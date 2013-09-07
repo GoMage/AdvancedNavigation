@@ -26,6 +26,8 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
      * @var Mage_Catalog_Model_Category
      */
     protected $_appliedCategory = null;
+    
+    protected $category_list = array();
 
     /**
      * Class constructor
@@ -230,10 +232,19 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
 	            ->addAttributeToSelect('is_anchor')
 	            ->addAttributeToFilter('is_active', 1)
 	            ->addAttributeToSelect('filter_image')
-	            ->addIdFilter($cats_ids_str)
-	            ->setOrder('path', 'ASC')
-	            ->joinUrlRewrite()
+	            ->addIdFilter($cats_ids_str)	            
+	            ->joinUrlRewrite()	            	            
 	            ->load();
+	            
+	        $category_list_ids = array();
+	        foreach ($categories as $category){
+	        	$category_list_ids[$category->getId()] = $category;
+	        }    
+	        
+         	$category = $this->getLayer()->getCurrentCategory();	        
+	        foreach($category->getChildrenCategories() as $_category){
+	        	$this->_renderCategoryList($_category, $category_list_ids);
+	        }
 	            	            
 	            	                    
 			$selected = array();
@@ -248,11 +259,11 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
             
             $filter_mode = Mage::helper('gomage_navigation')->isGomageNavigation();
             
-        	if($categories->count() > 0){
+        	if(count($this->category_list) > 0){
         		
-        		$category_count = $this->_getResource()->getCount($this, $categories);
+        		$category_count = $this->_getResource()->getCount($this, $this->category_list);
         		        		        		        		
-	            foreach ($categories as $category) {
+	            foreach ($this->category_list as $category) {
 	                
 	                if ($category->getIsActive()) {
 	                	
@@ -293,7 +304,7 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
 	                        'active'	=> $active,
 	                        'image' 	=> $category->getFilterImage(),
 	                        'level'     => $category->getLevel(),
-	                        'haschild' 	=> $category->getChildren(),                        
+	                        'haschild' 	=> $category->getChildren(),                          
 	                    );
 	                }
 	            }
@@ -322,4 +333,17 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
         }
         return $this->_resource;
     }
+    
+ 	protected function _renderCategoryList($category, $category_list_ids)
+    {    	
+    	if (array_key_exists($category->getId(), $category_list_ids)){
+    		
+    		array_push($this->category_list, $category_list_ids[$category->getId()]);
+    		     	
+	    	foreach ($category->getChildrenCategories() as $_category){
+	    		$this->_renderCategoryList($_category, $category_list_ids);
+	    	}
+    	}
+    }
+    
 }

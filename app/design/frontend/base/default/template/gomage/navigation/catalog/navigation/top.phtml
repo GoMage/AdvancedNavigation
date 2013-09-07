@@ -18,7 +18,14 @@
  */
 ?>
 
-<?php $_menu = $this->renderCategoriesMenuHtml(0,'level-top') ?>
+<?php 
+	if (method_exists($this, 'renderCategoriesMenuHtml')){		
+		$menu_block = $this;
+	}else{
+		$menu_block = Mage::getBlockSingleton('gomage_navigation/navigation');				
+	}
+	$_menu = $menu_block->renderCategoriesMenuHtml(0,'level-top');
+?>
 <?php if($_menu): ?>
     <?php switch ($this->getTypeNavigation()):  
             case GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN: ?>

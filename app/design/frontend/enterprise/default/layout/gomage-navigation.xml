@@ -31,6 +31,9 @@
 		</reference>
 	</catalog_category_default>
     <default>
+    	<reference name="after_body_start">
+			<block type="gomage_navigation/head"></block>
+		</reference>
 		<reference name="catalog.topnav">
 			<action method="setTemplate"><template>gomage/navigation/catalog/navigation/top.phtml</template></action>
 		</reference>

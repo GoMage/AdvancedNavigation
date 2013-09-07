@@ -43,10 +43,8 @@ class GoMage_Navigation_Block_Product_List_Toolbar_Pager extends Mage_Page_Block
     }
     
     public function isAjaxPager(){
-        return Mage::helper('gomage_navigation')->isGomageNavigation() &&
-               Mage::getStoreConfigFlag('gomage_navigation/general/pager') &&  
-               ((Mage::registry('current_category') && Mage::registry('current_category')->getisAnchor()) ||
-                (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch')); 
+        return Mage::helper('gomage_navigation')->isGomageNavigationAjax() &&
+               Mage::getStoreConfigFlag('gomage_navigation/general/pager'); 
     }
     
 }

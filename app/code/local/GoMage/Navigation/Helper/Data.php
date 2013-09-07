@@ -193,7 +193,8 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 	public function isGomageNavigationAjax(){
 	     return $this->isGomageNavigation() &&                 
                 ((Mage::registry('current_category') && Mage::registry('current_category')->getisAnchor()) ||
-                (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch'));
+                (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch' &&
+                 Mage::app()->getFrontController()->getRequest()->getControllerName() != 'advanced'));
 	}
 	
 	public function formatColor($value){
