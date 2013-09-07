@@ -89,7 +89,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 		$ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_downloadable/key/check'));
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'key='.urlencode($k).'&sku=advanced-navigation&domains='.urlencode(implode(',', $this->getAllStoreDomains())).'&ver='.urlencode('4.0'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'key='.urlencode($k).'&sku=advanced-navigation&domains='.urlencode(implode(',', $this->getAllStoreDomains())).'&ver='.urlencode('4.1'));
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         
@@ -470,6 +470,18 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
     		
     	return $showmore;
 	}
+
+    public function getBacktotop()
+    {
+        $backtotop = Mage::getStoreConfig('gomage_navigation/filter/backtotop_btn_txt');
+
+        if ( $backtotop == '' )
+        {
+            $backtotop = $this->__('Back to Top');
+        }
+
+        return $backtotop;
+    }
 	
  	public function isEnterprise()
     {
@@ -617,7 +629,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 	        $ch = curl_init();
 	        curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_notification/index/data'));
 	        curl_setopt($ch, CURLOPT_POST, true);
-	        curl_setopt($ch, CURLOPT_POSTFIELDS, 'sku=advanced-navigation&timestamp='.$timestamp.'&ver='.urlencode('4.0'));
+	        curl_setopt($ch, CURLOPT_POSTFIELDS, 'sku=advanced-navigation&timestamp='.$timestamp.'&ver='.urlencode('4.1'));
 	        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 	        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	        

@@ -25,7 +25,7 @@ $installer->getConnection()->addColumn($this->getTable('gomage_navigation_attrib
     "smallint(5) NOT NULL default '1'");
 
 $installer->getConnection()->addColumn($this->getTable('gomage_navigation_attribute'), 'range_options',
-    "smallint(5) NOT NULL default '1'");
+    "smallint(5) NOT NULL default '0'");
 
 $installer->getConnection()->addColumn($this->getTable('gomage_navigation_attribute'), 'range_manual',
     "text NOT NULL");
@@ -34,7 +34,7 @@ $installer->getConnection()->addColumn($this->getTable('gomage_navigation_attrib
     "text NOT NULL");
 
 $installer->getConnection()->addColumn($this->getTable('gomage_navigation_attribute'), 'attribute_location',
-    "smallint(5) NOT NULL default '1'");
+    "smallint(5) NOT NULL default '0'");
 
 $installer->getConnection()->addColumn($this->getTable('gomage_navigation_attribute'), 'show_currency',
     "smallint(1) NOT NULL default 0");

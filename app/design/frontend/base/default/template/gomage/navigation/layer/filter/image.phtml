@@ -33,6 +33,7 @@
 	$visible_options = intval($this->getVisibleOptions());
 ?>
 <ol class="image-align-<?php echo $image_align;?> <?php if($this->canShowCheckbox()):?>gan-list-checkbox<?php endif;?> <?php if(!$show_labels):?> no-titles <?php endif?> ">
+<?php $i = 0; ?>
 <?php foreach ($this->getItems() as $_item):?>
 	<?php $i++; ?>
 	<?php
@@ -66,8 +67,10 @@
     	
     	
         <?php if (( $_item->getCount() > 0 || $_item->getActive())): ?>
-    		
-	        <a data-ajax="<?php echo ($this->ajaxEnabled()) ? 1 : 0 ;?>" data-param="<?php echo $_item->getActive() ? $_item->getRemoveUrlParams() : $_item->getUrlParams(false); ?>" data-url="<?php echo $_item->getCleanUrl(flase); ?>" rel="nofollow" <?php if($_item->getActive()):?> class="active" <?php endif;?> title="<?php echo $_item->getLabel() ?>" onclick="GomageNavigation.click(this); return false;" href="<?php echo $_item->getCleanUrl(true); ?>">
+
+            <?php $data_param = $_item->getActive() ? $_item->getRemoveUrlParams() : $_item->getUrlParams(false); ?>
+
+	        <a data-ajax="<?php echo ($this->ajaxEnabled()) ? 1 : 0 ;?>" data-param="<?php echo $data_param; ?>" data-url="<?php echo $_item->getCleanUrl(false); ?>"  <?php if($_item->getActive()):?> class="active" <?php endif;?> title="<?php echo $_item->getLabel() ?>" onclick="GomageNavigation.click(this); return false;" href="<?php echo $_item->getCleanUrl(true) . $data_param; ?>">
 	        	
 	        	<?php if($image_url):?>
 	        	
