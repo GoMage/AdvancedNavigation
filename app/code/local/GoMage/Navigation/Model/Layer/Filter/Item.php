@@ -35,13 +35,10 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
         return Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $params);
     }
     
-    public function getUrl($ajax = false)
+    public function getUrl($ajax = false, $stock = false)
     {
-    	
-    	if($this->hasData('url')){
-    		
+    	if($this->hasData('url') && !$stock){
     		return $this->getData('url');
-    		
     	}
     	
     	$query = array(

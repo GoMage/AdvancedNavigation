@@ -20,7 +20,9 @@ class GoMage_Navigation_Block_Product_List_Toolbar extends Mage_Catalog_Block_Pr
             $this->setTemplate('gomage/navigation/catalog/product/list/toolbar.phtml');
         }                
         $html = '';
-        if (Mage::getStoreConfig('gomage_navigation/general/show_shopby') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::CONTENT){
+        if (Mage::helper('gomage_navigation')->isGomageNavigation()
+        		&&
+        	Mage::getStoreConfig('gomage_navigation/general/show_shopby') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::CONTENT){
 	        if ($this->first_render){
 	        	$shop_by = false;
 	        	if ($this->getLayout()->getBlock('catalogsearch.leftnav')){
@@ -98,5 +100,13 @@ class GoMage_Navigation_Block_Product_List_Toolbar extends Mage_Catalog_Block_Pr
 
      }
      
+     public function getFirstNum(){
+     	if ( Mage::getStoreConfigFlag('gomage_navigation/general/autoscrolling') )
+     	{
+     		return 1;
+     	}
+     	
+     	return parent::getFirstNum();
+     }
              
 }

@@ -18,7 +18,7 @@
     <?php if (!$_top_level) $_top_level = $_item->getLevel(); ?>      
     <li style="padding-left: <?php echo 10*($_item->getLevel() - $_top_level); ?>px;" >
         <?php if (($_item->getCount() > 0) || $_item->getHasChild() || $_item->getActive()): ?>
-        <a <?php if($_item->getActive()):?> class="active" <?php endif;?> <?php if($this->ajaxEnabled()):?> onclick="setNavigationUrl('<?php echo urlencode($_item->getActive() ? $_item->getRemoveUrl(true) : $_item->getUrl(true)) ?>'); return false;" <?php endif;?> href="<?php echo ($_item->getActive() ? $_item->getRemoveUrl() : $_item->getUrl()) ?>"><?php echo $_item->getLabel() ?></a>
+        <a rel="nofollow" <?php if($_item->getActive()):?> class="active" <?php endif;?> <?php if($this->ajaxEnabled()):?> onclick="setNavigationUrl('<?php echo urlencode($_item->getActive() ? $_item->getRemoveUrl(true) : $_item->getUrl(true)) ?>'); return false;" <?php endif;?> href="<?php echo ($_item->getActive() ? $_item->getRemoveUrl() : $_item->getUrl()) ?>"><?php echo $_item->getLabel() ?></a>
         <?php else: echo $_item->getLabel() ?>
         <?php endif; ?>
     	<?php if(!$_item->getActive()):?>

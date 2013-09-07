@@ -19,12 +19,13 @@
 ?>
 <?php foreach ($this->getItems() as $_item): ?>
 	<?php $i++; ?>
-    <li <?php if ($visible_options && $i > $visible_options && !$show_all): ?>style="display:none;"<?php endif; ?>>
-        <?php if ($_item->getCount() > 0 || $_item->getActive()): ?>
-        <a <?php if($_item->getActive()):?> class="active" <?php endif;?> <?php if($this->ajaxEnabled()):?> onclick="setNavigationUrl('<?php echo urlencode($_item->getActive() ? $_item->getRemoveUrl(true) : $_item->getUrl(true)) ?>'); return false;" <?php endif;?> href="<?php echo ($_item->getActive() ? $_item->getRemoveUrl() : $_item->getUrl()) ?>"><?php echo $_item->getLabel() ?></a>
+    <li <?php if (($visible_options && $i > $visible_options && !$show_all) || (!$_item->getCount() && $this->getName() != 'Stock')): ?>style="display:none;"<?php endif; ?>>
+        <?php if ($_item->getCount() > 0 || $_item->getActive() || $this->getName() == 'Stock'): ?>
+        <?php $stock = ($this->getName() == 'Stock') ? true : false; ?>
+        <a rel="nofollow" <?php if($_item->getActive()):?> class="active" <?php endif;?> <?php if($this->ajaxEnabled()):?> onclick="setNavigationUrl('<?php echo urlencode($_item->getActive() ? $_item->getRemoveUrl(true) : $_item->getUrl(true, $stock)) ?>'); return false;" <?php endif;?> href="<?php echo ($_item->getActive() ? $_item->getRemoveUrl() : $_item->getUrl(false, $stock)) ?>"><?php echo $_item->getLabel() ?></a>
         <?php else: echo $_item->getLabel() ?>
         <?php endif; ?>
-    	<?php if(!$_item->getActive()):?>
+    	<?php if(!$_item->getActive() && $this->getName() != 'Stock'):?>
         (<?php echo $_item->getCount() ?>)
         <?php endif;?>
     </li>    

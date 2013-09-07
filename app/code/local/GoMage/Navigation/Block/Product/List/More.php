@@ -39,7 +39,7 @@ class GoMage_Navigation_Block_Product_List_More extends Mage_Core_Block_Template
   	public function getPagerBlock()
     {
     	$toolbar = $this->getLayout()->getBlock('product_list_toolbar');
-        if (!$toolbar) return false;				
+        if (!$toolbar || !$toolbar->getCollection()) return false;				
         $pagerBlock = $toolbar->getChild('product_list_toolbar_pager');
 
         if ($pagerBlock instanceof Varien_Object) {

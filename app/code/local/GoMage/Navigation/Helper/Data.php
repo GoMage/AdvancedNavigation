@@ -194,8 +194,19 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 	}
 	
 	public function isGomageNavigationAjax(){
+		
 	     return $this->isGomageNavigation() &&                 
-                ((Mage::registry('current_category') && Mage::registry('current_category')->getIsAnchor()) ||
+	    		Mage::getStoreConfigFlag('gomage_navigation/general/pager')
+	    		&& 
+                (Mage::registry('current_category') ||
+                (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch' &&
+                 Mage::app()->getFrontController()->getRequest()->getControllerName() != 'advanced'));
+	}
+	
+	public function isGomageNavigationClearAjax(){
+		
+	     return $this->isGomageNavigation()&& 
+                (Mage::registry('current_category') ||
                 (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch' &&
                  Mage::app()->getFrontController()->getRequest()->getControllerName() != 'advanced'));
 	}
@@ -307,6 +318,48 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 		
     }
     
-				
+	public function IsGooglebot(){
+		// check if user agent contains googlebt
+		if(preg_match("/Google/",$_SERVER['HTTP_USER_AGENT']) || preg_match("/bot/",$_SERVER['HTTP_USER_AGENT'])){
+			$ip = $_SERVER['REMOTE_ADDR'];
+			//server name e.g. crawl-66-249-66-1.googlebot.com
+			$name = gethostbyaddr($ip);
+			//check if name ciontains googlebot
+			if(preg_match("/Googlebot/",$name) || preg_match("/bot/",$name)){
+				//list of IP's
+				$hosts = gethostbynamel($name);
+				foreach($hosts as $host){
+					if ($host == $ip){
+						return true;
+					}
+				}
+				return false; // Pretender, take some action if needed
+			}else{
+			return false; // Pretender, take some action if needed
+			}
+		}else{
+			return true;
+		}
+		return false;
+	}	
+
+	public function getFilterItemCount($filter)
+	{
+		$count = 0;
+		if ( $filter && $filter->getItems() )
+		{
+			foreach( $filter->getItems() as $item )
+			{
+				$count += $item->getCount();
+			}
+		}
+		
+		if ( $count == 0 && $filter->getName() == 'Stock' )
+		{
+			return 1;
+		}
+		
+		return $count;
+	}
 }
 

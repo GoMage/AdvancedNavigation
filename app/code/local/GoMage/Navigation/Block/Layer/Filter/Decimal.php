@@ -76,6 +76,12 @@ class GoMage_Navigation_Block_Layer_Filter_Decimal extends Mage_Catalog_Block_La
 		
 	}
 	
+	public function getCategoryIdsFilter(){
+        
+        return trim($this->getAttributeModel()->getCategoryIdsFilter());
+        
+    }     
+	
 	public function getPopupWidth(){
 		
 		return (int) $this->getAttributeModel()->getPopupWidth();

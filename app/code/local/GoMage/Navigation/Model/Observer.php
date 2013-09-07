@@ -89,6 +89,7 @@ class GoMage_Navigation_Model_Observer {
 		$is_ajax = ( int ) $event->getAttribute()->getData('is_ajax');
 		$inblock_height = ( int ) $event->getAttribute()->getData('inblock_height');
 		$filter_button = ( int ) $event->getAttribute()->getData('filter_button');
+		$category_ids_filter        = trim($event->getAttribute()->getData('category_ids_filter'));
 		
 		$attribute = Mage::getModel('gomage_navigation/attribute')->load($attribute_id, 'attribute_id');
 		
@@ -97,7 +98,7 @@ class GoMage_Navigation_Model_Observer {
 			$attribute->isObjectNew(true);
 		}
 		
-		$attribute->addData(array('filter_type' => $filter_type, 'image_align' => $image_align, 'image_width' => $image_width, 'image_height' => $image_height, 'show_minimized' => $show_minimized, 'show_image_name' => $show_image_name, 'show_checkbox' => $show_checkbox, 'visible_options' => $visible_options, 'show_help' => $show_help, 'popup_width' => $popup_width, 'popup_height' => $popup_height, 'filter_reset' => $filter_reset, 'is_ajax' => $is_ajax, 'inblock_height' => $inblock_height, 'filter_button' => $filter_button));
+		$attribute->addData(array('filter_type' => $filter_type, 'image_align' => $image_align, 'image_width' => $image_width, 'image_height' => $image_height, 'show_minimized' => $show_minimized, 'show_image_name' => $show_image_name, 'show_checkbox' => $show_checkbox, 'visible_options' => $visible_options, 'show_help' => $show_help, 'popup_width' => $popup_width, 'popup_height' => $popup_height, 'filter_reset' => $filter_reset, 'is_ajax' => $is_ajax, 'inblock_height' => $inblock_height, 'filter_button' => $filter_button, 'category_ids_filter' => $category_ids_filter));
 		
 		$attribute->save();
 		

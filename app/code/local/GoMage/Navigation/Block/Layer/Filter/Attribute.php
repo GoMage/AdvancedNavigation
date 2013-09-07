@@ -108,6 +108,12 @@ class GoMage_Navigation_Block_Layer_Filter_Attribute extends Mage_Catalog_Block_
 		
 	}
 	
+	public function getCategoryIdsFilter(){
+        
+        return trim($this->getAttributeModel()->getCategoryIdsFilter());
+        
+    }  
+	
 	public function getPopupWidth(){
 		
 		return (int) $this->getAttributeModel()->getPopupWidth();

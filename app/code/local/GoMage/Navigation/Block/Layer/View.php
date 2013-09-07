@@ -27,6 +27,44 @@
 			
 		}
 		
+		/**
+         * Get all layer filters
+         *
+         * @return array
+         */
+        public function getFilters()
+        {
+            $filters = parent::getFilters();
+            
+            if ($this->_isStockFilter()) {
+                $filters[] = $this->_getStockFilter();
+            }        
+            return $filters;
+        }  
+        
+		private function _isStockFilter()
+        {
+        	if(Mage::helper('gomage_navigation')->isGomageNavigation() 
+        		  &&
+           	   Mage::getStoreConfigFlag('gomage_navigation/stock/active'))
+        	{
+	
+            	return true;
+        	}
+
+        	return false;
+        }
+        
+        /**
+         * Get category filter block
+         *
+         * @return Mage_Catalog_Block_Layer_Filter_Category
+         */
+        protected function _getStockFilter()
+        {
+            return $this->getChild('stock_status_filter');
+        } 
+		
 		public function getSliderStyle(){
 			
 			return (string) Mage::getStoreConfig('gomage_navigation/filter/slider_style');
@@ -89,6 +127,12 @@
 	        }
 	        
 	        $this->getLayer()->setBaseSelect($base_select);
+	        
+	        $stockBlock = $this->getLayout()->createBlock("gomage_navigation/layer_filter_stock")
+                ->setLayer($this->getLayer())
+                ->init();
+
+            $this->setChild('stock_status_filter', $stockBlock); 
 
 	        parent::_prepareLayout();
 	        	        	        

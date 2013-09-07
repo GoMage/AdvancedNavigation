@@ -47,7 +47,7 @@
 	        $collection->getSelect()->joinLeft(
 	            array($tableAlias => Mage::getSingleton('core/resource')->getTableName('gomage_navigation_attribute')),
 	            "`main_table`.`attribute_id` = `{$tableAlias}`.`attribute_id`",
-	            array('filter_type', 'image_align', 'image_width', 'image_height', 'show_minimized', 'show_image_name', 'visible_options', 'show_help', 'show_checkbox', 'popup_width', 'popup_height', 'filter_reset', 'is_ajax', 'inblock_height', 'filter_button')
+	            array('filter_type', 'image_align', 'image_width', 'image_height', 'show_minimized', 'show_image_name', 'visible_options', 'show_help', 'show_checkbox', 'popup_width', 'popup_height', 'filter_reset', 'is_ajax', 'inblock_height', 'filter_button', 'category_ids_filter')
 	        );
 	        
 	        $tableAliasStore = 'gomage_nav_attr_store';

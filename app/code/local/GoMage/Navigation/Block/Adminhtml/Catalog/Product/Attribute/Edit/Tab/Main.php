@@ -319,6 +319,13 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
             ),
         ));
         
+        $field = $fieldset->addField('category_ids_filter', 'text', array(
+            'name' => 'category_ids_filter',
+            'label' => Mage::helper('catalog')->__('Category Filter'),
+            'title' => Mage::helper('catalog')->__('Category Filter'),
+            'class' => 'gomage-validate-number',
+        ));
+        
         $field->setValue(0);
         
 

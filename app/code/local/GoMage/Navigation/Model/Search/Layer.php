@@ -23,7 +23,15 @@
 	        if (isset($this->_productCollections[$this->getCurrentCategory()->getId()])) {
 	            $collection = $this->_productCollections[$this->getCurrentCategory()->getId()];
 	        } else {
-	            $collection = Mage::helper('catalogsearch')->getEngine()->getResultCollection();
+	            if(version_compare(Mage::getVersion(), '1.4.1.0', '<='))
+	            {
+					$collection = Mage::getResourceModel('catalogsearch/fulltext_collection');
+	            }
+				else
+				{
+					$collection = Mage::helper('catalogsearch')->getEngine()->getResultCollection();
+				}
+				
 	            $collection->setStoreId($this->getCurrentCategory()->getStoreId());
 	            $this->prepareProductCollection($collection);
 	            $collection->getSelect()->group('e.entity_id'); 

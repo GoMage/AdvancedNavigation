@@ -17,8 +17,8 @@
 	$attribute_code = $attribute->getAttributeCode();
 	$request		= $this->getRequest();
 	
-	$_from	= $request->getParam($this->_filter->getRequestVar().'_from', $this->_filter->getMinValueInt());
-   	$_to	= $request->getParam($this->_filter->getRequestVar().'_to', $this->_filter->getMaxValueInt());
+	$_from	= Mage::getSingleton('core/url')->escape($request->getParam($this->_filter->getRequestVar().'_from', $this->_filter->getMinValueInt()));
+   	$_to	= Mage::getSingleton('core/url')->escape($request->getParam($this->_filter->getRequestVar().'_to', $this->_filter->getMaxValueInt()));
 	
 ?>
 	

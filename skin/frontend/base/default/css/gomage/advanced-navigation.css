@@ -376,6 +376,7 @@ ul.image-align-default li{
 	display:block;
 	padding-bottom:5px;
 	padding-bottom:3px;
+	overflow: hidden;
 }
 #narrow-by-list dd ol.image-align-2-columns li,
 ul.image-align-2-columns li{

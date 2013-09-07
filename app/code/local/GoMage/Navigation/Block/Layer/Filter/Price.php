@@ -76,6 +76,12 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
 		
 	}
 	
+	public function getCategoryIdsFilter(){
+        
+        return trim($this->getAttributeModel()->getCategoryIdsFilter());
+        
+    }
+	
 	public function getPopupWidth(){
 		
 		return (int) $this->getAttributeModel()->getPopupWidth();

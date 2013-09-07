@@ -13,6 +13,48 @@
 	
 class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_Layer_Filter_Category
 {
+	/**
+     * Initialize filter template
+     *
+     */
+	
+    public function __construct()
+    {
+        parent::__construct();
+        
+        if( Mage::helper('gomage_navigation')->isGomageNavigation() 
+        	   &&
+            (Mage::getStoreConfigFlag('gomage_navigation/category/active') 
+                || 
+             Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active')) ){
+        	
+        	$type = Mage::getStoreConfig('gomage_navigation/category/filter_type');
+        	
+        	switch($type): 
+        	
+	        	default:
+	        	
+	        		$this->_template = ('gomage/navigation/layer/filter/category/default.phtml');
+	        	
+	        	break;
+	        	
+	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE):
+	        	
+	        		$this->_template = ('gomage/navigation/layer/filter/image.phtml');
+	        	
+	        	break;
+	        	
+	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN):
+	        	
+	        		$this->_template = ('gomage/navigation/layer/filter/dropdown.phtml');
+	        	
+	        	break;
+        	
+        	endswitch;
+        	
+        }
+        
+    }
 	
 	public function getRemoveUrl($ajax = false)
     {
@@ -129,8 +171,18 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 	
 	public function canShowCheckbox(){
 		
-		return (bool) Mage::getStoreConfigFlag('gomage_navigation/category/show_checkbox');
+	    if(Mage::helper('gomage_navigation')->isGomageNavigation() 
+	    		&&
+           Mage::getStoreConfigFlag('gomage_navigation/category/active')){
+				return (bool) Mage::getStoreConfigFlag('gomage_navigation/category/show_checkbox');
+          }
+           
+        if(Mage::helper('gomage_navigation')->isGomageNavigation() 
+          		&&
+           Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active')){
 		
+				return (bool) Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/show_checkbox');
+          }
 	}
 	
 	public function canShowLabels(){
@@ -184,46 +236,6 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 		return (bool) Mage::getStoreConfig('gomage_navigation/category/filter_reset');
 		
 	}
-	
-    /**
-     * Initialize filter template
-     *
-     */
-	
-    public function __construct()
-    {
-        parent::__construct();
-        
-        if(Mage::helper('gomage_navigation')->isGomageNavigation() &&
-           Mage::getStoreConfigFlag('gomage_navigation/category/active')){
-        	
-        	$type = Mage::getStoreConfig('gomage_navigation/category/filter_type');
-        	
-        	switch($type): 
-        	
-	        	default:
-	        	
-	        		$this->_template = ('gomage/navigation/layer/filter/category/default.phtml');
-	        	
-	        	break;
-	        	
-	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE):
-	        	
-	        		$this->_template = ('gomage/navigation/layer/filter/image.phtml');
-	        	
-	        	break;
-	        	
-	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN):
-	        	
-	        		$this->_template = ('gomage/navigation/layer/filter/dropdown.phtml');
-	        	
-	        	break;
-        	
-        	endswitch;
-        	
-        }
-        
-    }
     
     public function getFilterType(){
         return Mage::getStoreConfig('gomage_navigation/category/filter_type');    
