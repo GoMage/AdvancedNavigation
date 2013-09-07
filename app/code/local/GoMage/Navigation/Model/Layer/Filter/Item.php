@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
+ * @version      Release: 2.2
  * @since        Class available since Release 1.0
  */
 
@@ -15,7 +15,7 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
 {
     
     public function getRemoveUrl($ajax = false)
-    {
+    {    	
         $query = array($this->getFilter()->getRequestVar()=>$this->getFilter()->getResetValue($this->getValue()));
         $params['_nosid']       = true;
         $params['_current']     = true;
@@ -30,10 +30,9 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
         	$params['_query']['ajax'] = true;
         	
         	
-        }
+        }        
         
-        
-        return Mage::getUrl('*/*/*', $params);
+        return Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $params);
     }
     
     public function getUrl($ajax = false)
@@ -58,7 +57,8 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
         	
         }
         
-        return Mage::getUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>$query, '_escape'=>false));
+        return Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>$query, '_escape'=>false)); 
+        
     }
     
 }

@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
+ * @version      Release: 2.2
  * @since        Class available since Release 1.0
  */
 	
@@ -190,12 +190,104 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 	            Mage::getStoreConfigFlag('gomage_navigation/general/mode'); 	         	     
 	}
 	
+	public function isGomageNavigationAjax(){
+	     return $this->isGomageNavigation() &&                 
+                ((Mage::registry('current_category') && Mage::registry('current_category')->getisAnchor()) ||
+                (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch'));
+	}
+	
 	public function formatColor($value){
 	    if ($value = preg_replace('/[^a-zA-Z0-9\s]/', '', $value)){
 	       $value = '#' . $value; 	        
 	    }
 	    return $value;
 	}
+	
+	public function isFrendlyUrl(){
+		return $this->isGomageNavigation() && Mage::getStoreConfigFlag('gomage_navigation/general/frendlyurl');
+	}
+	
+	public function getFilterUrl($route = '', $params = array()){
+		
+		if (!$this->isFrendlyUrl()){
+            return Mage::getUrl($route, $params);
+        }
+
+        $model = Mage::getModel('core/url');
+        $request_query = $model->getRequest()->getQuery();
+        $attr = Mage::registry('gan_filter_attributes');
+
+        foreach($model->getRequest()->getQuery() as $param => $value){
+        	if ($param == 'cat'){
+            	$values = explode(',', $value);
+            	$prepare_values = array();
+            	foreach($values as $_value){
+            		$category = Mage::getModel('catalog/category')->load($_value);
+            		if ($category && $category->getId()){
+            			$prepare_values[] = $category->getData('url_key');
+            		}
+            	}
+            	$model->getRequest()->setQuery($param, implode(',', $prepare_values));
+            }elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))){	
+            	$values = explode(',', $value);
+            	$prepare_values = array();
+            	foreach($values as $_value){                		
+            		foreach($attr[$param]['options'] as $_k => $_v){
+            			if ($_v == $_value){
+            				$prepare_values[] = $_k;
+            				break;
+            			}
+            		}
+            	}            		
+                $model->getRequest()->setQuery($param, implode(',', $prepare_values));                
+            }
+        }
+                
+        foreach ($params['_query'] as $param => $value){
+        	if ($value){
+	        	if ($param == 'cat'){
+	            	$values = explode(',', $value);
+	            	$prepare_values = array();
+	            	foreach($values as $_value){
+	            		$category = Mage::getModel('catalog/category')->load($_value);
+	            		if ($category && $category->getId()){
+	            			$prepare_values[] = $category->getData('url_key');
+	            		}
+	            	}
+	            	$params['_query'][$param] = implode(',', $prepare_values);
+	            }elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))){	
+	            	$values = explode(',', $value);
+	            	$prepare_values = array();
+	            	foreach($values as $_value){            			
+		            	foreach($attr[$param]['options'] as $_k => $_v){
+	            			if ($_v == $_value){
+	            				$prepare_values[] = $_k;
+	            				break;
+	            			}
+	            		}            		
+	            	}            		
+	                $params['_query'][$param] = implode(',', $prepare_values);                
+	            }
+        	}
+        }
+        
+        $url = $model->getUrl($route, $params);
+
+        foreach($request_query as $param => $value){
+        	$model->getRequest()->setQuery($param, $value);
+        }
+        
+        return $url; 
+        
+	}
+	
+ 	public function formatUrlValue($value){    	
+        $value = preg_replace('#[^0-9a-z]+#i', '_', Mage::helper('catalog/product_url')->format($value));
+        $value = strtolower($value);
+        $value = trim($value, '-');
+
+        return $value;
+    }
 				
 }
 

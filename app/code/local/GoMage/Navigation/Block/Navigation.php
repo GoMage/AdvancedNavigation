@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
+ * @version      Release: 2.2
  * @since        Class available since Release 1.0
  */
 
@@ -115,7 +115,8 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                      return (Mage::getStoreConfig('gomage_navigation/category/ajax_enabled') == 1) && 
                              Mage::registry('current_category') && 
                              Mage::registry('current_category')->getisAnchor() &&
-                             (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE);    
+                             (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE) &&
+                             !Mage::registry('current_product');    
                 break;    
             case self::RIGTH_COLUMN :
                   if (!(Mage::registry('current_category') || (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch')))
@@ -124,7 +125,8 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                      return (Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/ajax_enabled') == 1) && 
                              Mage::registry('current_category') && 
                              Mage::registry('current_category')->getisAnchor() &&
-                             (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE);
+                             (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE) &&
+                             !Mage::registry('current_product');
                 break;                        
         }   
     }
@@ -158,7 +160,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
         else
             $params['_query']['cat'] = null;        
                         
-        return urlencode(Mage::getUrl('*/*/*', $params));
+        return urlencode(Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $params));
     }
     
     public function getIsActiveAjaxCategory($category)
@@ -720,14 +722,14 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
 
                     $option_value = ($this->getIsAjax() ? $this->getAjaxUrl($category) : $this->getCategoryUrl($category) );
                     
-                    $html[] = '<option class="gan-dropdown-top" value=' . $option_value . '>' . (str_repeat('&nbsp;&nbsp;', $category->getLevel() - $this->_root_level) . $category->getName()) . '</option>';
+                    $html[] = '<option class="gan-dropdown-top" value="' . $option_value . '">' . (str_repeat('&nbsp;&nbsp;', $category->getLevel() - $this->_root_level) . $category->getName()) . '</option>';
                     
                 }
                                                  
                 $option_selected = ( $curent_id == $category->getId() ? 'selected="selected"' : '');
                 $option_value = ($this->getIsAjax() ? $this->getAjaxUrl($category) : $this->getCategoryUrl($category) );
         
-                $html[] = '<option ' . $option_selected . ' value=' . $option_value . '>' . (str_repeat('&nbsp;&nbsp;', $category->getLevel() - $this->_root_level) . $category->getName()) . '</option>';
+                $html[] = '<option ' . $option_selected . ' value="' . $option_value . '">' . (str_repeat('&nbsp;&nbsp;', $category->getLevel() - $this->_root_level) . $category->getName()) . '</option>';
         
                 // render children
                 $htmlChildren = '';

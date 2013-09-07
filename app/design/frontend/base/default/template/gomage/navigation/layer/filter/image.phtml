@@ -7,10 +7,12 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
+ * @version      Release: 2.2
  * @since        Class available since Release 1.0
  */
-	
+?>
+
+<?php	
 	$attribute = $this->getAttributeModel();
 	$show_labels = $this->canShowLabels();
 	
@@ -25,8 +27,7 @@
 		$image_height = '';
 	}
 	
-	$image_align = $this->getImageAlign();
-	
+	$image_align = $this->getImageAlign();	
 ?>
 <ol class="image-align-<?php echo $image_align;?> <?php if($this->canShowCheckbox()):?>gan-list-checkbox<?php endif;?> <?php if(!$show_labels):?> no-titles <?php endif?> ">
 <?php foreach ($this->getItems() as $_item):?>

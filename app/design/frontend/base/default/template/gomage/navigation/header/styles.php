@@ -1,3 +1,17 @@
+<?php
+ /**
+ * GoMage Advanced Navigation Extension
+ *
+ * @category     Extension
+ * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @author       GoMage
+ * @license      http://www.gomage.com/license-agreement/  Single domain license
+ * @terms of use http://www.gomage.com/terms-of-use
+ * @version      Release: 2.2
+ * @since        Class available since Release 1.0
+ */
+?>
+
 <style type="text/css">
 	
 	.gan-loadinfo{
@@ -92,6 +106,7 @@
 	?>
 	
 	var gomage_navigation_loadinfo_text = "<?php echo $text?>";
+	var gomage_navigation_urlhash = <?php echo (Mage::getStoreConfig('gomage_navigation/general/urlhash') ? 'true' : 'false') ?>;
 	
 	// ]]>
 	

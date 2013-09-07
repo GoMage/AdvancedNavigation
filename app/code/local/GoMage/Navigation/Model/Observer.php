@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
+ * @version      Release: 2.2
  * @since        Class available since Release 1.0
  */
 	
@@ -226,5 +226,54 @@
 	    $session->setContinueShoppingUrl($url);
 	}
 
-		
+	public function prepareFilterParams(Varien_Event_Observer $observer)
+    {
+        $action = $observer->getEvent()->getControllerAction();
+        $helper = Mage::helper('gomage_navigation');
+        
+        if ($helper->isFrendlyUrl()){
+        
+	        $request = $action->getRequest();
+	        $attr = array();
+	
+	        $attributes = Mage::getSingleton('catalog/layer')->getFilterableAttributes();
+	        
+	        foreach ($attributes as $attribute){
+	            $attr[$attribute->getAttributeCode()]['type'] = $attribute->getBackendType();
+	            $options = $attribute->getSource()->getAllOptions();
+	            foreach ($options as $option){
+	                $attr[$attribute->getAttributeCode()]['options'][$helper->formatUrlValue($option['label'])] = $option['value'];
+	            }
+	        }                
+	        Mage::register('gan_filter_attributes', $attr);
+	        
+	     	if (($layerParams = $request->getQuery()) && !empty($layerParams)){
+	            foreach ($layerParams as $param => $value){
+	            	if ($param == 'cat'){
+	            		$values = explode(',', $value);
+	            		$prepare_values = array();
+	            		foreach($values as $_value){
+	            			$category = Mage::getModel('catalog/category')->loadByAttribute('url_key', $_value);	            			
+	            			if ($category && $category->getId()){
+	            				$prepare_values[] = $category->getId();
+	            			}
+	            		}
+	            		$request->setQuery($param, implode(',', $prepare_values));
+	            		
+	            	}elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))){
+	            		$values = explode(',', $value);
+	            		$prepare_values = array();
+	            		foreach($values as $_value){            			
+	            			if (isset($attr[$param]['options'][$_value])){
+	            				$prepare_values[] = $attr[$param]['options'][$_value];
+	            			}
+	            		}
+	            		
+	                    $request->setQuery($param, implode(',', $prepare_values));
+	                }                
+	            }
+	        } 
+        }
+    }
+    		
 }

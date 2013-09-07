@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
+ * @version      Release: 2.2
  * @since        Class available since Release 1.0
  */
 ?>
@@ -26,8 +26,11 @@
     			<span><?php echo $this->__('Shopping Options') ?></span>
     			
     			<?php if(count($this->getActiveFilters()) > 0):?>
-    			
-    			<button class="button" onclick="setNavigationUrl('<?php echo urlencode($this->getClearUrl(true));?>'); return false;"><span><span><?php echo $this->__('Clear All') ?></span></span></button>
+    				<?php if (Mage::helper('gomage_navigation')->isGomageNavigationAjax()): ?>
+    					<button class="button" onclick="setNavigationUrl('<?php echo urlencode($this->getClearUrl(true));?>'); return false;"><span><span><?php echo $this->__('Clear All') ?></span></span></button>
+    				<?php else: ?>
+    					<button class="button" onclick="setLocation('<?php echo $this->getClearUrl();?>')"><span><span><?php echo $this->__('Clear All') ?></span></span></button>
+    				<?php endif; ?>	
     			
     			<?php endif;?>
     		</p>

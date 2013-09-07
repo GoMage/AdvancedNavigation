@@ -1,18 +1,71 @@
+ /**
+ * GoMage Advanced Navigation Extension
+ *
+ * @category     Extension
+ * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @author       GoMage
+ * @license      http://www.gomage.com/license-agreement/  Single domain license
+ * @terms of use http://www.gomage.com/terms-of-use
+ * @version      Release: 2.2
+ * @since        Available since Release 1.0
+ */
+
 navigationOpenFilters = {};
 navigation_eval_js = null;
 var gan_slider_datas = new Array();
 
-document.observe("dom:loaded", function() {   	
-	ganLoadForPlain();	
-});
+Event.observe(window, 'load', function() {
+		ganLoadForPlain();	
+	}
+);
 
-document.onreadystatechange = ganLoadForPlain; 
-
-function ganLoadForPlain() {
+function ganLoadForPlain() {	
 	mainNav("gan_nav_left", {"show_delay":"100","hide_delay":"100"});
 	mainNav("gan_nav_top", {"show_delay":"100","hide_delay":"100"});
 	mainNav("gan_nav_right", {"show_delay":"100","hide_delay":"100"});
-	ganInitSliders();
+	ganInitSliders();	
+	if (typeof(gomage_navigation_urlhash) != 'undefined' && gomage_navigation_urlhash){
+		ganPrepareUrl();
+	}
+}
+
+function ganPrepareUrl(){
+	var hash_str = window.location.hash;
+	if (hash_str){		
+		var url = window.location.href;
+		url = url.replace(hash_str, '');
+				
+		var hashes = hash_str.slice(1).split('&');
+	    var vars = new Array();	    
+	    var hash = new Object();
+	    var gan_data = false;
+	    var hash_str = '';
+	    
+	    for(var i = 0; i < hashes.length; i++)
+	    {	        
+	    	vars = hashes[i].split('=');
+	        
+	    	if (vars[0] == 'gan_data'){
+	    		gan_data = true;
+	    		continue;
+	    	}
+	    	
+	        if (vars[0] != 'ajax' && vars[0] != 'gan_data'){
+	        	hash[vars[0]] = vars[1];
+	        }
+	    }    
+	    
+	    for(var key in hash){
+	    	if (hash.hasOwnProperty(key)){
+	    		hash_str += key + '=' + hash[key] + '&';
+	    	}
+	    }
+		
+		if (typeof(setNavigationUrl) == 'function' && gan_data && hash_str){						
+			hash_str += 'ajax=1';			
+			setNavigationUrl(url + '?' + hash_str);
+		}
+	}
 }
 
 function ganInitSliders(){

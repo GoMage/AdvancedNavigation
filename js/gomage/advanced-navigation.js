@@ -1,3 +1,15 @@
+ /**
+ * GoMage Advanced Navigation Extension
+ *
+ * @category     Extension
+ * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @author       GoMage
+ * @license      http://www.gomage.com/license-agreement/  Single domain license
+ * @terms of use http://www.gomage.com/terms-of-use
+ * @version      Release: 2.2
+ * @since        Available since Release 1.0
+ */
+
 navigationLoadInProccess = false;
 
 var GanUrl = { 
@@ -262,6 +274,10 @@ function submitNavigationForm(form, url, is_ajax) {
 			url = url.split('?')[0] + '?' + strQuery;
 		}
 		
+		if (gomage_navigation_urlhash){
+			GanSetHashUrl(url, params);
+		}
+
 		var request = new Ajax.Request(url,
 		  {
 		    method:'GET',
@@ -296,12 +312,52 @@ function submitNavigationForm(form, url, is_ajax) {
 	
 }
 
+function GanSetHashUrl(url, params){
+			
+    var vars = new Array(); 
+    var hash = new Object();    
+    var hashes = url.slice(url.indexOf('?') + 1).split('&');
+    var hash_str = '';
+    
+    for(var i = 0; i < hashes.length; i++)
+    {
+        vars = hashes[i].split('=');
+        if (vars[0] != 'ajax'){
+        	hash[vars[0]] = GanUrl.decode(vars[1]);
+        }
+    }    
+    
+    if (params){
+    	for(var key in params){
+    		if (params.hasOwnProperty(key)){
+    			hash[key] = params[key];
+    		}
+    	}
+    }
+    
+    for(var key in hash){
+    	if (hash.hasOwnProperty(key)){
+    		hash_str += key + '=' + hash[key] + '&';
+    	}
+    }
+    
+    if (hash_str){
+    	hash_str += 'gan_data=true';
+    }
+            
+    window.location.hash = hash_str;    
+}
+
 function setNavigationUrl(url){
 	
 	url = GanUrl.decode(url);
 	
 	is_ajax = typeof(is_ajax) != 'undefined' ? is_ajax : true;
 	var url = url.replace(/&amp;/ig, '&');
+	
+	if (gomage_navigation_urlhash){
+		GanSetHashUrl(url);
+	}
 
 	if(startLoadNavigationData()){
 
@@ -391,6 +447,7 @@ function replaceProductsBlock(content){
     }
 
     element.parentNode.replaceChild(content, element);
+    element.scrollTo();
     
 }
 

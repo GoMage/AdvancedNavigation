@@ -10,9 +10,9 @@
 }
 .gan-sidebar-nav .block-title{
 	background: url("../../images/gomage/advanced-navigation/block-nav-title.gif") no-repeat 0 0;
-    border:0;
-    overflow:hidden;
-    padding:0 0 0 9px;
+  border:0;
+  overflow:hidden;
+  padding:0 0 0 9px;
 	position:relative;
 	cursor:pointer;
 }
@@ -26,10 +26,19 @@
 	padding:3px 9px 3px 0;
 	background:url("../../images/gomage/advanced-navigation/block-nav-title.gif") no-repeat 100% 0;
 }
+/* 1900 */
+.sidebar .block-layered-nav .block-content{
+  padding:0;
+}
+.sidebar .block-layered-nav .block-subtitle{
+  display:block;
+  padding:3px 9px;
+}
+
 .block-layered-nav .block-content,
 .gan-sidebar-nav .block-content{
-    background:#E7F1F4;
-    border:1px solid #A0B3C3;
+  background:#E7F1F4;
+  border:1px solid #A0B3C3;
 }
 .block-layered-nav #narrow-by-list{
 	padding-bottom:5px;
@@ -220,6 +229,7 @@ span.plain_column{float:left;}
 #narrow-by-list dd ol.gan-inblock-list,
 ul.gan-inblock-list.gan-default-list{
 	overflow:auto;
+  position:relative;
 }
 #narrow-by-list dd ol.gan-inblock-list{
 	background:#fff;
@@ -556,7 +566,8 @@ ul.image-align-2-columns li{
 #narrow-by-list dt,
 .gan-plain-items,
 .gan-top,
-.gan-wrapper{
+.gan-wrapper,
+.block-layered-nav dd{
 	zoom:1;
 }
 /* Clears END */

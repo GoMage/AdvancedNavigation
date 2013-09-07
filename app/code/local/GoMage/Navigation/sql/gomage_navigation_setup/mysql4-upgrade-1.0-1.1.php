@@ -7,8 +7,8 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
- * @since        Release available since Release 1.0
+ * @version      Release: 2.2
+ * @since        Release available since Release 1.1
  */
 
 $installer = $this;

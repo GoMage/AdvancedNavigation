@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
+ * @version      Release: 2.2
  * @since        Class available since Release 1.0
  */
 
@@ -170,6 +170,8 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
         
 	        if($value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)){
 	        
+	        	$value = urldecode($value);
+	        	
 	        	$_selected = array_merge($selected, explode(',', $value));
 	        	
 	        	$length = count($_selected);

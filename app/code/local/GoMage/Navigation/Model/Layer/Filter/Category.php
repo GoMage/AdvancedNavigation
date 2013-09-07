@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
+ * @version      Release: 2.2
  * @since        Class available since Release 1.0
  */
 
@@ -207,6 +207,18 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
                 {                
                    $cats_ids_str .= ',' . $this->_addChildsCategory($_id,  explode(',',Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)));
                 }
+                                                
+                foreach(explode(',',Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)) as $_id){                	 
+                	$_cat = Mage::getModel('catalog/category')->load($_id);
+                	$cats_ids_str .= ',' . $_cat->getId();
+                	$_parent_cat = Mage::getModel('catalog/category')->load($_cat->getParentId());                	                	
+                	while($category->getLevel() < $_parent_cat->getLevel()){
+                		$cats_ids_str .= ',' . $_parent_cat->getId(); 	
+                		$_parent_cat = Mage::getModel('catalog/category')->load($_parent_cat->getParentId());
+                	}                		
+                }                
+                
+                                
             }
                                       
             $categories = Mage::getResourceModel('catalog/category_collection');

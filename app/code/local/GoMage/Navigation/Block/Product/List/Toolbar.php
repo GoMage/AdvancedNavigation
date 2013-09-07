@@ -7,20 +7,26 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
+ * @version      Release: 2.2
  * @since        Class available since Release 1.0
  */
 
 class GoMage_Navigation_Block_Product_List_Toolbar extends Mage_Catalog_Block_Product_List_Toolbar
 {
     
-    public function getPagerUrl($params=array())
-    {
+	protected function _toHtml(){
+    	if(Mage::helper('gomage_navigation')->isGomageNavigationAjax()){
+            $this->setTemplate('gomage/navigation/catalog/product/list/toolbar.phtml');
+        }        
+        return parent::_toHtml();
+    }
+    
+    public function getPagerUrl($params=array()){
     	
-    	if(intval(Mage::getStoreConfigFlag('gomage_navigation/general/mode'))){
-    	    	    
-    		$params['ajax']     = null;
-    	
+    	if(Mage::helper('gomage_navigation')->isGomageNavigationAjax()){    	    	    
+    		$params['ajax'] = 1;    	
+    	}else{
+    		$params['ajax'] = null;
     	}
     	
     	$urlParams = array();
@@ -29,8 +35,8 @@ class GoMage_Navigation_Block_Product_List_Toolbar extends Mage_Catalog_Block_Pr
         $urlParams['_escape']   = true;
         $urlParams['_use_rewrite']   = true;
         $urlParams['_query']    = $params;
-        return parent::getUrl('*/*/*', $urlParams);
-    	        
+        
+        return Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $urlParams);        
     }
     
     

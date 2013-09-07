@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
+ * @version      Release: 2.2
  * @since        Class available since Release 1.0
  */
 
@@ -38,7 +38,7 @@ class GoMage_Navigation_Block_Html_Pager extends Mage_Page_Block_Html_Pager
         $urlParams['_use_rewrite']   = true;
         $urlParams['_query']    = $params;
         
-        return $this->getUrl('*/*/*', $urlParams);
+        return Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $urlParams);
     }
     
     public function isAjaxPager(){

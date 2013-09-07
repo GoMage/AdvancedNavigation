@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
+ * @version      Release: 2.2
  * @since        Class available since Release 1.0
  */
 
@@ -179,11 +179,12 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
 						}
         			}
                 });
-                document.observe("dom:loaded", function() {   	
-                	init_filter_type();                	
-                });
-                document.onreadystatechange = init_filter_type;
                 
+                Event.observe(window, "load", function() {
+						init_filter_type();	
+					}
+				);
+                                
                 function init_filter_type() {
                 	Gomage_Navigation_fireEvent($("filter_type"), "change");
                 }

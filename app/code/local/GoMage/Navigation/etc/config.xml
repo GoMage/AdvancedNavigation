@@ -8,14 +8,14 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.1
+ * @version      Release: 2.2
  * @since        Class available since Release 1.0
  */
  -->
 <config>
     <modules>
         <GoMage_Navigation>
-            <version>2.1</version>
+            <version>2.2</version>
         </GoMage_Navigation>
     </modules>
     <global>
@@ -151,6 +151,15 @@
                     </gomage_navigation_set_continue_shopping_url>
                 </observers> 
             </controller_action_predispatch_checkout_cart_index>
+            <catalog_controller_category_init_after>
+                <observers>
+                    <seosuite>
+                        <type>singleton</type>
+                        <class>GoMage_Navigation_Model_Observer</class>
+                        <method>prepareFilterParams</method>
+                    </seosuite>
+                </observers>
+            </catalog_controller_category_init_after> 
 		</events>
 		
 	</global>
@@ -172,6 +181,17 @@
             </updates>
         </layout>
     </frontend>
+    <admin>
+        <routers>
+			<gomage_navigation>
+				<use>admin</use>
+				<args>
+					<module>GoMage_Navigation</module>
+					<frontName>gomage_navigation</frontName>
+				</args>
+			</gomage_navigation>
+        </routers>
+    </admin>
     <adminhtml>    	
     	<events>
 			<admin_system_config_changed_section_gomage_activation>
@@ -192,14 +212,7 @@
 					</files>
 				</GoMage_Navigation>
 			</modules>
-        </translate>
-    	<layout>
-            <updates>
-                <gomage_navigation module="gomage_navigation">
-                    <file>gomage-navigation.xml</file>
-                </gomage_navigation>
-            </updates>
-        </layout>
+        </translate>    	
 		<acl>
 	        <resources>
 	            <admin>
@@ -222,18 +235,14 @@
 	            </admin>
 	        </resources>
 	    </acl>
-	</adminhtml>
-	<admin>
-        <routers>
-			<gomage_navigation>
-				<use>admin</use>
-				<args>
-					<module>GoMage_Navigation</module>
-					<frontName>gomage_navigation</frontName>
-				</args>
-			</gomage_navigation>
-        </routers>
-    </admin>
+	    <layout>
+            <updates>
+                <gomage_navigation module="gomage_navigation">
+                    <file>gomage-navigation.xml</file>
+                </gomage_navigation>
+            </updates>
+        </layout>
+	</adminhtml>	
     <default>
     	<gomage_navigation>  
     	    <general>
