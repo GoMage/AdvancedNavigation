@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 	
@@ -30,6 +30,7 @@ class GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Type_Categor
         	array('value'=>GoMage_Navigation_Model_Layer::FILTER_TYPE_PLAIN, 'label' => $helper->__('Plain')),
         	//array('value'=>GoMage_Navigation_Model_Layer::FILTER_TYPE_FOLDING, 'label' => $helper->__('Folding')),
         	array('value'=>GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK, 'label' => $helper->__('In Block')),
+        	//array('value'=>GoMage_Navigation_Model_Layer::FILTER_TYPE_ACCORDION, 'label' => $helper->__('Accordion')),
         );
     	
     }
@@ -51,6 +52,7 @@ class GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Type_Categor
         	GoMage_Navigation_Model_Layer::FILTER_TYPE_PLAIN => $helper->__('Plain'),
         	//GoMage_Navigation_Model_Layer::FILTER_TYPE_FOLDING => $helper->__('Folding'),
         	GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK => $helper->__('In Block'),
+        	GoMage_Navigation_Model_Layer::FILTER_TYPE_ACCORDION => $helper->__('Accordion'),
         );
     }
 

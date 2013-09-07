@@ -8,7 +8,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
  -->
@@ -31,7 +31,7 @@
             <show_in_store>1</show_in_store>
             <groups>
 				<advancednavigation translate="label">
-					<label>GoMage Advanced Navigation v.2.3</label>
+					<label>GoMage Advanced Navigation v.3.0</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>20</sort_order>
 					<show_in_default>1</show_in_default>
@@ -116,7 +116,43 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>	
 							<comment>It will replace Attribute Numbers to Names</comment>						
-						</frendlyurl>												 																		
+						</frendlyurl>
+						<show_shopby>
+							<label>Show Shop By in</label>
+							<frontend_type>select</frontend_type>
+							<source_model>gomage_navigation/adminhtml_system_config_source_shopby</source_model>
+							<sort_order>22</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>														
+						</show_shopby>
+						<autoscrolling>
+							<label>Use Autoscrolling</label>
+							<frontend_type>select</frontend_type>
+							<source_model>gomage_navigation/adminhtml_system_config_source_autoscrolling</source_model>
+							<sort_order>25</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>														
+						</autoscrolling>
+						<showpager>
+							<label>Show Pager</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>														
+						</showpager>
+						<back_to_top>
+							<label>Show Back to Top Button</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>35</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>														
+						</back_to_top>												 																		
 					</fields>
 				</general>
 				<filter translate="label">
@@ -412,17 +448,7 @@
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
-						</navigation>	
-						<column_color>
-							<label>Background Color (for Plain)</label>
-							<frontend_type>text</frontend_type>							
-							<sort_order>20</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment>e.g. "ffffff", "000" </comment>
-							<validate>color</validate>
-						</column_color>												
+						</navigation>																			
 					</fields>
 				</menubarsettings>
 												
@@ -692,6 +718,17 @@
 							<comment>e.g. "ffffff", "000" </comment>
 							<validate>color</validate>
 						</bordercolor>
+						
+						<textcolor>
+							<label>Text Color</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>85</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>e.g. "ffffff", "000" </comment>
+							<validate>color</validate>
+						</textcolor>
 						
 						<width>
 							<label>Widow Width, px</label>

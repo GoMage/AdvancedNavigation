@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 	
@@ -67,6 +67,55 @@ class GoMage_Navigation_Model_Adminhtml_System_Config_Source_Category_Image_Posi
         } 
         
         return $positionclass;
-    } 
+    }
+
+	public static function getOfferBlockPositionClass($pos)
+    {
+        $positionclass = '';
+        if (!$pos) $pos = self::LEFT;
+        switch ($pos)
+        { 
+            case self::LEFT: 
+                 $positionclass = 'gan-plain-ob-left';
+               break;
+            case self::TOP: 
+                 $positionclass = 'gan-plain-ob-top';
+               break;
+            case self::RIGHT: 
+                 $positionclass = 'gan-plain-ob-right';
+               break;   
+            case self::BOTTOM: 
+                 $positionclass = 'gan-plain-ob-bottom';
+               break; 
+        } 
+        
+        return $positionclass;
+    }
+    
+	public static function getListPositionClass($pos)
+    {
+        $positionclass = '';
+        if (!$pos) $pos = self::LEFT;
+        switch ($pos)
+        { 
+            case self::LEFT: 
+                 $positionclass = ' gan-plain-with-image-left';
+               break;
+            case self::TOP: 
+                 $positionclass = ' gan-plain-with-image-top';
+               break;
+            case self::RIGHT: 
+                 $positionclass = ' gan-plain-with-image-right';
+               break;   
+            case self::BOTTOM: 
+                 $positionclass = ' gan-plain-with-image-bottom';
+               break; 
+        } 
+        
+        return $positionclass;
+    }
+    
+    
+    
             
 }

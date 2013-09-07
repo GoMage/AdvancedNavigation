@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 
@@ -116,10 +116,10 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
     protected function _getSelect($filter)
     {
     	$base_select = $filter->getLayer()->getBaseSelect();
-    	
+    	    	
     	if(isset($base_select['price'])){
         	
-        	$select = $base_select['price'];
+        	$select = $base_select['price'];        	
         
         }else{
         	
@@ -135,7 +135,12 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
         $select->reset(Zend_Db_Select::LIMIT_COUNT);
         $select->reset(Zend_Db_Select::LIMIT_OFFSET);
 		$select->reset(Zend_Db_Select::GROUP);
-		
+
+		$_collection = clone $filter->getLayer()->getProductCollection();
+    	$searched_entity_ids = $_collection->load()->getSearchedEntityIds();
+		if ($searched_entity_ids && is_array($searched_entity_ids) && count($searched_entity_ids)){
+        	$select->where('e.entity_id IN (?)', $searched_entity_ids);	
+        } 
 		
         return $select;
     }

@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 	
@@ -50,5 +50,11 @@
                 return Mage::helper('core')->jsonEncode($this->_procartproductlist);          
     	    }    
         }
+        
+		public function getToolbarHtml()
+	    {
+	    	$toolbar = $this->getChild('toolbar');
+	        return $toolbar->toHtml(); 
+	    }
 	    
     }

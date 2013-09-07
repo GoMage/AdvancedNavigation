@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 2.0
  */
 
@@ -27,7 +27,7 @@
 	$_menu = $menu_block->renderCategoriesMenuHtml(0,'level-top');
 ?>
 <?php if($_menu): ?>
-    <?php switch ($this->getTypeNavigation()):  
+    <?php switch ($menu_block->getTypeNavigation()):  
             case GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN: ?>
               <div class="gan-wrapper gan-top">
                   <ul class="gan-dropdown-list">                  

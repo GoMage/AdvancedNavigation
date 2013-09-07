@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 
@@ -61,6 +61,14 @@ class GoMage_Navigation_Block_Adminhtml_Cms_Page_Edit_Tab_Navigation
             'disabled'  => $isElementDisabled,
         ));
         
+        $navigationFieldset->addField('navigation_category_id', 'select', array(
+            'label'     => Mage::helper('gomage_navigation')->__('Category'),
+            'title'     => Mage::helper('gomage_navigation')->__('Category'),
+            'name'      => 'navigation_category_id',            
+            'options'   => $this->getAvailableCategories(),
+            'disabled'  => $isElementDisabled,
+        ));
+        
         Mage::dispatchEvent('adminhtml_cms_page_edit_tab_navigation_prepare_form', array('form' => $form));
 
         $form->setValues($model->getData());
@@ -68,6 +76,53 @@ class GoMage_Navigation_Block_Adminhtml_Cms_Page_Edit_Tab_Navigation
         $this->setForm($form);
         
         return parent::_prepareForm();
+    }
+    
+    public function getAvailableCategories(){
+    	$options = array(
+            0 => Mage::helper('gomage_navigation')->__('-Select-'),
+        );
+        
+        $websites = Mage::helper('gomage_navigation')->getAvailavelWebsites();
+        
+        if(!empty($websites)){        
+        	$store_ids = array();
+            foreach ($websites as $website_id){
+                $website = Mage::getModel('core/website')->load($website_id);
+                $store_ids = array_unique(array_merge($store_ids, $website->getStoreIds()));
+            }
+ 			if(!count($store_ids)){
+            	$store_ids = array(Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID); 
+        	}
+            
+        	foreach ($store_ids as $store_id)
+	        {
+	            $collection = Mage::getModel('catalog/category')->getCollection()
+	                            ->setStoreId($store_id)                       
+	                            ->addAttributeToSelect('name'); 
+	    	                            
+	            $_root_category = Mage::getModel('core/store')->load($store_id)->getRootCategoryId();
+	                    
+	            $_root_level = Mage::getModel('catalog/category')->load($_root_category)->getLevel();                
+	                            
+	            $collection->addFieldToFilter(array(
+	                    array('attribute'=>'level', 'gt'=>$_root_level)                            
+	            ));                 
+	    
+	            foreach ($collection as $category) {	                
+	                if (!isset($options[$category->getId()]))
+	                {
+	                    $options[$category->getId()] = $category->getName();	                       	                    
+	                }	                
+	            }
+	        } 
+	        
+        }
+        
+        $result = new Varien_Object($options);        
+
+        return $result->getData();
+        
     }
     
     public function getAvailableNavigationStatuses()

@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 2.0
  */
  
@@ -52,10 +52,10 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):	
     		
-    		
-    		$from	= isset($value['from']) ? intval($value['from']) : 0;
-    		$to		= isset($value['to']) ? intval($value['to']) : 0;
-    		
+
+    		$from	= isset($value['from']) ? $value['from'] : 0;
+    		$to		= isset($value['to']) ? $value['to'] : 0;
+
     		$where[] = sprintf("{$tableAlias}.value >= %s", $from) . ($to > 0 ? ' AND ' . sprintf("{$tableAlias}.value <= %d", $to) : '');
     		
     	break;
@@ -156,10 +156,10 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
     {
     	
     	$base_select = $filter->getLayer()->getBaseSelect();
-    	
+    	    	
     	if(isset($base_select[$filter->getRequestVar()])){
         	
-        	$select = $base_select[$filter->getRequestVar()];
+        	$select = $base_select[$filter->getRequestVar()];        	
         
         }else{
     	
@@ -184,6 +184,12 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
                 . " AND decimal_index.store_id={$storeId}",
             array()
         );
+        
+        $_collection = clone $filter->getLayer()->getProductCollection();
+    	$searched_entity_ids = $_collection->load()->getSearchedEntityIds();
+        if ($searched_entity_ids && is_array($searched_entity_ids) && count($searched_entity_ids)){
+        	$select->where('e.entity_id IN (?)', $searched_entity_ids);	
+        } 
 
         return $select;
     }

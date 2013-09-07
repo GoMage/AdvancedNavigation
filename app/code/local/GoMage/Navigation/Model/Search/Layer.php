@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 2.0
  */
  	
@@ -22,24 +22,17 @@
 	    {
 	        if (isset($this->_productCollections[$this->getCurrentCategory()->getId()])) {
 	            $collection = $this->_productCollections[$this->getCurrentCategory()->getId()];
-	        }
-	        else {
-	        	
-	        	if(!($collection = Mage::getResourceModel('catalogsearch/fulltext_collection'))){
-	            	$engine = Mage::helper('catalogsearch')->getEngine();
-	            	$collection = $engine->getResultCollection();
-	            }
-	            
+	        } else {
+	            $collection = Mage::helper('catalogsearch')->getEngine()->getResultCollection();
+	            $collection->setStoreId($this->getCurrentCategory()->getStoreId());
 	            $this->prepareProductCollection($collection);
-	            
-	            $collection->getSelect()->group('e.entity_id');
-	            
+	            $collection->getSelect()->group('e.entity_id'); 
 	            $this->_productCollections[$this->getCurrentCategory()->getId()] = $collection;
 	        }
-	        
-
+	
 	        return $collection;
-	    }
+	    } 
+
 		/**
 	     * Prepare product collection
 	     *
@@ -49,8 +42,7 @@
 	    public function prepareProductCollection($collection)
 	    {
 	        $collection->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
-	            ->addSearchFilter(Mage::helper('catalogsearch')->getQuery()->getQueryText())
-	            ->setStore(Mage::app()->getStore())
+	            ->addSearchFilter(Mage::helper('catalogsearch')->getQuery()->getQueryText())	            
 	            ->addMinimalPrice()
 	            ->addFinalPrice()
 	            ->addTaxPercents()
@@ -104,8 +96,18 @@
 	        $collection->getSelect()->joinLeft(
 	            array($tableAlias => Mage::getSingleton('core/resource')->getTableName('gomage_navigation_attribute')),
 	            "`main_table`.`attribute_id` = `{$tableAlias}`.`attribute_id`",
-	            array('filter_type', 'image_align', 'image_width', 'image_height', 'show_minimized', 'show_image_name', 'show_help', 'show_checkbox', 'popup_text', 'popup_width', 'popup_height', 'filter_reset', 'is_ajax', 'inblock_height', 'filter_button')
+	            array('filter_type', 'image_align', 'image_width', 'image_height', 'show_minimized', 'show_image_name', 'visible_options', 'show_help', 'show_checkbox', 'popup_width', 'popup_height', 'filter_reset', 'is_ajax', 'inblock_height', 'filter_button')
 	        );
+	        
+	        $tableAliasStore = 'gomage_nav_attr_store';
+	        
+	        $collection->getSelect()->joinLeft(
+	        	array($tableAliasStore => Mage::getSingleton('core/resource')->getTableName('gomage_navigation_attribute_store')),
+	            "`main_table`.`attribute_id` = `{$tableAliasStore}`.`attribute_id` and `{$tableAliasStore}`.store_id = " . Mage::app()->getStore()->getStoreId(),
+	        	array('popup_text')
+	        );
+	        
+	        
 	        $connection = Mage::getSingleton('core/resource')->getConnection('read');
 	        $table = Mage::getSingleton('core/resource')->getTableName('gomage_navigation_attribute_option');
 	        

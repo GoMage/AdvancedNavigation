@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 
@@ -70,7 +70,29 @@ class GoMage_Navigation_Block_Layer_Filter_Attribute extends Mage_Catalog_Block_
 			
 		}
 		
-		return (bool) ($this->getAttributeModel()->getShowMinimized() > 0);;
+		return (bool) ($this->getAttributeModel()->getShowMinimized() > 0);
+		
+	}
+	
+	public function getShowAllOptions(){
+		
+		if('true' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar().'_show_all')){
+		
+			return true;
+		
+		}elseif('false' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar().'_show_all')){
+			
+			return false;
+			
+		}
+		
+		return false;
+		
+	}
+	
+	public function getVisibleOptions(){
+		
+		return (int) $this->getAttributeModel()->getVisibleOptions();
 		
 	}
 	

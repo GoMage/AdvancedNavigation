@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 	
@@ -19,6 +19,7 @@
 	            $url = $this->getCurrentUrl();
 	        }
 	        
+	        $url = str_replace('ajax=1&', '', $url);
 	        $url = str_replace('ajax=1', '', $url);
 	        
 	        return $this->urlEncode($url);

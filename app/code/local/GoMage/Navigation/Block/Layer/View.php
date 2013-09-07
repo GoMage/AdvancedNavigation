@@ -7,11 +7,13 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 	
 	class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View{
+		
+		protected $shop_by_in_content = false; 
 		
 		public function getPopupStyle(){
 			
@@ -90,35 +92,68 @@
 
 	        parent::_prepareLayout();
 	        	        	        
-	        if(Mage::helper('gomage_navigation')->isGomageNavigation()){
-	        	
-	            $styles_block = $this->getLayout()->createBlock('core/template', 'advancednavigation_styles')->setTemplate('gomage/navigation/header/styles.php');
-	        
-	            $this->getLayout()->getBlock('head')->setChild('advancednavigation_styles', $styles_block);
-	            
-	        	$this->getLayout()->getBlock('head')->addjs('gomage/advanced-navigation.js');
-	        	$this->getLayout()->getBlock('head')->addCss('css/gomage/advanced-navigation.css');
-	        	
-	        	$this->unsetChild('layer_state');	        
-	        }
+	        if(Mage::helper('gomage_navigation')->isGomageNavigation()){	        		        	        	
+	        	$this->unsetChild('layer_state');
+	        	if (Mage::getStoreConfig('gomage_navigation/general/show_shopby') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN){	        
+		        	$right = $this->getLayout()->getBlock('right');            
+		            if ($right){              	
+		            	$catalog_rightnav = clone $this;
+		            	$catalog_rightnav->setParentBlock($right);
+		            	$catalog_rightnav->setNameInLayout('gomage.catalog.rightnav');
+		            	if ($this->getLayout()->getBlock('gomage.navigation.right')){            	            	          		            	
+		            		$right->insert($catalog_rightnav, 'gomage.navigation.right', true, 'gomage.catalog.rightnav');
+		            	}else{             	           	            	            	          		            	
+		            		$right->insert($catalog_rightnav, '', false, 'gomage.catalog.rightnav');
+		            	}             	           	
+		            }
+	        	}            
+	        }	        	                    
 	    }
 	    
     	protected function _toHtml()
-        {
+        {        	        	
             if(Mage::helper('gomage_navigation')->isGomageNavigation()){
-                $this->setTemplate('gomage/navigation/layer/view.phtml');
+            	if (Mage::getStoreConfig('gomage_navigation/general/show_shopby') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::CONTENT){
+            		if ($this->shop_by_in_content){
+            			$this->setTemplate('gomage/navigation/layer/view.phtml');
+            		}else{
+            			$this->setTemplate(null);
+            		}
+            	}elseif (Mage::getStoreConfig('gomage_navigation/general/show_shopby') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN){
+            		if ($this->getNameInLayout() != 'gomage.catalog.rightnav'){
+            			$this->setTemplate(null);
+            		}else{
+            			$this->setTemplate('gomage/navigation/layer/view.phtml');
+            		}	
+            	}else{	
+                	$this->setTemplate('gomage/navigation/layer/view.phtml');
+            	}	
             }
             return parent::_toHtml();
         }
 	    
     	protected function _getCategoryFilter()
         {
-            if(Mage::helper('gomage_navigation')->isGomageNavigation() && 
-               Mage::getStoreConfigFlag('gomage_navigation/category/active')){
-                if (!Mage::getStoreConfig('gomage_navigation/category/show_shopby'))            
-                    return false;
-                else
-                    return parent::_getCategoryFilter();   
+            if(Mage::helper('gomage_navigation')->isGomageNavigation()){               	
+               	switch(Mage::getStoreConfig('gomage_navigation/general/show_shopby')){
+               		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN :
+               			if (Mage::getStoreConfigFlag('gomage_navigation/category/active') && !Mage::getStoreConfig('gomage_navigation/category/show_shopby')){
+               				return false;
+               			}               			               			
+               		break;
+               		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN :
+               			if (Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/show_shopby')){
+               				return false;
+               			}               			               			
+               		break;
+               		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::CONTENT :
+               			if ((Mage::getStoreConfigFlag('gomage_navigation/category/active') && !Mage::getStoreConfig('gomage_navigation/category/show_shopby')) ||
+               				(Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/show_shopby'))){
+               					return false;
+               				}
+               		break;	
+               	}
+               	return parent::_getCategoryFilter();   
             }else{
                 return parent::_getCategoryFilter();
             }                 
@@ -275,6 +310,11 @@
 		    }
 	        
 	        return Mage::getUrl('*/*/*', $params);
+	    }
+	    
+	    public function setShopByInContent($value){
+	    	$this->shop_by_in_content = $value;
+	    	return $this;
 	    }
 		
 	}

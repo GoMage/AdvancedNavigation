@@ -8,7 +8,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Available since Release 1.0
  */
  -->
@@ -33,13 +33,17 @@
 			<block type="gomage_navigation/head"></block>
 		</reference>
 		<reference name="catalog.topnav">
-			<action method="setTemplate"><template>gomage/navigation/catalog/navigation/top.phtml</template></action>			
+			<action ifconfig="gomage_navigation/menubarsettings/navigation" method="setTemplate"><template>gomage/navigation/catalog/navigation/top.phtml</template></action>			
 		</reference>							
 		<reference name="right">
 			<block type="gomage_navigation/navigation_right"></block>
 		</reference>
 		<reference name="left">
 			<block type="gomage_navigation/navigation_left"></block>
+		</reference>
+		<reference name="before_body_end">
+			<block name="gomage.navigation.more.button" type="gomage_navigation/product_list_more"></block>
+			<block name="gomage.navigation.totop.button" type="gomage_navigation/product_list_totop"></block>
 		</reference>				
 	</default>	
 </layout>

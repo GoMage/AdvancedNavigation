@@ -8,14 +8,14 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
  -->
 <config>
     <modules>
         <GoMage_Navigation>
-            <version>2.2</version>
+            <version>3.0</version>
         </GoMage_Navigation>
     </modules>
     <global>
@@ -58,6 +58,17 @@
                 <class>GoMage_Navigation_Model</class>
                 <resourceModel>gomage_navigation_mysql4</resourceModel>
             </gomage_navigation>
+            <gomage_navigation_mysql4>
+            	<class>GoMage_Navigation_Model_Mysql4</class>
+            	<entities>
+            		 <attribute>
+                        <table>gomage_navigation_attribute</table>
+		             </attribute>
+            		 <attribute_store>
+                        <table>gomage_navigation_attribute_store</table>
+		            </attribute_store>
+            	</entities> 
+            </gomage_navigation_mysql4>
             <catalog>
             	<rewrite>
 	            	<layer>GoMage_Navigation_Model_Layer</layer>
@@ -88,6 +99,11 @@
             		<fulltext_collection>GoMage_Navigation_Model_Resource_Eav_Mysql4_Collection</fulltext_collection>
             	</rewrite>
             </catalogsearch_mysql4>
+            <enterprise_search_resource>
+            	<rewrite>
+            		<collection>GoMage_Navigation_Model_Enterprise_Resource_Collection</collection>
+            	</rewrite>
+            </enterprise_search_resource>
         </models>
         <helpers>
             <gomage_navigation>
@@ -160,6 +176,15 @@
                     </seosuite>
                 </observers>
             </catalog_controller_category_init_after> 
+            <controller_action_predispatch_catalogsearch_result_index>
+            	<observers>
+                    <gomage_navigation_set_continue_shopping_url>
+                        <type>singleton</type>
+                        <class>GoMage_Navigation_Model_Observer</class>
+                        <method>prepareFilterParams</method>
+                    </gomage_navigation_set_continue_shopping_url>
+                </observers> 
+            </controller_action_predispatch_catalogsearch_result_index>
 		</events>
 		
 	</global>
@@ -248,6 +273,7 @@
     	    <general>
     	    	<mode>0</mode>
     	    	<pager>1</pager>
+    	    	<showpager>1</showpager>
     	    </general>  		
     		<filter>
     			<slider_type>cone</slider_type>
@@ -276,11 +302,11 @@
     			<imagealign>left</imagealign>
     			<bgcolor>FFFFFF</bgcolor>
     			<bordercolor>000000</bordercolor>
+    			<textcolor>000000</textcolor>
     			<text>Loading, please wait...</text>
     		</ajaxloader>
     		<menubarsettings>
-    			<navigation>0</navigation>    		
-    			<column_color>ECF3F6</column_color>	
+    			<navigation>0</navigation>    		    				
     		</menubarsettings>	
     		<rightcolumnsettings>
     			<active>0</active>

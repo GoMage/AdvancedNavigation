@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 
@@ -277,6 +277,13 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
             'class' => 'gomage-validate-number',
         ));
         
+        $fieldset->addField('visible_options', 'text', array(
+            'name' => 'visible_options',
+            'label' => Mage::helper('catalog')->__('Visible Options per Attribute'),
+            'title' => Mage::helper('catalog')->__('Visible Options per Attribute'),
+            'class' => 'gomage-validate-number',
+        ));
+        
         $field= $fieldset->addField('show_help', 'select', array(
             'name' => 'show_help',
             'label' => Mage::helper('catalog')->__('Show Help Icon'),
@@ -289,11 +296,6 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
         
         $field->setValue(0);
         
-        $fieldset->addField('popup_text', 'textarea', array(
-            'name' => 'popup_text',
-            'label' => Mage::helper('catalog')->__('Help Icon text'),
-            'title' => Mage::helper('catalog')->__('Help Icon text'),
-        ));
         $fieldset->addField('popup_width', 'text', array(
             'name' => 'popup_width',
             'label' => Mage::helper('catalog')->__('Popup Width, px'),

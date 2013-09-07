@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 	
@@ -41,9 +41,7 @@
 				
 				$attribute->addData($data);
 				
-			}
-			
-			
+			}						
 		}
 		
 		public function moveImageFromTmp($file)
@@ -76,10 +74,7 @@
 	    }
 		
 		public function saveAttribute($event){
-			
-			$connection = Mage::getSingleton('core/resource')->getConnection('read');
-			$table = Mage::getSingleton('core/resource')->getTableName('gomage_navigation_attribute');
-			
+			    					
 			$attribute_id		= (int)$event->getAttribute()->getAttributeId();
 			$filter_type		= (int)$event->getAttribute()->getData('filter_type');
 			$image_align		= (int)$event->getAttribute()->getData('image_align');
@@ -87,63 +82,57 @@
 			$image_height		= (int)$event->getAttribute()->getData('image_height');
 			$show_minimized		= (int)$event->getAttribute()->getData('show_minimized');
 			$show_image_name	= (int)$event->getAttribute()->getData('show_image_name');
+			$visible_options	= (int)$event->getAttribute()->getData('visible_options');
 			$show_help			= (int)$event->getAttribute()->getData('show_help');
 			$show_checkbox		= (int)$event->getAttribute()->getData('show_checkbox');
-			$popup_text			= trim($event->getAttribute()->getData('popup_text'));
+			$popup_text			= (array)$event->getAttribute()->getData('popup_text');			
 			$popup_width		= (int)$event->getAttribute()->getData('popup_width');
 			$popup_height		= (int)$event->getAttribute()->getData('popup_height');
 			$filter_reset		= (int)$event->getAttribute()->getData('filter_reset');
 			$is_ajax		    = (int)$event->getAttribute()->getData('is_ajax');
 			$inblock_height		= (int)$event->getAttribute()->getData('inblock_height');
 			$filter_button		= (int)$event->getAttribute()->getData('filter_button');
-						
-			
-			
-			if($connection->fetchOne("SELECT COUNT(*) FROM {$table} WHERE `attribute_id` = {$attribute_id};") > 0){
-				
-				$connection->query("UPDATE {$table} SET 
-					`filter_type`		= {$filter_type},
-					`image_align`		= {$image_align},
-					`image_width`		= {$image_width},
-					`image_height`		= {$image_height},
-					`show_minimized`	= {$show_minimized},
-					`show_image_name`	= {$show_image_name},
-					`show_checkbox`		= {$show_checkbox},
-					`show_help`			= {$show_help},
-					`popup_text`		= '{$popup_text}',
-					`popup_width`		= {$popup_width},
-					`popup_height`		= {$popup_height},
-					`filter_reset`      = {$filter_reset}, 
-					`is_ajax`      	    = {$is_ajax},
-					`inblock_height`    = {$inblock_height},
-					`filter_button`     = {$filter_button}
 					
-					WHERE `attribute_id` = {$attribute_id};
-				");
-				
-			}else{
-				
-				$connection->query("INSERT INTO {$table} SET 
-					`attribute_id`		= {$attribute_id}, 
-					`filter_type`		= {$filter_type},
-					`image_align`		= {$image_align},
-					`image_width`		= {$image_width},
-					`image_height`		= {$image_height},
-					`show_minimized`	= {$show_minimized},
-					`show_image_name`	= {$show_image_name},
-					`show_checkbox`		= {$show_checkbox},
-					`show_help`			= {$show_help},
-					`popup_text`		= '{$popup_text}',
-					`popup_width`		= {$popup_width},
-					`popup_height`		= {$popup_height},
-					`filter_reset`      = {$filter_reset},
-					`is_ajax`      	    = {$is_ajax},
-					`inblock_height`    = {$inblock_height},
-					`filter_button`     = {$filter_button}
-				");
-				
-			}
+			$attribute = Mage::getModel('gomage_navigation/attribute')->load($attribute_id, 'attribute_id');
 			
+			if (!$attribute->getData('attribute_id')){				
+				$attribute->setData('attribute_id', $attribute_id);
+				$attribute->isObjectNew(true);
+			}	           			 					
+	            					
+	        $attribute->addData(array('filter_type'	=> $filter_type,
+					'image_align' => $image_align,
+					'image_width' => $image_width,
+					'image_height' => $image_height,
+					'show_minimized' => $show_minimized,
+					'show_image_name' => $show_image_name,
+					'show_checkbox' => $show_checkbox,
+					'visible_options' => $visible_options,
+					'show_help' => $show_help,
+					'popup_width' => $popup_width,
+					'popup_height' => $popup_height,
+					'filter_reset' => $filter_reset,
+					'is_ajax' => $is_ajax,
+					'inblock_height' => $inblock_height,
+					'filter_button' => $filter_button));
+	        												
+	        $attribute->save();
+	        
+			foreach ($popup_text as $store_id => $text){			
+				$attribute_store = Mage::getModel('gomage_navigation/attribute_store')	
+									->getCollection()							
+									->addFieldToFilter('attribute_id', $attribute_id)
+	            					->addFieldToFilter('store_id', $store_id)
+	            					->getFirstItem();
+	            					
+	            if (!$attribute_store->getId()){
+	            	$attribute_store->setData('attribute_id', $attribute_id);
+	            	$attribute_store->setData('store_id', $store_id);
+	            }
+	            
+	            $attribute_store->setData('popup_text', $text);
+	            $attribute_store->save();	            					
+			}
 		}
 		
 		public function checkAjax(){
@@ -155,7 +144,15 @@
 					$layout->removeOutputBlock('root');
 					$layout->removeOutputBlock('core_profiler');
 					
-					if($layout->getBlock('catalogsearch.leftnav'))
+					if(!($productsBlock = $layout->getBlock('search_result_list'))){
+						$productsBlock = $layout->getBlock('product_list');
+					}					
+					$product_list_html = ($productsBlock ? Mage::getModel('core/url')->sessionUrlVar($productsBlock->toHtml()) : '');
+					
+					if ($layout->getBlock('gomage.catalog.rightnav')){
+						$navBlock = $layout->getBlock('gomage.catalog.rightnav');
+					}
+					elseif($layout->getBlock('catalogsearch.leftnav'))
                     {
 						$navBlock = $layout->getBlock('catalogsearch.leftnav');
 					}
@@ -172,33 +169,44 @@
                         $navBlock = $layout->getBlock('gomage.enterprise.catalog.leftnav');
                     }
 
-					if(!($productsBlock = $layout->getBlock('search_result_list'))){
-						$productsBlock = $layout->getBlock('product_list');
-					}
-
 					$LeftnavBlock = $layout->getBlock('gomage.navigation.left');
 					$RightnavBlock = $layout->getBlock('gomage.navigation.right');
+					
+					$navigation_more_button = $layout->getBlock('gomage.navigation.more.button');
 
-					$gomage_ajax = $layout->createBlock('gomage_navigation/ajax', 'gomage_ajax');
+					$navigation_html = '';
+					if ($navBlock){
+						if (Mage::getStoreConfig('gomage_navigation/general/show_shopby') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::CONTENT){
+							$navBlock->setShopByInContent(true);
+						}
+						$navigation_html = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
+						$navBlock->setShopByInContent(false);
+					}
+					
+					$gomage_ajax = Mage::getBlockSingleton('gomage_navigation/ajax');
 					$gomage_ajax->addData(
-
 							array(
-								'navigation'	    => ($navBlock ? Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml()) : ''),
-								'product_list'	    => ($productsBlock ? Mage::getModel('core/url')->sessionUrlVar($productsBlock->toHtml()) : ''),
+								'navigation'	    => $navigation_html,
+								'product_list'	    => $product_list_html,
 							    'navigation_left'	=> ($LeftnavBlock ? Mage::getModel('core/url')->sessionUrlVar($LeftnavBlock->toHtml()) : ''), 
 							    'navigation_right'	=> ($RightnavBlock ? Mage::getModel('core/url')->sessionUrlVar($RightnavBlock->toHtml()) : ''),
-							)
-							
+								'navigation_more'   => ($navigation_more_button ? Mage::getModel('core/url')->sessionUrlVar($navigation_more_button->toHtml()) : ''),																													
+							)							
 						);
-						
-					if (Mage::getStoreConfig('gomage_procart/qty_settings/category_page') && $productsBlock) {						
-				        $gomage_ajax->addEvalJs("if (typeof(GomageProcartConfig) != 'undefined') {
-				        	gomage_procart_product_list = " . $productsBlock->getProcartProductList() . ";
-				        	GomageProcartConfig.initialize(gomage_procart_config);
-					        };", "eval_js_procart");	
-					}
-						
-					$layout->addOutputBlock('gomage_ajax', 'toJson');
+
+					if(class_exists('GoMage_Procart_Model_Adminhtml_System_Config_Source_Qtyview')){
+                        if ((Mage::getStoreConfig('gomage_procart/qty_settings/category_page') !=
+                            GoMage_Procart_Model_Adminhtml_System_Config_Source_Qtyview::ARROWS_NO) && $productsBlock) {
+                        $gomage_ajax->addEvalJs("if (typeof(GomageProcartConfig) != 'undefined') {
+                            gomage_procart_product_list = " . $productsBlock->getProcartProductList() . ";
+                            GomageProcartConfig.initialize(gomage_procart_config);
+                            };", "eval_js_procart");
+                        }
+                    }
+					
+					$gomage_ajax->setNameInLayout('gomage_ajax');
+					$layout->setBlock('gomage_ajax', $gomage_ajax);					
+					$layout->addOutputBlock($gomage_ajax->getNameInLayout(), 'toJson');
 					
 				}
 				

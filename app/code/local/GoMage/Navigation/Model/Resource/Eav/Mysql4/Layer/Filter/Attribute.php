@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 
@@ -92,16 +92,13 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute extends
     	$connection = $this->_getReadAdapter();
         $attribute  = $filter->getAttributeModel();
         $tableAlias = $attribute->getAttributeCode() . '_idx';
-    	
-        // clone select from collection with filters
-        //$select = clone $filter->getLayer()->getProductCollection()->getSelect();
         
-        $base_select = $filter->getLayer()->getBaseSelect();
-        
+        $base_select = $filter->getLayer()->getBaseSelect();        
+                
         if(isset($base_select[$attribute->getAttributeCode()])){
         
         	$select = $base_select[$attribute->getAttributeCode()];
-        
+        	        
         }else{
         	
         	$select = clone $filter->getLayer()->getProductCollection()->getSelect();
@@ -111,8 +108,7 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute extends
         // reset columns, order and limitation conditions
         $select->reset(Zend_Db_Select::COLUMNS);
         $select->reset(Zend_Db_Select::ORDER);
-        $select->reset(Zend_Db_Select::LIMIT_COUNT);
-        $select->reset(Zend_Db_Select::LIMIT_OFFSET);
+        $select->reset(Zend_Db_Select::LIMIT_COUNT);        
         $select->reset(Zend_Db_Select::LIMIT_OFFSET);
         $select->reset(Zend_Db_Select::GROUP);
 
@@ -129,6 +125,12 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute extends
                 join(' AND ', $conditions),
                 array('value', 'count' => "COUNT(DISTINCT {$tableAlias}.entity_id)"))
             ->group("{$tableAlias}.value");
+
+        $_collection = clone $filter->getLayer()->getProductCollection();
+    	$searched_entity_ids = $_collection->load()->getSearchedEntityIds();    
+        if ($searched_entity_ids && is_array($searched_entity_ids) && count($searched_entity_ids)){
+        	$select->where('e.entity_id IN (?)', $searched_entity_ids);	
+        }    
 		
         return $connection->fetchPairs($select);
     }

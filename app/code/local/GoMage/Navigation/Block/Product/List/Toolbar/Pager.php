@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 
@@ -30,8 +30,8 @@ class GoMage_Navigation_Block_Product_List_Toolbar_Pager extends Mage_Page_Block
     	   $params['ajax'] = 1;    	
     	}else{
     	   $params['ajax'] = null; 
-    	}    	
-    	    	    	
+    	}
+    	    	    	    	    	
         $urlParams = array();
         $urlParams['_nosid']    = true;
         $urlParams['_current']  = true;

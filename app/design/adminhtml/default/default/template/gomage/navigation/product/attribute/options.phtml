@@ -7,10 +7,10 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
- 
+
 $config = new Varien_Object();
 $type = 'option_image';
 
@@ -27,7 +27,8 @@ $config->setReplaceBrowseWithRemove(true);
 $config->setWidth('32');
 $config->setHideUploadButton(true);
 $json_config = Mage::helper('core')->jsonEncode($config->getData());
- 	 
+
+$show_options = 10;
  	
  
 ?>
@@ -59,6 +60,33 @@ $json_config = Mage::helper('core')->jsonEncode($config->getData());
                     <td>
                         <input class="input-text<?php if($_store->getId()==0): ?> required-option<?php endif; ?>" type="text" name="frontend_label[<?php echo $_store->getId() ?>]" value="<?php echo $this->htmlEscape($_labels[$_store->getId()]) ?>"<?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/>
                     </td>
+                    <?php endforeach; ?>
+                </tr>
+            </table>
+            </div>
+    </div>
+</div>
+<br/>
+<div class="entity-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('catalog')->__('Manage Help Icon text') ?></h4>
+    </div>
+    <div class="box">
+            <div class="hor-scroll">
+            <table class="dynamic-grid" cellspacing="0" id="attribute-labels-popup-text-table">
+                <tr>
+	                <?php foreach ($this->getStores() as $_store): ?>
+	                	<?php if ($_store->getId() == 0) continue; ?>
+	                    <th><?php echo $_store->getName() ?></th>
+	                <?php endforeach; ?>
+                </tr>
+                <tr>
+                    <?php $_labels = $this->getPopupTextValues(); ?>
+                    <?php foreach ($this->getStores() as $_store): ?>
+	                    <?php if ($_store->getId() == 0) continue; ?>
+	                    <td>                        
+	                        <textarea <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?> class="textarea" cols="15" rows="2" name="popup_text[<?php echo $_store->getId() ?>]"><?php echo $this->htmlEscape($_labels[$_store->getId()]) ?></textarea>
+	                    </td>
                     <?php endforeach; ?>
                 </tr>
             </table>
@@ -105,6 +133,13 @@ $json_config = Mage::helper('core')->jsonEncode($config->getData());
         </div>
         <input type="hidden" id="option-count-check" value="" />
     </div>
+    <?php if (count($this->getOptionValues()) > $show_options): ?>
+    	<div id="show_all_options_wrapper">
+    		<?php echo $this->__('Options 1 to %s of %s total', $show_options, count($this->getOptionValues())); ?>
+    		<button onclick="ganShowAllOptions()" class="scalable add" type="button" title="<?php echo $this->__('Show All Options'); ?>" id="show_all_options"><span><span><span><?php echo $this->__('Show All Options'); ?></span></span></span></button>    		 
+    	</div>
+    <?php endif; ?>
+    
 </div>
 								
 <script type="text/javascript">
@@ -418,8 +453,24 @@ Validation.addAllThese([
     ['required-options-count', '<?php echo Mage::helper('catalog')->__('Options is required') ?>', function(v) {
         return !Validation.get('IsEmpty').test(v);
 }]]);
+<?php $_i = 0; ?>
 <?php foreach ($this->getOptionValues() as $_value): ?>
-    attributeOption.add(<?php echo $_value->toJson() ?>);
+	<?php $_i++; ?>
+    attributeOption.add(<?php echo $_value->toJson() ?>);    
+    <?php if ($_i == $show_options) break; ?>
 <?php endforeach; ?>
+
+<?php if (count($this->getOptionValues()) > $show_options): ?>
+ function ganShowAllOptions(){
+	 <?php $_i = 0; ?>
+	 <?php foreach ($this->getOptionValues() as $_value): ?>
+	     <?php $_i++; ?>
+	     <?php if ($_i <= $show_options) continue; ?>
+	     attributeOption.add(<?php echo $_value->toJson() ?>);	     	     
+	 <?php endforeach; ?>
+	 $('show_all_options_wrapper').hide();
+ }
+<?php endif; ?>
+
 //]]>
 </script>

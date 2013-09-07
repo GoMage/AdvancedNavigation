@@ -7,20 +7,22 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 	
-	class GoMage_Navigation_Model_Resource_Eav_Mysql4_Product_Collection extends Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection{
+class GoMage_Navigation_Model_Resource_Eav_Mysql4_Product_Collection extends Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection{
 		
-		
-		public function getSelectCountSql()
-	    {
-	    	
-	        $select = parent::getSelectCountSql();
-	        $select->reset(Zend_Db_Select::GROUP);
-	        
-	        return $select;
-	    }
-		
+	public function getSelectCountSql()
+    {    	
+        $select = parent::getSelectCountSql();
+        $select->reset(Zend_Db_Select::GROUP);
+        
+        return $select;
+    }
+    
+	public function getSearchedEntityIds(){
+		return false;		
 	}
+		
+}

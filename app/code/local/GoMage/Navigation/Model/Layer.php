@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 	
@@ -24,6 +24,7 @@
 		const FILTER_TYPE_DEFAULT_PRO       = 8;
 		const FILTER_TYPE_DEFAULT_INBLOCK   = 9;
 		const FILTER_TYPE_INPUT_SLIDER	    = 10;
+		const FILTER_TYPE_ACCORDION	    	= 11;
 		
 		public function prepareProductCollection($collection){
 			
@@ -46,7 +47,15 @@
 	        $collection->getSelect()->joinLeft(
 	            array($tableAlias => Mage::getSingleton('core/resource')->getTableName('gomage_navigation_attribute')),
 	            "`main_table`.`attribute_id` = `{$tableAlias}`.`attribute_id`",
-	            array('filter_type', 'image_align', 'image_width', 'image_height', 'show_minimized', 'show_image_name', 'show_help', 'show_checkbox', 'popup_text', 'popup_width', 'popup_height', 'filter_reset', 'is_ajax', 'inblock_height', 'filter_button')
+	            array('filter_type', 'image_align', 'image_width', 'image_height', 'show_minimized', 'show_image_name', 'visible_options', 'show_help', 'show_checkbox', 'popup_width', 'popup_height', 'filter_reset', 'is_ajax', 'inblock_height', 'filter_button')
+	        );
+	        
+	        $tableAliasStore = 'gomage_nav_attr_store';
+	        
+	        $collection->getSelect()->joinLeft(
+	        	array($tableAliasStore => Mage::getSingleton('core/resource')->getTableName('gomage_navigation_attribute_store')),
+	            "`main_table`.`attribute_id` = `{$tableAliasStore}`.`attribute_id` and `{$tableAliasStore}`.store_id = " . Mage::app()->getStore()->getStoreId(),
+	        	array('popup_text')
 	        );
 	        
 	        $connection = Mage::getSingleton('core/resource')->getConnection('read');

@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.2
+ * @version      Release: 3.0
  * @since        Class available since Release 1.0
  */
 
@@ -199,10 +199,10 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
                 }
                 
             }else {
-                $cats_ids = array();
+                $cats_ids = array();                
                 if ($category->getChildren())
-                  $cats_ids = explode(',', $category->getChildren());               
-                                                      
+                  $cats_ids = explode(',', $category->getChildren());
+                                                                                                       
                 $cats_ids_str = '0';
                 
                 foreach ($cats_ids as $_id)
@@ -213,14 +213,15 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
                 foreach(explode(',',Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)) as $_id){                	 
                 	$_cat = Mage::getModel('catalog/category')->load($_id);
                 	$cats_ids_str .= ',' . $_cat->getId();
+                	if ($_cat->getChildren()){
+                		$cats_ids_str .= ',' . $_cat->getChildren();
+                	}
                 	$_parent_cat = Mage::getModel('catalog/category')->load($_cat->getParentId());                	                	
                 	while($category->getLevel() < $_parent_cat->getLevel()){
                 		$cats_ids_str .= ',' . $_parent_cat->getId(); 	
                 		$_parent_cat = Mage::getModel('catalog/category')->load($_parent_cat->getParentId());
                 	}                		
-                }                
-                
-                                
+                }                                
             }
                                       
             $categories = Mage::getResourceModel('catalog/category_collection');
@@ -235,7 +236,7 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
 	            ->addIdFilter($cats_ids_str)	            
 	            ->joinUrlRewrite()	            	            
 	            ->load();
-	            
+	            	            
 	        $category_list_ids = array();
 	        foreach ($categories as $category){
 	        	$category_list_ids[$category->getId()] = $category;
@@ -286,8 +287,9 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
 	                		$active = false;
 		                	
 		                	if(!empty($selected)){
-		                	
-		                		$value = implode(',',array_merge($selected, (array)$category->getId()));
+		                		
+		                		$value = $this->_prepareRequestValue($selected, $category);		                		 		                	
+		                		$value = implode(',', $value);
 		                	
 		                	}else{
 		                		
@@ -344,6 +346,26 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
 	    		$this->_renderCategoryList($_category, $category_list_ids);
 	    	}
     	}
+    }
+    
+    //remove parent category from filter
+    protected function _prepareRequestValue($selected, $category){
+    	$result = array();
+    	$parent_ids = $category->getParentIds();
+    	
+    	foreach ($selected as $cat_id){
+    		if (in_array($cat_id, $parent_ids)){
+	    		$cat = Mage::getModel('catalog/category')->load($cat_id);
+	    		if ($cat->getLevel() <  $category->getLevel()){
+	    			continue; 
+	    		}
+    		}
+    		$result[] = $cat_id;    		
+    	}
+    	
+    	$result[] = $category->getId();
+    	
+    	return $result; 
     }
     
 }
