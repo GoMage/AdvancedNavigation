@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 1.0
  */
 
@@ -97,6 +97,33 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
         }        
             
         return $this->_type_navigation; 
+    }
+
+    public function getInblockType()
+    {
+        switch ($this->_navigation_place)
+        {
+            case self::LEFT_COLUMN :
+                return Mage::getStoreConfig('gomage_navigation/category/inblock_type');
+                break;
+            case self::RIGTH_COLUMN :
+                return Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/inblock_type');
+                break;
+        }
+    }
+
+    public function getMaxInBlockHeight()
+    {
+        switch ($this->_navigation_place)
+        {
+            case self::LEFT_COLUMN :
+                return Mage::getStoreConfig('gomage_navigation/category/max_inblock_height');
+                break;
+            case self::RIGTH_COLUMN :
+                return Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/max_inblock_height');
+                break;
+        }
+
     }
     
     public function getIsAjax()
@@ -462,7 +489,6 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
         if(Mage::helper('gomage_navigation')->isGomageNavigation()){
             if($head_block = $this->getLayout()->getBlock('head')){        	
 	            $head_block->addCss('css/gomage/advanced-navigation.css'); 
-	            $head_block->addjs('gomage/category-navigation.js');
             }
         }       
     }
@@ -732,13 +758,13 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
         if (count($classes) > 0) {
             $attributes['class'] = implode(' ', $classes);
         }
-        
+
         switch ($this->getTypeNavigation())
         {
             case GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN:
                 
                 if ($this->getIsAjax())                
-                    $attributes['onchange'] = "setNavigationUrl(this.value); return false;";                
+                    $attributes['onchange'] = "GomageNavigation.setNavigationUrl(this.value); return false;";
                 else                
                     $attributes['onchange'] = "window.location=this.value";
                     
@@ -863,7 +889,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                     $htmlA = '<a href="'.$this->getCategoryUrl($category).'"'.$linkClass;        
                     if ($this->getIsAjax())
                     {
-                        $htmlA .= ' onclick="setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
                     }
                     $htmlA .= '>';
                     
@@ -1017,7 +1043,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                      $htmlA = '<a style="padding-left:' .  (10*($category->getLevel() - ($this->_root_level + 1))) . 'px;" href="'.$this->getCategoryUrl($category).'"'.$linkClass;                              
                      if ($this->getIsAjax())
                      {
-                        $htmlA .= ' onclick="setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
                      }
                      $htmlA .= '>';                    
                      $html[] = $htmlA;
@@ -1094,7 +1120,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                         
                 if ($this->getIsAjax())
                 {
-                    $htmlA .= ' onclick="setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                    $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
                 }
                 
                 if ($this->getIsActiveAjaxCategory($category) || $this->isCategoryActive($category))
@@ -1144,7 +1170,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                               
                 if ($this->getIsAjax())
                 {
-                    $htmlA .= ' onclick="setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                    $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
                 }
                 if ($this->getIsActiveAjaxCategory($category) || $this->isCategoryActive($category))
                 {
@@ -1184,7 +1210,9 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 $html[] = '</li>';
                 break;
                 
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_PRO:    
+            case GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_PRO:
+
+
             	
                 if ($hasActiveChildren && !$noEventAttributes) {
                          $attributes['onmouseover'] = 'toggleMenu(this,1)';
@@ -1202,7 +1230,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                                   
                     if ($this->getIsAjax())
                     {
-                        $htmlA .= ' onclick="setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
                     }
                     if ($this->isCategoryActive($category)) {
                         $htmlA .= ' class="active" ';
@@ -1292,7 +1320,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
 	
 	                     if ($this->getIsAjax())
 	                     {
-	                        $htmlA .= ' onclick="setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+	                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
 	                     }
 	                     $htmlA .= '>';
 	                     $html[] = $htmlA;
@@ -1339,7 +1367,8 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
 	                }
             	 break;
             default:    
-            	                               
+
+
                 if ($this->_navigation_place == self::MENU_BAR)
                 {                                
                     if ($hasActiveChildren && !$noEventAttributes) {
@@ -1403,8 +1432,9 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                                   
                     if ($this->getIsAjax())
                     {
-                        $htmlA .= ' onclick="setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
                     }
+
                     if ($this->getIsActiveAjaxCategory($category) || $this->isCategoryActive($category))
                     {
                         $htmlA .= ' class="active" ';

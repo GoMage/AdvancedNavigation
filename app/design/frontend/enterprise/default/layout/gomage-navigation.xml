@@ -4,11 +4,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Available since Release 1.0
  */
  -->
@@ -30,6 +30,11 @@
 			<remove name="catalog.leftnav" />
 		</reference>
 	</catalog_category_default>
+	<catalog_product_view>
+		<reference name="content">
+            <block type="gomage_navigation/product_navigation" name="product.navigation" before="product.info" />
+        </reference>
+	</catalog_product_view>
     <default>
     	<reference name="after_body_start">
 			<block type="gomage_navigation/head"></block>

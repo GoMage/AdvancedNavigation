@@ -3,17 +3,41 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 1.0
  */
-?>
 
+?>
 <style type="text/css">
-	
+
+	 <?php
+			$_color1 = Mage::getStoreConfig('gomage_navigation/filter/bg_color'); 
+			$_color2 = Mage::getStoreConfig('gomage_navigation/filter/bg_color2');
+			$_font_color = Mage::getStoreConfig('gomage_navigation/filter/font_color');
+	 ?>
+  
+	/* Buttons Color */
+	.block-layered-nav .block-content button.button span span{
+    
+   color: <?php echo Mage::helper('gomage_navigation')->formatColor($_font_color);?>;
+    
+    <?php if (Mage::getStoreConfig('gomage_navigation/filter/gradient') && $_color1 && $_color2): ?>
+		background-color: <?php echo Mage::helper('gomage_navigation')->formatColor($_color1);?>;
+		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(<?php echo Mage::helper('gomage_navigation')->formatColor($_color1);?>), to(<?php echo Mage::helper('gomage_navigation')->formatColor($_color2);?>));
+		background-image: -webkit-linear-gradient(top, <?php echo Mage::helper('gomage_navigation')->formatColor($_color1);?>, <?php echo Mage::helper('gomage_navigation')->formatColor($_color2);?>);
+		background-image:    -moz-linear-gradient(top, <?php echo Mage::helper('gomage_navigation')->formatColor($_color1);?>, <?php echo Mage::helper('gomage_navigation')->formatColor($_color2);?>);
+		background-image:      -o-linear-gradient(top, <?php echo Mage::helper('gomage_navigation')->formatColor($_color1);?>, <?php echo Mage::helper('gomage_navigation')->formatColor($_color2);?>);
+		background-image:         linear-gradient(to bottom, <?php echo Mage::helper('gomage_navigation')->formatColor($_color1);?>, <?php echo Mage::helper('gomage_navigation')->formatColor($_color2);?>);
+    
+    <?php else:?>
+    background: <?php echo Mage::helper('gomage_navigation')->formatColor($_color1);?>;
+    <?php endif;?>
+	}  
+		
 	.gan-loadinfo{
 		
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/ajaxloader/bordercolor')):?>
@@ -50,18 +74,8 @@
 		<?php endif;?>
 	}
 	
-	/* Buttons Color */
-	.block-layered-nav .block-content button.button span span{
-		<?php if($_color = Mage::getStoreConfig('gomage_navigation/filter/button_style')):?>
-		color:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?>;
-		<?php else:?>
-		color:#519cde;
-		<?php endif;?>
-		
-	}
-	
 	/* Slider Color */	
-	#narrow-by-list .gan-slider-span{
+	.narrow-by-list .gan-slider-span{
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/filter/slider_style')):?>
 		background:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?>;
 		<?php else:?>
@@ -70,9 +84,9 @@
 	}
 	
 	/* Popup Window Background */
-	#gan-left-nav-main-container .filter-note-content,
-	#gan-right-nav-main-container .filter-note-content,
-	#narrow-by-list .filter-note-content{
+	#gan-left-nav-main-container filter-note-content-in,
+	#gan-right-nav-main-container .filter-note-content-in,
+	.narrow-by-list .filter-note-content-in{
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/filter/popup_style')):?>
 		background:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?>;
 		<?php else:?>
@@ -83,7 +97,7 @@
 	/* Help Icon View */
 	#gan-left-nav-main-container .filter-note-handle,
 	#gan-right-nav-main-container .filter-note-handle,
-	#narrow-by-list .filter-note-handle{
+	.narrow-by-list .filter-note-handle{
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/filter/icon_style')):?>
 		color:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?>;
 		<?php else:?>
@@ -210,32 +224,54 @@
 		<?php endforeach; ?>
 	<?php endif; ?>
 </style>
+
 <script type="text/javascript">
 //<![CDATA[
-	
-	<?php if($loadimage = Mage::getStoreConfig('gomage_navigation/ajaxloader/loadimage')):?>
-	var loadimage = '<?php echo Mage::getBaseUrl("media")."gomage/config/".$loadimage;?>';
-	<?php else:?>
-	var loadimage = '<?php echo $this->getSkinUrl("images/gomage/loadinfo.gif");?>';
-	<?php endif;?>
-	var loadimagealign = '<?php echo Mage::getStoreConfig('gomage_navigation/ajaxloader/imagealign');?>';
-	
-	<?php		
-		$text = trim(Mage::getStoreConfig('gomage_navigation/ajaxloader/text')) ? trim(Mage::getStoreConfig('gomage_navigation/ajaxloader/text')) : $this->__('Loading, please wait...');
-		$text = addslashes(str_replace("\n", "<br/>", str_replace("\r", '', $text)));		
-	?>
-	
-	var gomage_navigation_loadinfo_text = "<?php echo $text?>";
-	var gomage_navigation_urlhash = <?php if (Mage::getStoreConfig('gomage_navigation/general/urlhash')): ?>true<?php else: ?>false<?php endif; ?>;
-	<?php if ($url = $this->getNavigationCatigoryUrl()): ?>
-		var gan_static_navigation_url = '<?php echo $url; ?>';
-		gomage_navigation_urlhash = false;
-	<?php endif; ?>
 
-	<?php if (Mage::getStoreConfig('gomage_navigation/general/autoscrolling') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Autoscrolling::AJAX): ?>	
-		var gan_more_type_ajax = true;	
-	<?php endif; ?>
-	var gan_shop_by_area = <?php echo intval(Mage::getStoreConfig('gomage_navigation/general/show_shopby')); ?>;
+<?php		
+	$text = trim(Mage::getStoreConfig('gomage_navigation/ajaxloader/text')) ? trim(Mage::getStoreConfig('gomage_navigation/ajaxloader/text')) : $this->__('Loading, please wait...');
+	$text = addslashes(str_replace("\n", "<br/>", str_replace("\r", '', $text)));
 
+	$currentCategory = Mage::registry('current_category');
+            	
+	if ( ($currentCategory && $currentCategory->getData('navigation_pw_gn_shopby') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::USE_GLOBAL)
+			||
+		  !$currentCategory )
+	{
+		$position = Mage::getStoreConfig('gomage_navigation/general/show_shopby');
+	}	        
+	else if( $currentCategory )
+	{
+	   	$position = $currentCategory->getData('navigation_pw_gn_shopby');
+	}
+?>
+
+var GomageNavigation = new GomageNavigationClass({
+			<?php if($loadimage = Mage::getStoreConfig('gomage_navigation/ajaxloader/loadimage')):?>
+			loadimage: '<?php echo Mage::getBaseUrl("media")."gomage/config/".$loadimage;?>',
+			<?php else:?>
+			loadimage: '<?php echo $this->getSkinUrl("images/gomage/loadinfo.gif");?>',
+			<?php endif;?>
+			loadimagealign: '<?php echo Mage::getStoreConfig('gomage_navigation/ajaxloader/imagealign');?>',
+			back_to_top_action: '<?php echo Mage::getStoreConfig('gomage_navigation/general/back_to_top_action');?>',
+			gomage_navigation_loadinfo_text: "<?php echo $text?>",
+			
+			<?php if ($url = $this->getNavigationCatigoryUrl()): ?>
+				gan_static_navigation_url: '<?php echo $url; ?>',
+				gomage_navigation_urlhash: false,
+			<?php else:?>
+				gomage_navigation_urlhash: <?php if (Mage::getStoreConfig('gomage_navigation/filter_settings/urlhash')): ?>true<?php else: ?>false<?php endif; ?>,
+			<?php endif; ?>
+
+		    <?php if (Mage::getStoreConfig('gomage_navigation/general/autoscrolling') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Autoscrolling::AJAX): ?>	
+			    gan_more_type_ajax: true,	
+			<?php endif; ?>
+			gan_shop_by_area: <?php echo intval($position); ?>,
+            <?php if ( Mage::getStoreConfigFlag('gomage_navigation/filter/show_help') ): ?>
+            help_icon_open_type: 'click',
+            <?php else: ?>
+            help_icon_open_type: 'over',
+            <?php endif; ?>
+		});
 //]]>	
 </script>

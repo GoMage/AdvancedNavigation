@@ -3,16 +3,17 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 1.0
  */
 
 class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Layer_Filter_Price
 {
+	protected $_activeFilters = array();
 	
 	public function getRemoveUrl($ajax = false)
     {
@@ -81,6 +82,18 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
         return trim($this->getAttributeModel()->getCategoryIdsFilter());
         
     }
+    
+    public function getAttributeLocation(){
+        
+        return trim($this->getAttributeModel()->getAttributeLocation());
+        
+    }
+
+	public function getShowCurrency(){
+        
+        return trim($this->getAttributeModel()->getShowCurrency());
+        
+    }
 	
 	public function getPopupWidth(){
 		
@@ -94,13 +107,13 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
 		
 	}
 	
-	public function canShowMinimized(){
+	public function canShowMinimized($side){
 		
-		if('true' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar().'_is_open')){
+		if('true' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')){
 		
 			return false;
 		
-		}elseif('false' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar().'_is_open')){
+		}elseif('false' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')){
 			
 			return true;
 			
@@ -184,8 +197,36 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
         return $this->getAttributeModel()->getFilterType();    
     }
     
+    
+    
+    public function isActiveFilter($label)
+    {
+    	if ( !$this->_activeFilters )
+    	{
+    		$this->_activeFilters = $this->getLayer()->getState()->getFilters();
+    	}
+
+        foreach( $this->_activeFilters as $filter )
+        {
+        	if ( $filter->getLabel() == $label )
+        	{
+	        	return true;
+        	} 
+        }
+        
+        return false;
+    }
+    
     public function getInBlockHeight(){
         return $this->getAttributeModel()->getInblockHeight();    
+    }
+    
+	public function getInblockType(){
+        return $this->getAttributeModel()->getInblockType();    
+    }
+    
+	public function getMaxInBlockHeight(){
+        return $this->getAttributeModel()->getMaxInblockHeight();    
     }
     
     public function canShowFilterButton(){        

@@ -4,18 +4,18 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 1.0
  */
  -->
 <config>
     <modules>
         <GoMage_Navigation>
-            <version>3.1</version>
+            <version>4.0</version>
         </GoMage_Navigation>
     </modules>
     <global>
@@ -94,6 +94,11 @@
 	       			<layer>GoMage_Navigation_Model_Search_Layer</layer>
 	       		</rewrite>
 	       	</catalogsearch>
+	       	<enterprise_search>
+	       		<rewrite>
+	       			<search_layer>GoMage_Navigation_Model_Enterprise_Searchlayer</search_layer>
+	       		</rewrite>
+	       	</enterprise_search>
             <catalogsearch_mysql4>
             	<rewrite>
             		<fulltext_collection>GoMage_Navigation_Model_Resource_Eav_Mysql4_Collection</fulltext_collection>
@@ -233,6 +238,14 @@
                     </navigation_collect_totals_after>
                 </observers>
             </admin_system_config_changed_section_gomage_activation>
+            <controller_action_predispatch>
+                <observers>
+                    <gomage_navigation_notify>
+                        <class>gomage_navigation/observer_notify</class>
+                        <method>notify</method>
+                    </gomage_navigation_notify>
+                </observers>
+            </controller_action_predispatch> 
         </events>        
     	<translate>
 			<modules>
@@ -286,7 +299,11 @@
     			<popup_style>FFFFFF</popup_style>
     			<icon_style>1F5070</icon_style>
     			<button_style>1F5070</button_style>
-    			<style>E7F1F4</style>    			
+    			<style>E7F1F4</style> 
+    			<bg_color>FFFFFF</bg_color>   
+    			<gradient>1</gradient>	
+    			<bg_color2>FFFFFF</bg_color2>	
+    			<font_color>519CDE</font_color>	
     		</filter>
     		<category>
     			<active>0</active>

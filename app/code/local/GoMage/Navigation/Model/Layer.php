@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 1.0
  */
 	
@@ -47,7 +47,30 @@
 	        $collection->getSelect()->joinLeft(
 	            array($tableAlias => Mage::getSingleton('core/resource')->getTableName('gomage_navigation_attribute')),
 	            "`main_table`.`attribute_id` = `{$tableAlias}`.`attribute_id`",
-	            array('filter_type', 'image_align', 'image_width', 'image_height', 'show_minimized', 'show_image_name', 'visible_options', 'show_help', 'show_checkbox', 'popup_width', 'popup_height', 'filter_reset', 'is_ajax', 'inblock_height', 'filter_button', 'category_ids_filter')
+	            array('filter_type',
+	                  'inblock_type',
+	                  'round_to', 
+	                  'show_currency',
+	                  'image_align', 
+	                  'image_width', 
+	                  'image_height', 
+	                  'show_minimized', 
+	                  'show_image_name', 
+	                  'visible_options', 
+	                  'show_help', 
+	                  'show_checkbox', 
+	                  'popup_width', 
+	                  'popup_height', 
+	                  'filter_reset', 
+	                  'is_ajax', 
+	                  'inblock_height',
+	                  'max_inblock_height', 
+	                  'filter_button', 
+	                  'category_ids_filter',
+	            	  'range_options',
+	            	  'range_manual',
+	                  'range_auto',
+	            	  'attribute_location')
 	        );
 	        
 	        $tableAliasStore = 'gomage_nav_attr_store';

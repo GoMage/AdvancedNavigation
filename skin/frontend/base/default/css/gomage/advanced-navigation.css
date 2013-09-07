@@ -42,14 +42,14 @@
   border:1px solid #A0B3C3;
   padding:0;
 }
-.block-layered-nav #narrow-by-list{
-	padding-bottom:5px;
+.block.block-layered-nav .block-content{
   position:relative;
-}
+  padding-bottom:5px;
+  }
 .sidebar .block-layered-nav dl{
   padding:0;
   }
-.block-layered-nav #narrow-by-list dt{
+.block-layered-nav .narrow-by-list dt{
 	cursor:pointer;
 	padding:7px 30px 2px 0;
 	font-weight: 700;
@@ -57,14 +57,14 @@
   background:none;
   overflow:hidden;
 }
-.block-layered-nav #narrow-by-list .gan-attribute{
+.block-layered-nav .narrow-by-list .gan-attribute{
   background:url("../../images/gomage/advanced-navigation/bkg_block-layered-dd.gif") repeat-x 0 0;
   }
-.block-layered-nav #narrow-by-list .gan-attribute:first-child,
-.block-layered-nav #narrow-by-list .filter-note-content:first-child + .gan-attribute{
+.block-layered-nav .narrow-by-list .gan-attribute:first-child,
+.block-layered-nav .narrow-by-list .filter-note-content:first-child + .gan-attribute{
   background:none;
 }
-.block-layered-nav #narrow-by-list dt .filter-name{
+.block-layered-nav .narrow-by-list dt .filter-name{
   background:url("../../images/gomage/advanced-navigation/bkg_block-layered-dt.gif") no-repeat 9px 4px;
   float:left;
   padding:2px 0 0 28px;
@@ -81,7 +81,7 @@
 .block-layered-nav dd,
 .category-products,
 div.col-main p.note-msg,
-.block-layered-nav #narrow-by-list dt{
+.block-layered-nav .narrow-by-list dt{
 	position:relative;
 }
 #advanced-navigation-overlay{
@@ -301,39 +301,53 @@ span.plain_column{float:left;}
 	background:url('../../images/gomage/advanced-navigation/icon_filter_help.png') 0 0 no-repeat;
 	cursor:help;
 }
-#narrow-by-list dd.filter-note-content,
+.narrow-by-list dd.filter-note-content,
 .filter-note-content{
 	position:absolute;
 	top:-15px;
 	left:190px;
-	padding:3px 7px;
-	border:1px solid #dbdbdb;
-	background:#fff;
 	text-transform:none;
 	display:none;
 	z-index:999;
-	margin-left:30px;
+	padding-left: 30px;
 	font-weight:400;
-}
+  }
+  .filter-note-content-in{
+    padding:3px 16px 3px 7px;
+    border:1px solid #dbdbdb;
+    background:#fff;  
+    overflow: auto;
+    }
 .gan-sidebar-nav .block-title .filter-note-handle{
 	right:5px;
-    top:3px;
+  top:3px;
+}
+.gomage-help-close{
+  color: #000000;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  position: absolute;
+  right: 5px;
+  text-decoration: none;
+  top: 2px;
 }
 /* Help icon and popup END */
 
-#narrow-by-list dd ol.gan-inblock-list,
+.narrow-by-list dd ol.gan-inblock-list,
 ul.gan-inblock-list.gan-default-list{
 	overflow:auto;
   position:relative;
 }
-#narrow-by-list dd ol.gan-inblock-list{
+.narrow-by-list dd ol.gan-inblock-list{
 	background:#fff;
 	padding:5px;
 	border:1px solid #ccc;
 }
 
 /* Checkbox's */
-#narrow-by-list dd ol.gan-list-checkbox li a,
+.narrow-by-list dd ol.gan-list-checkbox li a,
 ul.gan-list-checkbox.gan-default-list li a span,
 ul.gan-list-checkbox.gan-folding-list li a span,
 .gan-sidebar-nav .gan-image-list.gan-list-checkbox li a{
@@ -342,7 +356,7 @@ ul.gan-list-checkbox.gan-folding-list li a span,
 	line-height:16px;
 	background:url('../../images/gomage/advanced-navigation/gan_checkbox.gif') 0 2px no-repeat;
 }
-#narrow-by-list dd ol.gan-list-checkbox li a.active{
+.narrow-by-list dd ol.gan-list-checkbox li a.active{
 	background:url('../../images/gomage/advanced-navigation/gan_checkbox_active.gif') 0 2px no-repeat;
 }
 ul.gan-list-checkbox.gan-default-list li a.active span,
@@ -357,61 +371,61 @@ ul.gan-list-checkbox.gan-image-list li a.active{
 	background-position:9px 7px;
 	padding-left:26px;
 }
-#narrow-by-list dd ol.image-align-horizontally li a,
-#narrow-by-list dd ol.image-align-default li a,
-#narrow-by-list dd ol.image-align-2-columns li a,
+.narrow-by-list dd ol.image-align-horizontally li a,
+.narrow-by-list dd ol.image-align-default li a,
+.narrow-by-list dd ol.image-align-2-columns li a,
 ul.image-align-horizontally li a,
 ul.image-align-default li a,
 ul.image-align-2-columns li a{
 	background-position:0 0;
 }
-#narrow-by-list dd ol.image-align-horizontally li,
+.narrow-by-list dd ol.image-align-horizontally li,
 ul.image-align-horizontally li{
 	display:inline-block;
 	padding-right:5px;
 	padding-bottom:3px;
 }
-#narrow-by-list dd ol.image-align-default li,
+.narrow-by-list dd ol.image-align-default li,
 ul.image-align-default li{
 	display:block;
 	padding-bottom:5px;
 	padding-bottom:3px;
 	overflow: hidden;
 }
-#narrow-by-list dd ol.image-align-2-columns li,
+.narrow-by-list dd ol.image-align-2-columns li,
 ul.image-align-2-columns li{
 	width:50%;
 	padding-bottom:3px;
 	float:left;
 }
-#narrow-by-list dd ol.gan-list-checkbox li a,
-#narrow-by-list dd ol.image-align-horizontally li{
+.narrow-by-list dd ol.gan-list-checkbox li a,
+.narrow-by-list dd ol.image-align-horizontally li{
 	/display:inline;
 }
-#narrow-by-list dd select{
+.narrow-by-list dd select{
 	width:100%;
   margin-top:5px;
 }
-#narrow-by-list .filter-fieldset .fields{
+.narrow-by-list .filter-fieldset .fields{
   float:left;
   margin-left:-5px;
   }
-#narrow-by-list .filter-fieldset .fields .from-wrapper{
+.narrow-by-list .filter-fieldset .fields .from-wrapper{
 	float:left;
 }
-#narrow-by-list .filter-fieldset .fields .from-wrapper span{
+.narrow-by-list .filter-fieldset .fields .from-wrapper span{
 	float:left;
 	text-align:center;
 	width:25px;
 }
-#narrow-by-list .filter-fieldset .fields .from-wrapper input{
+.narrow-by-list .filter-fieldset .fields .from-wrapper input{
 	width:34px;
 }
-#narrow-by-list .slider-input-action{
+.narrow-by-list .slider-input-action{
 	float:right;
   margin-right:-6px;
 }
-#narrow-by-list dd ol.image-align-horizontally li .filter-label,
+.narrow-by-list dd ol.image-align-horizontally li .filter-label,
 .gan-sidebar-nav .gan-image-list.image-align-horizontally a span{
 	display:block;
 }
@@ -461,15 +475,15 @@ ul.image-align-2-columns li{
     vertical-align:middle;
     padding-right:5px;
     }
-#narrow-by-list dd ol a,
+.narrow-by-list dd ol a,
 .gan-sidebar-nav .gan-image-list a{
 	text-decoration:none;
 }
-#narrow-by-list dd ol a span,
+.narrow-by-list dd ol a span,
 .gan-sidebar-nav .gan-image-list a span{
 	text-decoration:underline;
 }
-#narrow-by-list dd ol a:hover span,
+.narrow-by-list dd ol a:hover span,
 .gan-sidebar-nav .gan-image-list a:hover span{
 	text-decoration:none;
 }
@@ -497,39 +511,46 @@ ul.image-align-2-columns li{
 .gan-totop-button button { overflow:visible; float:none; width:auto; border:0; padding:0; margin:0; background:none !important; cursor:pointer; text-indent:0px !important; height:23px !important;}
 
 .block-layered-nav .block-content button.button span{
-	border:0;
-	height:23px;
-	display:block;
-	padding:0 0 0 12px;
-	font:700 12px/23px Arial,Helvetica,sans-serif !important;
-	background:url(../../images/gomage/advanced-navigation/gan_button.png) no-repeat 0 0;
+  border: 0;
+  display: block;
+  font:700 12px/23px Arial,Helvetica,sans-serif !important;
+  padding: 0;
+  background: none;
 	text-transform:uppercase;
 	text-align:center;
 	white-space:nowrap;
+  height: 23px;
 }
 .block-layered-nav .block-content button.button span span{
-	padding:0 12px 0 0;
+	padding:0 12px;
+  background-color: #f2f2f2;
 	text-indent:0px !important;
-	background-position:100% 0;
 	color:#519cde;
+  border: 1px solid #dfdfdf;
+  -webkit-border-radius: 5px;
+  -moz-border-radius   : 5px;
+  border-radius        : 5px;
+  -webkit-background-clip: padding-box !important;
+  -moz-background-clip   : padding-box !important;
+  background-clip        : padding-box !important;  
 }
 /* Buttons END */
 
 
 /* Slider View */
-#narrow-by-list .handle-left{
+.narrow-by-list .handle-left{
 	width:9px;
 	height:21px;
 	position:absolute;
 	z-index:11;
 }
-#narrow-by-list .handle-right{
+.narrow-by-list .handle-right{
 	width:9px;
 	height:21px;
 	position:absolute;
 	z-index:11;
 }
-#narrow-by-list .handle-left .handle-left-bg{
+.narrow-by-list .handle-left .handle-left-bg{
 	display:block;
 	background:#ccc;
 	background-repeat:no-repeat;
@@ -539,7 +560,7 @@ ul.image-align-2-columns li{
 	position:relative;
 	left:-14px;
 }
-#narrow-by-list .handle-right .handle-right-bg{
+.narrow-by-list .handle-right .handle-right-bg{
 	display:block;
 	background:#ccc;
 	background-repeat:no-repeat;
@@ -548,37 +569,37 @@ ul.image-align-2-columns li{
 	cursor:pointer;
 	position:relative;
 }
-#narrow-by-list .handle-left .handle-left-bg span.slider-span,
-#narrow-by-list .handle-right .handle-right-bg span.slider-span{
+.narrow-by-list .handle-left .handle-left-bg span.slider-span,
+.narrow-by-list .handle-right .handle-right-bg span.slider-span{
 	position:absolute;
 	top:20px;
 	left:50%;
 	display:block;
 	width:45px;
 }
-#narrow-by-list .handle-left .handle-left-bg span.slider-span span,
-#narrow-by-list .handle-right .handle-right-bg span.slider-span span{
+.narrow-by-list .handle-left .handle-left-bg span.slider-span span,
+.narrow-by-list .handle-right .handle-right-bg span.slider-span span{
 	position:absolute;
 	left:-50%;
 	display:block;
 	width:45px;
 	text-align:center;
 }
-#narrow-by-list .gan-track{
+.narrow-by-list .gan-track{
 	background-image:#333;
 	width:98%;
 	height:28px;
 	position:relative;
 	left:9px;
 }
-#narrow-by-list .gan-slider-span{
+.narrow-by-list .gan-slider-span{
 	background:blue;
 	height:4px;
 	top:10px;
 	position:relative;
 	z-index:10;
 }
-#narrow-by-list .slider-back-bg{
+.narrow-by-list .slider-back-bg{
 	background:#bfbfbf;
 	height:4px;
 	left:-9px;
@@ -587,7 +608,7 @@ ul.image-align-2-columns li{
 	width:100%;
 	z-index:9;
 }
-#narrow-by-list .gan-track div.span{
+.narrow-by-list .gan-track div.span{
 	top:0;
 	height:20px;
 	overflow:hidden;
@@ -596,71 +617,71 @@ ul.image-align-2-columns li{
 /* Slider View END */
 
 /* Slider Type */
-.gomage-navigation-slider-type-rectangle #narrow-by-list .slider-back-bg,
-.gomage-navigation-slider-type-rectangle #narrow-by-list .gan-slider-span{
+.gomage-navigation-slider-type-rectangle .narrow-by-list .slider-back-bg,
+.gomage-navigation-slider-type-rectangle .narrow-by-list .gan-slider-span{
 	height:3px;
 	top:10px;
 }
-.gomage-navigation-slider-type-cone #narrow-by-list .slider-back-bg,
-.gomage-navigation-slider-type-cone #narrow-by-list .gan-slider-span{
+.gomage-navigation-slider-type-cone .narrow-by-list .slider-back-bg,
+.gomage-navigation-slider-type-cone .narrow-by-list .gan-slider-span{
 	height:3px;
 	top:8px;
 	overflow:hidden;
 }
-#narrow-by-list .handle-left .handle-left-bg,
-#narrow-by-list .handle-right .handle-right-bg,
-#narrow-by-list .handle-left,
-#narrow-by-list .handle-right{
+.narrow-by-list .handle-left .handle-left-bg,
+.narrow-by-list .handle-right .handle-right-bg,
+.narrow-by-list .handle-left,
+.narrow-by-list .handle-right{
 	height:24px;
 	width:14px;
 }
-#narrow-by-list .handle-right .handle-right-bg,
-#narrow-by-list .handle-right .handle-right-bg{
+.narrow-by-list .handle-right .handle-right-bg,
+.narrow-by-list .handle-right .handle-right-bg{
 	left:0;
 }
-#narrow-by-list .handle-left .handle-left-bg span.slider-span,
-#narrow-by-list .handle-right .handle-right-bg span.slider-span{
+.narrow-by-list .handle-left .handle-left-bg span.slider-span,
+.narrow-by-list .handle-right .handle-right-bg span.slider-span{
 	top:25px;
 }
-#narrow-by-list .filter-type-input{
+.narrow-by-list .filter-type-input{
 	padding-top:15px;
 }
-.gomage-navigation-slider-type-rectangle #narrow-by-list .handle-left .handle-left-bg,
-.gomage-navigation-slider-type-rectangle #narrow-by-list .handle-right .handle-right-bg{
+.gomage-navigation-slider-type-rectangle .narrow-by-list .handle-left .handle-left-bg,
+.gomage-navigation-slider-type-rectangle .narrow-by-list .handle-right .handle-right-bg{
 	background:transparent url(../../images/gomage/advanced-navigation/slider_bg_rect.png) no-repeat 0 0;
 }
-.gomage-navigation-slider-type-cone #narrow-by-list .handle-left .handle-left-bg,
-.gomage-navigation-slider-type-cone #narrow-by-list .handle-right .handle-right-bg{
+.gomage-navigation-slider-type-cone .narrow-by-list .handle-left .handle-left-bg,
+.gomage-navigation-slider-type-cone .narrow-by-list .handle-right .handle-right-bg{
 	background:transparent url(../../images/gomage/advanced-navigation/slider_bg_cone.png) no-repeat 0 0;
 }
 /* Slider Type END */
 
-#narrow-by-list dd ol.no-titles li img,
+.narrow-by-list dd ol.no-titles li img,
 .gan-sidebar-nav .gan-image-list li img,
-#narrow-by-list dd ol.image-align-horizontally li a img,
-#narrow-by-list dd ol.image-align-default li a img,
-#narrow-by-list dd ol.image-align-2-columns li a img{
+.narrow-by-list dd ol.image-align-horizontally li a img,
+.narrow-by-list dd ol.image-align-default li a img,
+.narrow-by-list dd ol.image-align-2-columns li a img{
 	padding:2px;
 }
-#narrow-by-list dd ol.no-titles li a.active img,
+.narrow-by-list dd ol.no-titles li a.active img,
 .gan-sidebar-nav .gan-image-list li a.active img,
-#narrow-by-list dd ol.image-align-horizontally li a.active img,
-#narrow-by-list dd ol.image-align-default li a.active img,
-#narrow-by-list dd ol.image-align-2-columns li a.active img{
+.narrow-by-list dd ol.image-align-horizontally li a.active img,
+.narrow-by-list dd ol.image-align-default li a.active img,
+.narrow-by-list dd ol.image-align-2-columns li a.active img{
 	padding:1px;
 	border:1px solid #E26703;
 }
-#narrow-by-list dd ol.image-align-horizontally.no-titles li{
+.narrow-by-list dd ol.image-align-horizontally.no-titles li{
 	padding-right:0;
 }
 .gan-sidebar-nav .image-align-horizontally.no-titles li{
 	padding-right:2px;
 }
-#narrow-by-list dd ol.gan-list-checkbox.no-titles  li a,
+.narrow-by-list dd ol.gan-list-checkbox.no-titles  li a,
 .gan-sidebar-nav .gan-list-checkbox.no-titles  li a{
 	background-position:0 2px;
 }
-#narrow-by-list dd ol.gan-list-checkbox.no-titles  li a.active img,
+.narrow-by-list dd ol.gan-list-checkbox.no-titles  li a.active img,
 .gan-sidebar-nav .gan-list-checkbox.no-titles  li a.active img{
 	padding:2px;
 	border:0;
@@ -750,26 +771,26 @@ ul.image-align-2-columns li{
       text-decoration:underline;
       font-weight:bold;
       }
-.gan-content-area #narrow-by-list dt{
+.gan-content-area .narrow-by-list dt{
   float:left;
   width:26%;
   padding-bottom:7px;
   word-wrap:break-word;
   }
-.gan-content-area #narrow-by-list dd{
+.gan-content-area .narrow-by-list dd{
   float:left;
   width:63%;
   padding:7px;
   }
-.gan-content-area #narrow-by-list ol li{
+.gan-content-area .narrow-by-list ol li{
   float:left;
   padding-right:10px;
   padding-left:0 !important;
   }
-  .gan-content-area #narrow-by-list ol.image-align-default li{
+  .gan-content-area .narrow-by-list ol.image-align-default li{
     float:none;
     }
-  .gan-content-area #narrow-by-list ol.image-align-2-columns li{
+  .gan-content-area .narrow-by-list ol.image-align-2-columns li{
     padding-right:0;
     }
 .gan-content-area.block-layered-nav .block-subtitle > span{
@@ -782,10 +803,54 @@ ul.image-align-2-columns li{
 .block-layered-nav #advancednavigation-filter-content-cat .gan-list-checkbox a.active{
   font-weight:normal;
   }
+  
+  
+/* Product Navgation
+-------------------------------------------------- */
+.gomage_product_navigation{
+  width: 100%;
+  margin: 0 0 5px;
+  }
+  .gomage_product_navigation img{
+    vertical-align: middle;
+    }
+  .gomage_product_navigation td{
+    width: 33%;
+    }
+  .gomage_product_navigation .gomage_product_prev{
+    text-align: left;
+    }
+  .gomage_product_navigation .gomage_product_category{
+    text-align: center;
+    }
+  .gomage_product_navigation .gomage_product_next{
+    text-align: right;
+    }
+/* Product Navgation END
+-------------------------------------------------- */
+.block-layered-nav .filter-align-columns.narrow-by-list .gan-attribute{
+  background: none;
+  }
+.gan-content-area .filter-align-columns .gan-attribute{
+  float: left;
+  }
+.gan-content-area .filter-align-columns.narrow-by-list dt{
+  float: none;
+  width: auto;
+  }
+.gan-content-area .filter-align-columns.narrow-by-list dd{
+  float: none;
+  width: auto;
+  }
+.gan-content-area .filter-align-columns.narrow-by-list ol li{
+  float: none;
+  }
+
 /* Clears */
-#narrow-by-list dd ol:after,
-#narrow-by-list .filter-fieldset:after,
-#narrow-by-list dt:after,
+.filter-align-columns:after,
+.narrow-by-list dd ol:after,
+.narrow-by-list .filter-fieldset:after,
+.narrow-by-list dt:after,
 .gan-plain-items:after,
 .gan-top:after,
 .gan-wrapper:after,
@@ -800,11 +865,11 @@ ul.image-align-2-columns li{
 	overflow:hidden;
 	font-size:0;
 }
-#narrow-by-list dd ol,
-#narrow-by-list dd ol li a,
-#narrow-by-list .filter-fieldset,
-#narrow-by-list dd ol.image-align-horizontally li,
-#narrow-by-list dt,
+.narrow-by-list dd ol,
+.narrow-by-list dd ol li a,
+.narrow-by-list .filter-fieldset,
+.narrow-by-list dd ol.image-align-horizontally li,
+.narrow-by-list dt,
 .gan-plain-items,
 .gan-top,
 .gan-wrapper,

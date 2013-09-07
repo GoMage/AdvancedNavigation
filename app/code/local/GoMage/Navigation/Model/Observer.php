@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 1.0
  */
 
@@ -74,6 +74,9 @@ class GoMage_Navigation_Model_Observer {
 		
 		$attribute_id = ( int ) $event->getAttribute()->getAttributeId();
 		$filter_type = ( int ) $event->getAttribute()->getData('filter_type');
+		$inblock_type = ( int ) $event->getAttribute()->getData('inblock_type');
+		$round_to = ( int ) $event->getAttribute()->getData('round_to');
+		$show_currency = ( int ) $event->getAttribute()->getData('show_currency');
 		$image_align = ( int ) $event->getAttribute()->getData('image_align');
 		$image_width = ( int ) $event->getAttribute()->getData('image_width');
 		$image_height = ( int ) $event->getAttribute()->getData('image_height');
@@ -88,8 +91,24 @@ class GoMage_Navigation_Model_Observer {
 		$filter_reset = ( int ) $event->getAttribute()->getData('filter_reset');
 		$is_ajax = ( int ) $event->getAttribute()->getData('is_ajax');
 		$inblock_height = ( int ) $event->getAttribute()->getData('inblock_height');
+		$max_inblock_height = ( int ) $event->getAttribute()->getData('max_inblock_height');
 		$filter_button = ( int ) $event->getAttribute()->getData('filter_button');
 		$category_ids_filter        = trim($event->getAttribute()->getData('category_ids_filter'));
+		$attribute_location = ( int ) $event->getAttribute()->getData('attribute_location');
+		
+		$range_options = ( int ) $event->getAttribute()->getData('range_options');
+		$range_auto = '';
+		$range_manual = trim($event->getAttribute()->getData('range_manual'));
+		if ( $range_options == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO )
+		{
+			$to_value = $event->getAttribute()->getData('to_value');
+			$step = $event->getAttribute()->getData('step');
+			
+			foreach($to_value as $key => $val)
+			{
+				$range_auto .= trim($val) . '=' . trim($step[$key]) . ',';			
+			}
+		}
 		
 		$attribute = Mage::getModel('gomage_navigation/attribute')->load($attribute_id, 'attribute_id');
 		
@@ -98,7 +117,30 @@ class GoMage_Navigation_Model_Observer {
 			$attribute->isObjectNew(true);
 		}
 		
-		$attribute->addData(array('filter_type' => $filter_type, 'image_align' => $image_align, 'image_width' => $image_width, 'image_height' => $image_height, 'show_minimized' => $show_minimized, 'show_image_name' => $show_image_name, 'show_checkbox' => $show_checkbox, 'visible_options' => $visible_options, 'show_help' => $show_help, 'popup_width' => $popup_width, 'popup_height' => $popup_height, 'filter_reset' => $filter_reset, 'is_ajax' => $is_ajax, 'inblock_height' => $inblock_height, 'filter_button' => $filter_button, 'category_ids_filter' => $category_ids_filter));
+		$attribute->addData(array('filter_type' => $filter_type, 
+								  'inblock_type' => $inblock_type,
+								  'round_to' => $round_to, 
+								  'show_currency' => $show_currency,
+								  'image_align' => $image_align, 
+								  'image_width' => $image_width, 
+								  'image_height' => $image_height, 
+								  'show_minimized' => $show_minimized, 
+								  'show_image_name' => $show_image_name, 
+								  'show_checkbox' => $show_checkbox, 
+								  'visible_options' => $visible_options, 
+								  'show_help' => $show_help, 
+								  'popup_width' => $popup_width, 
+								  'popup_height' => $popup_height, 
+								  'filter_reset' => $filter_reset, 
+								  'is_ajax' => $is_ajax, 
+								  'inblock_height' => $inblock_height, 
+								  'max_inblock_height' => $max_inblock_height, 
+								  'filter_button' => $filter_button, 
+								  'category_ids_filter' => $category_ids_filter, 
+								  'range_options' => $range_options, 
+								  'range_manual' => $range_manual, 
+								  'range_auto' => $range_auto,
+								  'attribute_location' => $attribute_location));
 		
 		$attribute->save();
 		
@@ -150,17 +192,60 @@ class GoMage_Navigation_Model_Observer {
 				
 				$navigation_more_button = $layout->getBlock('gomage.navigation.more.button');
 				
+				$currentCategory = Mage::registry('current_category');
+            	
+				if ( ($currentCategory && $currentCategory->getData('navigation_pw_gn_shopby') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::USE_GLOBAL)
+						||
+					  !$currentCategory )
+				{
+					$position = Mage::getStoreConfig('gomage_navigation/general/show_shopby');
+				}	        
+				else if( $currentCategory )
+				{
+				   	$position = $currentCategory->getData('navigation_pw_gn_shopby');
+				}
+				
 				$navigation_html = '';
+				$navigation_html_right = '';
+				$navigation_html_left = '';
 				if ($navBlock) {
-					if (Mage::getStoreConfig('gomage_navigation/general/show_shopby') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::CONTENT) {
+					
+					if ( $position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN_CONTENT )
+					{
+						$navigation_html_left = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
 						$navBlock->setShopByInContent(true);
+						
+						$navigation_html = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
+						$navBlock->setShopByInContent(false);
 					}
-					$navigation_html = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
-					$navBlock->setShopByInContent(false);
+					else if ( $position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN_CONTENT )
+					{
+						$navigation_html_right = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
+						$navBlock->setShopByInContent(true);
+						
+						$navigation_html = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
+						$navBlock->setShopByInContent(false);
+					}
+					else if ( $position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::CONTENT )
+					{
+						$navBlock->setShopByInContent(true);
+						
+						$navigation_html = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
+						$navBlock->setShopByInContent(false);
+					}
+					else if ( $position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN )
+					{
+						$navigation_html_left = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
+					}
+					else if ( $position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN )
+					{
+						$navigation_html_right = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
+					}
+					
 				}
 				
 				$gomage_ajax = Mage::getBlockSingleton('gomage_navigation/ajax');
-				$gomage_ajax->addData(array('navigation' => $navigation_html, 'product_list' => $product_list_html, 'navigation_left' => ($LeftnavBlock ? Mage::getModel('core/url')->sessionUrlVar($LeftnavBlock->toHtml()) : ''), 'navigation_right' => ($RightnavBlock ? Mage::getModel('core/url')->sessionUrlVar($RightnavBlock->toHtml()) : ''), 'navigation_more' => ($navigation_more_button ? Mage::getModel('core/url')->sessionUrlVar($navigation_more_button->toHtml()) : '')));
+				$gomage_ajax->addData(array('navigation_shop_left' => ($navigation_html_left ? $navigation_html_left : ''),'navigation_shop_right' => ($navigation_html_right ? $navigation_html_right : ''),'navigation' => $navigation_html, 'product_list' => $product_list_html, 'navigation_left' => ($LeftnavBlock ? Mage::getModel('core/url')->sessionUrlVar($LeftnavBlock->toHtml()) : ''), 'navigation_right' => ($RightnavBlock ? Mage::getModel('core/url')->sessionUrlVar($RightnavBlock->toHtml()) : ''), 'navigation_more' => ($navigation_more_button ? Mage::getModel('core/url')->sessionUrlVar($navigation_more_button->toHtml()) : '')));
 				
 				if (Mage::getStoreConfig('gomage_procart/general/enable')) {
 					if ($productsBlock) {

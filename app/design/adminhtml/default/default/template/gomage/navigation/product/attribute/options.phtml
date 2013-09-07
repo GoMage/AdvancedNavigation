@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 1.0
  */
 
@@ -135,8 +135,11 @@ $show_options = 10;
     </div>
     <?php if (count($this->getOptionValues()) > $show_options): ?>
     	<div id="show_all_options_wrapper">
-    		<?php echo $this->__('Options 1 to %s of %s total', $show_options, count($this->getOptionValues())); ?>
-    		<button onclick="ganShowAllOptions()" class="scalable add" type="button" title="<?php echo $this->__('Show All Options'); ?>" id="show_all_options"><span><span><span><?php echo $this->__('Show All Options'); ?></span></span></span></button>    		 
+    		<?php /*echo $this->__('Options')?><span id="start">1</span> <?php echo $this->__('to') ?> <span id="end"><?php echo $show_options; ?></span> <?php echo $this->__('of')?> <span id="total"><?php echo count($this->getOptionValues())?></span>*/?>
+    		<?php echo $this->__('Options 1 to <span id="end">%s</span> of %s total', $show_options, count($this->getOptionValues())); ?>
+    		<button onclick="ganShowAllOptions()" class="scalable add" type="button" title="<?php echo $this->__('Show All Options'); ?>" id="show_all_options"><span><span><span><?php echo $this->__('Show All Options'); ?></span></span></span></button>
+    		<button onclick="ganShowNextOptions('simple')" class="scalable add" type="button" title="<?php echo $this->__('Show Next 20 Options'); ?>" id="show_all_options"><span><span><span><?php echo $this->__('Show Next 20 Options'); ?></span></span></span></button>
+			<button onclick="ganShowNextOptions('noimage')" class="scalable add" type="button" title="<?php echo $this->__('Show Next 20 Options No Image'); ?>" id="show_all_options"><span><span><span><?php echo $this->__('Show Next 20 Options No Image'); ?></span></span></span></button>    		    		 
     	</div>
     <?php endif; ?>
     
@@ -323,8 +326,8 @@ var templateText =
 <?php foreach ($this->getStores() as $_store): ?>
             '<td><input name="option[value][{{id}}][<?php echo $_store->getId() ?>]" value="{{store<?php echo $_store->getId() ?>}}" class="input-text<?php if($_store->getId()==0): ?> required-option<?php endif; ?>" type="text" <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/><\/td>'+
 <?php endforeach; ?>
-			'<td><input id="option_image_{{id}}_save" class="hidden" type="hidden" name="option[image][{{id}}]]" value=""/>'+
-				'<div id="option_image_{{id}}" class="uploader">'+
+			'<td onmouseover="addButton(this);"><input id="option_image_{{id}}_save" class="hidden" type="hidden" name="option[image][{{id}}]]" value=""/>'+
+				'<div id="option_image_{{id}}" class="uploader" >'+
 					'<div id="option_image_{{id}}-old" class="file-row-info"></div>'+
                     '<div id="option_image_{{id}}-new" class="file-row-info new-file"></div>'+
                     '<div id="option_image_{{id}}-upload" class="file-row-info"></div>'+
@@ -390,6 +393,37 @@ var attributeOption = {
         this.itemCount++;
         this.totalItems++;
         this.updateItemsCountField();
+        
+    },
+    addnoimage : function(data) {
+        this.template = new Template(this.templateText, this.templateSyntax);
+        this.listTemplate = new Template(this.fileListTemplate, this.templateSyntax);
+        if(!data.id){
+            data = {};
+            data.id  = 'option_'+this.itemCount;
+        }
+        if (!data.intype)
+            data.intype = optionDefaultInputType;
+
+        Element.insert(this.table, {after: this.template.evaluate(data)});
+        this.bindRemoveButtons();
+        var itemCount = this.itemCount;
+        
+        if (!data.image_info) {
+            data.image_info = [];
+        }else{
+        	
+        	$('option_image_' + data.id + '-old').innerHTML = this.listTemplate.evaluate(data.image_info[0]);
+        }
+    	$('option_image_' + data.id + '-new').hide();
+    	$('option_image_' + data.id + '-old').show();
+        
+        this.itemCount++;
+        this.totalItems++;
+        this.updateItemsCountField();
+
+        arrButton[data.id] = data;
+        itemCountArr[data.id] = itemCount;
         
     },
     remove : function(event){
@@ -461,12 +495,99 @@ Validation.addAllThese([
 <?php endforeach; ?>
 
 <?php if (count($this->getOptionValues()) > $show_options): ?>
+
+ var current = 0;
+ var options = [];
+ var preoptions = [];
+ var show_options = <?php echo $show_options; ?>;
+ var total = <?php echo count($this->getOptionValues()); ?>;
+ 
+ <?php $_i = 0; ?>
+ <?php foreach ($this->getOptionValues() as $_value): ?>
+     <?php $_i++; ?>
+     
+     <?php if ($_i <= $show_options) continue; ?>
+     	preoptions.push(<?php echo $_value->toJson() ?>);	
+
+     <?php 
+     if ( $_i % 20 == 0 ):
+		?>
+		options.push(preoptions);
+		preoptions = [];
+		<?php 	     
+     endif;
+     ?>	          	     
+ <?php endforeach; ?>
+ options.push(preoptions);
+
+arrButton = [];
+itemCountArr = [];
+function addButton(t)
+{
+	var div = $(t).down(0).next();
+	var id_full = div.readAttribute('id');
+	var id = id_full.substr(13);
+
+	if( typeof arrButton[id] != "undefined" )
+	{
+		var data = arrButton[id];
+		var itemCount = itemCountArr[id];
+
+		delete arrButton[id];
+		delete itemCountArr[id];
+		
+		new Downloadable.FileUploader(
+	            'option_image',
+	            'option_image_'+itemCount,
+	            $('option_image_'+data.id+'').up('td'),
+	            'option[image]['+data.id+']',
+	            data.image_info,
+	            'option_image_'+data.id+'',
+	            <?php echo $json_config ?>
+	        );
+	}
+}
+
+function ganShowNextOptions(type){
+	var arr = options[current];
+	var length = arr.length;
+	element = null;
+	
+	for (var i = 0; i < length; i++) {
+		if ( type == 'noimage' )
+		{
+			attributeOption.addnoimage(arr[i]);
+		}
+		else
+		{
+			attributeOption.add(arr[i]);
+		}	
+	}    
+
+	show_options += 20;
+
+	if ( show_options > total )
+	{
+		show_options = total;
+	}
+	
+	$('end').innerHTML = show_options;
+	current++;
+}
+
  function ganShowAllOptions(){
 	 <?php $_i = 0; ?>
 	 <?php foreach ($this->getOptionValues() as $_value): ?>
 	     <?php $_i++; ?>
 	     <?php if ($_i <= $show_options) continue; ?>
-	     attributeOption.add(<?php echo $_value->toJson() ?>);	     	     
+	     attributeOption.add(<?php echo $_value->toJson() ?>);	
+
+	     <?php 
+	     if ( $_i >= 20 ):
+			break;	     
+	     endif;
+	     ?>
+		          	     
 	 <?php endforeach; ?>
 	 $('show_all_options_wrapper').hide();
  }

@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 2.1
  */
  		
@@ -29,7 +29,17 @@ class GoMage_Navigation_Block_Adminhtml_Config_Form_Renderer_Navigationtype exte
                             	$(id).up('td').up('tr').show();	
     						}
                         }
-                        var id = '{$this->_getBasePartName($element)}' + 'inblock_height'; 
+                        
+						var id = '{$this->_getBasePartName($element)}' + 'inblock_type'; 
+                        if ($(id)){
+                        	$(id).up('td').up('tr').hide();	
+						}
+						
+						var id = '{$this->_getBasePartName($element)}' + 'max_inblock_height'; 
+                        if ($(id)){
+                            $(id).up('td').up('tr').hide();	
+    					}
+    					var id = '{$this->_getBasePartName($element)}' + 'inblock_height'; 
                         if ($(id)){
                         	$(id).up('td').up('tr').hide();	
 						}
@@ -40,9 +50,38 @@ class GoMage_Navigation_Block_Adminhtml_Config_Form_Renderer_Navigationtype exte
                             	$(id).up('td').up('tr').hide();	
     						}
                         }
-    					var id = '{$this->_getBasePartName($element)}' + 'inblock_height'; 
+						
+						var id = '{$this->_getBasePartName($element)}' + 'inblock_type'; 
                         if ($(id)){
                         	$(id).up('td').up('tr').show();	
+						}
+						
+						var id = '{$this->_getBasePartName($element)}' + 'inblock_height';						
+						
+                        if ($(id) && $('row_'+ '{$this->_getBasePartName($element)}' + 'inblock_type').visible() == true){
+                        
+                        	if ( $('{$this->_getBasePartName($element)}' + 'inblock_type').value == ".GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Type_Inblock::TYPE_FIXED." )
+                        	{
+                        		var id_new = '{$this->_getBasePartName($element)}' + 'inblock_height';						
+						
+		                        if ($(id_new)){
+		                        	$(id_new).up('td').up('tr').show();	
+								}	
+                        	}
+                        	else
+                        	{
+                        		var id_new = '{$this->_getBasePartName($element)}' + 'max_inblock_height';						
+						
+		                        if ($(id_new)){
+		                        	$(id_new).up('td').up('tr').show();	
+								}
+                        	}
+                        	
+                        		
+						}
+						else
+						{
+							$(id).up('td').up('tr').hide();
 						}
     				}else{
     					for (var i = 0; i < elements.length; i++) {
@@ -51,7 +90,17 @@ class GoMage_Navigation_Block_Adminhtml_Config_Form_Renderer_Navigationtype exte
                             	$(id).up('td').up('tr').hide();	
     						}
                         }
-                        var id = '{$this->_getBasePartName($element)}' + 'inblock_height'; 
+						
+						var id = '{$this->_getBasePartName($element)}' + 'inblock_type'; 
+                        if ($(id)){
+                        	$(id).up('td').up('tr').hide();	
+						}
+						
+						var id = '{$this->_getBasePartName($element)}' + 'max_inblock_height'; 
+                        if ($(id)){
+                            $(id).up('td').up('tr').hide();	
+    					}
+    					var id = '{$this->_getBasePartName($element)}' + 'inblock_height'; 
                         if ($(id)){
                         	$(id).up('td').up('tr').hide();	
 						}

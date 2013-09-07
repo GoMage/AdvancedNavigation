@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 1.0
  */
 
@@ -177,7 +177,7 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
     }
 	
 	public function prepareSelect($filter, $value, $select){
-		
+
         $response   = $this->_dispatchPreparePriceEvent($filter, $select);
 
         $table      = $this->_getIndexTableAlias();
@@ -194,21 +194,38 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):    
     		
-    		
-    		
     		$from	= isset($value['from']) ? intval($value['from']) : 0;
     		$to		= isset($value['to']) ? intval($value['to']) : 0;
     		
     		$where[] = sprintf($priceExpr . ' >= %s', $from) . ($to > 0 ? ' AND ' . sprintf($priceExpr . ' <= %d', $to) : '');
     		
+    		
     	break;
 		
 		default:
-		
-			foreach((array)$value as $_value){
-				
-				$where[] = sprintf($priceExpr . ' >= %s', ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf($priceExpr . ' < %d', ($_value['range'] * $_value['index']));
-				
+			
+			$attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product','price');
+			$attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
+			
+			if ( ($filter->getAttributeModel()->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
+					||
+				 $filter->getAttributeModel()->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
+					&&
+				 $filter->getAttributeModel()->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT )
+			{
+				$from	= isset($value['from']) ? intval($value['from']) : 0;
+	    		$to		= isset($value['to']) ? intval($value['to']) : 0;
+	    		
+	    		$where[] = sprintf($priceExpr . ' >= %s', $from) . ($to > 0 ? ' AND ' . sprintf($priceExpr . ' <= %d', $to) : '');
+	    		 	
+			}
+			else 
+			{
+				foreach((array)$value as $_value){
+					
+					$where[] = sprintf($priceExpr . ' >= %s', ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf($priceExpr . ' < %d', ($_value['range'] * $_value['index']));
+					
+				}		
 			}
 		
 		break;

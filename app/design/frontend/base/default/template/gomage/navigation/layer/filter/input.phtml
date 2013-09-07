@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 1.0
  */
 ?>
@@ -22,7 +22,7 @@
 	
 ?>
 <div class="filter-type-input" style="padding:0;">
-	<form onsubmit="submitNavigationForm(this, '<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array('ajax'=>$this->ajaxEnabled())))?>', <?php echo $this->ajaxEnabled() ?>);return false;" action="'<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true))?>'">
+	<form onsubmit="GomageNavigation.submitNavigationForm(this, '<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array('ajax'=>$this->ajaxEnabled())))?>', <?php echo $this->ajaxEnabled() ?>);return false;" action="'<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true))?>'">
 		<fieldset class="filter-fieldset">
 		
 		<div class="fields">
@@ -38,7 +38,7 @@
 		
 		<div class="slider-input-action">
 		
-		<button class="button" type="submit"><span><span><?php echo $this->__('Filter')?></span></span></button>
+		<button class="button" type="submit"><span><span><?php echo Mage::helper('gomage_navigation')->getFilter();?></span></span></button>
 		
 		</div>
 		</fieldset>

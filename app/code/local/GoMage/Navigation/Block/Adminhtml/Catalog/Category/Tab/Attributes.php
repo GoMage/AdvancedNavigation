@@ -3,16 +3,17 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 1.0
  */
 
 class GoMage_Navigation_Block_Adminhtml_Catalog_Category_Tab_Attributes extends Mage_Adminhtml_Block_Catalog_Category_Tab_Attributes
 {
+	public $content_filters_settings = array('navigation_pw_gn_shopby');
 	
 	public $plain_window_settings = array('navigation_pw_s_template',
 										'navigation_pw_s_bgcolor',
@@ -74,6 +75,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Category_Tab_Attributes extends 
 	        $form->setDataObject($this->getCategory());
 		        	        
 	        $attributes_lr = $this->left_right_column;
+	        $attributes_pw_gn = array();
 	        $attributes_pw_s = array();
 	        $attributes_pw_m = array();
 	        $attributes_pw_fl = array();
@@ -87,6 +89,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Category_Tab_Attributes extends 
 	        	 		$attributes_pw_m[] = 'navigation_pw_m_bsize';
 	        	 		break;
 	           		case 2:	           			
+	           			$attributes_pw_gn = $this->content_filters_settings;
 						$attributes_pw_s = $this->plain_window_settings;
 						$attributes_pw_s = array_diff($attributes_pw_s, array('navigation_pw_s_column', 'navigation_pw_s_img'));
 						
@@ -96,13 +99,24 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Category_Tab_Attributes extends 
 						$attributes_pw_ob = $this->offer_block_settings;
 	           			break;
 	           		case 3: //first_level_subcategory
+	           			$attributes_pw_gn = $this->content_filters_settings;
 						$attributes_pw_s[] = 'navigation_pw_s_column';
 						$attributes_pw_s[] = 'navigation_pw_s_img';
 	           			break;
-	           		case 4: //second_level_subcategory						
+	           		case 4: //second_level_subcategory	
+	           			$attributes_pw_gn = $this->content_filters_settings;					
 						$attributes_pw_s[] = 'navigation_pw_s_img';
 	           			break;
 	        	 }		
+	        }
+	        
+    		if (count($attributes_pw_gn)){
+	        	$fieldset = $form->addFieldset('fieldset_group_' . $group->getId() . '_pw_gn', array(
+		            'legend'    => Mage::helper('gomage_navigation')->__('Stock Settings'),
+		            'class'     => 'fieldset-wide',
+		        ));
+		        $attributes = $this->getNeededAttributes($attributes_pw_gn);
+		        $this->_setFieldset($attributes, $fieldset);
 	        }
 	        
 	        if (count($attributes_pw_s)){

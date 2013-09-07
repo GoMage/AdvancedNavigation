@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 2.0
  */
  
@@ -22,25 +22,38 @@ if($_menu): ?>
         
     	<?php if(strlen($note_content)):?>
     		<?php        		
-            		$styles = 'display: none;';        		
+            		$styles = '';        		
             		if($content_width = $this->getPopupWidth()){        			
             			$styles .= "width:{$content_width}px;";        			
             		}
             		if($content_height = $this->getPopupHeight()){        			
             			$styles .= "height:{$content_height}px;";        			
             		}        		
-            ?>        	
-        	<div id="filter-left-category-note-content" class="filter-note-content" <?php if($styles):?> style="<?php echo $styles;?>" <?php endif;?>>
-    			<?php echo nl2br($note_content);?>
-        	</div>
+            ?>   
+            <div id="filter-left-category-note-content" class="filter-note-content"
+    	          <?php if ( Mage::getStoreConfig('gomage_navigation/filter/hide_help') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Style_Hidehelp::MOUSE_OUT ):?> 
+	                 	onmouseout="setTimeout('GomageNavigation.hideNavigationNote(false, false)',200);"
+				  <?php endif; ?> >
+                  <div class="filter-note-content-in" onmouseover="GomageNavigation.mouseStatus(true);" onmouseout="GomageNavigation.mouseStatus(false);"
+                        <?php if($styles):?> style="<?php echo $styles;?>" <?php endif;?>>
+    	                	<?php if ( Mage::getStoreConfig('gomage_navigation/filter/hide_help') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Style_Hidehelp::CLOSE_BUTTON ):?> 
+		                		<div class="gomage-help-close" onclick="GomageNavigation.hideNavigationNote(true, 'filter-left-category-note-content');">&#x2715;</div>
+							<?php endif; ?>
+    						<?php echo nl2br($note_content);?>
+                  </div>
+    	    </div>     	
     	<?php endif;?>
     <?php endif;?>
     
-    <div class="block-title" onclick="navigationOpenFilter('left-category')">
+    <div class="block-title" onclick="GomageNavigation.navigationOpenFilter('left-category')">
         <strong><span><?php echo $this->__('Categories') ?></span></strong>
         <?php if($this->canShowPopup()):?>                    		                    		                    	
         	<?php if(strlen($note_content)):?>        	
-        		<span class="filter-note-handle" onmouseout="hideNavigationNote();" onmouseover="showNavigationNote('filter-left-category-note-content', this)">?</span>        		                    	
+        		<?php if ( Mage::getStoreConfig('gomage_navigation/filter/show_help') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Style_Showhelp::MOUSE_OVER ):?>
+			              <span class="filter-note-handle" onmouseover="GomageNavigation.showNavigationNote('filter-left-category-note-content', this, 'cat_left')">?</span>
+			    <?php else: ?> 
+			          	  <span class="filter-note-handle" onclick="GomageNavigation.showNavigationNote('filter-left-category-note-content', this, 'cat_left')">?</span>
+			    <?php endif; ?>        		                    	
         	<?php endif;?>                    	
         <?php endif;?>
     </div>
@@ -79,7 +92,7 @@ if($_menu): ?>
                           <?php endif; ?>
                    <?php break; ?>
                    <?php case GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK: ?>
-                   		  <ul id="gan_nav_left" class="gan-inblock-list gan-default-list <?php if($this->canShowCheckbox() && $this->getIsAjax()):?>gan-list-checkbox<?php endif;?>" style="height:<?php echo $this->getInBlockHeight(); ?>px;">
+                   		  <ul id="gan_nav_left" class="gan-inblock-list gan-default-list <?php if($this->canShowCheckbox() && $this->getIsAjax()):?>gan-list-checkbox<?php endif;?>"  style="<?php if($this->getInblockType()==GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Type_Inblock::TYPE_AUTO):?>max-height:<?php echo $this->getMaxInBlockHeight(); ?>px;<?php else:?>height:<?php echo $this->getInBlockHeight(); ?>px;<?php endif;?>">
                             <?php echo $_menu ?>
                           </ul>		
                    <?php break; ?>

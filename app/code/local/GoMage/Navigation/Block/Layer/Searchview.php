@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 2.0
  */
  
@@ -21,7 +21,14 @@ class GoMage_Navigation_Block_Layer_Searchview extends GoMage_Navigation_Block_L
      */
     public function getLayer()
     {
-        return Mage::getSingleton('catalogsearch/layer');
+    	if ( Mage::helper('gomage_navigation')->isEnterprise() )
+       	{
+       		return Mage::getSingleton('enterprise_search/search_layer');	
+       	}
+       	else 
+       	{
+       		return Mage::getSingleton('catalogsearch/layer');
+       	}
     }
 
     /**

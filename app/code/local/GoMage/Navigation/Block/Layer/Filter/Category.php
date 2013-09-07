@@ -3,16 +3,17 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.1
+ * @version      Release: 4.0
  * @since        Class available since Release 1.0
  */
 	
 class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_Layer_Filter_Category
 {
+	protected $_activeFilters = array();
 	/**
      * Initialize filter template
      *
@@ -128,13 +129,13 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 
 	}
 	
-	public function canShowMinimized(){
+	public function canShowMinimized($side){
 		
-		if('true' === Mage::app()->getFrontController()->getRequest()->getParam('cat_is_open')){
+		if('true' === Mage::app()->getFrontController()->getRequest()->getParam('cat' . '-' . $side . '_is_open')){
 		
 			return false;
 		
-		}elseif('false' === Mage::app()->getFrontController()->getRequest()->getParam('cat_is_open')){
+		}elseif('false' === Mage::app()->getFrontController()->getRequest()->getParam('cat' . '-' . $side . '_is_open')){
 			
 			return true;
 			
@@ -236,6 +237,11 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 		return (bool) Mage::getStoreConfig('gomage_navigation/category/filter_reset');
 		
 	}
+	
+    public function isActiveFilter($label)
+    {
+        return false;
+    }
     
     public function getFilterType(){
         return Mage::getStoreConfig('gomage_navigation/category/filter_type');    
@@ -243,6 +249,14 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
     
     public function getInBlockHeight(){
         return Mage::getStoreConfig('gomage_navigation/category/inblock_height');    
+    }
+    
+	public function getInblockType(){
+        return Mage::getStoreConfig('gomage_navigation/category/inblock_type');    
+    }
+    
+    public function getMaxInBlockHeight(){
+        return Mage::getStoreConfig('gomage_navigation/category/max_inblock_height');    
     }
     
 }

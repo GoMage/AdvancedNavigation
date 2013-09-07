@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.2
+ * @version      Release: 4.0
  * @since        Class available since Release 3.2
  */
 
@@ -15,7 +15,7 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Stock extends Mag
 {
 	
 	public function prepareSelect($filter, $value, $select){
-        
+
 		$val = (int)$value[0];
 		
         $table = "stock_status";
@@ -37,7 +37,7 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Stock extends Mag
             $select->join(  
                 array($table => Mage::getSingleton('core/resource')->getTableName('cataloginventory/stock_item')),
                 '(' . join(') OR (', $cond) . ')',
-                array("inventory_in_stock"=>"qty")
+                array("inventory_in_stock_qty"=>"qty")
             );
                 
         }
@@ -59,10 +59,9 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Stock extends Mag
             $select->join(  
                 array($table => Mage::getSingleton('core/resource')->getTableName('cataloginventory/stock_item')),
                 '(' . join(') OR (', $cond) . ')',
-                array("inventory_in_stock"=>"qty")
+                array("inventory_in_stock_qty"=>"qty")
                 
             ); 
-
         } 
         
         return $this;     
@@ -112,25 +111,43 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Stock extends Mag
 		        
         if(isset($base_select['stock_status'])){
         	
-        	
         	$select = $base_select['stock_status'];        	
         
         }else{
-        	
         	$select = clone $filter->getLayer()->getProductCollection()->getSelect();
         	
         }
+
+        $select->reset(Zend_Db_Select::LIMIT_COUNT);        
+        $select->reset(Zend_Db_Select::LIMIT_OFFSET);
+        
 		
-		$where = array();
-		
+        $sql = $connection->fetchAll($select);
+        $productCollection = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*');
         
-        $_collection = clone $filter->getLayer()->getProductCollection();
-    	$searched_entity_ids = $_collection->load()->getSearchedEntityIds();
-        if ($searched_entity_ids && is_array($searched_entity_ids) && count($searched_entity_ids)){
-        	$select->where('e.entity_id IN (?)', $searched_entity_ids);	
-        } 
+        $product_ids = array();
+        foreach( $sql as $item )
+        {
+        	$product_ids[] = $item['entity_id'];
+        }
         
-        return $connection->fetchPairs($select);
+        $collection = $productCollection->addAttributeToFilter('entity_id', array('in'=>$product_ids)); 
+        $collection->joinField('is_in_stock', 'cataloginventory/stock_item', 'is_in_stock', 'product_id=entity_id');
+
+        $stockCount = array('instock' => 0, 'outofstock' => 0);
+
+        foreach( $collection as $product )
+        {
+        	if ( (int)$product->getIsInStock() > 0 )
+        	{
+        		$stockCount['instock']++;
+        	}
+        	else 
+        	{
+        		$stockCount['outofstock']++;
+        	}
+        }
         
+        return $stockCount;
     }
 }

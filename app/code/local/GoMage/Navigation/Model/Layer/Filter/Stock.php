@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.2
+ * @version      Release: 4.0
  * @since        Class available since Release 3.2
  */
 
@@ -95,7 +95,7 @@ class GoMage_Navigation_Model_Layer_Filter_Stock extends GoMage_Navigation_Model
                 '(' . join(') OR (', $cond) . ')'
             );    
             $this->getLayer()->getState()->addFilter(
-                    $this->_createItem(Mage::helper('gomage_navigation')->__("In Stock"), array("stock_status"=>$filter))
+                    $this->_createItem(Mage::helper('gomage_navigation')->__("Out of Stock"), array("stock_status"=>$filter))
                 );                  
         }
         	
@@ -119,21 +119,21 @@ class GoMage_Navigation_Model_Layer_Filter_Stock extends GoMage_Navigation_Model
     
     protected function _getItemsData()
     {
-    
+    	$optionsCount = $this->_getResource()->getCount($this);
        
         $value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar);
                 		
         $data[] = array(
             'label'     => Mage::helper('gomage_navigation')->__("In Stock"),
             'value'     => "1",
-            'count'     => "",
+            'count'     => isset($optionsCount['instock']) ? $optionsCount['instock'] : 0,
             'active'    => ($value==1)?true:false,
             'image'        => "",
             );        		        		        		        		
         $data[] = array(
             'label'     => Mage::helper('gomage_navigation')->__("Out of Stock"),
             'value'     => "2",
-            'count'     => "",
+            'count'     => isset($optionsCount['outofstock']) ? $optionsCount['outofstock'] : 0,
             'active'    => ($value==2)?true:false,
             'image'        => "",
             );                                                                

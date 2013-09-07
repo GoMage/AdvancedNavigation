@@ -3,16 +3,17 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.2
+ * @version      Release: 4.0
  * @since        Class available since Release 3.2
  */
 	
 class GoMage_Navigation_Block_Layer_Filter_Stock extends Mage_Catalog_Block_Layer_Filter_Abstract
 {
+	protected $_activeFilters = array();
     
     public function __construct()
     {
@@ -116,19 +117,25 @@ class GoMage_Navigation_Block_Layer_Filter_Stock extends Mage_Catalog_Block_Laye
 		return $is_ajax;
 	}
 	
-	public function canShowMinimized(){
-		
-		if ( Mage::app()->getFrontController()->getRequest()->getParam('stock_status_is_open') )
+	public function canShowMinimized($side){
+
+		if ( Mage::app()->getFrontController()->getRequest()->getParam('stock_status' . '-' . $side . '_is_open') )
 		{
-			if('true' === Mage::app()->getFrontController()->getRequest()->getParam('stock_status_is_open')){
+			if('true' === Mage::app()->getFrontController()->getRequest()->getParam('stock_status' . '-' . $side . '_is_open')){
 				return false;
-			}elseif('false' === Mage::app()->getFrontController()->getRequest()->getParam('stock_status_is_open')){
+			}elseif('false' === Mage::app()->getFrontController()->getRequest()->getParam('stock_status' . '-' . $side . '_is_open')){
 				return true;			
 			}
 		}
 		
 		return (bool) Mage::getStoreConfigFlag('gomage_navigation/stock/show_minimized');
 	}
+	
+	public function getAttributeLocation(){
+        
+        return Mage::getStoreConfig('gomage_navigation/stock/attribute_location');
+        
+    } 
 	
 	public function canShowPopup(){
 		return (bool) Mage::getStoreConfigFlag('gomage_navigation/stock/show_help');
@@ -193,6 +200,11 @@ class GoMage_Navigation_Block_Layer_Filter_Stock extends Mage_Catalog_Block_Laye
 		return false;
 	}
 	
+    public function isActiveFilter($label)
+    {
+        return false;
+    }
+	
     
     public function getFilterType(){
         return Mage::getStoreConfig('gomage_navigation/stock/filter_type');    
@@ -200,5 +212,13 @@ class GoMage_Navigation_Block_Layer_Filter_Stock extends Mage_Catalog_Block_Laye
     
     public function getInBlockHeight(){
         return Mage::getStoreConfig('gomage_navigation/stock/inblock_height');    
+    }
+    
+	public function getInblockType(){
+        return Mage::getStoreConfig('gomage_navigation/stock/inblock_type');    
+    }
+    
+	public function getMaxInBlockHeight(){
+        return Mage::getStoreConfig('gomage_navigation/stock/max_inblock_height');
     }
 }
