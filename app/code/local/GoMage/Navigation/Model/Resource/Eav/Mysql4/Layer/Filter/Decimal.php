@@ -7,12 +7,14 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 2.0
  */
  
 class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends Mage_Core_Model_Mysql4_Abstract
 {
+    private $_min_max = array();
+    
     /**
      * Initialize connection and define main table name
      *
@@ -48,7 +50,7 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
 		case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
-    		
+    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):	
     		
     		
     		$from	= isset($value['from']) ? intval($value['from']) : 0;
@@ -117,20 +119,30 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
      * @param Mage_Catalog_Model_Layer_Filter_Decimal $filter
      * @return array
      */
+    
     public function getMinMax($filter)
     {
-        $select     = $this->_getSelect($filter);
-        $adapter    = $this->_getReadAdapter();
-
-        $select->columns(array(
-            'min_value' => new Zend_Db_Expr('MIN(decimal_index.value)'),
-            'max_value' => new Zend_Db_Expr('MAX(decimal_index.value)'),
-        ));
-
-        $result     = $adapter->fetchRow($select);
-
-        return array($result['min_value'], $result['max_value']);
+        if(!count($this->_min_max))
+        {
+            $select     = $this->_getSelect($filter);
+            $adapter    = $this->_getReadAdapter();
+    
+            $select->columns(array(
+                'min_value' => new Zend_Db_Expr('MIN(decimal_index.value)'),
+                'max_value' => new Zend_Db_Expr('MAX(decimal_index.value)'),
+            ));
+    
+            $result     = $adapter->fetchRow($select);
+           
+            return array($result['min_value'], $result['max_value']);
+            
+        }else{
+            
+            return $this->_min_max;
+            
+        }
     }
+    
 
     /**
      * Retrieve clean select with joined index table
@@ -161,7 +173,8 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
         $select->reset(Zend_Db_Select::LIMIT_COUNT);
         $select->reset(Zend_Db_Select::LIMIT_OFFSET);
 		$select->reset(Zend_Db_Select::GROUP);
-		
+		$select->reset(Zend_Db_Select::WHERE);        
+				
         $attributeId = $filter->getAttributeModel()->getId();
         $storeId     = Mage::app()->getStore()->getId();
 

@@ -7,21 +7,23 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 	
 	class GoMage_Navigation_Model_Layer extends Mage_Catalog_Model_Layer{
 		
-		const FILTER_TYPE_DEFAULT		= 0;
-		const FILTER_TYPE_IMAGE			= 1;
-		const FILTER_TYPE_DROPDOWN		= 2;
-		const FILTER_TYPE_INPUT			= 3;
-		const FILTER_TYPE_SLIDER		= 4;
-		const FILTER_TYPE_SLIDER_INPUT	= 5;
-		const FILTER_TYPE_PLAIN	        = 6;
-		const FILTER_TYPE_FOLDING	    = 7;
-		const FILTER_TYPE_DEFAULT_PRO   = 8;
+		const FILTER_TYPE_DEFAULT		    = 0;
+		const FILTER_TYPE_IMAGE			    = 1;
+		const FILTER_TYPE_DROPDOWN		    = 2;
+		const FILTER_TYPE_INPUT			    = 3;
+		const FILTER_TYPE_SLIDER		    = 4;
+		const FILTER_TYPE_SLIDER_INPUT	    = 5;
+		const FILTER_TYPE_PLAIN	            = 6;
+		const FILTER_TYPE_FOLDING	        = 7;
+		const FILTER_TYPE_DEFAULT_PRO       = 8;
+		const FILTER_TYPE_DEFAULT_INBLOCK   = 9;
+		const FILTER_TYPE_INPUT_SLIDER	    = 10;
 		
 		public function prepareProductCollection($collection){
 			
@@ -44,7 +46,7 @@
 	        $collection->getSelect()->joinLeft(
 	            array($tableAlias => Mage::getSingleton('core/resource')->getTableName('gomage_navigation_attribute')),
 	            "`main_table`.`attribute_id` = `{$tableAlias}`.`attribute_id`",
-	            array('filter_type', 'image_align', 'image_width', 'image_height', 'show_minimized', 'show_image_name', 'show_help', 'show_checkbox', 'popup_text', 'popup_width', 'popup_height', 'filter_reset', 'is_ajax')
+	            array('filter_type', 'image_align', 'image_width', 'image_height', 'show_minimized', 'show_image_name', 'show_help', 'show_checkbox', 'popup_text', 'popup_width', 'popup_height', 'filter_reset', 'is_ajax', 'inblock_height', 'filter_button')
 	        );
 	        
 	        $connection = Mage::getSingleton('core/resource')->getConnection('read');

@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 
@@ -130,7 +130,7 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
         $key = $this->getLayer()->getStateKey().'_'.$this->_requestVar;
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
         
-        $filter_mode = intval(Mage::getStoreConfigFlag('gomage_navigation/general/mode'));
+        $filter_mode = Mage::helper('gomage_navigation')->isGomageNavigation();
         
 
         if ($data === null) {

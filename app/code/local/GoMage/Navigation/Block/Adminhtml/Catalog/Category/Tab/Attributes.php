@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 
@@ -35,7 +35,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Category_Tab_Attributes extends 
            if ($category->getLevel() != 2)
            { 
               $hidde_elements = array_merge($hidde_elements, 
-                       array('navigation_plain_window_width',
+                       array('navigation_pw_width',
                              'navigation_image',
                              'navigation_image_position',
                              'navigation_image_width',

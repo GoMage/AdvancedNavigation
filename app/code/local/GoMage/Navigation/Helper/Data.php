@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 	
@@ -183,6 +183,18 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 	
 	public function ga(){
 		return Zend_Json::decode(base64_decode(Mage::helper('core')->decrypt(Mage::getStoreConfig('gomage_activation/advancednavigation/ar'))));
+	}
+	
+	public function isGomageNavigation(){
+	     return in_array(Mage::app()->getStore()->getWebsiteId(), $this->getAvailavelWebsites()) &&
+	            Mage::getStoreConfigFlag('gomage_navigation/general/mode'); 	         	     
+	}
+	
+	public function formatColor($value){
+	    if ($value = preg_replace('/[^a-zA-Z0-9\s]/', '', $value)){
+	       $value = '#' . $value; 	        
+	    }
+	    return $value;
 	}
 				
 }

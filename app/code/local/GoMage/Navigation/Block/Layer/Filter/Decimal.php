@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 
@@ -56,8 +56,17 @@ class GoMage_Navigation_Block_Layer_Filter_Decimal extends Mage_Catalog_Block_La
 	
 	public function ajaxEnabled(){
 		
-		if ($this->getAttributeModel()->getIsAjax() === '0') return 0;
-		else return 1; 
+		if (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch'){
+	        $is_ajax = true; 
+	    }else{
+	        $is_ajax = Mage::registry('current_category') && 
+                       Mage::registry('current_category')->getisAnchor() &&
+                       (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE);
+	    }
+	    
+	    $is_ajax = $is_ajax && ($this->getAttributeModel()->getIsAjax() == 1);
+	    		
+		return ($is_ajax ? 1 : 0); 
 	    		
 	}
 	
@@ -119,7 +128,7 @@ class GoMage_Navigation_Block_Layer_Filter_Decimal extends Mage_Catalog_Block_La
     	
     	parent::_prepareFilter();
     	
-    	if(Mage::getStoreConfigFlag('gomage_navigation/general/mode') > 0){
+    	if(Mage::helper('gomage_navigation')->isGomageNavigation()){
         	
         	switch($this->getAttributeModel()->getFilterType()): 
         	
@@ -147,6 +156,12 @@ class GoMage_Navigation_Block_Layer_Filter_Decimal extends Mage_Catalog_Block_La
 	        	
 	        	break;
 	        	
+	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
+	        	
+	        		$this->_template = ('gomage/navigation/layer/filter/input-slider.phtml');
+	        	
+	        	break;
+	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN):
 	        	
 	        		$this->_template = ('gomage/navigation/layer/filter/dropdown.phtml');
@@ -158,4 +173,17 @@ class GoMage_Navigation_Block_Layer_Filter_Decimal extends Mage_Catalog_Block_La
         }
     	
     }
+    
+    public function getFilterType(){
+        return $this->getAttributeModel()->getFilterType();    
+    }
+    
+    public function getInBlockHeight(){
+        return $this->getAttributeModel()->getInblockHeight();    
+    }
+    
+    public function canShowFilterButton(){        
+        return (bool) $this->getAttributeModel()->getFilterButton();    
+    }
+    
 }

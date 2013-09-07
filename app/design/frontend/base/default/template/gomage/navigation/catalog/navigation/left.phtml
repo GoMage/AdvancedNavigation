@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 2.0
  */
  
@@ -77,6 +77,11 @@ if($_menu): ?>
                           <?php if($this->getRequest()->getParam('ajax')>0):?>
                             	<?php $this->getLayout()->getBlock('gomage_ajax')->addEvalJs("mainNav('gan_nav_left', {'show_delay':'100','hide_delay':'100'});");?>                            	
                           <?php endif; ?>
+                   <?php break; ?>
+                   <?php case GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK: ?>
+                   		  <ul id="gan_nav_left" class="gan-inblock-list gan-default-list <?php if($this->canShowCheckbox() && $this->getIsAjax()):?>gan-list-checkbox<?php endif;?>" style="height:<?php echo $this->getInBlockHeight(); ?>px;">
+                            <?php echo $_menu ?>
+                          </ul>		
                    <?php break; ?>
                    <?php default: ?>
                           <ul id="gan_nav_left" class="gan-default-list <?php if($this->canShowCheckbox() && $this->getIsAjax()):?>gan-list-checkbox<?php endif;?>">

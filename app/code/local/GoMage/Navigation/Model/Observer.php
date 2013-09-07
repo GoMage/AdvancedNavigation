@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 	
@@ -94,7 +94,9 @@
 			$popup_height		= (int)$event->getAttribute()->getData('popup_height');
 			$filter_reset		= (int)$event->getAttribute()->getData('filter_reset');
 			$is_ajax		    = (int)$event->getAttribute()->getData('is_ajax');
-			
+			$inblock_height		= (int)$event->getAttribute()->getData('inblock_height');
+			$filter_button		= (int)$event->getAttribute()->getData('filter_button');
+						
 			
 			
 			if($connection->fetchOne("SELECT COUNT(*) FROM {$table} WHERE `attribute_id` = {$attribute_id};") > 0){
@@ -112,7 +114,9 @@
 					`popup_width`		= {$popup_width},
 					`popup_height`		= {$popup_height},
 					`filter_reset`      = {$filter_reset}, 
-					`is_ajax`      	    = {$is_ajax}
+					`is_ajax`      	    = {$is_ajax},
+					`inblock_height`    = {$inblock_height},
+					`filter_button`     = {$filter_button}
 					
 					WHERE `attribute_id` = {$attribute_id};
 				");
@@ -133,7 +137,9 @@
 					`popup_width`		= {$popup_width},
 					`popup_height`		= {$popup_height},
 					`filter_reset`      = {$filter_reset},
-					`is_ajax`      	    = {$is_ajax}
+					`is_ajax`      	    = {$is_ajax},
+					`inblock_height`    = {$inblock_height},
+					`filter_button`     = {$filter_button}
 				");
 				
 			}
@@ -184,7 +190,14 @@
 							)
 							
 						);
-					
+						
+					if (Mage::getStoreConfig('gomage_procart/qty_settings/category_page') && $productsBlock) {						
+				        $gomage_ajax->addEvalJs("if (typeof(GomageProcartConfig) != 'undefined') {
+				        	gomage_procart_product_list = " . $productsBlock->getProcartProductList() . ";
+				        	GomageProcartConfig.initialize(gomage_procart_config);
+					        };", "eval_js_procart");	
+					}
+						
 					$layout->addOutputBlock('gomage_ajax', 'toJson');
 					
 				}
@@ -204,6 +217,13 @@
 			
 			Mage::helper('gomage_navigation')->a($key);
 			
+	}
+	
+	public function setContinueShoppingUrl($event){
+	    $session = Mage::getSingleton('checkout/session');	    
+	    $url = $session->getContinueShoppingUrl();
+	    $url = str_replace('ajax=1', '', $url);
+	    $session->setContinueShoppingUrl($url);
 	}
 
 		

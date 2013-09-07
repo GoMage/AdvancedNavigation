@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 
@@ -16,9 +16,9 @@
 		
 		protected $eval_js = array();
 		
-		public function addEvalJs($str){
+		public function addEvalJs($str, $param = 'eval_js'){
 			
-			$this->setData('eval_js', $this->getData('eval_js').";".$str);
+			$this->setData($param, $this->getData($param).";".$str);
 			
 		}
 		

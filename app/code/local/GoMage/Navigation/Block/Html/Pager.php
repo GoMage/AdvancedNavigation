@@ -7,35 +7,45 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 
 class GoMage_Navigation_Block_Html_Pager extends Mage_Page_Block_Html_Pager
-{
-    
-    protected function _construct(){
-    	return parent::_construct();
-    	
+{        
+    protected function _construct()
+    {
+        parent::_construct();        
+        if($this->isAjaxPager()){
+            $this->setTemplate('gomage/navigation/html/pager.phtml');
+        }else{
+            $this->setTemplate('page/html/pager.phtml');
+        }
     }
     
     public function getPagerUrl($params=array())
     {
-    	
-    	if(intval(Mage::getStoreConfigFlag('gomage_navigation/general/mode'))){
-    	
-    		$params['ajax'] = null;
-    	
-    	}
-    	
-    	
+        if($this->isAjaxPager()){    	
+    	   $params['ajax'] = 1;    	
+    	}else{
+    	   $params['ajax'] = null; 
+    	}    	
+    	    	    	
         $urlParams = array();
         $urlParams['_nosid']    = true;
         $urlParams['_current']  = true;
         $urlParams['_escape']   = true;
         $urlParams['_use_rewrite']   = true;
         $urlParams['_query']    = $params;
+        
         return $this->getUrl('*/*/*', $urlParams);
+    }
+    
+    public function isAjaxPager(){
+        return Mage::helper('gomage_navigation')->isGomageNavigation() &&
+               Mage::getStoreConfigFlag('gomage_navigation/general/pager') &&  
+               ((Mage::registry('current_category') && Mage::registry('current_category')->getisAnchor()) ||
+                (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch')); 
     }
     
 }

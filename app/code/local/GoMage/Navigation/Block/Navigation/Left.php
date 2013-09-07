@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 
@@ -19,7 +19,8 @@ class GoMage_Navigation_Block_Navigation_Left extends Mage_Core_Block_Template
         
         $left = $this->getLayout()->getBlock('left');        
                                 
-        if ($left)
+        if ($left && Mage::helper('gomage_navigation')->isGomageNavigation() &&
+            Mage::getStoreConfig('gomage_navigation/category/active'))
         {   
             $left->unsetChild('gomage.navigation.left');                  
             $page = Mage::getSingleton('cms/page');                                     
@@ -35,7 +36,7 @@ class GoMage_Navigation_Block_Navigation_Left extends Mage_Core_Block_Template
             }
             else
             {                                                                                                   
-                if (Mage::getStoreConfig('gomage_navigation/category/active') && !Mage::getStoreConfig('gomage_navigation/category/show_shopby'))
+                if (!Mage::getStoreConfig('gomage_navigation/category/show_shopby'))
                 {
                     $navigation_left = $this->getLayout()->createBlock('gomage_navigation/navigation', 'gomage.navigation.left')
                                                      ->setTemplate('gomage/navigation/catalog/navigation/left.phtml');

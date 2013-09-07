@@ -1,5 +1,72 @@
 navigationLoadInProccess = false;
 
+var GanUrl = { 
+  
+	encode : function (string) { 
+		return escape(this._utf8_encode(string)); 
+	}, 
+  
+	decode : function (string) { 
+		return this._utf8_decode(unescape(string)); 
+	}, 
+  
+	_utf8_encode : function (string) { 
+		string = string.replace(/\r\n/g,"\n"); 
+		var utftext = ""; 
+ 
+		for (var n = 0; n < string.length; n++) { 
+ 
+			var c = string.charCodeAt(n); 
+ 
+			if (c < 128) { 
+				utftext += String.fromCharCode(c); 
+			} 
+			else if((c > 127) && (c < 2048)) { 
+				utftext += String.fromCharCode((c >> 6) | 192); 
+				utftext += String.fromCharCode((c & 63) | 128); 
+			} 
+			else { 
+				utftext += String.fromCharCode((c >> 12) | 224); 
+				utftext += String.fromCharCode(((c >> 6) & 63) | 128); 
+				utftext += String.fromCharCode((c & 63) | 128); 
+			} 
+ 
+		} 
+ 
+		return utftext; 
+	}, 
+  
+	_utf8_decode : function (utftext) { 
+		var string = ""; 
+		var i = 0; 
+		var c = c1 = c2 = 0; 
+ 
+		while ( i < utftext.length ) { 
+ 
+			c = utftext.charCodeAt(i); 
+ 
+			if (c < 128) { 
+				string += String.fromCharCode(c); 
+				i++; 
+			} 
+			else if((c > 191) && (c < 224)) { 
+				c2 = utftext.charCodeAt(i+1); 
+				string += String.fromCharCode(((c & 31) << 6) | (c2 & 63)); 
+				i += 2; 
+			} 
+			else { 
+				c2 = utftext.charCodeAt(i+1); 
+				c3 = utftext.charCodeAt(i+2); 
+				string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63)); 
+				i += 3; 
+			} 
+ 
+		} 
+ 
+		return string; 
+	} 
+}
+
 function startLoadNavigationData(){
 	
 	if(navigationLoadInProccess){
@@ -88,7 +155,7 @@ function generateUrlWithParams (url, params) {
 		query[key[0]] = key[1];
 	}
 		
-	for (attrname in query) { 
+	for (attrname in query) {
 		if (!params.hasOwnProperty(attrname))
 			params[attrname] = query[attrname]; 
 	}	
@@ -106,6 +173,7 @@ function generateUrlWithParams (url, params) {
 
 function submitNavigationForm(form, url, is_ajax) {
 	
+	url = GanUrl.decode(url);
 	
 	var from = $(form).down('input.navigation-from');
 	var to = $(form).down('input.navigation-to');
@@ -129,13 +197,17 @@ function submitNavigationForm(form, url, is_ajax) {
 		return false;
 	}
 	
+	var form_values = {};
+	form_values[$(from).name] = $(from).value;
+	form_values[$(to).name] = $(to).value;
+	
     is_ajax = typeof(is_ajax) != 'undefined' ? is_ajax : true;
     
 	var url = url.replace(/&amp;/ig, '&');
 	
 	var elements = form.elements;
 	
-	var params = Object.clone(navigationOpenFilters);	
+	var params = Object.clone(navigationOpenFilters);
 	
 	for(var i=0;i< elements.length;i++){
 		
@@ -151,7 +223,7 @@ function submitNavigationForm(form, url, is_ajax) {
 				
 				}
 				
-			break
+			break;
 			
 		}
 		
@@ -165,38 +237,69 @@ function submitNavigationForm(form, url, is_ajax) {
 		setLocation(generateUrlWithParams(url, params));
 	} else if(startLoadNavigationData()){
 	
-	
-	var request = new Ajax.Request(url,
-	  {
-	    method:'GET',
-	    parameters:params,
-	    onSuccess: function(transport){
-	    	
-	    	var response = eval('('+(transport.responseText || false)+')');
-	    	
-	    	replaceNavigationBlock(response.navigation);
-			replaceProductsBlock(response.product_list);
-			replaceLeftRightNavigationBlocks('gan-left-nav-main-container', response.navigation_left);
-			replaceLeftRightNavigationBlocks('gan-right-nav-main-container', response.navigation_right);
+		var query    = {},
+		new_query    = {},
+		keys     = url.split('?')[1].split('&'),
+		key      = '',
+		glue     = '',
+		strQuery = '',
+		i        = -1;
+		while (++i < keys.length) {
+			key = keys[i].split('=');
+			query[key[0]] = key[1];
+		}
 			
-			if(response.eval_js){
-				eval(response.eval_js);
-				navigation_eval_js = response.eval_js;
-			}
-						
-			stopLoadNavigationData();
-	      
-	    },
-	    onFailure: function(){
-	    	stopLoadNavigationData();
-	    }
-	  });
+		for (attrname in query) {
+			if (!form_values.hasOwnProperty(attrname))
+				new_query[attrname] = query[attrname]; 
+		}	
+		
+		for (key in new_query) {
+			strQuery += glue + key + '=' + new_query[key];
+			glue = '&';
+		}
+		if (strQuery != '') {
+			url = url.split('?')[0] + '?' + strQuery;
+		}
+		
+		var request = new Ajax.Request(url,
+		  {
+		    method:'GET',
+		    parameters:params,
+		    onSuccess: function(transport){
+		    	
+		    	var response = eval('('+(transport.responseText || false)+')');
+		    	
+		    	replaceNavigationBlock(response.navigation);
+				replaceProductsBlock(response.product_list);
+				replaceLeftRightNavigationBlocks('gan-left-nav-main-container', response.navigation_left);
+				replaceLeftRightNavigationBlocks('gan-right-nav-main-container', response.navigation_right);
+				
+				if(response.eval_js){
+					eval(response.eval_js);
+					ganInitSliders();
+					navigation_eval_js = response.eval_js;				
+				}
+				if (response.eval_js_procart){
+					eval(response.eval_js_procart);
+				}
+							
+				stopLoadNavigationData();
+		      
+		    },
+		    onFailure: function(){
+		    	stopLoadNavigationData();
+		    }
+		  });
 	  
 	}
 	
 }
 
 function setNavigationUrl(url){
+	
+	url = GanUrl.decode(url);
+	
 	is_ajax = typeof(is_ajax) != 'undefined' ? is_ajax : true;
 	var url = url.replace(/&amp;/ig, '&');
 
@@ -217,7 +320,11 @@ function setNavigationUrl(url){
 						
 			if(response.eval_js){
 				eval(response.eval_js);
-				navigation_eval_js = response.eval_js;
+				ganInitSliders();
+				navigation_eval_js = response.eval_js;				
+			}
+			if (response.eval_js_procart){
+				eval(response.eval_js_procart);
 			}
 			
 			stopLoadNavigationData();
@@ -312,6 +419,10 @@ function replaceNavigationBlock(content){
 	
     var element = $$('div.block-layered-nav')[0];
     
+    if (typeof(element) == 'undefined'){
+    	return;
+    }
+    
     if (content && content.toElement){
     	
     	content = content.toElement();
@@ -357,52 +468,52 @@ function replaceLeftRightNavigationBlocks(element, content)
 
 
 function initSlider(code, min, max, curr_min, curr_max, url, is_ajax){
-	
+
 	if(min == max){
 		max++;
 		if(curr_min == curr_max){
 			curr_max++;
 		}
-		
+
 	}
 	var handles = [code+'-handle-from', code+'-handle-to'];
-	
+
 	var s1 = new Control.Slider(handles,code+'-track', {axis:'horizontal',alignY:0, range: $R(min,max), sliderValue: [curr_min, curr_max],restricted: true,  spans: [code+"-square_slider_span"]});
 	s1.options.onChange = function(value){
-					
+
 			if (isNaN(value[0]) || isNaN(value[1]))
 		    {
 		    	return false;
 		    }
 
 			$(code+'-filter-form').elements[code+'_from'].value = parseInt(value[0]);
-			$(code+'-filter-form').elements[code+'_to'].value = parseInt(value[1]);			
-			
+			$(code+'-filter-form').elements[code+'_to'].value = parseInt(value[1]);
+
 			if(min == value[0] && max == value[1]){
-				
+
 				//setNavigationUrl(url);
 				submitNavigationForm($(code+'-filter-form'), url, is_ajax);
 
 			}else{
-				
+
 				submitNavigationForm($(code+'-filter-form'), url, is_ajax);
-				
+
 			}
-			
+
 			var htmlvalue = parseInt(value[0]) + ' - ' + parseInt(value[1]);
-			
+
 			if(value[0] >= 0 && value[1] >= 0){
-			
+
 			$(code+'-value-from').innerHTML = parseInt(1*value[0]);
 			$(code+'-value-to').innerHTML = parseInt(1*value[1]);
-			
+
 			}
-			
+
 	        $(code+'-value').innerHTML = htmlvalue;
-	        
+
 	};
-	
-	
+
+
 	
 	s1.options.onSlide = function(value){
 					    
@@ -438,16 +549,14 @@ function initSlider(code, min, max, curr_min, curr_max, url, is_ajax){
 	    if (this.initialized && this.options.onSlide)
 	      this.options.onSlide(this.values.length>1 ? this.values : this.value, this);
 	};
-	
-	
-	var htmlvalue = parseInt(s1.values[0]) + ' - ' + parseInt(s1.values[1]);
-	
-	$(code+'-value-from').innerHTML = parseInt(s1.values[0]);
-	$(code+'-value-to').innerHTML = parseInt(s1.values[1]);
-	
-	$(code+'-value').innerHTML = htmlvalue;
-	
-	
-	
-	
+
+    var slider_data = new Object();
+    var htmlvalue = parseInt(s1.values[0]) + ' - ' + parseInt(s1.values[1]);
+
+    slider_data.code = code;
+    slider_data.from = parseInt(s1.values[0]);
+    slider_data.to = parseInt(s1.values[1]);
+    slider_data.htmlvalue = htmlvalue;
+
+    gan_slider_datas.push(slider_data);
 }

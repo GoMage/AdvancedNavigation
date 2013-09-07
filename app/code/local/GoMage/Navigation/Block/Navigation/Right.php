@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 
@@ -19,7 +19,8 @@ class GoMage_Navigation_Block_Navigation_Right extends Mage_Core_Block_Template
         
         $right = $this->getLayout()->getBlock('right');
         
-        if ($right)
+        if ($right && Mage::helper('gomage_navigation')->isGomageNavigation() &&
+            Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/active'))
         {   
             $right->unsetChild('gomage.navigation.right');                  
             $page = Mage::getSingleton('cms/page');                                     
@@ -35,12 +36,11 @@ class GoMage_Navigation_Block_Navigation_Right extends Mage_Core_Block_Template
             }
             else
             {
-                if (Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/active'))
-                {
+                if (!Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/show_shopby')){
                     $navigation_right = $this->getLayout()->createBlock('gomage_navigation/navigation', 'gomage.navigation.right')
                                                      ->setTemplate('gomage/navigation/catalog/navigation/right.phtml');
                     $navigation_right->SetNavigationPlace(GoMage_Navigation_Block_Navigation::RIGTH_COLUMN);  
-                    $right->insert($navigation_right, '', false);
+                    $right->insert($navigation_right, '', false);                
                 }
             }
         }                               

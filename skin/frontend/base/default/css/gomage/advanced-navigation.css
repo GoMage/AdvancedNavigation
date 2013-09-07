@@ -19,7 +19,7 @@
 .gan-sidebar-nav .block-title strong{
 	color:#fff;
 	height:18px;
-	font:bold 12px/16px Arial,Helvetica,sans-serif;
+	font:700 12px/16px Arial,Helvetica,sans-serif;
 	display:block;
 	text-transform:uppercase;
 	line-height:18px;
@@ -37,7 +37,7 @@
 .block-layered-nav #narrow-by-list dt{
 	cursor:pointer;
 	padding:7px 10px 2px 28px;
-	font-weight: bold;
+	font-weight: 700;
 	text-transform:uppercase;
 	background:url("../../images/gomage/advanced-navigation/bkg_block-layered-dt.gif") no-repeat 9px 11px;
 }
@@ -46,7 +46,7 @@
     padding:0 12px 12px;
 }
 .block-layered-nav li.active a{
-	font-weight:bold;
+	font-weight:700;
 }
 .block-layered-nav dd,
 .category-products,
@@ -69,7 +69,7 @@ span.plain_column{float:left;}
 #gan_nav_top.gan-plain-list li.over { z-index:998; }
 #gan_nav_top.gan-plain-list li.active a { color:#d96708; }
 #gan_nav_top.gan-plain-list a,
-#gan_nav_top.gan-plain-list a:hover { display:block; line-height:1.3em; text-decoration:none; float:left; padding:5px 12px 6px 8px; color:#a7c6dd; font-weight:bold;}
+#gan_nav_top.gan-plain-list a:hover { display:block; line-height:1.3em; text-decoration:none; float:left; padding:5px 12px 6px 8px; color:#a7c6dd; font-weight:700;}
 #gan_nav_top.gan-plain-list span { display:block; cursor:pointer; white-space:nowrap; }
 #gan_nav_top.gan-plain-list li ul span {white-space:normal; }
 #gan_nav_top.gan-plain-list li.over a,
@@ -80,13 +80,13 @@ span.plain_column{float:left;}
 #gan_nav_top.gan-plain-list ul a,
 #gan_nav_top.gan-plain-list ul a:hover { float:none; padding:0; background:none; }
 #gan_nav_top.gan-plain-list ul span,
-#gan_nav_top.gan-plain-list ul li.last li span { padding:3px 15px 4px 15px; }
+#gan_nav_top.gan-plain-list ul li.last li span { padding:3px 15px 4px; }
 #gan_nav_top.gan-plain-list div.gan-plain ul li a,
-#gan_nav_top.gan-plain-list div.gan-plain ul li a:hover { color:#2f2f2f; font-weight:normal;}
+#gan_nav_top.gan-plain-list div.gan-plain ul li a:hover { color:#2f2f2f; font-weight:400;}
 #gan_nav_top.gan-plain-list ul li a:hover { background:#d5e4eb; }
 #gan_nav_top.gan-plain-list li div.gan-plain.shown-sub { left:0; z-index:999; }
 
-.gan-wrapper .gan-plain .gan-plain-items li.gan-plain-item-bold a{font-weight:bold !important;}
+.gan-wrapper .gan-plain .gan-plain-items li.gan-plain-item-bold a{font-weight:700 !important;}
 
 /* Plain img */
 .gan-plain-image-left{float:left;}
@@ -112,7 +112,7 @@ span.plain_column{float:left;}
 .gan-sidebar-nav ul.gan-default-list li{position:relative;float:none;display:block;border-top:1px solid #CCC;}
 .gan-sidebar-nav ul.gan-default-list li.first{border-top:0;}
 .gan-sidebar-nav ul.gan-default-list li li.first{border-top:1px solid #CCC;}
-.gan-sidebar-nav ul.gan-default-list li a{color:#2F2F2F;float:none;font-weight:700;display:block;line-height:1.3em;text-decoration:none;background-color:#E7F1F4;}
+.gan-sidebar-nav ul.gan-default-list li a{color:#2F2F2F;float:none;font-weight:700;display:block;line-height:1.3em;text-decoration:none;}
 .gan-sidebar-nav ul.gan-default-list li a span{cursor:pointer;display:block;white-space:normal;padding:5px 12px 6px 8px;}
 .gan-sidebar-nav ul.gan-default-list li a:hover{color:#d96708;background-color:#f6fafd;}
 .gan-sidebar-nav ul.gan-default-list li a.active{color:#d96708;background-color:#f6fafd;}
@@ -121,8 +121,8 @@ span.plain_column{float:left;}
 
 /* Sidebar default Pro */
 .gan-sidebar-nav ul.gan-defaultpro-list{font-size:13px;}
-.gan-sidebar-nav ul.gan-defaultpro-list li{float:none;position:relative;padding-bottom:1px;background:url("../../images/gomage/advanced-navigation/bkg_nav1.gif") repeat-x 0 100% #ECF3F6;}
-.gan-sidebar-nav ul.gan-defaultpro-list li.last{background:#ECF3F6;padding-bottom:0;}
+.gan-sidebar-nav ul.gan-defaultpro-list li{float:none;position:relative;padding-bottom:1px;background:url("../../images/gomage/advanced-navigation/bkg_nav1.gif") repeat-x 0 100%;}
+.gan-sidebar-nav ul.gan-defaultpro-list li.last{background:none;padding-bottom:0;}
 .gan-sidebar-nav ul.gan-defaultpro-list li.over{z-index:999;}
 .gan-sidebar-nav ul.gan-defaultpro-list li a,.gan-sidebar-nav ul.gan-defaultpro-list li a:hover{display:block;line-height:1.3em;text-decoration:none;}
 .gan-sidebar-nav ul.gan-defaultpro-list li a.active{background-color:#f6fafd;color:#d96708;}
@@ -146,7 +146,7 @@ span.plain_column{float:left;}
 .gan-sidebar-nav ul.gan-folding-list{font-size:13px;}
 .gan-sidebar-nav ul.gan-folding-list li{position:relative;float:none;display:block;border-bottom:1px solid #CCC;}
 .gan-sidebar-nav ul.gan-folding-list li:last-child{border-bottom:0;}
-.gan-sidebar-nav ul.gan-folding-list li a{color:#2F2F2F;float:none;font-weight:700;display:block;line-height:1.3em;text-decoration:none;background-color:#E7F1F4;}
+.gan-sidebar-nav ul.gan-folding-list li a{color:#2F2F2F;float:none;font-weight:700;display:block;line-height:1.3em;text-decoration:none;}
 .gan-sidebar-nav ul.gan-folding-list li a span{cursor:pointer;display:block;white-space:normal;padding:5px 12px 6px 8px;}
 .gan-sidebar-nav ul.gan-folding-list li a:hover{color:#d96708;background-color:#f6fafd;}
 .gan-sidebar-nav ul.gan-folding-list li a.active{color:#d96708;background-color:#f6fafd;}
@@ -155,10 +155,10 @@ span.plain_column{float:left;}
 
 /* Sidebar plain */
 .gan-sidebar-nav ul.gan-plain-list{font-size:12px;}
-.gan-sidebar-nav ul.gan-plain-list li{background:#E7F1F4;border:1px solid #E7F1F4;border-bottom-color:#CCC; line-height:16px;position:relative;display:block;}
+.gan-sidebar-nav ul.gan-plain-list li{border:1px solid #E7F1F4;border-bottom-color:#CCC; line-height:16px;position:relative;display:block;}
 .gan-sidebar-nav ul.gan-plain-list li.last{border-bottom:0;}
 .gan-sidebar-nav ul.gan-plain-list li.over{z-index:999;}
-.gan-sidebar-nav ul.gan-plain-list li:hover,.gan-sidebar-nav ul.gan-plain-list li.over{background:#f6fafd;border:1px solid #A0B3C3;margin:0 -1px 0;padding:0 1px;}
+.gan-sidebar-nav ul.gan-plain-list li:hover,.gan-sidebar-nav ul.gan-plain-list li.over{background:#f6fafd;border:1px solid #A0B3C3;margin:0 -1px;padding:0 1px;}
 .gan-sidebar-nav ul.gan-plain-list li.last:hover,.gan-sidebar-nav ul.gan-plain-list li.over.last:hover{margin-bottom:-1px;}
 .gan-sidebar-nav ul.gan-plain-list li a{color:#000;float:none;display:block;line-height:16px;text-decoration:none;font-weight:700;padding:5px 12px 6px 8px;}
 .gan-sidebar-nav ul.gan-plain-list li a span{cursor:pointer;display:block;white-space:normal;}
@@ -168,7 +168,7 @@ span.plain_column{float:left;}
 .gan-sidebar-nav ul.gan-plain-list li .gan-plain{background:#F6FAFD;border:1px solid #A0B3C3;width:15em;position:absolute;}
 .gan-sidebar-nav ul#gan_nav_left.gan-plain-list .gan-plain{left:-10000px;top:0;}
 .gan-sidebar-nav ul#gan_nav_left.gan-plain-list li.over > .gan-plain{left:90%;top:-1px;}
-.gan-sidebar-nav ul#gan_nav_right.gan-plain-list .gan-plain{top:-10000px;}
+.gan-sidebar-nav ul#gan_nav_right.gan-plain-list .gan-plain{top:-10000px;right:999em;}
 .gan-sidebar-nav ul#gan_nav_right.gan-plain-list li.over > .gan-plain{top:-1px;right:100%;}
 .gan-sidebar-nav ul.gan-plain-list span.gan-plain-border{display:block;position:absolute;top:0;background:#f6fafd;width:1px;overflow:hidden;height:27px;}
 .gan-sidebar-nav ul#gan_nav_left.gan-plain-list span.gan-plain-border{left:-1px;}
@@ -191,13 +191,13 @@ span.plain_column{float:left;}
 	font-size:12px;
 	line-height:16px;
 	height:16px;
-	font-weight:bold;
+	font-weight:700;
 	overflow:hidden;
 	color:#519cde;
 	background:url('../../images/gomage/advanced-navigation/icon_filter_help.png') 0 0 no-repeat;
 	cursor:help;
 }
-#narrow-by-list dt.filter-note-content,
+#narrow-by-list dd.filter-note-content,
 .filter-note-content{
 	position:absolute;
 	top:-15px;
@@ -209,7 +209,7 @@ span.plain_column{float:left;}
 	display:none;
 	z-index:999;
 	margin-left:30px;
-	font-weight:normal;
+	font-weight:400;
 }
 .gan-sidebar-nav .block-title .filter-note-handle{
 	right:5px;
@@ -217,6 +217,15 @@ span.plain_column{float:left;}
 }
 /* Help icon and popup END */
 
+#narrow-by-list dd ol.gan-inblock-list,
+ul.gan-inblock-list.gan-default-list{
+	overflow:auto;
+}
+#narrow-by-list dd ol.gan-inblock-list{
+	background:#fff;
+	padding:5px;
+	border:1px solid #ccc;
+}
 
 /* Checkbox's */
 #narrow-by-list dd ol.gan-list-checkbox li a,
@@ -353,7 +362,7 @@ ul.image-align-2-columns li{
 	height:23px;
 	display:block;
 	padding:0 0 0 12px;
-	font:bold 12px/23px Arial,Helvetica,sans-serif !important;
+	font:700 12px/23px Arial,Helvetica,sans-serif !important;
 	background:url(../../images/gomage/advanced-navigation/gan_button.png) no-repeat 0 0;
 	text-transform:uppercase;
 	text-align:center;
@@ -567,7 +576,7 @@ ul.image-align-2-columns li{
 
 #nav li { float:left; }
 #nav li.active a { color:#d96708; }
-#nav a { float:left; padding:5px 12px 6px 8px; color:#a7c6dd; font-weight:bold; }
+#nav a { float:left; padding:5px 12px 6px 8px; color:#a7c6dd; font-weight:700; }
 #nav li.over a,
 #nav a:hover { color:#d96708; }
 
@@ -577,7 +586,7 @@ ul.image-align-2-columns li{
 
 #nav ul a,
 #nav ul a:hover { float:none; padding:0; background:none; }
-#nav ul li a { font-weight:normal !important; }
+#nav ul li a { font-weight:400 !important; }
 
 #nav ul,
 #nav div { position:absolute; width:15em; top:27px; left:-10000px; border:1px solid #899ba5; }

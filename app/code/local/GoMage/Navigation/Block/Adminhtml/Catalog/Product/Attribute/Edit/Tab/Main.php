@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 
@@ -48,7 +48,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
     				
     				e = options[i];
     				
-    				if(e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT.'){
+    				if(e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER.'){
     					
     					e.parentNode.removeChild(e);
     					
@@ -82,6 +82,12 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
 						option.innerHTML = "'.$helper->__('Slider and Input').'";
 						
 						$("filter_type").appendChild(option);
+												
+						var option = document.createElement("option");
+						option.value = "'.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER.'";
+						option.innerHTML = "'.$helper->__('Input and Slider').'";
+						
+						$("filter_type").appendChild(option);
 	        			
 	        			is_price = true;
 	        			
@@ -97,7 +103,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
         				
         				e = options[i];
         				
-        				if(e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT.'){
+        				if(e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER. '){
         					
         					e.parentNode.removeChild(e);
         					
@@ -108,7 +114,99 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
         		
         	});
         	
+        	Event.observe("filter_type", "change", function(){
+                    var value = $("filter_type").value;                    
+                    var elements = eval('.$this->_getAssociatedElements().');
+                    if (value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE.'){
+                    	for (var i = 0; i < elements.length; i++) {
+                    		var id = elements[i]; 
+                            if ($(id)){
+                            	$(id).up("td").up("tr").show();	
+    						}
+                        }
+                        var id = "inblock_height"; 
+                        if ($(id)){
+                        	$(id).up("td").up("tr").hide();	
+						}
+						var id = "filter_button"; 
+                        if ($(id)){
+                        	$(id).up("td").up("tr").hide();	
+						}
+    				}else if (value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK.'){
+    					for (var i = 0; i < elements.length; i++) {
+                    		var id = elements[i]; 
+                            if ($(id)){
+                            	$(id).up("td").up("tr").hide();	
+    						}
+                        }
+                        var id = "inblock_height"; 
+                        if ($(id)){
+                        	$(id).up("td").up("tr").show();	
+						}
+						var id = "filter_button"; 
+                        if ($(id)){
+                        	$(id).up("td").up("tr").hide();	
+						}
+    				}else if (value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT.' || value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER.'){
+    					for (var i = 0; i < elements.length; i++) {
+                    		var id = elements[i]; 
+                            if ($(id)){
+                            	$(id).up("td").up("tr").hide();	
+    						}
+                        }
+                        var id = "inblock_height"; 
+                        if ($(id)){
+                        	$(id).up("td").up("tr").hide();	
+						}
+						var id = "filter_button"; 
+                        if ($(id)){
+                        	$(id).up("td").up("tr").show();	
+						}
+    				}else{
+    					for (var i = 0; i < elements.length; i++) {
+                    		var id = elements[i]; 
+                            if ($(id)){
+                            	$(id).up("td").up("tr").hide();	
+    						}
+                        }
+                        var id = "inblock_height"; 
+                        if ($(id)){
+                            $(id).up("td").up("tr").hide();	
+    					}
+    					var id = "filter_button"; 
+                        if ($(id)){
+                        	$(id).up("td").up("tr").hide();	
+						}
+        			}
+                });
+                document.observe("dom:loaded", function() {   	
+                	init_filter_type();                	
+                });
+                document.onreadystatechange = init_filter_type;
+                
+                function init_filter_type() {
+                	Gomage_Navigation_fireEvent($("filter_type"), "change");
+                }
+        	
         </script>');
+        
+        $fieldset->addField('inblock_height', 'text', array(
+            'name' => 'inblock_height',
+            'label' => Mage::helper('catalog')->__('Block Height, px'),
+            'title' => Mage::helper('catalog')->__('Block Height, px'),
+            'class' => 'gomage-validate-number',
+        ));
+        
+        $fieldset->addField('filter_button', 'select', array(
+            'name' => 'filter_button',
+            'label' => Mage::helper('catalog')->__('Show Filter Button '),
+            'title' => Mage::helper('catalog')->__('Show Filter Button '),
+            'values'=>array(
+                	0 => $this->__('No'),
+                	1 => $this->__('Yes'),
+                ),
+            
+        ));
         
         $field = $fieldset->addField('is_ajax', 'select', array(
             'name' => 'is_ajax',
@@ -222,5 +320,10 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
         
 
         return $this;
+    }
+    
+    protected function _getAssociatedElements()
+    {
+        return  json_encode(array('show_image_name', 'image_align', 'image_width', 'image_height'));
     }
 }

@@ -8,7 +8,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Available since Release 1.0
  */
  -->
@@ -16,6 +16,8 @@
 	<default>
 		<reference name="head">    		
     		<action method="addJs"><script>gomage/validation.js</script></action>
+    		<action method="addJs"><script>jscolor/jscolor.js</script></action>
+    		<action method="addJs"><script>jscolor/jscolor/jscolor.js</script></action>
     	</reference>
 	</default>	
 	<adminhtml_catalog_product_attribute_edit>

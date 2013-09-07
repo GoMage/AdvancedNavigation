@@ -8,15 +8,12 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Available since Release 1.0
  */
  -->
 <layout version="0.1.0">
-	<catalog_category_layered>
-		<reference name="catalog.leftnav">
-			<action ifconfig="gomage_navigation/general/mode" method="setTemplate"><template>gomage/navigation/layer/view.phtml</template></action>
-		</reference>		
+	<catalog_category_layered>				
 		<reference name="left">			
 			<block type="gomage_navigation/navigation_left"></block>
 		</reference>			
@@ -26,10 +23,7 @@
 			<remove name="catalog.leftnav" />
 		</reference>
 	</catalog_category_default>
-	<catalogsearch_result_index>
-		<reference name="catalogsearch.leftnav">
-			<action ifconfig="gomage_navigation/general/mode" method="setTemplate"><template>gomage/navigation/layer/view.phtml</template></action>
-		</reference>			
+	<catalogsearch_result_index>		
 		<reference name="left">			
 			<block type="gomage_navigation/navigation_left"></block>
 		</reference>					

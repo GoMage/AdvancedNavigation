@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 	
@@ -87,30 +87,41 @@
 	        }
 	        
 	        $this->getLayer()->setBaseSelect($base_select);
-	        
+
 	        parent::_prepareLayout();
-	        
-	        $styles_block = $this->getLayout()->createBlock('core/template', 'advancednavigation_styles')->setTemplate('gomage/navigation/header/styles.php');
-	        
-	        $this->getLayout()->getBlock('head')->setChild('advancednavigation_styles', $styles_block);
-	        
-	        if(Mage::getStoreConfigFlag('gomage_navigation/general/mode') > 0){
+	        	        	        
+	        if(Mage::helper('gomage_navigation')->isGomageNavigation()){
 	        	
+	            $styles_block = $this->getLayout()->createBlock('core/template', 'advancednavigation_styles')->setTemplate('gomage/navigation/header/styles.php');
+	        
+	            $this->getLayout()->getBlock('head')->setChild('advancednavigation_styles', $styles_block);
+	            
 	        	$this->getLayout()->getBlock('head')->addjs('gomage/advanced-navigation.js');
 	        	$this->getLayout()->getBlock('head')->addCss('css/gomage/advanced-navigation.css');
 	        	
-	        	$this->unsetChild('layer_state');
-	        
+	        	$this->unsetChild('layer_state');	        
 	        }
-	        
 	    }
+	    
+    	protected function _toHtml()
+        {
+            if(Mage::helper('gomage_navigation')->isGomageNavigation()){
+                $this->setTemplate('gomage/navigation/layer/view.phtml');
+            }
+            return parent::_toHtml();
+        }
 	    
     	protected function _getCategoryFilter()
         {
-            if (!Mage::getStoreConfig('gomage_navigation/category/show_shopby'))            
-                return false;
-            else
-               return parent::_getCategoryFilter();     
+            if(Mage::helper('gomage_navigation')->isGomageNavigation() && 
+               Mage::getStoreConfigFlag('gomage_navigation/category/active')){
+                if (!Mage::getStoreConfig('gomage_navigation/category/show_shopby'))            
+                    return false;
+                else
+                    return parent::_getCategoryFilter();   
+            }else{
+                return parent::_getCategoryFilter();
+            }                 
         }
 	    
 	    /**
@@ -139,7 +150,8 @@
     	            $slider_item = in_array($item->getFilter()->getAttributeModel()->getFilterType(), 
                 	                   array(GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT,
                 	                         GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER,
-                    				    	 GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT));
+                    				    	 GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT,
+                    				    	 GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER));
 	            }	
 	            catch(Exception $e){
     	            	
@@ -156,6 +168,7 @@
     		        		case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):	
     				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
     				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
+    				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):    
     		        			
     				    	    $_from	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVar().'_from', $item->getFilter()->getMinValueInt());
    	                            $_to	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVar().'_to', $item->getFilter()->getMaxValueInt());
@@ -225,6 +238,7 @@
 				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
 				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
 				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
+				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):    
 		        			
 		        			$filterState[$item->getFilter()->getRequestVar().'_from'] = null;
 		        			$filterState[$item->getFilter()->getRequestVar().'_to'] = null;

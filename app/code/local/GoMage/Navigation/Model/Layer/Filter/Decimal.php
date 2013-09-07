@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 2.0
  */
  
@@ -61,6 +61,7 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
+    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):    
     		
     		$_from = $request->getParam($this->getRequestVar().'_from', false);
     		$_to = $request->getParam($this->getRequestVar().'_to', false);
@@ -190,7 +191,7 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
 		
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
         
-        $filter_mode = intval(Mage::getStoreConfigFlag('gomage_navigation/general/mode'));
+        $filter_mode = Mage::helper('gomage_navigation')->isGomageNavigation();
         
         if ($data === null) {
             $range      = $this->getRange();

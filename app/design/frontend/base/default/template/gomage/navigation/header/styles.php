@@ -3,11 +3,11 @@
 	.gan-loadinfo{
 		
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/ajaxloader/bordercolor')):?>
-		border-color:<?php echo $_color;?> !important;
+		border-color:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?> !important;
 		<?php endif;?>
 		
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/ajaxloader/bgcolor')):?>
-		background-color:<?php echo $_color;?> !important;
+		background-color:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?> !important;
 		<?php endif;?>
 		
 		<?php if($_width = intval(Mage::getStoreConfig('gomage_navigation/ajaxloader/width'))):?>
@@ -26,7 +26,7 @@
 	/* Background Color */
 	.block-layered-nav .block-content{
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/filter/style')):?>
-		background:<?php echo $_color;?>;
+		background:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?>;
 		<?php else:?>
 		background:#E7F1F4;
 		<?php endif;?>
@@ -35,35 +35,39 @@
 	/* Buttons Color */
 	.block-layered-nav .block-content button.button span span{
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/filter/button_style')):?>
-		color:<?php echo $_color;?>;
+		color:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?>;
 		<?php else:?>
 		color:#519cde;
 		<?php endif;?>
 		
 	}
 	
-	/* Slider Color */
+	/* Slider Color */	
 	#narrow-by-list .gan-slider-span{
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/filter/slider_style')):?>
-		background:<?php echo $_color;?>;
+		background:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?>;
 		<?php else:?>
 		background:#0000FF;
 		<?php endif;?>
 	}
 	
 	/* Popup Window Background */
-	#narrow-by-list .filter-note-content{
+	#gan-left-nav-main-container .filter-note-content,
+	#gan-right-nav-main-container .filter-note-content,
+	#narrow-by-list dd.filter-note-content{
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/filter/popup_style')):?>
-		background:<?php echo $_color;?>;
+		background:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?>;
 		<?php else:?>
 		background:#FFFFFF;
 		<?php endif;?>
 	}
 	
 	/* Help Icon View */
+	#gan-left-nav-main-container .filter-note-handle,
+	#gan-right-nav-main-container .filter-note-handle,
 	#narrow-by-list .filter-note-handle{
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/filter/icon_style')):?>
-		color:<?php echo $_color;?>;
+		color:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?>;
 		<?php else:?>
 		color:#519cde;
 		<?php endif;?>

@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Release available since Release 1.0
  */
 
@@ -82,7 +82,7 @@ $attribute_data = array(
         'visible_on_front'  => false,
         'unique'            => false,
     );
-$installer->addAttribute('catalog_category', 'navigation_plain_window_width', $attribute_data);
+$installer->addAttribute('catalog_category', 'navigation_pw_width', $attribute_data);
 
 $attribute_data = array(
         'group'             => 'Advanced Navigation',
@@ -238,7 +238,7 @@ $attribute_data = array(
         'visible_on_front'  => false,
         'unique'            => false,
     );
-$installer->addAttribute('catalog_category', 'navigation_plain_window_side_width', $attribute_data);
+$installer->addAttribute('catalog_category', 'navigation_pw_side_width', $attribute_data);
 
 $pageTable = $installer->getTable('cms/page');
 $installer->getConnection()->addColumn($pageTable, 'navigation_left_column',

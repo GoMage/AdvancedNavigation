@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 	
@@ -29,6 +29,8 @@ class GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Type_Attribu
         	array('value'=>GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT, 'label' => $helper->__('Input')),
         	array('value'=>GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER, 'label' => $helper->__('Slider')),
         	array('value'=>GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT, 'label' => $helper->__('Slider and Input')),
+        	array('value'=>GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER, 'label' => $helper->__('Input an Slider')),
+        	array('value'=>GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK, 'label' => $helper->__('In Block')),
         );
     	
     }
@@ -49,6 +51,8 @@ class GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Type_Attribu
         	GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT	=> $helper->__('Input'),
         	GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER	=> $helper->__('Slider'),
         	GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT => $helper->__('Slider and Input'),
+        	GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER => $helper->__('Input and Slider'),
+        	GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK => $helper->__('In Block'),
         );
     }
 

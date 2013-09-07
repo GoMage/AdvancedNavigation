@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 
@@ -18,7 +18,7 @@ function gan_cat_sort($a, $b)
    
    if ($a_col == $b_col)
    {
-       return ($a->getId() < $b->getId()) ? -1 : 1;
+       return ($a->getData('position') < $b->getData('position')) ? -1 : 1;
    }
    else
    {
@@ -33,7 +33,7 @@ function gan_cat_slide_sort($a, $b)
    
    if ($a_col == $b_col)
    {
-       return ($a->getId() < $b->getId()) ? -1 : 1;
+       return ($a->getData('position') < $b->getData('position')) ? -1 : 1;
    }
    else
    {
@@ -81,13 +81,16 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
         switch ($this->_navigation_place)
         {
             case self::MENU_BAR :
-                  $this->_type_navigation = Mage::getStoreConfig('gomage_navigation/menubarsettings/navigation');
+                  if(Mage::helper('gomage_navigation')->isGomageNavigation())  
+                      $this->_type_navigation = Mage::getStoreConfig('gomage_navigation/menubarsettings/navigation');
+                  else
+                      $this->_type_navigation = GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT;    
                 break;
             case self::LEFT_COLUMN :
                   $this->_type_navigation = Mage::getStoreConfig('gomage_navigation/category/filter_type');
                 break;    
             case self::RIGTH_COLUMN :
-                  $this->_type_navigation = Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/navigation');
+                  $this->_type_navigation = Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/filter_type');
                 break;        
                 
         }        
@@ -109,13 +112,19 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                   if (!(Mage::registry('current_category') || (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch')))
                      return false;
                   else 
-                     return (Mage::getStoreConfig('gomage_navigation/category/ajax_enabled') == 1);    
+                     return (Mage::getStoreConfig('gomage_navigation/category/ajax_enabled') == 1) && 
+                             Mage::registry('current_category') && 
+                             Mage::registry('current_category')->getisAnchor() &&
+                             (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE);    
                 break;    
             case self::RIGTH_COLUMN :
                   if (!(Mage::registry('current_category') || (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch')))
                      return false;
                   else 
-                     return (Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/ajax_enabled') == 1);
+                     return (Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/ajax_enabled') == 1) && 
+                             Mage::registry('current_category') && 
+                             Mage::registry('current_category')->getisAnchor() &&
+                             (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE);
                 break;                        
         }   
     }
@@ -149,7 +158,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
         else
             $params['_query']['cat'] = null;        
                         
-        return Mage::getUrl('*/*/*', $params);
+        return urlencode(Mage::getUrl('*/*/*', $params));
     }
     
     public function getIsActiveAjaxCategory($category)
@@ -370,28 +379,59 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
 				
 	}
 	
+    public function getInBlockHeight(){
+		
+        switch ($this->_navigation_place)
+        {
+            case self::LEFT_COLUMN :
+                    return Mage::getStoreConfig('gomage_navigation/category/inblock_height');    
+                break;    
+            case self::RIGTH_COLUMN :
+                    return Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/inblock_height');
+                break;                        
+        }
+				
+	}
+	
     public function getColumnColor(){
 		
         switch ($this->_navigation_place)
         {
             case self::MENU_BAR :
-                  return Mage::getStoreConfig('gomage_navigation/menubarsettings/column_color');
+                    return Mage::helper('gomage_navigation')->formatColor(Mage::getStoreConfig('gomage_navigation/menubarsettings/column_color'));
                 break;
             case self::LEFT_COLUMN :
-                    return Mage::getStoreConfig('gomage_navigation/category/column_color');    
+                    return Mage::helper('gomage_navigation')->formatColor(Mage::getStoreConfig('gomage_navigation/category/column_color'));    
                 break;    
             case self::RIGTH_COLUMN :
-                    return Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/column_color');                     
+                    return Mage::helper('gomage_navigation')->formatColor(Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/column_color'));                     
                 break;                        
         }
 				
 	}
+	
+	public function getIsShowAllSubcategories(){
+	    switch ($this->_navigation_place)
+        {
+            case self::MENU_BAR :
+                  false;
+                break;
+            case self::LEFT_COLUMN :
+                    return Mage::getStoreConfigFlag('gomage_navigation/category/show_allsubcats');    
+                break;    
+            case self::RIGTH_COLUMN :
+                    return Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/show_allsubcats');                     
+                break;                        
+        }
+	}
 	            
     protected function _prepareLayout()
     { 
-        parent::_prepareLayout(); 
-        $this->getLayout()->getBlock('head')->addCss('css/gomage/advanced-navigation.css'); 
-        $this->getLayout()->getBlock('head')->addjs('gomage/category-navigation.js');       
+        parent::_prepareLayout();
+        if(Mage::helper('gomage_navigation')->isGomageNavigation()){ 
+            $this->getLayout()->getBlock('head')->addCss('css/gomage/advanced-navigation.css'); 
+            $this->getLayout()->getBlock('head')->addjs('gomage/category-navigation.js');
+        }       
     }
 
     protected function _construct()
@@ -446,14 +486,17 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
      *
      * @return Varien_Data_Tree_Node_Collection
      */
-    public function getStoreCategories($root_category)
+    public function getStoreCategories($root_category = null)
     {                
+        if (is_null($root_category)){
+            $root_category = Mage::app()->getStore()->getRootCategoryId();
+        }
         $tree = Mage::getResourceModel('catalog/category_tree');        
         $nodes = $tree->loadNode($root_category)
             ->loadChildren(max(0, (int) Mage::app()->getStore()->getConfig('catalog/navigation/max_depth')))
             ->getChildren();
                     
-        $collection = Mage::getResourceModel('catalog/category_collection');    
+        $collection = Mage::getResourceModel('catalog/category_collection')->setLoadProductCount(true);    
         $collection->addAttributeToSelect('*');    
                 
         $tree->addCollectionData($collection, Mage::app()->getStore()->getId(), $root_category, true, true);
@@ -752,11 +795,16 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                     if ($hasActiveChildren)
                     { 
                        if ($this->_navigation_place == self::MENU_BAR) 
-                           $_width = $category->getData('navigation_plain_window_width');
+                           $_width = $category->getData('navigation_pw_width');
                        else    
-                           $_width = $category->getData('navigation_plain_window_side_width');
+                           $_width = $category->getData('navigation_pw_side_width');
                            
-                       $html[] = '<div style="' . ($this->_navigation_place == self::MENU_BAR ? 'background-color: ' . $this->getColumnColor() . ';' : '') .  ($_width ? 'width: ' . $_width . 'px;' : '') . '" class="gan-plain" >';
+                       $gan_plain_style = ($this->_navigation_place == self::MENU_BAR ? 'background-color: ' . $this->getColumnColor() . ';' : '') .  ($_width ? 'width: ' . $_width . 'px;' : '');
+                       if ($gan_plain_style){
+                           $gan_plain_style = 'style="' . $gan_plain_style . '"'; 
+                       } 
+                           
+                       $html[] = '<div ' . $gan_plain_style . ' class="gan-plain" >';
                        
                        if (!($this->_navigation_place == self::MENU_BAR))                       
                            $html[] = '<span class="gan-plain-border"></span>';
@@ -778,11 +826,14 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                                 $_add_image_style = '';
                                 if ($category->getData('navigation_image_width'))
                                    $_add_image_style = 'width:' . $category->getData('navigation_image_width') . 'px;';
-                                if ($category->getData('navigation_image_width'))
+                                if ($category->getData('navigation_image_height'))
                                    $_add_image_style .= 'height:' . $category->getData('navigation_image_height') . 'px;';   
                                    
+                                if ($_add_image_style){
+                                    $_add_image_style = 'style="' . $_add_image_style . '"';
+                                }   
                                 $this->_plain_image  = '<div class="' . GoMage_Navigation_Model_Adminhtml_System_Config_Source_Category_Image_Position::getPositionClass($navigation_image_position) . '">';                            
-                                $this->_plain_image .= '<img style="' . $_add_image_style . '" src="' . Mage::getBaseUrl ( 'media' ) ."catalog/product/cache/cat_resized/" . $navigation_image . '" alt="' . $this->escapeHtml($category->getName()) . '" />';
+                                $this->_plain_image .= '<img ' . $_add_image_style . ' src="' . Mage::getBaseUrl ( 'media' ) ."catalog/product/cache/cat_resized/" . $navigation_image . '" alt="' . $this->escapeHtml($category->getName()) . '" />';
                                 $this->_plain_image .= '</div>';
                                 
                                 $imageObj = new Varien_Image(Mage::getBaseDir ( 'media' ) . DS . "catalog" . DS . "product" . DS . "cache" . DS . "cat_resized" . DS . $navigation_image);
@@ -790,7 +841,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                                 switch ($navigation_image_position)
                                 {
                                     case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Category_Image_Position::RIGHT:
-                                         $_add_style = ' style="margin-right: ' . ($imageObj->getOriginalWidth() + 10) . 'px;" ';
+                                         $_add_style = ' style="margin-right: ' . ((int)($category->getData('navigation_image_width') ? $category->getData('navigation_image_width') : $imageObj->getOriginalWidth()) + 10) . 'px;" ';
                                          $html[] = $this->_plain_image;
                                          $this->_plain_image = '';
                                         break;
@@ -802,7 +853,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                                         break;    
                                     default:    
                                     case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Category_Image_Position::LEFT:
-                                         $_add_style = ' style="margin-left: ' . ($imageObj->getOriginalWidth() + 10) . 'px;" ';
+                                         $_add_style = ' style="margin-left: ' . ((int)($category->getData('navigation_image_width') ? $category->getData('navigation_image_width') : $imageObj->getOriginalWidth()) + 10) . 'px;" ';
                                          $html[] = $this->_plain_image;
                                          $this->_plain_image = ''; 
                                         break;
@@ -1141,7 +1192,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                     $htmlChildren = '';
                     $j = 0;
                     
-                    if ($this->getIsActiveAjaxCategory($category))
+                    if ($this->getIsActiveAjaxCategory($category) || $this->getIsShowAllSubcategories())
                     {
                         foreach ($activeChildren as $child) {
                             $htmlChildren .= $this->_renderCategoryMenuItemHtml(
@@ -1291,8 +1342,22 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
         $this->_root_level = Mage::getModel('catalog/category')->load($_root_category)->getLevel() + 1;
         
         foreach ($this->getStoreCategories($_root_category) as $child) {
-            if ($child->getIsActive()) {
-                $activeCategories[] = $child;
+            if ($child->getIsActive()) {                
+                switch ($this->_navigation_place){
+                    case self::LEFT_COLUMN :
+                        if (Mage::getStoreConfig('gomage_navigation/category/hide_empty') && 
+                            !$child->getProductCount()){	                	    
+	                	    continue 2;	                	    
+	                	} 
+                    break;
+                    case self::RIGTH_COLUMN :
+                        if (Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/hide_empty') && 
+                            !$child->getProductCount()){	                	    
+	                	    continue 2;	                	    
+	                	} 
+                    break;                                
+                }
+                $activeCategories[] = $child;                
             }
         }
         

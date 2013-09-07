@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 	
@@ -38,24 +38,28 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 	
 	public function getItems(){
 		
-		if(!$this->ajaxEnabled()){
-						
-			$items = parent::getItems();;
-			
-			foreach($items as $key=>$item){
-				
-			    if($category = Mage::getModel('catalog/category')->load($item->getValue())){				
-					
-					$items[$key]->setUrl($category->getUrl());
-					
-				}
-				
-			}
-			
-			return $items;
-			
-		}
-		
+	    if(Mage::helper('gomage_navigation')->isGomageNavigation() && 
+	       Mage::getStoreConfigFlag('gomage_navigation/category/active')){
+
+	        if(!$this->ajaxEnabled()){
+    						
+    			$items = parent::getItems();;
+    			
+    			foreach($items as $key=>$item){
+    				
+    			    if($category = Mage::getModel('catalog/category')->load($item->getValue())){				
+    					
+    					$items[$key]->setUrl($category->getUrl());
+    					
+    				}
+    				
+    			}
+    			
+    			return $items;
+    			
+    		}
+	    }
+	    
 		return parent::getItems();
 		
 	}
@@ -68,8 +72,18 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 	
 	public function ajaxEnabled(){
 		
-		return (bool) Mage::getStoreConfigFlag('gomage_navigation/category/ajax_enabled');
-		
+	    if (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch'){
+	        $is_ajax = true; 
+	    }else{
+	        $is_ajax = Mage::registry('current_category') && 
+                       Mage::registry('current_category')->getisAnchor() &&
+                       (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE);
+	    }
+	    
+	    $is_ajax = $is_ajax && Mage::getStoreConfigFlag('gomage_navigation/category/ajax_enabled');
+	    		
+		return $is_ajax;
+
 	}
 	
 	public function canShowMinimized(){
@@ -180,7 +194,8 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
     {
         parent::__construct();
         
-        if(Mage::getStoreConfigFlag('gomage_navigation/general/mode') > 0){
+        if(Mage::helper('gomage_navigation')->isGomageNavigation() &&
+           Mage::getStoreConfigFlag('gomage_navigation/category/active')){
         	
         	$type = Mage::getStoreConfig('gomage_navigation/category/filter_type');
         	
@@ -209,4 +224,13 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
         }
         
     }
+    
+    public function getFilterType(){
+        return Mage::getStoreConfig('gomage_navigation/category/filter_type');    
+    }
+    
+    public function getInBlockHeight(){
+        return Mage::getStoreConfig('gomage_navigation/category/inblock_height');    
+    }
+    
 }

@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 ?>
@@ -27,7 +27,7 @@
     			
     			<?php if(count($this->getActiveFilters()) > 0):?>
     			
-    			<button class="button" onclick="setNavigationUrl('<?php echo $this->getClearUrl(true);?>'); return false;"><span><span><?php echo $this->__('Clear All') ?></span></span></button>
+    			<button class="button" onclick="setNavigationUrl('<?php echo urlencode($this->getClearUrl(true));?>'); return false;"><span><span><?php echo $this->__('Clear All') ?></span></span></button>
     			
     			<?php endif;?>
     		</p>
@@ -64,9 +64,9 @@
     	                    		
     	                    	?>
     	                    	
-    	                    	<dt id="filter-<?php echo $_filter->getPopupId();?>-note-content" class="filter-note-content" <?php if($styles):?> style="<?php echo $styles;?>" <?php endif;?>>
+    	                    	<dd id="filter-<?php echo $_filter->getPopupId();?>-note-content" class="filter-note-content" <?php if($styles):?> style="<?php echo $styles;?>" <?php endif;?>>
     								<?php echo nl2br($note_content);?>
-    	                    	</dt>
+    	                    	</dd>
     					<?php endif;?>
 					<?php endif;?>
                 	                	                	
@@ -88,7 +88,7 @@
                     <?php if ($_filter->canShowResetFirler()): ?>
                         <?php $_filter_reset =  $this->getResetFirlerUrl($_filter, $_filter->ajaxEnabled()); ?>
                         <?php if ($_filter_reset): ?>
-                             <a href="<?php echo $_filter_reset; ?>" <?php if ($_filter->ajaxEnabled()): ?>onclick="setNavigationUrl('<?php echo $_filter_reset; ?>'); return false;"<?php endif; ?> >Reset</a>
+                             <a href="<?php echo $_filter_reset; ?>" <?php if ($_filter->ajaxEnabled()): ?>onclick="setNavigationUrl('<?php echo urlencode($_filter_reset); ?>'); return false;"<?php endif; ?> >Reset</a>
                         <?php endif; ?>
                     <?php endif; ?>
                     

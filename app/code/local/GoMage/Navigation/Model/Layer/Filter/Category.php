@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 2.0
+ * @version      Release: 2.1
  * @since        Class available since Release 1.0
  */
 
@@ -186,15 +186,27 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
             /** @var $categoty Mage_Catalog_Model_Categeory */
             //$categories = $categoty->getChildrenCategories();
             
-            $cats_ids = array();
-            if ($category->getChildren())
-              $cats_ids = explode(',', $category->getChildren());               
-                                                  
-            $cats_ids_str = '0';
+            if (Mage::getStoreConfigFlag('gomage_navigation/category/show_allsubcats')){
             
-            foreach ($cats_ids as $_id)
-            {                
-               $cats_ids_str .= ',' . $this->_addChildsCategory($_id,  explode(',',Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)));
+                $cats_ids = array_diff($category->getAllChildren(true), array($category->getId()));
+                
+                if (count($cats_ids)) {
+                    $cats_ids_str = implode(',', $cats_ids);
+                } else {
+                    $cats_ids_str = '0';   
+                }
+                
+            }else {
+                $cats_ids = array();
+                if ($category->getChildren())
+                  $cats_ids = explode(',', $category->getChildren());               
+                                                      
+                $cats_ids_str = '0';
+                
+                foreach ($cats_ids as $_id)
+                {                
+                   $cats_ids_str .= ',' . $this->_addChildsCategory($_id,  explode(',',Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)));
+                }
             }
                                       
             $categories = Mage::getResourceModel('catalog/category_collection');
@@ -222,20 +234,23 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
 			
             $data = array();
             
-            $filter_mode = intval(Mage::getStoreConfigFlag('gomage_navigation/general/mode'));
+            $filter_mode = Mage::helper('gomage_navigation')->isGomageNavigation();
             
         	if($categories->count() > 0){
         		
         		$category_count = $this->_getResource()->getCount($this, $categories);
         		        		        		        		
 	            foreach ($categories as $category) {
+	                
 	                if ($category->getIsActive()) {
 	                	
-	                	if(in_array($category->getId(), $selected) && !$filter_mode){
-	                		
-	                		continue;
-	                		
+	                	if(in_array($category->getId(), $selected) && !$filter_mode){	                		
+	                		continue;	                		
 	                	}
+	                	
+	                	if (Mage::getStoreConfig('gomage_navigation/category/hide_empty') && !isset($category_count[$category->getId()])){	                	    
+	                	    continue;	                	    
+	                	} 
 	                	
 	                	if(in_array($category->getId(), $selected) && $filter_mode){
 	                		
