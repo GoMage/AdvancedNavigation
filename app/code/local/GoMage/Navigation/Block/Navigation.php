@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.0
+ * @version      Release: 3.1
  * @since        Class available since Release 1.0
  */
 
@@ -428,9 +428,11 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
     protected function _prepareLayout()
     { 
         parent::_prepareLayout();
-        if(Mage::helper('gomage_navigation')->isGomageNavigation()){ 
-            $this->getLayout()->getBlock('head')->addCss('css/gomage/advanced-navigation.css'); 
-            $this->getLayout()->getBlock('head')->addjs('gomage/category-navigation.js');
+        if(Mage::helper('gomage_navigation')->isGomageNavigation()){
+            if($head_block = $this->getLayout()->getBlock('head')){        	
+	            $head_block->addCss('css/gomage/advanced-navigation.css'); 
+	            $head_block->addjs('gomage/category-navigation.js');
+            }
         }       
     }
 
@@ -791,6 +793,12 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
 					   		}
 				
 					   		$offer_block_class = GoMage_Navigation_Model_Adminhtml_System_Config_Source_Category_Image_Position::getOfferBlockPositionClass($category->getData('navigation_pw_ob_pos'));
+					   		
+					   		if(in_array($category->getData('navigation_pw_ob_pos'), array(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Category_Image_Position::LEFT, GoMage_Navigation_Model_Adminhtml_System_Config_Source_Category_Image_Position::RIGHT)) &&
+					   			!$category->getData('navigation_pw_ob_height')){
+					   			$offer_block_class .= ' gan-ob-noheight';
+					   		}
+					   		
 					   		$this->_offer_block_html  = '<div class="'.$offer_block_class.'" style="'.$offer_block_styles.'">';
 					   		$_desc = $category->getData('navigation_pw_ob_desc');
 					   		$_desc = nl2br($this->helper('cms')->getBlockTemplateProcessor()->filter($_desc));

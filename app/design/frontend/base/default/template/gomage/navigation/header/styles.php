@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.0
+ * @version      Release: 3.1
  * @since        Class available since Release 1.0
  */
 ?>
@@ -93,26 +93,57 @@
 	<?php if (Mage::helper('gomage_navigation')->isGomageNavigation() &&
 			  Mage::getStoreConfig('gomage_navigation/menubarsettings/navigation') == GoMage_Navigation_Model_Layer::FILTER_TYPE_PLAIN): ?>
 		<?php $categories = $this->getStoreCategories(); ?>
+		<?php $_size = intval($this->getRootCategory()->getData('navigation_pw_m_bsize')); ?>		
+		<?php if ($_size === 0 && $this->getRootCategory()->getData('navigation_pw_m_bsize') != ''): ?>
+			#gan_nav_top.gan-plain-list > li > a{
+				border:1px solid;
+			}		
+			#gan_nav_top.gan-plain-list > li > a{
+				border-right-width:0;
+			}				
+			#gan_nav_top.gan-plain-list > li.last > a{
+				border-right-width:1px;
+			}
+		<?php elseif($_size == 1): ?>
+			#gan_nav_top.gan-plain-list > li > a{
+		  		border:1px solid;
+		    }
+		<?php elseif($_size >= 2): ?>
+			#gan_nav_top.gan-plain-list > li > a{
+			    border:1px solid;
+			    margin-right:<?php echo ($_size - 1) ?>px;
+		  	}	
+		<?php endif; ?>
 		<?php foreach ($categories as $cat): ?>
 			#gan_nav_top.gan-plain-list > li.nav-<?php echo $cat->getId() ?> > a{
-				<?php if (($_color = $cat->getData('navigation_pw_m_bcolor')) && ($_size = $cat->getData('navigation_pw_m_bsize'))): ?>
-			 		border:<?php echo $_size; ?>px solid <?php echo Mage::helper('gomage_navigation')->formatColor($_color); ?>;
+				<?php if ($_color = $cat->getData('navigation_pw_m_bcolor')): ?>
+			 		border-color:<?php echo Mage::helper('gomage_navigation')->formatColor($_color); ?>;
 				<?php endif; ?>
 				<?php if ($_color = $cat->getData('navigation_pw_m_bgcolor')): ?>
 					background:<?php echo Mage::helper('gomage_navigation')->formatColor($_color); ?>;
 				<?php endif; ?>
 				<?php if ($_color = $cat->getData('navigation_pw_m_tcolor')): ?>
 			  		color:<?php echo Mage::helper('gomage_navigation')->formatColor($_color); ?>;
-			    <?php endif; ?>			 			
+			    <?php endif; ?>
+				<?php if ($_radius = $cat->getData('navigation_pw_m_bradius')): ?>
+			 		-webkit-border-radius: <?php echo $_radius ?>px <?php echo $_radius ?>px 0 0;
+				    -moz-border-radius: <?php echo $_radius ?>px <?php echo $_radius ?>px 0 0;
+				    border-radius: <?php echo $_radius ?>px <?php echo $_radius ?>px 0 0; 
+				<?php endif; ?>			 			
 			}
 			#gan_nav_top.gan-plain-list > li.nav-<?php echo $cat->getId() ?> > a:hover,
-      #gan_nav_top.gan-plain-list > li.nav-<?php echo $cat->getId() ?> > a.active{
+      		#gan_nav_top.gan-plain-list > li.nav-<?php echo $cat->getId() ?> > a.over{      		
 				<?php if ($_color = $cat->getData('navigation_pw_m_otcolor')): ?>
 			  		color:<?php echo Mage::helper('gomage_navigation')->formatColor($_color); ?>;
 			    <?php endif; ?>
 				<?php if ($_color = $cat->getData('navigation_pw_m_obgcolor')): ?>
 					background:<?php echo Mage::helper('gomage_navigation')->formatColor($_color); ?>;
 				<?php endif; ?>			 			
+			}
+			#gan_nav_top.gan-plain-list > li.nav-<?php echo $cat->getId() ?> > a.active{
+				<?php if ($_color = $cat->getData('navigation_pw_m_sccolor')): ?>
+					background:<?php echo Mage::helper('gomage_navigation')->formatColor($_color); ?>;
+				<?php endif; ?>
 			}
 		    #gan_nav_top.gan-plain-list > li.gan-plain-style1.nav-<?php echo $cat->getId() ?> > a:hover,
 		    #gan_nav_top.gan-plain-list > li.over.gan-plain-style1.nav-<?php echo $cat->getId() ?> > a{
@@ -122,9 +153,15 @@
 		    }
 		    #gan_nav_top.gan-plain-list > li.gan-plain-style1.nav-<?php echo $cat->getId() ?> > a:hover span,
 		    #gan_nav_top.gan-plain-list > li.over.gan-plain-style1.nav-<?php echo $cat->getId() ?> > a span{
-		        <?php if (($_color = $cat->getData('navigation_pw_m_bcolor')) && ($_size = $cat->getData('navigation_pw_m_bsize'))): ?>
-		          padding-bottom:<?php echo $_size; ?>px;
-		        <?php endif; ?>
+        
+          <?php $_size = intval($this->getRootCategory()->getData('navigation_pw_m_bsize')); ?>		
+          <?php if ($_size === 0 && $this->getRootCategory()->getData('navigation_pw_m_bsize') != ''): ?>
+            padding-bottom:0px;
+          <?php elseif($_size == 1): ?>
+            padding-bottom:1px;
+          <?php elseif($_size >= 2): ?>
+            padding-bottom:1px;
+          <?php endif; ?>        
 		    }      
 		    #gan_nav_top.gan-plain-list > li.gan-plain-style1.nav-<?php echo $cat->getId() ?> .gan-plain{
 		        <?php if (($_color = $cat->getData('navigation_pw_s_bcolor')) && ($_size = $cat->getData('navigation_pw_s_bsize'))): ?>
@@ -148,7 +185,7 @@
 			  <?php endif; ?>
 			}
 			#gan_nav_top.gan-plain-list .nav-<?php echo $cat->getId() ?> .gan-plain-item li.sub-level1 > a:hover,
-      #gan_nav_top.gan-plain-list .nav-<?php echo $cat->getId() ?> .gan-plain-item li.sub-level1 > a.active{
+      		#gan_nav_top.gan-plain-list .nav-<?php echo $cat->getId() ?> .gan-plain-item li.sub-level1 > a.active{
 			  <?php if ($_color = $cat->getData('navigation_pw_fl_otcolor')): ?>
 			  	color:<?php echo Mage::helper('gomage_navigation')->formatColor($_color); ?>;
 			  <?php endif; ?>
@@ -165,7 +202,7 @@
 			  <?php endif; ?>
 			}
 			#gan_nav_top.gan-plain-list .nav-<?php echo $cat->getId() ?> .gan-plain-item li.sub-level2 > a:hover,
-      #gan_nav_top.gan-plain-list .nav-<?php echo $cat->getId() ?> .gan-plain-item li.sub-level2 > a.active{
+      		#gan_nav_top.gan-plain-list .nav-<?php echo $cat->getId() ?> .gan-plain-item li.sub-level2 > a.active{
 			  <?php if ($_color = $cat->getData('navigation_pw_sl_otcolor')): ?>
 			  	color:<?php echo Mage::helper('gomage_navigation')->formatColor($_color); ?>;
 			  <?php endif; ?>

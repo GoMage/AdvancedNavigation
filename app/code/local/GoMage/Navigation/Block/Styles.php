@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.0
+ * @version      Release: 3.1
  * @since        Class available since Release 3.0
  */
 
@@ -29,6 +29,11 @@ class GoMage_Navigation_Block_Styles extends Mage_Core_Block_Template
         $tree->addCollectionData($collection, Mage::app()->getStore()->getId(), $root_category, true, true);
             
         return $nodes;    
+    }
+    
+    public function getRootCategory(){
+    	$root_category_id = Mage::app()->getStore()->getRootCategoryId();
+    	return Mage::getModel('catalog/category')->load($root_category_id);
     }
     
     public function getNavigationCatigoryUrl(){

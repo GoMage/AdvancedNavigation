@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.0
+ * @version      Release: 3.1
  * @since        Class available since Release 1.0
  */
 	
@@ -186,13 +186,16 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 	}
 	
 	public function isGomageNavigation(){
+		 if ($this->isMobileDevice() && Mage::getStoreConfigFlag('gomage_navigation/general/disable_mobile')){
+		 	return false;
+		 }
 	     return in_array(Mage::app()->getStore()->getWebsiteId(), $this->getAvailavelWebsites()) &&
 	            Mage::getStoreConfigFlag('gomage_navigation/general/mode'); 	         	     
 	}
 	
 	public function isGomageNavigationAjax(){
 	     return $this->isGomageNavigation() &&                 
-                ((Mage::registry('current_category') && Mage::registry('current_category')->getisAnchor()) ||
+                ((Mage::registry('current_category') && Mage::registry('current_category')->getIsAnchor()) ||
                 (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch' &&
                  Mage::app()->getFrontController()->getRequest()->getControllerName() != 'advanced'));
 	}
@@ -289,6 +292,21 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
         return $value;
     }
+    
+    public function isMobileDevice(){		
+    	$user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+    	if (!$user_agent || strpos($user_agent, 'ipad')) return false;
+    	
+		$regex_match="/(nokia|iphone|android|motorola|^mot-|softbank|foma|docomo|kddi|up.browser|up.link|";
+		$regex_match.="htc|dopod|blazer|netfront|helio|hosin|huawei|novarra|CoolPad|webos|techfaith|palmsource|";
+		$regex_match.="blackberry|alcatel|amoi|ktouch|nexian|samsung|^sam-|s[cg]h|^lge|ericsson|philips|sagem|wellcom|bunjalloo|maui|";	
+		$regex_match.="symbian|smartphone|midp|wap|phone|windows ce|iemobile|^spice|^bird|^zte-|longcos|pantech|gionee|^sie-|portalmmm|";
+		$regex_match.="jigs browser|hiptop|^ucweb|^benq|haier|^lct|operas*mobi|opera*mini|320x320|240x320|176x220";
+		$regex_match.=")/i";		
+		return preg_match($regex_match, strtolower($user_agent));
+		
+    }
+    
 				
 }
 

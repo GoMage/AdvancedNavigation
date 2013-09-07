@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.0
+ * @version      Release: 3.1
  * @since        Class available since Release 1.0
  */
 
@@ -26,10 +26,11 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Category_Tab_Attributes extends 
 										'navigation_pw_s_column',
 										'navigation_pw_s_img');
 	
-	public $menu_bar_settings = array('navigation_pw_m_bsize',
-										'navigation_pw_m_bcolor',
+	public $menu_bar_settings = array('navigation_pw_m_bcolor',
+										'navigation_pw_m_bradius',
 										'navigation_pw_m_bgcolor',
 										'navigation_pw_m_obgcolor',
+										'navigation_pw_m_sccolor',
 										'navigation_pw_m_tcolor',
 										'navigation_pw_m_otcolor');
 		
@@ -82,7 +83,10 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Category_Tab_Attributes extends 
 	        if ($category = $this->getCategory()){
 	        	$level = intval($category->getLevel());
 	        	 switch ($level){
-	           		case 2:
+	        	 	case 1:
+	        	 		$attributes_pw_m[] = 'navigation_pw_m_bsize';
+	        	 		break;
+	           		case 2:	           			
 						$attributes_pw_s = $this->plain_window_settings;
 						$attributes_pw_s = array_diff($attributes_pw_s, array('navigation_pw_s_column', 'navigation_pw_s_img'));
 						

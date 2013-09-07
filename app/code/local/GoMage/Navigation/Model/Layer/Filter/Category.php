@@ -3,11 +3,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.0
+ * @version      Release: 3.1
  * @since        Class available since Release 1.0
  */
 
@@ -216,7 +216,10 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
                 	if ($_cat->getChildren()){
                 		$cats_ids_str .= ',' . $_cat->getChildren();
                 	}
-                	$_parent_cat = Mage::getModel('catalog/category')->load($_cat->getParentId());                	                	
+                	$_parent_cat = Mage::getModel('catalog/category')->load($_cat->getParentId());
+                	if ($_parent_cat->getChildren()){
+                		$cats_ids_str .= ',' . $_parent_cat->getChildren();
+                	}                	                	
                 	while($category->getLevel() < $_parent_cat->getLevel()){
                 		$cats_ids_str .= ',' . $_parent_cat->getId(); 	
                 		$_parent_cat = Mage::getModel('catalog/category')->load($_parent_cat->getParentId());

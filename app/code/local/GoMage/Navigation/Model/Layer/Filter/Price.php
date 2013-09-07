@@ -3,16 +3,32 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.0
+ * @version      Release: 3.1
  * @since        Class available since Release 1.0
  */
 
 class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model_Layer_Filter_Abstract
 {
+	/**
+     * XML configuration paths for Price Layered Navigation
+     */
+    const XML_PATH_RANGE_CALCULATION       = 'catalog/layered_navigation/price_range_calculation';
+    const XML_PATH_RANGE_STEP              = 'catalog/layered_navigation/price_range_step';
+    const XML_PATH_RANGE_MAX_INTERVALS     = 'catalog/layered_navigation/price_range_max_intervals';
+    const XML_PATH_ONE_PRICE_INTERVAL      = 'catalog/layered_navigation/one_price_interval';
+    const XML_PATH_INTERVAL_DIVISION_LIMIT = 'catalog/layered_navigation/interval_division_limit';
+
+    /**
+     * Price layered navigation modes: Automatic (equalize price ranges), Automatic (equalize product counts), Manual
+     */
+    const RANGE_CALCULATION_AUTO     = 'auto'; // equalize price ranges
+    const RANGE_CALCULATION_IMPROVED = 'improved'; // equalize product counts
+    const RANGE_CALCULATION_MANUAL   = 'manual';
+    
     const MIN_RANGE_POWER = 10;
 	
 	protected $_selected_options;
@@ -55,21 +71,27 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
     public function getPriceRange()
     {
         $range = $this->getData('price_range');
-        if (is_null($range)) {
+        if (!$range) {            
             $maxPrice = $this->getMaxPriceInt();
-            $index = 1;
-            do {
-                $range = pow(10, (strlen(floor($maxPrice))-$index));
-                $items = $this->getRangeItemCounts($range);
-                $index++;
+            if (!$range) {
+                $calculation = Mage::app()->getStore()->getConfig(self::XML_PATH_RANGE_CALCULATION);
+                if (!$calculation || $calculation == self::RANGE_CALCULATION_AUTO) {
+                    $index = 1;
+                    do {
+                        $range = pow(10, (strlen(floor($maxPrice)) - $index));
+                        $items = $this->getRangeItemCounts($range);
+                        $index++;
+                    }
+                    while($range > self::MIN_RANGE_POWER && count($items) < 2);
+                } else {
+                    $range = (float)Mage::app()->getStore()->getConfig(self::XML_PATH_RANGE_STEP);
+                }
             }
-            while($range>self::MIN_RANGE_POWER && count($items)<2);
-
             $this->setData('price_range', $range);
         }
         return $range;
     }
-	
+    	
 	/**
      * Get minimal price from layer products set
      *
@@ -123,7 +145,23 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
         $rangeKey = 'range_item_counts_' . $range;
         $items = $this->getData($rangeKey);
         if (is_null($items)) {
-            $items = $this->_getResource()->getCount($this, $range);
+            $items = $this->_getResource()->getCount($this, $range);            
+            $calculation = Mage::app()->getStore()->getConfig(self::XML_PATH_RANGE_CALCULATION);
+            if ($calculation){            
+	            $i = 0;
+	            $lastIndex = null;
+	            $maxIntervalsNumber = $this->getMaxIntervalsNumber();
+	            
+	            foreach ($items as $k => $v) {
+	                ++$i;
+	                if ($calculation == self::RANGE_CALCULATION_MANUAL && $i > 1 && $i > $maxIntervalsNumber) {
+	                    $items[$lastIndex] += $v;
+	                    unset($items[$k]);
+	                } else {
+	                    $lastIndex = $k;
+	                }
+            	}
+            }
             $this->setData($rangeKey, $items);
         }
         return $items;
@@ -143,7 +181,30 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
         $toPrice    = $store->formatPrice($value*$range);
         return Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice);
     }
-
+    
+    /**
+     * Prepare text of range label
+     *
+     * @param float|string $fromPrice
+     * @param float|string $toPrice
+     * @return string
+     */
+    protected function _renderRangeLabel($fromPrice, $toPrice)
+    {
+        $store      = Mage::app()->getStore();
+        $formattedFromPrice  = $store->formatPrice($fromPrice);
+        if ($toPrice === '') {
+            return Mage::helper('catalog')->__('%s and above', $formattedFromPrice);
+        } elseif ($fromPrice == $toPrice && Mage::app()->getStore()->getConfig(self::XML_PATH_ONE_PRICE_INTERVAL)) {
+            return $formattedFromPrice;
+        } else {
+            if ($fromPrice != $toPrice) {
+                $toPrice -= .01;
+            }
+            return Mage::helper('catalog')->__('%s - %s', $formattedFromPrice, $store->formatPrice($toPrice));
+        }
+    }
+   
     /**
      * Get price aggreagation data cache key
      *
@@ -408,41 +469,23 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
     }
     
     public function getResetValue($value_to_remove = null)
-    {
-    	
-    	
-    	if($value_to_remove && ($current_value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar))){
-    		
-    		if(is_array($value_to_remove)){
-    			
-    			if(isset($value_to_remove['index']) && isset($value_to_remove['range'])){
-    		
-	    		$value_to_remove = $value_to_remove['index'].','.$value_to_remove['range'];
-	    		
-	    		}else{
-	    			
-	    			return null;
-	    			
-	    		}
-	    		
+    {    	    	
+    	if($value_to_remove && ($current_value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar))){    		
+    		if(is_array($value_to_remove)){    			
+    			if(isset($value_to_remove['index']) && isset($value_to_remove['range'])){    		
+	    		$value_to_remove = $value_to_remove['index'].','.$value_to_remove['range'];	    		
+	    		}else{	    			
+	    			return null;	    		
+	    		}	    		
 	    	}
 	    	
-    		$current_value = $this->_getSelectedOptions();
-    		
-    		if(false !== ($position = array_search($value_to_remove, $current_value))){
-    			
-    			unset($current_value[$position]);
-    			
-    			if(!empty($current_value)){
-    				
-    				return implode(',', $current_value);
-    				
-    			}
-    			
+    		$current_value = $this->_getSelectedOptions();    		
+    		if(false !== ($position = array_search($value_to_remove, $current_value))){    			
+    			unset($current_value[$position]);    			
+    			if(!empty($current_value)){    				
+    				return implode(',', $current_value);    				
+    			}    			
     		}
-    		
-    		
-    		
     	}
     	
         return null;

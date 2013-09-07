@@ -4,11 +4,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.0
+ * @version      Release: 3.1
  * @since        Class available since Release 1.0
  */
  -->
@@ -31,7 +31,7 @@
             <show_in_store>1</show_in_store>
             <groups>
 				<advancednavigation translate="label">
-					<label>GoMage Advanced Navigation v.3.0</label>
+					<label>GoMage Advanced Navigation v.3.1</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>20</sort_order>
 					<show_in_default>1</show_in_default>
@@ -152,7 +152,16 @@
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>														
-						</back_to_top>												 																		
+						</back_to_top>	
+						<disable_mobile>
+							<label>Disable on Mobile Devices</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</disable_mobile>																	 																		
 					</fields>
 				</general>
 				<filter translate="label">

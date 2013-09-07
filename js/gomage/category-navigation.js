@@ -2,11 +2,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2011 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2012 GoMage (http://www.gomage.com)
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 3.0
+ * @version      Release: 3.1
  * @since        Available since Release 1.0
  */
 
@@ -21,12 +21,28 @@ Event.observe(window, 'load', function() {
 
 function ganLoadForPlain() {	
 	mainNav("gan_nav_left", {"show_delay":"100","hide_delay":"100"});
-	mainNav("gan_nav_top", {"show_delay":"100","hide_delay":"100"});
+	mainNav("gan_nav_top", {"show_delay":"100","hide_delay":"100"});	
+	$$('div.gan-ob-noheight').each(function(ob){
+		try{
+			var gan_plain = ob.up('div.gan-plain');
+			if (gan_plain && gan_plain.getHeight()){
+				var border = gan_plain.getStyle('border-width');
+				if (border){
+					border = border.replace(/px/g, '');
+					border = parseInt(border);
+				}else{
+					border = 0;
+				}
+				ob.setStyle({height: gan_plain.getHeight() - border*2 + 'px'});
+			}
+		}catch(e){}
+	});		
 	mainNav("gan_nav_right", {"show_delay":"100","hide_delay":"100"});
 	ganInitSliders();	
 	if (typeof(gomage_navigation_urlhash) != 'undefined' && gomage_navigation_urlhash){
 		ganPrepareUrl();
 	}
+	$(document.body).scrollTo();
 	ganInitMoreButton();
 	ganInitScrollToTop();
 	if (typeof(gan_static_navigation_url) != 'undefined' && gan_static_navigation_url){		
@@ -62,6 +78,9 @@ function ganPrepareUrl(){
 	    
 	    for(var key in hash){
 	    	if (hash.hasOwnProperty(key)){
+	    		if (key == 'p'){
+	    			hash[key] = 1;
+	    		}
 	    		hash_str += key + '=' + hash[key] + '&';
 	    	}
 	    }
