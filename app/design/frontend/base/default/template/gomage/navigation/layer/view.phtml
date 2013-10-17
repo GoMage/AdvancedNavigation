@@ -129,7 +129,9 @@
 	    					<?php endif;?>
 						<?php endif;?>
 	                	<dl class="gan-attribute" <?php if ( $content_area && Mage::getStoreConfig('gomage_navigation/general/content_filters') == 'columns' ) : ?>style="width: <?php echo $filter_width;?>" <?php endif; ?>>	                    	                	                	                	
-		                    <dt onclick="GomageNavigation.navigationOpenFilter('<?php echo $_filter->_filter->getRequestVar();?>-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?>');">
+		                    <dt onclick="GomageNavigation.navigationOpenFilter('<?php echo $_filter->_filter->getRequestVar();?>-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?>');"
+                                id="<?php echo $filter_id;?>-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?>-title"
+                                class="<?php echo ($_filter->canShowMinimized(Mage::helper('gomage_navigation')->getSide($check)))? "filter-content-hide" : "filter-content-show";  ?>">
 		                    	<span class="filter-name"><?php echo $this->__($_filter->getName()) ?></span>
 		                    	
 		                    	<?php if($_filter->canShowPopup()):?>

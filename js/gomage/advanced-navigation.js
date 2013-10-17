@@ -1282,13 +1282,18 @@ GomageNavigationClass = Class.create({
 				}	
 				
 				this.navigationOpenFilters[request_var+'_is_open'] = true;
+
+                $(id + '-title').removeClassName('filter-content-hide');
+                $(id + '-title').addClassName('filter-content-show');
 				
 			}else{
 				
 				$(id).style.display = 'none' ;
 				
 				this.navigationOpenFilters[request_var+'_is_open'] = false;
-				
+
+                $(id + '-title').removeClassName('filter-content-show');
+                $(id + '-title').addClassName('filter-content-hide');
 			}
 		}
 		
