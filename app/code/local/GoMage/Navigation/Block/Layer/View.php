@@ -75,7 +75,7 @@
                 }	
             }
 
-            return floor(100 / $i) . '%';
+            return ($i)?floor(100 / $i) . '%':0;
         }
         
         
