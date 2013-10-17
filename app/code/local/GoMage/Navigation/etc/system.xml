@@ -1144,7 +1144,7 @@
 						</prev_link>
 						
 						<prev_img>
-							<label>Previous Product Link</label>
+							<label>Previous Product Image</label>
 							<frontend_type>image</frontend_type>
                             <backend_model>adminhtml/system_config_backend_image</backend_model>
                             <upload_dir config="system/filesystem/media" scope_info="1">gomage/config</upload_dir>
@@ -1166,7 +1166,7 @@
 						</next_link>
 						
 						<next_img>
-							<label>Next Product Link</label>
+							<label>Next Product Image</label>
 							<frontend_type>image</frontend_type>
                             <backend_model>adminhtml/system_config_backend_image</backend_model>
                             <upload_dir config="system/filesystem/media" scope_info="1">gomage/config</upload_dir>
