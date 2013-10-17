@@ -13,12 +13,12 @@
 	
 class GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby extends Mage_Eav_Model_Entity_Attribute_Source_Abstract{
     
-	const LEFT_COLUMN = 0;
+	const LEFT_COLUMN = 5;
 	const CONTENT = 1;
 	const RIGHT_COLUMN = 2;
 	const LEFT_COLUMN_CONTENT = 3;
 	const RIGHT_COLUMN_CONTENT = 4;
-	const USE_GLOBAL = 5;
+	const USE_GLOBAL = 0;
 		
     public function toOptionArray(){
     	

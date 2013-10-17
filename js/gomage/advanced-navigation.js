@@ -643,7 +643,7 @@ GomageNavigationClass = Class.create({
 	replaceNavigationBlock: function(content, side){
 
 	    if (typeof(this.gan_static_navigation_url) != 'undefined' && this.gan_static_navigation_url){
-	    	if ($$('div.col-left').length > 0 && (this.gan_shop_by_area == 0)){
+	    	if ($$('div.col-left').length > 0 && (this.gan_shop_by_area == 5)){
 	    		if ($('gan-left-nav-main-container')){
 	    			var content = Object.toHTML(content);
 	    		    content.evalScripts.bind(content).defer();
