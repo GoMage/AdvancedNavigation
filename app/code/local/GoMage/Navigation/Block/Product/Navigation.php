@@ -148,41 +148,102 @@
 	    	
 	    	return false;
 	    }
-	    
-	    protected function _getTemplate($product, $template)
-	    {
-	    	$name = $product->getName();
-    		if ( Mage::getStoreConfig('gomage_navigation/products/max_symbol') != 0 )
-    		{
-    			$name = substr($name, 0, Mage::getStoreConfig('gomage_navigation/products/max_symbol'));	
-    		}
-    		
-    		$url = $product->getProductUrl();
-    		$price = Mage::helper('core')->currency($product->getPrice());
+
+        protected function _getBundleDifPrice($_product_id)
+        {
+            $model_catalog_product  = Mage::getModel('catalog/product');
+            $_product               = $model_catalog_product->load( $_product_id );
+
+            $TypeInstance           = $_product->getTypeInstance(true);
+            $Selections             = $TypeInstance->getSelectionsCollection($OptionIds, $_product );
+            $Options                = $TypeInstance->getOptionsByIds($OptionIds, $_product);
+            $bundleOptions          = $Options->appendSelections($Selections, true);
+
+            $min_price      = 0;
+
+            foreach ($bundleOptions as $bundleOption) {
+                if ($bundleOption->getSelections()) {
+
+                    $bundleSelections       = $bundleOption->getSelections();
+
+                    $pricevalues_array  = array();
+                    foreach ($bundleSelections as $bundleSelection) {
+
+                        $pricevalues_array[] = $bundleSelection->getPrice();
+
+                    }
+
+                    sort($pricevalues_array);
+
+                    $min_price += $pricevalues_array[0];
+                }
+            }
+
+            $max_price      = 0;
+
+            foreach ($bundleOptions as $bundleOption) {
+                if ($bundleOption->getSelections()) {
+
+                    $bundleSelections       = $bundleOption->getSelections();
+
+                    $pricevalues_array  = array();
+                    foreach ($bundleSelections as $bundleSelection) {
+
+                        $pricevalues_array[] = $bundleSelection->getPrice();
+
+                    }
+                    rsort($pricevalues_array);
+
+                    $max_price += $pricevalues_array[0];
+                }
+            }
+
+            return Mage::helper('core')->currency($min_price,2) . ' - ' .
+            Mage::helper('core')->currency($max_price);
+        }
+
+        protected function _getTemplate($product, $template)
+        {
+            $name = $product->getName();
+            if ( Mage::getStoreConfig('gomage_navigation/products/max_symbol') != 0 )
+            {
+                $name = substr($name, 0, Mage::getStoreConfig('gomage_navigation/products/max_symbol'));
+            }
+
+            $url = $product->getProductUrl();
+            $price = Mage::helper('core')->currency($product->getPrice());
 
             if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE)
             {
-                $priceModel  = $product->getPriceModel();
-                list($minimalPrice, $maximalPrice) = $priceModel->getTotalPrices($product, null, null, false);
-                $price = Mage::helper('core')->currency($minimalPrice,2) . ' - ' .
-                    Mage::helper('core')->currency($maximalPrice);
+                $helper = Mage::helper('gomage_navigation');
+                if ( $helper->getIsAnymoreVersion(1, 5) )
+                {
+                    $priceModel  = $product->getPriceModel();
+                    list($minimalPrice, $maximalPrice) = $priceModel->getTotalPrices($product, null, null, false);
+                    $price = Mage::helper('core')->currency($minimalPrice,2) . ' - ' .
+                        Mage::helper('core')->currency($maximalPrice);
+                }
+                else
+                {
+                    $price = $this->_getBundleDifPrice($product->getId());
+                }
             }
-    		
-    		$image_prev = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'gomage/config/' . Mage::getStoreConfig('gomage_navigation/products/prev_img'); 
-    		$image_tag_prev = '<img src="' . $image_prev . '" alt="' . $name . '" title="' . $name . '" />';
-    		
-    		$image_next = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'gomage/config/' . Mage::getStoreConfig('gomage_navigation/products/next_img'); 
-    		$image_tag_next = '<img src="' . $image_next . '" alt="' . $name . '" title="' . $name . '" />';
-    		
-    		$template = str_replace("%product%", $name, $template);
-    		$template = str_replace("%price%", $price, $template);
-    		$template = str_replace("%previous_image%", $image_tag_prev, $template);
-    		$template = str_replace("%next_image%", $image_tag_next, $template);
-    		
-    		$template = '<a href="' . $url . '">' . $template . '</a>';
-    		
-    		return $template; 
-	    }
+
+            $image_prev = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'gomage/config/' . Mage::getStoreConfig('gomage_navigation/products/prev_img');
+            $image_tag_prev = '<img src="' . $image_prev . '" alt="' . $name . '" title="' . $name . '" />';
+
+            $image_next = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'gomage/config/' . Mage::getStoreConfig('gomage_navigation/products/next_img');
+            $image_tag_next = '<img src="' . $image_next . '" alt="' . $name . '" title="' . $name . '" />';
+
+            $template = str_replace("%product%", $name, $template);
+            $template = str_replace("%price%", $price, $template);
+            $template = str_replace("%previous_image%", $image_tag_prev, $template);
+            $template = str_replace("%next_image%", $image_tag_next, $template);
+
+            $template = '<a href="' . $url . '">' . $template . '</a>';
+
+            return $template;
+        }
 		
 	    
 	    protected function _showPrev()

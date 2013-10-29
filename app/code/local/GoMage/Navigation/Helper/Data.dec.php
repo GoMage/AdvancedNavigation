@@ -691,7 +691,43 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
     }
 
+    public function getIsAnymoreVersion($major, $minor, $revision = 0)
+    {
+        $version_info = Mage::getVersion();
+        $version_info = explode('.', $version_info);
 
+        if ($version_info[0] > $major)
+        {
+            return true;
+        }
+        elseif ($version_info[0] == $major)
+        {
+            if ($version_info[1] > $minor)
+            {
+                return true;
+            }
+            elseif ($version_info[1] == $minor)
+            {
+                if ($version_info[2] >= $revision)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
 
 }
 
