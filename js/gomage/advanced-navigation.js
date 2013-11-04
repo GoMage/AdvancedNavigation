@@ -27,6 +27,7 @@ GomageNavigationClass = Class.create({
 	p_count: 0,
 	mouse: false,
 	help: false,
+    scrolling_speed: 0,
 	initialize:function(data){
 
 		if(data && (typeof data.loadimage != 'undefined')){
@@ -62,6 +63,10 @@ GomageNavigationClass = Class.create({
 
         if(data && (typeof data.help_icon_open_type != 'undefined')){
             this.help_icon_open_type = data.help_icon_open_type;
+        }
+
+        if(data && (typeof data.scrolling_speed != 'undefined')){
+            this.scrolling_speed = data.scrolling_speed;
         }
 
 		setTimeout("GomageNavigation.ganLoadForPlain()", 500);
@@ -1402,19 +1407,52 @@ GomageNavigationClass = Class.create({
 
 	ganScrollToTop: function(){
 
+        var scroll_flag = false;
+        if ( (this.scrolling_speed - 0) > 0)
+        {
+            scroll_flag = true;
+            var scroll_speed = (this.scrolling_speed - 0)/1000;
+        }
+
 		if ( this.back_to_top_action == 0 )
 		{
 			var category_view = $$('body')[0];
-			category_view.scrollTo();
+
+            if ( scroll_flag )
+            {
+                Effect.ScrollTo(category_view, { duration: scroll_speed});
+            }
+            else
+            {
+                category_view.scrollTo();
+            }
+
 		}
 		else
 		{
 			if ($$('div.category-view').length > 0){    		
 				var category_view = $$('div.category-view')[0];
-				category_view.scrollTo();
+
+                if ( scroll_flag )
+                {
+                    Effect.ScrollTo(category_view, { duration: scroll_speed});
+                }
+                else
+                {
+                    category_view.scrollTo();
+                }
+
 			}else if ($$('div.category-products').length > 0){
 				var category_products = $$('div.category-products')[0];
-				category_products.scrollTo();
+
+                if ( scroll_flag )
+                {
+                    Effect.ScrollTo(category_products, { duration: scroll_speed});
+                }
+                else
+                {
+                    category_products.scrollTo();
+                }
 			}
 		}
 	},

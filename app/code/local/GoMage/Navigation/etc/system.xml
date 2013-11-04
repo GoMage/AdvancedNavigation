@@ -203,6 +203,16 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>														
 						</back_to_top_action>
+
+                        <scrolling_speed>
+                            <label>Scrolling Speed, ms</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>41</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>e.g. 1000 equal 1 second, 500 equal 0.5 second </comment>
+                        </scrolling_speed>
 							
 						<disable_mobile>
 							<label>Disable on Mobile Devices</label>

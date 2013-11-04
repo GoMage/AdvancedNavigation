@@ -296,6 +296,7 @@
     	    	<mode>0</mode>
     	    	<pager>1</pager>
     	    	<showpager>1</showpager>
+                <scrolling_speed>0</scrolling_speed>
     	    </general>
     		<filter>
     			<slider_type>cone</slider_type>

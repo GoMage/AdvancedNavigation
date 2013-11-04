@@ -272,6 +272,8 @@ var GomageNavigation = new GomageNavigationClass({
             <?php else: ?>
             help_icon_open_type: 'over',
             <?php endif; ?>
+
+            scrolling_speed: '<?php echo Mage::getStoreConfig('gomage_navigation/general/scrolling_speed');?>',
 		});
 //]]>	
 </script>
