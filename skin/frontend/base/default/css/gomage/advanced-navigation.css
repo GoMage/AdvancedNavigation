@@ -205,6 +205,10 @@ span.plain_column{float:left;}
 .gan-sidebar-nav ul#gan_nav_left.gan-defaultpro-list li.over > ul{left:100px;}
 .gan-sidebar-nav ul#gan_nav_right.gan-defaultpro-list ul{top:-10000px;}
 .gan-sidebar-nav ul#gan_nav_right.gan-defaultpro-list li.over > ul{right:100%;top:-1px;}
+
+.gan-sidebar-nav ul#gan_nav_content.gan-defaultpro-list ul{top:-10000px;}
+.gan-sidebar-nav ul#gan_nav_content.gan-defaultpro-list li.over > ul{right:100%;top:-1px;}
+
 .gan-sidebar-nav ul.gan-defaultpro-list ul li a{float:none;font-weight:400;background:none;color:#2F2F2F !important;padding:0;}
 .gan-sidebar-nav ul.gan-defaultpro-list ul li.parent a{background:url("../../images/gomage/advanced-navigation/bkg_nav2.gif") no-repeat 100% 100%;}
 .gan-sidebar-nav ul.gan-defaultpro-list ul li a:hover{background-color:#d5e4eb;}
@@ -241,9 +245,16 @@ span.plain_column{float:left;}
 .gan-sidebar-nav ul#gan_nav_left.gan-plain-list li.over > .gan-plain{left:90%;top:-1px;}
 .gan-sidebar-nav ul#gan_nav_right.gan-plain-list .gan-plain{top:-10000px;right:999em;}
 .gan-sidebar-nav ul#gan_nav_right.gan-plain-list li.over > .gan-plain{top:-1px;right:100%;}
+
+.gan-sidebar-nav ul#gan_nav_content.gan-plain-list .gan-plain{top:-10000px;right:999em;}
+.gan-sidebar-nav ul#gan_nav_content.gan-plain-list li.over > .gan-plain{top:-1px;right:100%;}
+
 .gan-sidebar-nav ul.gan-plain-list span.gan-plain-border{display:block;position:absolute;top:0;background:#f6fafd;width:1px;overflow:hidden;height:27px;}
 .gan-sidebar-nav ul#gan_nav_left.gan-plain-list span.gan-plain-border{left:-1px;}
 .gan-sidebar-nav ul#gan_nav_right.gan-plain-list span.gan-plain-border{right:-1px;}
+
+.gan-sidebar-nav ul#gan_nav_content.gan-plain-list span.gan-plain-border{right:-1px;}
+
 .gan-sidebar-nav ul.gan-plain-list li li{border:0 !important;background:none;margin:0 !important;padding:0 !important;}
 .gan-sidebar-nav ul.gan-plain-list li li a{background:none !important;color:#2f2f2f;float:none;text-decoration:none;padding:0;}
 .gan-sidebar-nav ul.gan-plain-list li li a:hover,.gan-sidebar-nav ul.gan-plain-list li.over li a,.gan-sidebar-nav ul.gan-plain-list li.over li,.gan-sidebar-nav ul.gan-plain-list li.hover li{background:none !important;}

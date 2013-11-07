@@ -78,6 +78,7 @@
             <div id="narrow-by-list-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?>" class="narrow-by-list filter-align-<?php echo Mage::getStoreConfig('gomage_navigation/general/content_filters'); ?>">
                 <?php $_filters = $this->getFilters() ?>
                 <?php $filter_width = $this->getFiltersCount($check);?>
+
                 <?php foreach ($_filters as $_filter):
 
                 	$category = Mage::registry("current_category");
@@ -88,12 +89,6 @@
                 	$filter_id = 'advancednavigation-filter-content-'.$_filter->_filter->getRequestVar();                	
                 ?>
 
-                <?php 
-                if (($_filter->getPopupId() == 'category' && $content_area)):
-                	continue;
-                endif;
-                ?>
-                
                 <?php if($_filter->getItemsCount()
                 			&&
                 		 ($_filter->getAttributeLocation() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::USE_GLOBAL

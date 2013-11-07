@@ -86,6 +86,7 @@
 	/* Popup Window Background */
 	#gan-left-nav-main-container filter-note-content-in,
 	#gan-right-nav-main-container .filter-note-content-in,
+    #gan-content-nav-main-container .filter-note-content-in,
 	.narrow-by-list .filter-note-content-in{
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/filter/popup_style')):?>
 		background:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?>;
@@ -97,6 +98,7 @@
 	/* Help Icon View */
 	#gan-left-nav-main-container .filter-note-handle,
 	#gan-right-nav-main-container .filter-note-handle,
+    #gan-content-nav-main-container .filter-note-handle,
 	.narrow-by-list .filter-note-handle{
 		<?php if($_color = Mage::getStoreConfig('gomage_navigation/filter/icon_style')):?>
 		color:<?php echo Mage::helper('gomage_navigation')->formatColor($_color);?>;

@@ -384,10 +384,11 @@ GomageNavigationClass = Class.create({
 			    	{
 			    		GomageNavigation.replaceNavigationBlock(response.navigation_shop_right, 'right');
 			    	}
-			    	
+
 			    	GomageNavigation.replaceProductsBlock(response);
 			    	GomageNavigation.replaceLeftRightNavigationBlocks('gan-left-nav-main-container', response.navigation_left);
 			    	GomageNavigation.replaceLeftRightNavigationBlocks('gan-right-nav-main-container', response.navigation_right);
+                    GomageNavigation.replaceLeftRightNavigationBlocks('gan-content-nav-main-container', response.navigation_content);
 			    	GomageNavigation.ganReplaceMoreButton(response.navigation_more);
 					
 					try{
@@ -503,10 +504,12 @@ GomageNavigationClass = Class.create({
 			    	{
 			    		GomageNavigation.replaceNavigationBlock(response.navigation_shop_right, 'right');
 			    	}
-		    				    	
+
+
 		    		GomageNavigation.replaceProductsBlock(response, need_scroll);
 		    		GomageNavigation.replaceLeftRightNavigationBlocks('gan-left-nav-main-container', response.navigation_left);				
-		    		GomageNavigation.replaceLeftRightNavigationBlocks('gan-right-nav-main-container', response.navigation_right);				
+		    		GomageNavigation.replaceLeftRightNavigationBlocks('gan-right-nav-main-container', response.navigation_right);
+                    GomageNavigation.replaceLeftRightNavigationBlocks('gan-content-nav-main-container', response.navigation_content);
 		    		GomageNavigation.ganReplaceMoreButton(response.navigation_more);				
 		    	}
 		    	
@@ -668,9 +671,9 @@ GomageNavigationClass = Class.create({
 	    	}
 	    	if ($$('div.col-right').length > 0 && (this.gan_shop_by_area == 2)){
 	    		if ($('gan-right-nav-main-container')){
-	    			var content = Object.toHTML(content);        
+	    			var content = Object.toHTML(content);
 	    		    content.evalScripts.bind(content).defer();
-	    		    content = content.stripScripts();                
+	    		    content = content.stripScripts();
 	    			var tempElement = document.createElement('div');
 	    	        tempElement.innerHTML = content;
 	    	        element = this.getElementsByClassName('block-layered-nav', tempElement);
@@ -684,9 +687,30 @@ GomageNavigationClass = Class.create({
 		    		col_right.innerHTML = content + col_right.innerHTML;
 	    		}
 	    	}
+
+
+
+            if ($$('div.col-main').length > 0 && (this.gan_shop_by_area == 2)){
+                if ($('gan-content-nav-main-container')){
+                    var content = Object.toHTML(content);
+                    content.evalScripts.bind(content).defer();
+                    content = content.stripScripts();
+                    var tempElement = document.createElement('div');
+                    tempElement.innerHTML = content;
+                    element = this.getElementsByClassName('block-layered-nav', tempElement);
+                    if (element.length > 0)
+                    {
+                        element = element[0];
+                        new Insertion.After($('gan-content-nav-main-container'), element);
+                    }
+                }else{
+                    var col_content = $$('div.col-main')[0];
+                    col_content.innerHTML = content + col_content.innerHTML;
+                }
+            }
 	    }
 	    
-	    if ( side == 'left' || side == 'right' )
+	    if ( side == 'left' || side == 'right' || side == 'content' )
 	    {
 	    	var element = $$('div.block-layered-nav-' + side)[0];
 	    }
@@ -725,25 +749,25 @@ GomageNavigationClass = Class.create({
 
 		if (content && element)
 		{
-
 		    if (content && content.toElement){
-			    	
+
 			    	content = content.toElement();
-			    	
+
 			}else if (!Object.isElement(content)) {
+
 			      content = Object.toHTML(content);
-			      
+
 			      var tempElement = document.createElement('div');
 			      content.evalScripts.bind(content).defer();
-			      tempElement.innerHTML = content;
-			      content = tempElement.firstChild;
 
-			      
+			      tempElement.innerHTML = content;
+
+			      content = tempElement.firstChild;
 			 }
 
-			 element.parentNode.replaceChild(content, element);
 
-		} 
+			 element.parentNode.replaceChild(content, element);
+		}
 	},
 
 
@@ -1062,6 +1086,7 @@ GomageNavigationClass = Class.create({
 			}catch(e){}
 		});		
 		mainNav("gan_nav_right", {"show_delay":"100","hide_delay":"100"});
+        mainNav("gan_nav_content", {"show_delay":"100","hide_delay":"100"});
 
 		this.ganInitSliders();
 		if (typeof(this.gomage_navigation_urlhash) != 'undefined' && this.gomage_navigation_urlhash){
@@ -1196,7 +1221,7 @@ GomageNavigationClass = Class.create({
 		var arr = $(control).cumulativeOffset();
 		
 		
-		if ( side != 'cat_left' && side != 'cat_right')
+		if ( side != 'cat_left' && side != 'cat_right' && side != 'cat_content')
         {
             var in_narrow_by_list = false;
             if ($('narrow-by-list-' + side)){
@@ -1217,9 +1242,13 @@ GomageNavigationClass = Class.create({
             {
                 id_el = 'gan_nav_left';
             }
-            else
+            else if ( side == 'cat_right' )
             {
                 id_el = 'gan_nav_right';
+            }
+            else
+            {
+                id_el = 'gan_nav_content';
             }
 
             var in_narrow_by_list = false;

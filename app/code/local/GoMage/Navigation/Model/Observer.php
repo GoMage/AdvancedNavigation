@@ -189,6 +189,7 @@ class GoMage_Navigation_Model_Observer {
 				
 				$LeftnavBlock = $layout->getBlock('gomage.navigation.left');
 				$RightnavBlock = $layout->getBlock('gomage.navigation.right');
+                $ContentnavBlock = $layout->getBlock('gomage.navigation.content');
 				
 				$navigation_more_button = $layout->getBlock('gomage.navigation.more.button');
 				
@@ -245,7 +246,7 @@ class GoMage_Navigation_Model_Observer {
 				}
 				
 				$gomage_ajax = Mage::getBlockSingleton('gomage_navigation/ajax');
-				$gomage_ajax->addData(array('navigation_shop_left' => ($navigation_html_left ? $navigation_html_left : ''),'navigation_shop_right' => ($navigation_html_right ? $navigation_html_right : ''),'navigation' => $navigation_html, 'product_list' => $product_list_html, 'navigation_left' => ($LeftnavBlock ? Mage::getModel('core/url')->sessionUrlVar($LeftnavBlock->toHtml()) : ''), 'navigation_right' => ($RightnavBlock ? Mage::getModel('core/url')->sessionUrlVar($RightnavBlock->toHtml()) : ''), 'navigation_more' => ($navigation_more_button ? Mage::getModel('core/url')->sessionUrlVar($navigation_more_button->toHtml()) : '')));
+				$gomage_ajax->addData(array('navigation_shop_left' => ($navigation_html_left ? $navigation_html_left : ''),'navigation_shop_right' => ($navigation_html_right ? $navigation_html_right : ''),'navigation' => $navigation_html, 'product_list' => $product_list_html, 'navigation_left' => ($LeftnavBlock ? Mage::getModel('core/url')->sessionUrlVar($LeftnavBlock->toHtml()) : ''), 'navigation_right' => ($RightnavBlock ? Mage::getModel('core/url')->sessionUrlVar($RightnavBlock->toHtml()) : ''), 'navigation_content' => ($ContentnavBlock ? Mage::getModel('core/url')->sessionUrlVar($ContentnavBlock->toHtml()) : ''), 'navigation_more' => ($navigation_more_button ? Mage::getModel('core/url')->sessionUrlVar($navigation_more_button->toHtml()) : '')));
 				
 				if (Mage::getStoreConfig('gomage_procart/general/enable')) {
 					if ($productsBlock) {

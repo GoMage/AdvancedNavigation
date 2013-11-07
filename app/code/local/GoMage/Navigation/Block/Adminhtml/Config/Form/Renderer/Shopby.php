@@ -112,6 +112,53 @@ class GoMage_Navigation_Block_Adminhtml_Config_Form_Renderer_Shopby extends Mage
 	    				}
 	                });
             	}
+            	else if('{$element->getHtmlId()}' == 'gomage_navigation_contentcolumnsettings_show_shopby')
+            	{
+            		var sel_right = $('gomage_navigation_contentcolumnsettings_filter_type');
+
+            		Event.observe('{$element->getHtmlId()}', 'change', function(){
+	                    var value = $('{$element->getHtmlId()}').value;
+	                    if (value == 1){
+	                    	for(i=sel_right.options.length-1;i>=0;i--)
+							{
+								if (sel_right.options[i].value == '8'
+										||
+									sel_right.options[i].value == '6'
+									)
+		                    	{
+		                    		sel_right.remove(i);
+		                    	}
+
+							}
+
+	    				}else{
+	    					var option_fly = false;
+	    					var option_plain = false;
+	    					for(i=sel_right.options.length-1;i>=0;i--)
+							{
+								if (sel_right.options[i].value == '8')
+		                    	{
+		                    		option_fly = true;
+		                    	}
+
+		                    	if (sel_right.options[i].value == '6')
+		                    	{
+		                    		option_plain = true;
+		                    	}
+							}
+
+	    					if ( !option_plain )
+							{
+								sel_right.options[sel_right.options.length] = new Option('Plain', '6');
+							}
+
+							if ( !option_fly )
+							{
+								sel_right.options[sel_right.options.length] = new Option('Fly-Out', '8');
+							}
+	    				}
+	                });
+            	}
             	
                 
                 document.observe('dom:loaded', function() {   	

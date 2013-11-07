@@ -46,6 +46,9 @@
 		<reference name="left">
 			<block type="gomage_navigation/navigation_left"></block>
 		</reference>
+        <reference name="content">
+            <block type="gomage_navigation/navigation_content"></block>
+        </reference>
 		<reference name="before_body_end">
 			<block name="gomage.navigation.more.button" type="gomage_navigation/product_list_more"></block>
 			<block name="gomage.navigation.totop.button" type="gomage_navigation/product_list_totop"></block>

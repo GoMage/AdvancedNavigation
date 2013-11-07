@@ -48,6 +48,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
     const MENU_BAR = 1;
     const LEFT_COLUMN = 2;
     const RIGTH_COLUMN = 3;
+    const CONTENT_COLUMN = 4;
     
     protected $_categoryInstance = null;
     
@@ -92,8 +93,10 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;    
             case self::RIGTH_COLUMN :
                   $this->_type_navigation = Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/filter_type');
-                break;        
-                
+                break;
+            case self::CONTENT_COLUMN :
+                $this->_type_navigation = Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/filter_type');
+                break;
         }        
             
         return $this->_type_navigation; 
@@ -109,6 +112,9 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
             case self::RIGTH_COLUMN :
                 return Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/inblock_type');
                 break;
+            case self::CONTENT_COLUMN :
+                return Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/inblock_type');
+                break;
         }
     }
 
@@ -121,6 +127,9 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;
             case self::RIGTH_COLUMN :
                 return Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/max_inblock_height');
+                break;
+            case self::CONTENT_COLUMN :
+                return Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/max_inblock_height');
                 break;
         }
 
@@ -155,7 +164,17 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                                 (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE) &&
                                 !Mage::registry('current_product'))
                               );
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                return (Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/ajax_enabled') == 1) &&
+                ((Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch' &&
+                        Mage::app()->getFrontController()->getRequest()->getControllerName() != 'advanced') ||
+                    (Mage::registry('current_category') &&
+                        Mage::registry('current_category')->getisAnchor() &&
+                        (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE) &&
+                        !Mage::registry('current_product'))
+                );
+                break;
         }   
     }
     
@@ -260,7 +279,17 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
         			  return true;        			
         		  }
         		  return (bool) Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/show_minimized');
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                if('true' === Mage::app()->getFrontController()->getRequest()->getParam('content-category_is_open'))
+                {
+                    return false;
+                }elseif('false' === Mage::app()->getFrontController()->getRequest()->getParam('content-category_is_open'))
+                {
+                    return true;
+                }
+                return (bool) Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/show_minimized');
+                break;
         } 
 	}
 	
@@ -276,7 +305,10 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;    
             case self::RIGTH_COLUMN :
                     return (bool) Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/show_help');
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                return (bool) Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/show_help');
+                break;
         }		
 		
 	}
@@ -293,7 +325,10 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;    
             case self::RIGTH_COLUMN :
                     return trim(Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/popup_text'));
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                return trim(Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/popup_text'));
+                break;
         }				
 	}
 	
@@ -309,7 +344,10 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;    
             case self::RIGTH_COLUMN :
                     return (int) Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/popup_width');
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                return (int) Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/popup_width');
+                break;
         }				
 	}
 	
@@ -325,8 +363,11 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;    
             case self::RIGTH_COLUMN :
                     return (int) Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/popup_height');
-                break;                        
-        }				
+                break;
+            case self::CONTENT_COLUMN :
+                return (int) Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/popup_height');
+                break;
+        }
 	}
 	
     public function canShowLabels(){
@@ -342,7 +383,10 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;    
             case self::RIGTH_COLUMN :
                     return (bool) Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/show_image_name');
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                return (bool) Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/show_image_name');
+                break;
         }
 		
 	}
@@ -359,7 +403,10 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;    
             case self::RIGTH_COLUMN :
                     return (int) Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/image_width');
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                return (int) Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/image_width');
+                break;
         }        		
 	}
 	
@@ -375,7 +422,10 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;    
             case self::RIGTH_COLUMN :
                     return (int) Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/image_height');
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                return (int) Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/image_height');
+                break;
         }
 		
 	}
@@ -416,7 +466,21 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
             				$image_align = '2-columns';            				
             			break;            			
                     }
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                switch(Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/image_align'))
+                {
+                    default:
+                        $image_align = 'default';
+                        break;
+                    case (1):
+                        $image_align = 'horizontally';
+                        break;
+                    case (2):
+                        $image_align = '2-columns';
+                        break;
+                }
+                break;
         }
 	    
 		return $image_align;
@@ -435,7 +499,10 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;    
             case self::RIGTH_COLUMN :
                     return (bool) Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/show_checkbox');
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                return (bool) Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/show_checkbox');
+                break;
         }
 				
 	}
@@ -449,7 +516,10 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;    
             case self::RIGTH_COLUMN :
                     return Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/inblock_height');
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                return Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/inblock_height');
+                break;
         }
 				
 	}
@@ -463,7 +533,10 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;    
             case self::RIGTH_COLUMN :
                     return Mage::helper('gomage_navigation')->formatColor(Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/column_color'));                     
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                return Mage::helper('gomage_navigation')->formatColor(Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/column_color'));
+                break;
         }
 				
 	}
@@ -479,7 +552,10 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 break;    
             case self::RIGTH_COLUMN :
                     return Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/show_allsubcats');                     
-                break;                        
+                break;
+            case self::CONTENT_COLUMN :
+                return Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/show_allsubcats');
+                break;
         }
 	}
 	            
@@ -1625,6 +1701,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
         {            
             case self::LEFT_COLUMN :  
             case self::RIGTH_COLUMN :
+            case self::CONTENT_COLUMN :
                   if ($this->getTypeNavigation() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_PRO)
                   {
                      $_root_category = Mage::app()->getStore()->getRootCategoryId(); 
@@ -1653,7 +1730,14 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                             !$child->getProductCount()){	                	    
 	                	    continue 2;	                	    
 	                	} 
-                    break;                                
+                    break;
+                    case self::CONTENT_COLUMN :
+
+                        if (Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/hide_empty') &&
+                            !$child->getProductCount()){
+                            continue 2;
+                        }
+                        break;
                 }
                 
                 $activeCategories[] = $child;                

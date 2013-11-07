@@ -38,7 +38,8 @@
             
             if ($this->_isStockFilter()) {
                 $filters[] = $this->_getStockFilter();
-            }        
+            }
+
             return $filters;
         }
 
@@ -186,24 +187,24 @@
 			   	$position = $currentCategory->getData('navigation_pw_gn_shopby');
 			}
 	        
-	        if(Mage::helper('gomage_navigation')->isGomageNavigation()){	        		        	        	
+	        if(Mage::helper('gomage_navigation')->isGomageNavigation()){
 	        	$this->unsetChild('layer_state');
 	        	if ($position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN
 	        			||
-	        		$position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN_CONTENT){	        
-		        	$right = $this->getLayout()->getBlock('right');            
-		            if ($right){              	
+	        		$position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN_CONTENT){
+		        	$right = $this->getLayout()->getBlock('right');
+		            if ($right){
 		            	$catalog_rightnav = clone $this;
 		            	$catalog_rightnav->setParentBlock($right);
 		            	$catalog_rightnav->setNameInLayout('gomage.catalog.rightnav');
-		            	if ($this->getLayout()->getBlock('gomage.navigation.right')){            	            	          		            	
+		            	if ($this->getLayout()->getBlock('gomage.navigation.right')){
 		            		$right->insert($catalog_rightnav, 'gomage.navigation.right', true, 'gomage.catalog.rightnav');
-		            	}else{             	           	            	            	          		            	
+		            	}else{
 		            		$right->insert($catalog_rightnav, '', false, 'gomage.catalog.rightnav');
-		            	}             	           	
+		            	}
 		            }
-	        	}            
-	        }	        	                    
+	        	}
+	        }
 	    }
 	    
     	protected function _toHtml()
@@ -237,7 +238,7 @@
             			$this->setTemplate('gomage/navigation/layer/view.phtml');
             			$this->setData('shopby_type', 'right');
             			$this->setData('check', GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::RIGHT_BLOCK);
-            		}	
+            		}
             	}
             	elseif ($position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN_CONTENT){
             		
@@ -294,7 +295,7 @@
 				{
 				   	$position = $currentCategory->getData('navigation_pw_gn_shopby');
 				}
-            	
+
                	switch($position){
                		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN :
                			if (Mage::getStoreConfigFlag('gomage_navigation/category/active') && !Mage::getStoreConfig('gomage_navigation/category/show_shopby')){
@@ -304,13 +305,18 @@
                		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN :
                			if (Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/show_shopby')){
                				return false;
-               			}               			               			
+               			}
                		break;
                		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::CONTENT :
+
                			if ((Mage::getStoreConfigFlag('gomage_navigation/category/active') && !Mage::getStoreConfig('gomage_navigation/category/show_shopby')) ||
                				(Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/show_shopby'))){
                					return false;
                				}
+
+                        if ((Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/show_shopby'))){
+                            return false;
+                        }
                		break;	
                		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN_CONTENT :
                			if ( !Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') )
@@ -320,6 +326,14 @@
                		    if (Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/show_shopby')){
                		    	return false;
                		    }
+
+                        if ( !Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active') )
+                        {
+                            return false;
+                        }
+                        if (Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/show_shopby')){
+                            return false;
+                        }
                		break;
                		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN_CONTENT :
 
@@ -330,12 +344,23 @@
                		    if (Mage::getStoreConfigFlag('gomage_navigation/category/active') && !Mage::getStoreConfig('gomage_navigation/category/show_shopby')){
                		    	return false;
                		    }
+
+                        if ( !Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active') )
+                        {
+                            return false;
+                        }
+                        if (Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/show_shopby')){
+                            return false;
+                        }
                		break;	
                	}
-               	return parent::_getCategoryFilter();   
+
+               	return parent::_getCategoryFilter();
             }else{
                 return parent::_getCategoryFilter();
-            }                 
+            }
+
+
         }
 	    
 	    /**
@@ -367,7 +392,7 @@
 	        	
 	        	$activeFilters[] = $filter;
 	        }
-	        
+
 	        return $activeFilters;
 	    }
 	    

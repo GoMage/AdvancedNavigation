@@ -27,7 +27,10 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
         	   &&
             (Mage::getStoreConfigFlag('gomage_navigation/category/active') 
                 || 
-             Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active')) ){
+             Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active')
+                ||
+             Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active')
+            ) ){
         	
         	$type = Mage::getStoreConfig('gomage_navigation/category/filter_type');
         	
@@ -74,8 +77,7 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
         	
         	
         }
-        
-        
+
         return Mage::getUrl('*/*/*', $params);
     }
 	
@@ -184,6 +186,13 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 		
 				return (bool) Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/show_checkbox');
           }
+
+        if(Mage::helper('gomage_navigation')->isGomageNavigation()
+            &&
+            Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active')){
+
+            return (bool) Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/show_checkbox');
+        }
 	}
 	
 	public function canShowLabels(){
