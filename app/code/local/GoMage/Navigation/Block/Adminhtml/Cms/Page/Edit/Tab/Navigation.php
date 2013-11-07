@@ -107,12 +107,19 @@ class GoMage_Navigation_Block_Adminhtml_Cms_Page_Edit_Tab_Navigation
 	                            
 	            $collection->addFieldToFilter(array(
 	                    array('attribute'=>'level', 'gt'=>$_root_level)                            
-	            ));                 
-	    
+	            ));
+
 	            foreach ($collection as $category) {	                
 	                if (!isset($options[$category->getId()]))
 	                {
-	                    $options[$category->getId()] = $category->getName();	                       	                    
+                        $dif = (int)$category->getLevel() - (int)$_root_level;
+                        $padding = '';
+                        for($i = 1;$i <= $dif; $i++)
+                        {
+                            $padding = $padding . '-';
+                        }
+
+	                    $options[$category->getId()] = $padding . $category->getName();
 	                }	                
 	            }
 	        } 
