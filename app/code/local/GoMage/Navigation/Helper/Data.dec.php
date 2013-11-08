@@ -340,7 +340,12 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
                         &&
                         $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT )
                     {
-                        $values = explode(',', $value);
+                        if (strpos($value, ';')){
+                            $values = explode(';', $value);
+                        }else {
+                            $values = explode(',', $value);
+                        }
+
 
                         $params['_query']['price_from'] = $values[0];
                         $params['_query']['price_to'] = $values[1];

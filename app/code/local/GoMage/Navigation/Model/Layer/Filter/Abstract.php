@@ -30,7 +30,9 @@ abstract class GoMage_Navigation_Model_Layer_Filter_Abstract extends Mage_Catalo
                 $itemData['active'],
                 isset($itemData['image']) ? $itemData['image'] : '',
                 isset($itemData['level']) ? $itemData['level'] : 0,
-                isset($itemData['haschild']) ? $itemData['haschild'] : ''                
+                isset($itemData['haschild']) ? $itemData['haschild'] : '',
+                isset($itemData['from_to']) ? $itemData['from_to'] : ''
+
             );
         }
         $this->_items = $items;
@@ -45,7 +47,7 @@ abstract class GoMage_Navigation_Model_Layer_Filter_Abstract extends Mage_Catalo
      * @param   int $count
      * @return  Mage_Catalog_Model_Layer_Filter_Item
      */
-    protected function _createItem($label, $value, $count=0, $status = false, $image = '', $level = 0, $haschild = '')
+    protected function _createItem($label, $value, $count=0, $status = false, $image = '', $level = 0, $haschild = '', $from_to = '')
     {
         return Mage::getModel('catalog/layer_filter_item')
             ->setFilter($this)
@@ -55,6 +57,8 @@ abstract class GoMage_Navigation_Model_Layer_Filter_Abstract extends Mage_Catalo
         	->setActive($status)
         	->setImage($image)
         	->setLevel($level)
-        	->setHasChild($haschild);
+        	->setHasChild($haschild)
+            ->setFromTo($from_to);
+
     }
 }

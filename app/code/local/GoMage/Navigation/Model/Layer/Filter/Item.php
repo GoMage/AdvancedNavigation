@@ -13,62 +13,91 @@
 
 class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer_Filter_Item
 {
-    
+
     public function getRemoveUrlParams()
-    {    	
+    {
         $query = array($this->getFilter()->getRequestVar()=>$this->getFilter()->getResetValue($this->getValue()));
         $params['_nosid']       = true;
         $params['_current']     = true;
         $params['_use_rewrite'] = true;
         $params['_query']       = $query;
         $params['_escape']      = false;
-        
+
         $url = Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $params);
 
         $clean_url = Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array(), '_escape'=>false));
 
-    	if ( strpos($clean_url, "?") !== false )
-    	{
-        	$clean_url = substr($clean_url, 0, strpos($clean_url, '?'));
-    	}
-    	
-    	$params = str_replace($clean_url, "", $url);
-    	
-    	if ($this->getFilter()->getName() == "Price")
-    	{
-    		$attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product','price');
-			$attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
-			
-			if ( ($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
-						||
-				  $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
-					&&
-				 $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT )
-			{
-				$params = str_replace("?", "", $params);
+        if ( strpos($clean_url, "?") !== false )
+        {
+            $clean_url = substr($clean_url, 0, strpos($clean_url, '?'));
+        }
 
-				$parArray = explode("&", $params);
-				$newParArray = array();
-				
-				foreach( $parArray as $par )
-				{
-					$expar = explode("=", $par);
-					if ( $expar[0] != 'price_from'
-							&&
-						 $expar[0] != 'price_to' )
-					{
-						$newParArray[] = $par;		
-					}
-				}
-				
-				return '?' . implode("&", $newParArray);
-				
-			}		
-    	}
-        
+        $params = str_replace($clean_url, "", $url);
+
+        if ( get_class($this->getFilter()) == 'GoMage_Navigation_Model_Layer_Filter_Price' )
+        {
+            $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product','price');
+            $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
+
+            if ( ($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
+                    ||
+                    $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
+                &&
+                $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT )
+            {
+                $params = str_replace("?", "", $params);
+
+                $parArray = explode("&", $params);
+                $newParArray = array();
+
+                foreach( $parArray as $par )
+                {
+                    $expar = explode("=", $par);
+                    if ($expar[0] == 'price_from'){
+                        $from_to = explode(',', $this->getFromTo());
+                        if (count($from_to) == 2){
+                            $_par = explode(',', urldecode($expar[1]));
+                            $key = array_search($from_to[0], $_par);
+                            if ($key !== false)
+                            {
+                                unset($_par[$key]);
+                            }
+                            if (count($_par)){
+                                $newParArray[] = urlencode('price_from=' . implode(',', $_par));
+                            }
+                        }else{
+                            $newParArray[] = $par;
+                        }
+
+                    }elseif ($expar[0] == 'price_to'){
+                        $from_to = explode(',', $this->getFromTo());
+                        if (count($from_to) == 2){
+                            $_par = explode(',', urldecode($expar[1]));
+                            $key = array_search($from_to[1], $_par);
+                            if ($key !== false)
+                            {
+                                unset($_par[$key]);
+                            }
+                            if (count($_par)){
+                                $newParArray[] = urlencode('price_to=' . implode(',', $_par));
+                            }
+                        }else{
+                            $newParArray[] = $par;
+                        }
+                    }else{
+                        $newParArray[] = $par;
+                    }
+                }
+
+                return '?' . implode("&", $newParArray);
+
+            }
+        }
+
         return $params;
     }
-    
+
+
     public function getCleanUrl($type = false)
     {        
     	$url = Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array(), '_escape'=>false));
