@@ -58,7 +58,7 @@ if($_menu): ?><div class="block gan-sidebar-nav gan-content-nav" id="gan-content
             <div class="gan-wrapper gan-content" style="background-color: <?php echo $this->getColumnColor() ?>;" >
                 <?php switch ($this->getTypeNavigation()):
                     case GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN: ?>
-                        <ul class="gan-dropdown-list">
+                        <ul id="gan_nav_content" class="gan-dropdown-list">
                             <?php echo $_menu ?>
                         </ul>
                         <?php break; ?>
