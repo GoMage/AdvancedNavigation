@@ -61,4 +61,9 @@ abstract class GoMage_Navigation_Model_Layer_Filter_Abstract extends Mage_Catalo
             ->setFromTo($from_to);
 
     }
+
+    public function addFacetCondition()
+    {
+        return $this;
+    }
 }

@@ -211,5 +211,13 @@ class GoMage_Navigation_Block_Layer_Filter_Decimal extends Mage_Catalog_Block_La
     public function canShowFilterButton(){        
         return (bool) $this->getAttributeModel()->getFilterButton();    
     }
-    
+
+    public function addFacetCondition()
+    {
+        if ( Mage::helper('gomage_navigation')->isEnterprise() )
+        {
+            $this->_filter->addFacetCondition();
+        }
+        return $this;
+    }
 }

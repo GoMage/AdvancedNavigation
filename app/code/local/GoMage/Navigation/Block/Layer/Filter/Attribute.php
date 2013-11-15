@@ -248,4 +248,13 @@ class GoMage_Navigation_Block_Layer_Filter_Attribute extends Mage_Catalog_Block_
 	public function getMaxInBlockHeight(){
         return $this->getAttributeModel()->getMaxInblockHeight();    
     }
+
+    public function addFacetCondition()
+    {
+        if ( Mage::helper('gomage_navigation')->isEnterprise() )
+        {
+            $this->_filter->addFacetCondition();
+        }
+        return $this;
+    }
 }

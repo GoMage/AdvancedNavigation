@@ -184,79 +184,37 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
 
         if ($data === null) {
-            $category   = $this->getLayer()->getCurrentCategory();
-            /** @var $categoty Mage_Catalog_Model_Categeory */
-            //$categories = $categoty->getChildrenCategories();
-            
-            if (Mage::getStoreConfigFlag('gomage_navigation/category/show_allsubcats')){
-            
-                $cats_ids = array_diff($category->getAllChildren(true), array($category->getId()));
-                
-                if (count($cats_ids)) {
-                    $cats_ids_str = implode(',', $cats_ids);
-                } else {
-                    $cats_ids_str = '0';   
-                }
-                
-            }else {
-                $cats_ids = array();                
-                if ($category->getChildren())
-                  $cats_ids = explode(',', $category->getChildren());
-                                                                                                       
-                $cats_ids_str = '0';
-                
-                foreach ($cats_ids as $_id)
-                {                
-                   $cats_ids_str .= ',' . $this->_addChildsCategory($_id,  explode(',',Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)));
-                }
-                                                
-                foreach(explode(',',Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)) as $_id){                	 
-                	$_cat = Mage::getModel('catalog/category')->load($_id);
-                	$cats_ids_str .= ',' . $_cat->getId();
-                	if ($_cat->getChildren()){
-                		$cats_ids_str .= ',' . $_cat->getChildren();
-                	}
-                	$_parent_cat = Mage::getModel('catalog/category')->load($_cat->getParentId());
-                	if ($_parent_cat->getChildren()){
-                		$cats_ids_str .= ',' . $_parent_cat->getChildren();
-                	}                	                	
-                	while($category->getLevel() < $_parent_cat->getLevel()){
-                		$cats_ids_str .= ',' . $_parent_cat->getId(); 	
-                		$_parent_cat = Mage::getModel('catalog/category')->load($_parent_cat->getParentId());
-                	}                		
-                }                                
-            }
-                                      
+
+            $cats_ids_str = $this->getFilterableCategoriesIds();
+
             $categories = Mage::getResourceModel('catalog/category_collection');
-	        /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Category_Collection */
-	        $categories->addAttributeToSelect('url_key')
-	            ->addAttributeToSelect('name')
-	            ->addAttributeToSelect('all_children')
-	            ->addAttributeToSelect('level')
-	            ->addAttributeToSelect('is_anchor')
-	            ->addAttributeToFilter('is_active', 1)
-	            ->addAttributeToSelect('filter_image')
-	            ->addIdFilter($cats_ids_str)	            
-	            ->joinUrlRewrite()	            	            
-	            ->load();
-	            	            
-	        $category_list_ids = array();
-	        foreach ($categories as $category){
-	        	$category_list_ids[$category->getId()] = $category;
-	        }    
+            /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Category_Collection */
+            $categories->addAttributeToSelect('url_key')
+                ->addAttributeToSelect('name')
+                ->addAttributeToSelect('all_children')
+                ->addAttributeToSelect('level')
+                ->addAttributeToSelect('is_anchor')
+                ->addAttributeToFilter('is_active', 1)
+                ->addAttributeToSelect('filter_image')
+                ->addIdFilter($cats_ids_str)
+                ->joinUrlRewrite()
+                ->load();
+
+            $category_list_ids = array();
+            foreach ($categories as $category) {
+                $category_list_ids[$category->getId()] = $category;
+            }
+
+            $category = $this->getLayer()->getCurrentCategory();
+            foreach ($category->getChildrenCategories() as $_category) {
+                $this->_renderCategoryList($_category, $category_list_ids);
+            }
+
+            $selected = array();
 	        
-         	$category = $this->getLayer()->getCurrentCategory();	        
-	        foreach($category->getChildrenCategories() as $_category){
-	        	$this->_renderCategoryList($_category, $category_list_ids);
-	        }
-	            	            
-	            	                    
-			$selected = array();
-	        
-	        if($value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)){
-	        
+	        if($value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar))
+            {
 	        	$selected = array_merge($selected, explode(',', $value));
-	        
 	        }
 			
             $data = array();
@@ -264,10 +222,23 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
             $filter_mode = Mage::helper('gomage_navigation')->isGomageNavigation();
             
         	if(count($this->category_list) > 0){
-        		
-        		$category_count = $this->_getResource()->getCount($this, $this->category_list);
-        		        		        		        		
-	            foreach ($this->category_list as $category) {
+
+                if ( Mage::helper('gomage_navigation')->isEnterprise() )
+                {
+                    $helper = Mage::helper('enterprise_search');
+                    if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation(false)) {
+                        $productCollection = $this->getLayer()->getProductCollection();
+                        $category_count     = $productCollection->getFacetedData('category_ids');
+                    } else {
+                        $category_count = $this->_getResource()->getCount($this, $this->category_list);
+                    }
+                }
+                else
+                {
+                    $category_count = $this->_getResource()->getCount($this, $this->category_list);
+                }
+
+                foreach ($this->category_list as $category) {
 	                
 	                if ($category->getIsActive()) {
 	                	
@@ -370,5 +341,64 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
     	
     	return $result; 
     }
-    
+
+    public function addFacetCondition()
+    {
+        $cats_ids_str = $this->getFilterableCategoriesIds();
+        $categories   = explode(',', $cats_ids_str);
+
+        $this->getLayer()->getProductCollection()->setFacetCondition('category_ids', array_filter($categories));
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    private function getFilterableCategoriesIds()
+    {
+        $category = $this->getLayer()->getCurrentCategory();
+
+        if (Mage::getStoreConfigFlag('gomage_navigation/category/show_allsubcats')) {
+
+            $cats_ids = array_diff($category->getAllChildren(true), array($category->getId()));
+
+            if (count($cats_ids)) {
+                $cats_ids_str = implode(',', $cats_ids);
+            } else {
+                $cats_ids_str = '0';
+            }
+
+        } else {
+            $cats_ids = array();
+            if ($category->getChildren()) {
+                $cats_ids = explode(',', $category->getChildren());
+            }
+
+            $cats_ids_str = '0';
+
+            foreach ($cats_ids as $_id) {
+                $cats_ids_str .= ',' . $this->_addChildsCategory($_id, explode(',', Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)));
+            }
+
+            foreach (explode(',', Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)) as $_id) {
+                $_cat = Mage::getModel('catalog/category')->load($_id);
+                $cats_ids_str .= ',' . $_cat->getId();
+                if ($_cat->getChildren()) {
+                    $cats_ids_str .= ',' . $_cat->getChildren();
+                }
+                $_parent_cat = Mage::getModel('catalog/category')->load($_cat->getParentId());
+                if ($_parent_cat->getChildren()) {
+                    $cats_ids_str .= ',' . $_parent_cat->getChildren();
+                }
+                while ($category->getLevel() < $_parent_cat->getLevel()) {
+                    $cats_ids_str .= ',' . $_parent_cat->getId();
+                    $_parent_cat = Mage::getModel('catalog/category')->load($_parent_cat->getParentId());
+                }
+            }
+        }
+
+        return $cats_ids_str;
+
+    }
 }

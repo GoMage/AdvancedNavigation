@@ -78,6 +78,7 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
     public function getMinPrice($filter)
     {
         $select     = $this->_getSelect($filter);
+
         $connection = $this->_getReadAdapter();
         $response   = $this->_dispatchPreparePriceEvent($filter, $select);
 

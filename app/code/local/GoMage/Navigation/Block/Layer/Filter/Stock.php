@@ -221,4 +221,13 @@ class GoMage_Navigation_Block_Layer_Filter_Stock extends Mage_Catalog_Block_Laye
 	public function getMaxInBlockHeight(){
         return Mage::getStoreConfig('gomage_navigation/stock/max_inblock_height');
     }
+
+    public function addFacetCondition()
+    {
+        if ( Mage::helper('gomage_navigation')->isEnterprise() )
+        {
+            $this->_filter->addFacetCondition();
+        }
+        return $this;
+    }
 }

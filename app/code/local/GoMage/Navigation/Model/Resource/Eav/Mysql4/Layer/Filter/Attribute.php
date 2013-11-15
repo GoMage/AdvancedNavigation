@@ -76,7 +76,34 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute extends
         	}
         	
         }
-        
+
+        if ( Mage::helper('gomage_navigation')->isEnterprise() )
+        {
+            if (empty($value) || (isset($value['from']) && empty($value['from']) && isset($value['to'])
+                    && empty($value['to']))
+            ) {
+                $value = array();
+            }
+
+            if (!is_array($value)) {
+                $value = array($value);
+            }
+
+            $attribute = $filter->getAttributeModel();
+            $options = $attribute->getSource()->getAllOptions();
+            foreach ($value as &$valueText) {
+                foreach ($options as $option) {
+                    if ($option['label'] == $valueText) {
+                        $valueText = $option['value'];
+                    }
+                }
+            }
+
+            $fieldName = Mage::getResourceSingleton('enterprise_search/engine')
+                ->getSearchEngineFieldName($attribute, 'nav');
+            $filter->getLayer()->getProductCollection()->addFqFilter(array($fieldName => $value));
+        }
+
         return $this;
     }
 

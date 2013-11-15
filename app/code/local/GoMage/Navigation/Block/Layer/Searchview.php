@@ -48,5 +48,21 @@ class GoMage_Navigation_Block_Layer_Searchview extends GoMage_Navigation_Block_L
         }
         return false;
     }
-    
+
+    protected function _prepareLayout(){
+
+        parent::_prepareLayout();
+
+        if ( Mage::helper('gomage_navigation')->isEnterprise() )
+        {
+            $helper = Mage::helper('enterprise_search');
+            if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation(false)) {
+
+                $children = $this->getChild();
+                foreach ($children as $child){
+                    $child->addFacetCondition();
+                }
+            }
+        }
+    }
 }

@@ -14,6 +14,22 @@
 class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Layer_Filter_Price
 {
 	protected $_activeFilters = array();
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->_filterModelName = 'catalog/layer_filter_price';
+
+        if ( Mage::helper('gomage_navigation')->isEnterprise() )
+        {
+            $helper = Mage::helper('enterprise_search');
+            if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation(false))
+            {
+                $this->_filterModelName = 'gomage_navigation/layer_filter_priceenterprise';
+            }
+        }
+    }
 	
 	public function getRemoveUrl($ajax = false)
     {
@@ -232,5 +248,13 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
     public function canShowFilterButton(){        
         return (bool) $this->getAttributeModel()->getFilterButton();    
     }
-    
+
+    public function addFacetCondition()
+    {
+        if ( Mage::helper('gomage_navigation')->isEnterprise() )
+        {
+            $this->_filter->addFacetCondition();
+        }
+        return $this;
+    }
 }

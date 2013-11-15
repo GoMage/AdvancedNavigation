@@ -23,13 +23,24 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Category extends 
         foreach($value as $_value){
 			$where[] = intval($_value);
 		}
-        
-        $select->join(
+
+        if ( Mage::helper('gomage_navigation')->isEnterprise() )
+        {
+            $store_id = Mage::app()->getStore()->getId();
+            $select->join(
                 array($alias => Mage::getSingleton('core/resource')->getTableName('catalog/category_product_index')),
-                $alias.'.category_id IN ('.implode(',',$where).') AND '.$alias.'.product_id = e.entity_id',
+                $alias.'.category_id IN ('.implode(',',$where).') AND '.$alias.'.product_id = e.entity_id AND '.$alias.'.store_id="' . $store_id . '"',
                 array()
             );
-		
+        }
+        else
+        {
+            $select->join(
+                    array($alias => Mage::getSingleton('core/resource')->getTableName('catalog/category_product_index')),
+                    $alias.'.category_id IN ('.implode(',',$where).') AND '.$alias.'.product_id = e.entity_id',
+                    array()
+                );
+        }
 	}
      
      /**
@@ -43,7 +54,6 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Category extends 
      
     public function applyFilterToCollection($filter, $value)
     {
-    	
         $collection = $filter->getLayer()->getProductCollection();
         
         $this->prepareSelect($filter, $value, $collection->getSelect());

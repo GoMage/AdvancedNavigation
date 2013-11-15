@@ -16,29 +16,4 @@ class GoMage_Navigation_Model_Enterprise_Resource_Collection extends Enterprise_
 	public function getSearchedEntityIds() {
 		return $this->_searchedEntityIds;
 	}
-	
-	public function getSize() {
-		if (is_null($this->_totalRecords)) {
-			if (! $this->isLoaded()) {
-				$pageSize = $this->_pageSize;
-				$this->_pageSize = false;
-                $this->getSelect()->distinct();
-				$this->load();
-				$this->_pageSize = $pageSize;
-				$this->_storedPageSize = null;
-			}
-			
-			$select = clone $this->getSelect();
-			$select->reset(Zend_Db_Select::LIMIT_COUNT);
-			$select->reset(Zend_Db_Select::LIMIT_OFFSET);
-			$select->reset(Zend_Db_Select::GROUP);
-			
-			$connection = Mage::getSingleton('core/resource')->getConnection('read');
-			$result = $connection->fetchAll(( string ) $select);
-			$this->_totalRecords = count($result);
-		}
-		
-		return parent::getSize();
-	}
-
 }

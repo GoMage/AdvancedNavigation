@@ -135,7 +135,26 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
 
         if ($data === null) {
             $options = $attribute->getFrontend()->getSelectOptions();
-            $optionsCount = $this->_getResource()->getCount($this);
+
+            if ( Mage::helper('gomage_navigation')->isEnterprise() )
+            {
+                $helper = Mage::helper('enterprise_search');
+                if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation(false)) {
+                    $engine = Mage::getResourceSingleton('enterprise_search/engine');
+                    $fieldName = $engine->getSearchEngineFieldName($attribute, 'nav');
+
+                    $productCollection = $this->getLayer()->getProductCollection();
+                    $optionsCount = $productCollection->getFacetedData($fieldName);
+
+                }else {
+                    $optionsCount = $this->_getResource()->getCount($this);
+                }
+            }
+            else
+            {
+                $optionsCount = $this->_getResource()->getCount($this);
+            }
+
             $data = array();
 
             foreach ($options as $option) {
@@ -145,8 +164,6 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
                 if (is_array($option['value']) || (in_array($option['value'], $selected) && !$filter_mode)) {
                     continue;
                 }
-                
-                
                 
                 if (Mage::helper('core/string')->strlen($option['value'])) {
                 	
@@ -240,5 +257,17 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
     	}
     	
         return null;
+    }
+
+    public function addFacetCondition()
+    {
+        if ( Mage::helper('gomage_navigation')->isEnterprise() )
+        {
+            $engine = Mage::getResourceSingleton('enterprise_search/engine');
+            $facetField = $engine->getSearchEngineFieldName($this->getAttributeModel(), 'nav');
+            $this->getLayer()->getProductCollection()->setFacetCondition($facetField);
+        }
+
+        return $this;
     }
 }
