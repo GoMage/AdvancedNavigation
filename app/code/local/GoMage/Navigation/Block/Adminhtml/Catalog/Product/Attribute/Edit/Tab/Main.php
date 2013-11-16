@@ -709,9 +709,10 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
                 });
                 
                 Event.observe(window, "load", function() {
-						init_range_options();	
+						init_range_options();
 					}
 				);
+
                                 
                 function init_range_options() {
                 

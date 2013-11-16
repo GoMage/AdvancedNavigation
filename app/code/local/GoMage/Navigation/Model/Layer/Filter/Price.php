@@ -283,7 +283,9 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
 
             if ( $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
                 &&
-                $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT )
+                $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
+                &&
+                $attribute->getRangeManual())
             {
                 $manual = $attribute->getRangeManual();
                 $range_array = explode(",", $manual);
@@ -352,7 +354,11 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
             }
             else if ( $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO
                 &&
-                $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT )
+                $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
+                &&
+                $attribute->getRangeAuto()
+                &&
+                $attribute->getRangeAuto() != '=,')
             {
                 $auto = $attribute->getRangeAuto();
                 $autoArray = explode(",", $auto);
