@@ -77,6 +77,18 @@ class GoMage_Navigation_Block_Adminhtml_Cms_Page_Edit_Tab_Navigation
         
         return parent::_prepareForm();
     }
+
+    protected function  _getCategories($categories, $prefix = '-') {
+        $array = '';
+        foreach($categories as $category) {
+            $array .= $prefix . '_' . $category->getId() . '_' . $category->getName() . ';';
+            if($category->hasChildren()) {
+                $children = Mage::getModel('catalog/category')->getCategories($category->getId());
+                $array .=  $this->_getCategories($children, $prefix . '-');
+            }
+        }
+        return  $array;
+    }
     
     public function getAvailableCategories(){
     	$options = array(
@@ -99,7 +111,8 @@ class GoMage_Navigation_Block_Adminhtml_Cms_Page_Edit_Tab_Navigation
 	        {
 	            $collection = Mage::getModel('catalog/category')->getCollection()
 	                            ->setStoreId($store_id)                       
-	                            ->addAttributeToSelect('name'); 
+	                            ->addAttributeToSelect('name')
+                                ->addAttributeToSort('name', 'asc') ;
 	    	                            
 	            $_root_category = Mage::getModel('core/store')->load($store_id)->getRootCategoryId();
 	                    
@@ -109,21 +122,24 @@ class GoMage_Navigation_Block_Adminhtml_Cms_Page_Edit_Tab_Navigation
 	                    array('attribute'=>'level', 'gt'=>$_root_level)                            
 	            ));
 
-	            foreach ($collection as $category) {	                
-	                if (!isset($options[$category->getId()]))
-	                {
-                        $dif = (int)$category->getLevel() - (int)$_root_level;
-                        $padding = '';
-                        for($i = 1;$i <= $dif; $i++)
-                        {
-                            $padding = $padding . '-';
-                        }
+                $categories = Mage::getModel('catalog/category')->getCategories($_root_category);
 
-	                    $options[$category->getId()] = $padding . $category->getName();
-	                }	                
-	            }
-	        } 
-	        
+                $string = $this->_getCategories($categories, '-');
+                $catArray = explode(";", $string);
+
+                foreach ($catArray as $catString) {
+                    $catArrayOptions = explode("_", $catString);
+
+                    $padding = $catArrayOptions[0];
+                    $catId = $catArrayOptions[1];
+                    $name = $catArrayOptions[2];
+
+                    if (!isset($options[$catId]))
+                    {
+                        $options[$catId] = $padding . $name;
+                    }
+                }
+	        }
         }
         
         $result = new Varien_Object($options);        
