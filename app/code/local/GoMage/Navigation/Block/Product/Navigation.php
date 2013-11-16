@@ -216,7 +216,7 @@
             if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE)
             {
                 $helper = Mage::helper('gomage_navigation');
-                if ( $helper->getIsAnymoreVersion(1, 5) )
+                if ( $helper->getIsAnymoreVersion(1, 5, 2) )
                 {
                     $priceModel  = $product->getPriceModel();
                     list($minimalPrice, $maximalPrice) = $priceModel->getTotalPrices($product, null, null, false);
