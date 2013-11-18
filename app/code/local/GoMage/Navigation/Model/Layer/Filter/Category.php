@@ -96,6 +96,9 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
         		$this->getLayer()->getState()->addFilter(
                 	$this->_createItem($category->getName(), $filter)
             	);
+
+                $this->getLayer()->getProductCollection()
+                    ->addCategoryFilter($category);
         	}
         }
         
