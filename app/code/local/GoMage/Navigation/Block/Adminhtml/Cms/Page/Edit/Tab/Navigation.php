@@ -134,7 +134,7 @@ class GoMage_Navigation_Block_Adminhtml_Cms_Page_Edit_Tab_Navigation
                     $catId = $catArrayOptions[1];
                     $name = $catArrayOptions[2];
 
-                    if (!isset($options[$catId]))
+                    if (!isset($options[$catId]) && $name)
                     {
                         $options[$catId] = $padding . $name;
                     }
