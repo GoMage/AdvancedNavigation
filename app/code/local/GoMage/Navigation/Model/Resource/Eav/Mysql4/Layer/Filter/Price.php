@@ -197,9 +197,8 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
     		
     		$from	= isset($value['from']) ? intval($value['from']) : 0;
     		$to		= isset($value['to']) ? intval($value['to']) : 0;
-    		
-    		$where[] = sprintf($priceExpr . ' >= %s', $from) . ($to > 0 ? ' AND ' . sprintf($priceExpr . ' <= %d', $to) : '');
-    		
+
+            $where[] = 'round(' . sprintf($priceExpr . ', 4) >= %s', $from) . '' . ($to > 0 ? ' AND round(' . sprintf($priceExpr . ',4) <= %d', $to) : '');
     		
     	break;
 		
@@ -234,7 +233,6 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
 		endswitch;
 		
         $select->where(implode(' OR ', $where));
-        
 	}
 	
     /**
