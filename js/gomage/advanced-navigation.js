@@ -1241,14 +1241,29 @@ GomageNavigationClass = Class.create({
             if ( side == 'cat_left' )
             {
                 id_el = 'gan_nav_left';
+
+                if ( !$(id_el) )
+                {
+                    id_el = 'gan_nav_left_dropdown';
+                }
             }
             else if ( side == 'cat_right' )
             {
                 id_el = 'gan_nav_right';
+
+                if ( !$(id_el) )
+                {
+                    id_el = 'gan_nav_right_dropdown';
+                }
             }
             else
             {
                 id_el = 'gan_nav_content';
+
+                if ( !$(id_el) )
+                {
+                    id_el = 'gan_nav_content_dropdown';
+                }
             }
 
             var in_narrow_by_list = false;
