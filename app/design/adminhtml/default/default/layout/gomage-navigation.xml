@@ -14,10 +14,11 @@
  -->
 <layout version="1.0">
 	<default>
-		<reference name="head">    		
+		<reference name="head">
+            <action method="addCss"><name>css/gomage/advanced-navigation-admin.css</name></action>
     		<action method="addJs"><script>gomage/validation.js</script></action>
-    		<action method="addJs"><script>jscolor/jscolor.js</script></action>
-    		<action method="addJs"><script>jscolor/jscolor/jscolor.js</script></action>
+    		<action ifconfig="gomage_navigation/general/mageversionnew" method="addJs"><script>jscolor/jscolor.js</script></action>
+    		<action ifconfig="gomage_navigation/general/mageversionold" method="addJs"><script>jscolor/jscolor/jscolor.js</script></action>
     	</reference>
 	</default>	
 	<adminhtml_catalog_product_attribute_edit>
