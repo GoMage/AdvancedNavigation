@@ -30,7 +30,7 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
             }
 
             $helper = Mage::helper('enterprise_search');
-            if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog))
+            if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog) && Mage::helper('gomage_navigation')->isGomageNavigation())
             {
                 $this->_filterModelName = 'gomage_navigation/layer_filter_priceenterprise';
             }

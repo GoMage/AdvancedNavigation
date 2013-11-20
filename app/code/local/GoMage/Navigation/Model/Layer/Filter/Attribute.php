@@ -145,7 +145,7 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
                 }
 
                 $helper = Mage::helper('enterprise_search');
-                if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog)) {
+                if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog) && Mage::helper('gomage_navigation')->isGomageNavigation()) {
                     $engine = Mage::getResourceSingleton('enterprise_search/engine');
                     $fieldName = $engine->getSearchEngineFieldName($attribute, 'nav');
 

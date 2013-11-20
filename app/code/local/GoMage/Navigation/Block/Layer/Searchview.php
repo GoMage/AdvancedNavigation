@@ -38,7 +38,6 @@ class GoMage_Navigation_Block_Layer_Searchview extends GoMage_Navigation_Block_L
      */
     public function canShowBlock()
     {
-    	
         $availableResCount = (int) Mage::app()->getStore()
             ->getConfig(Mage_CatalogSearch_Model_Layer::XML_PATH_DISPLAY_LAYER_COUNT );
 
@@ -62,7 +61,7 @@ class GoMage_Navigation_Block_Layer_Searchview extends GoMage_Navigation_Block_L
             }
 
             $helper = Mage::helper('enterprise_search');
-            if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog)) {
+            if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog) && Mage::helper('gomage_navigation')->isGomageNavigation()) {
 
                 $children = $this->getChild();
                 foreach ($children as $child){

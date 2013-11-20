@@ -235,7 +235,7 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
                     }
 
                     $helper = Mage::helper('enterprise_search');
-                    if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog)) {
+                    if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog) && Mage::helper('gomage_navigation')->isGomageNavigation()) {
                         $productCollection = $this->getLayer()->getProductCollection();
                         $category_count     = $productCollection->getFacetedData('category_ids');
                     } else {
