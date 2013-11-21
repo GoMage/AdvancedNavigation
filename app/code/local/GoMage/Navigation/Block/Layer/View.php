@@ -13,7 +13,7 @@
 	
 	class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View{
 		
-		protected $shop_by_in_content = false; 
+		protected $shop_by_in_content = false;
 		
 		public function getPopupStyle(){
 			

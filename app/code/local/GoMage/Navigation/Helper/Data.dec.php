@@ -526,12 +526,12 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
     public function isEnterprise()
     {
-        try{
-            $enterprise = Mage::getModel('enterprise_enterprise/observer');
-        } catch (Exception $e){
-            $enterprise = false;
+        if ( Mage::getConfig ()->getModuleConfig ( 'Enterprise_Enterprise' ) && Mage::getConfig ()->getModuleConfig ( 'Enterprise_AdminGws' ) && Mage::getConfig ()->getModuleConfig ( 'Enterprise_Checkout' ) && Mage::getConfig ()->getModuleConfig ( 'Enterprise_Customer' ) )
+        {
+            return true;
         }
-        return (bool)$enterprise;
+
+        return false;
     }
 
     public function getSide($type)
