@@ -14,6 +14,24 @@
 	class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View{
 		
 		protected $shop_by_in_content = false;
+
+        protected $_block_side = null;
+
+        public function setBlockSide($block_side)
+        {
+            $this->_block_side = $block_side;
+        }
+
+        public function getBlockSide()
+        {
+            if ( $this->_block_side )
+            {
+                return $this->_block_side;
+            }
+
+            return GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::LEFT_BLOCK;
+        }
+
 		
 		public function getPopupStyle(){
 			
@@ -257,6 +275,7 @@
             		}
             	}
             	elseif ($position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN_CONTENT){
+
             		if ($this->shop_by_in_content){
             			$this->setTemplate('gomage/navigation/layer/view.phtml');
             			$this->setData('check', GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT);
@@ -319,39 +338,52 @@
                         }
                		break;	
                		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN_CONTENT :
-               			if ( !Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') )
-               		    {
-               		        return false;
-               		    }
-               		    if (Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/show_shopby')){
-               		    	return false;
-               		    }
 
-                        if ( !Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active') )
+
+                        if ( $this->getBlockSide() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::RIGHT_BLOCK )
                         {
-                            return false;
+                            if ( !Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') )
+                            {
+                                return false;
+                            }
+                            if (Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/show_shopby')){
+                                return false;
+                            }
                         }
-                        if (Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/show_shopby')){
-                            return false;
+                        else if ( $this->getBlockSide() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT )
+                        {
+                            if ( !Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active') )
+                            {
+                                return false;
+                            }
+                            if (Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/show_shopby')){
+                                return false;
+                            }
                         }
                		break;
                		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN_CONTENT :
 
-               		    if ( !Mage::getStoreConfigFlag('gomage_navigation/category/active') )
-               		    {
-               		        return false;
-               		    }
-               		    if (Mage::getStoreConfigFlag('gomage_navigation/category/active') && !Mage::getStoreConfig('gomage_navigation/category/show_shopby')){
-               		    	return false;
-               		    }
-
-                        if ( !Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active') )
+                        if ( $this->getBlockSide() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::LEFT_BLOCK )
                         {
-                            return false;
+                            if ( !Mage::getStoreConfigFlag('gomage_navigation/category/active') )
+                            {
+                                return false;
+                            }
+                            if (Mage::getStoreConfigFlag('gomage_navigation/category/active') && !Mage::getStoreConfig('gomage_navigation/category/show_shopby')){
+                                return false;
+                            }
                         }
-                        if (Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/show_shopby')){
-                            return false;
+                        else if ( $this->getBlockSide() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT )
+                        {
+                            if ( !Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active') )
+                            {
+                                return false;
+                            }
+                            if (Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/show_shopby')){
+                                return false;
+                            }
                         }
+
                		break;	
                	}
 
@@ -359,8 +391,6 @@
             }else{
                 return parent::_getCategoryFilter();
             }
-
-
         }
 	    
 	    /**

@@ -41,7 +41,7 @@ class GoMage_Navigation_Adminhtml_ImageController extends Mage_Adminhtml_Control
         } catch (Exception $e) {
             $result = array('error'=>$e->getMessage(), 'errorcode'=>$e->getCode());
         }
-		
+
 		file_put_contents(Mage::getBaseDir('var').'/data-response.txt', print_r($result, true));
 		
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
