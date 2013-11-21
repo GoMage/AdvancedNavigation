@@ -1,4 +1,3 @@
-<?php
 /**
  * GoMage Advanced Navigation Extension
  *
@@ -228,20 +227,25 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
             $url =  Mage::getUrl($route, $params);
 
             $arr = parse_url($url);
-            $pars = explode('&amp;',$arr['query']);
 
             $newParams = array();
-            foreach( $pars as $_param)
+            if ( isset($arr['query']) )
             {
-                $_param = str_replace("ajax=1&", "", $_param);
-                $_param = str_replace("ajax=1", "", $_param);
+                $pars = explode('&amp;',$arr['query']);
 
-                if ( $_param != '' )
+                foreach( $pars as $_param)
                 {
-                    $newParams[] = $_param;
-                }
+                    $_param = str_replace("ajax=1&", "", $_param);
+                    $_param = str_replace("ajax=1", "", $_param);
 
+                    if ( $_param != '' )
+                    {
+                        $newParams[] = $_param;
+                    }
+
+                }
             }
+
             $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'] . '?';
 
             if ( $newParams )
