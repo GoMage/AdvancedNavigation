@@ -292,6 +292,7 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
 
                 $prevValue = 0;
                 $items = 0;
+
                 foreach( $range_array as $my_range )
                 {
                     $the_range = (int)trim($my_range);
@@ -318,16 +319,17 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
                                 $active = false;
 
                                 if(!empty($selected) && $this->getAttributeModel()->getFilterType() != GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN ){
-
                                     $value = implode(',',array_merge($selected, (array)$value));
-
-
                                 }
 
                             }
 
                             $count = $count - $items;
                             $items = $count + $items;
+
+                            if(!$count){
+                                continue;
+                            }
 
                             $store = Mage::app()->getStore();
                             $from = (($index-1)*$range) + $prevValue;

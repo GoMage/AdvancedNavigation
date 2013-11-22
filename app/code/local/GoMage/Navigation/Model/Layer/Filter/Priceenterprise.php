@@ -326,6 +326,10 @@ class GoMage_Navigation_Model_Layer_Filter_Priceenterprise extends Enterprise_Se
                             $count = $count - $items;
                             $items = $count + $items;
 
+                            if(!$count){
+                                continue;
+                            }
+
                             $store = Mage::app()->getStore();
                             $from = (($index-1)*$range) + $prevValue;
                             $fromPrice = $store->formatPrice($from);
