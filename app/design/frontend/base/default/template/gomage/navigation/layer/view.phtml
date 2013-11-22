@@ -22,7 +22,8 @@
 	$gan_bcontent_hide = 'true' === $this->getRequest()->getParam('gan_bcontent_hide'); 
 	$check = $this->getCheck();
     $this->setBlockSide($check);
-	
+
+    if ( $this->canShowLayeredBlock($check) ):
 	if ( Mage::helper('gomage_navigation')->IsGooglebot() ):
 ?>
 <div id="block-layered-nav-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?>" class="block block-layered-nav block-layered-nav-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?> gomage-navigation-slider-type-<?php echo $this->getSliderType();?> gomage-navigation-icons-<?php echo $this->getIconStyle();?><?php if ($content_area): ?> gan-content-area<?php endif; ?>">
@@ -165,4 +166,5 @@
     </div>
 </div>
 	<?php endif; ?>
+    <?php endif; ?>
 <?php endif; ?>

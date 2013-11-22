@@ -17,6 +17,36 @@
 
         protected $_block_side = null;
 
+        public function canShowLayeredBlock($check)
+        {
+            $_filters = $this->getFilters();
+            $canShow = false;
+            foreach( $_filters as $_filter )
+            {
+                $category = Mage::registry("current_category");
+                if($category && in_array($category->getId(),explode(",",$_filter->getCategoryIdsFilter())))
+                {
+                    continue;
+                }
+
+                if(
+                    $_filter->getItemsCount()
+                    &&
+                    ($_filter->getAttributeLocation() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::USE_GLOBAL
+                        ||
+                        $_filter->getAttributeLocation() == $check))
+                {
+                    if(Mage::helper('gomage_navigation')->getFilterItemCount($_filter))
+                    {
+                        $canShow = true;
+                    }
+                }
+
+            }
+
+            return $canShow;
+        }
+
         public function setBlockSide($block_side)
         {
             $this->_block_side = $block_side;
