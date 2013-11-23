@@ -511,7 +511,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
                 
                 Event.observe("inblock_type", "change", function(){
                     var value = $("inblock_type").value;                    
-                    var elements = eval('.array().');
+                    var elements = {};
                     if (value == '.GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Type_Inblock::TYPE_FIXED.'){
                     
                     	for (var i = 0; i < elements.length; i++) {
@@ -605,7 +605,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
                 
                  Event.observe("range_options", "change", function(){
                     var value = $("range_options").value;                    
-                    var elements = eval('.array().');
+                    var elements = {};
                     if (value == '.GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO.'){
                     	for (var i = 0; i < elements.length; i++) {
                     		var id = elements[i]; 
