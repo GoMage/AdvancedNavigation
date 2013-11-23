@@ -310,7 +310,7 @@
             			$this->setTemplate('gomage/navigation/layer/view.phtml');
             			$this->setData('check', GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT);
             		}
-            		else if ( $this->getNameInLayout() == 'catalog.leftnav' || $this->getNameInLayout() == 'catalogsearch.leftnav' )
+                    else if ( $this->getNameInLayout() == 'catalog.leftnav' || $this->getNameInLayout() == 'catalogsearch.leftnav'  || $this->getNameInLayout() == 'gomage.enterprise.catalog.leftnav')
             		{
             			$this->setData('check', GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::LEFT_BLOCK);
             			$this->setTemplate('gomage/navigation/layer/view.phtml');	
