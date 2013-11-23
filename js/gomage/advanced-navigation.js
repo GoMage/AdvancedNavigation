@@ -1216,12 +1216,11 @@ GomageNavigationClass = Class.create({
 	},
 
 
-	showNavigationNote: function(id, control, side){
-		
-		var arr = $(control).cumulativeOffset();
-		
-		
-		if ( side != 'cat_left' && side != 'cat_right' && side != 'cat_content')
+    showNavigationNote: function(id, control, side){
+
+        var arr = $(control).cumulativeOffset();
+
+        if ( side != 'cat_left' && side != 'cat_right' && side != 'cat_content')
         {
             var in_narrow_by_list = false;
             if ($('narrow-by-list-' + side)){
@@ -1231,6 +1230,11 @@ GomageNavigationClass = Class.create({
                     }
                 });
                 var nbl = $('narrow-by-list-' + side).cumulativeOffset();
+
+                var layered_width = $('narrow-by-list-' + side).getWidth();
+                var note_width = $(id).getWidth();
+
+                var merge_width = layered_width - note_width;
             }
 
             var gbc = $('gan-block-content-' + side).cumulativeOffset();
@@ -1274,19 +1278,32 @@ GomageNavigationClass = Class.create({
                     }
                 });
                 var nbl = $(id_el).cumulativeOffset();
+
+                var layered_width = $(id_el).getWidth();
+                var note_width = $(id).getWidth();
+
+                var merge_width = layered_width - note_width;
             }
 
             var gbc = $(id_el).cumulativeOffset();
             var diff = 0;
         }
 
-		$(id).style.left = (parseInt(arr[0]) - (in_narrow_by_list ? parseInt(nbl[0]) : 0 )) + 'px'; 
-		$(id).style.top = (parseInt(arr[1]) - (in_narrow_by_list ? parseInt(nbl[1]) : 0 )) + diff + 'px';
-		$(id).style.display = 'block';			
+        if (parseInt(document.viewport.getWidth()) > 782)
+        {
+            $(id).style.left = (parseInt(arr[0]) - (in_narrow_by_list ? parseInt(nbl[0]) : 0 )) + 'px';
+        }
+        else
+        {
+            $(id).style.left = (parseInt(arr[0]) - (in_narrow_by_list ? parseInt(nbl[0]) : 0 )) - parseInt(layered_width) + parseInt(merge_width) + 'px';
+        }
 
-		this.help = true;
-		return false;
-	},
+        $(id).style.top = (parseInt(arr[1]) - (in_narrow_by_list ? parseInt(nbl[1]) : 0 )) + diff + 'px';
+        $(id).style.display = 'block';
+
+        this.help = true;
+        return false;
+    },
 
 	hideNavigationNote: function(close, id){
 
@@ -1533,3 +1550,5 @@ var globalEval = function globalEval(src){
     };
     fn();
 };
+
+Event.observe(window, 'resize', function() { GomageNavigation.ganInitSliders(); });
