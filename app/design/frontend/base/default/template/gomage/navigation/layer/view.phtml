@@ -26,7 +26,15 @@
     if ( $this->canShowLayeredBlock($check) ):
 	if ( Mage::helper('gomage_navigation')->IsGooglebot() ):
 ?>
-<div id="block-layered-nav-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?>" class="block block-layered-nav block-layered-nav-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?> gomage-navigation-slider-type-<?php echo $this->getSliderType();?> gomage-navigation-icons-<?php echo $this->getIconStyle();?><?php if ($content_area): ?> gan-content-area<?php endif; ?>">
+<?php
+$enterprise_class = '';
+if ( $check == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT
+        &&
+     Mage::helper('gomage_navigation')->isEnterprise()):
+    $enterprise_class = 'sidebar-enterprise-block-layered-nav';
+endif;
+?>
+<div id="block-layered-nav-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?>" class="block <?php echo $enterprise_class; ?> block-layered-nav block-layered-nav-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?> gomage-navigation-slider-type-<?php echo $this->getSliderType();?> gomage-navigation-icons-<?php echo $this->getIconStyle();?><?php if ($content_area): ?> gan-content-area<?php endif; ?>">
     <div class="block-title">
         <strong>
         	<span><?php echo $this->__('Shop By') ?></span>
