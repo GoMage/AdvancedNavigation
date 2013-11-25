@@ -114,19 +114,19 @@ class GoMage_Navigation_Block_Adminhtml_Config_Form_Renderer_Shopby extends Mage
             	}
             	else if('{$element->getHtmlId()}' == 'gomage_navigation_contentcolumnsettings_show_shopby')
             	{
-            		var sel_right = $('gomage_navigation_contentcolumnsettings_filter_type');
+            		var sel_cont = $('gomage_navigation_contentcolumnsettings_filter_type');
 
             		Event.observe('{$element->getHtmlId()}', 'change', function(){
 	                    var value = $('{$element->getHtmlId()}').value;
 	                    if (value == 1){
-	                    	for(i=sel_right.options.length-1;i>=0;i--)
+	                    	for(i=sel_cont.options.length-1;i>=0;i--)
 							{
-								if (sel_right.options[i].value == '8'
+								if (sel_cont.options[i].value == '8'
 										||
-									sel_right.options[i].value == '6'
+									sel_cont.options[i].value == '6'
 									)
 		                    	{
-		                    		sel_right.remove(i);
+		                    		sel_cont.remove(i);
 		                    	}
 
 							}
@@ -134,14 +134,14 @@ class GoMage_Navigation_Block_Adminhtml_Config_Form_Renderer_Shopby extends Mage
 	    				}else{
 	    					var option_fly = false;
 	    					var option_plain = false;
-	    					for(i=sel_right.options.length-1;i>=0;i--)
+	    					for(i=sel_cont.options.length-1;i>=0;i--)
 							{
-								if (sel_right.options[i].value == '8')
+								if (sel_cont.options[i].value == '8')
 		                    	{
 		                    		option_fly = true;
 		                    	}
 
-		                    	if (sel_right.options[i].value == '6')
+		                    	if (sel_cont.options[i].value == '6')
 		                    	{
 		                    		option_plain = true;
 		                    	}
@@ -149,12 +149,12 @@ class GoMage_Navigation_Block_Adminhtml_Config_Form_Renderer_Shopby extends Mage
 
 	    					if ( !option_plain )
 							{
-								sel_right.options[sel_right.options.length] = new Option('Plain', '6');
+								sel_cont.options[sel_cont.options.length] = new Option('Plain', '6');
 							}
 
 							if ( !option_fly )
 							{
-								sel_right.options[sel_right.options.length] = new Option('Fly-Out', '8');
+								sel_cont.options[sel_cont.options.length] = new Option('Fly-Out', '8');
 							}
 	    				}
 	                });
