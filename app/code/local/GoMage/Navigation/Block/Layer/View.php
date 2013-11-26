@@ -513,13 +513,20 @@
     				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
     				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
 
-                                $_from	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVar().'_from');
-                                $_to	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVar().'_to');
-
-                                if ( $_from && $_to )
+                                if ( Mage::helper('gomage_navigation')->isMobileDevice() )
                                 {
-                                    $filterState[$item->getFilter()->getRequestVar().'_from'] = null;
-                                    $filterState[$item->getFilter()->getRequestVar().'_to'] = null;
+                                    $filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
+                                }
+                                else
+                                {
+                                    $_from	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVar().'_from');
+                                    $_to	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVar().'_to');
+
+                                    if ( $_from && $_to )
+                                    {
+                                        $filterState[$item->getFilter()->getRequestVar().'_from'] = null;
+                                        $filterState[$item->getFilter()->getRequestVar().'_to'] = null;
+                                    }
                                 }
 
     		        		break;
@@ -616,13 +623,23 @@
 		        	switch($item->getFilter()->getAttributeModel()->getFilterType()):
 				    	
 				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
+                            $filterState[$item->getFilter()->getRequestVar().'_from'] = null;
+                            $filterState[$item->getFilter()->getRequestVar().'_to'] = null;
+
+                            break;
 				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
 				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
-				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):    
-		        			
-		        			$filterState[$item->getFilter()->getRequestVar().'_from'] = null;
-		        			$filterState[$item->getFilter()->getRequestVar().'_to'] = null;
-		        			
+				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
+
+                            if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+                            {
+                                $filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
+                            }
+                            else
+                            {
+                                $filterState[$item->getFilter()->getRequestVar().'_from'] = null;
+                                $filterState[$item->getFilter()->getRequestVar().'_to'] = null;
+                            }
 		        		break;
 
                         case (GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT):

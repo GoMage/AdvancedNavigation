@@ -191,14 +191,32 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
 		switch($filter->getAttributeModel()->getFilterType()):
 		
 		case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):    
-    		
-    		$from	= isset($value['from']) ? intval($value['from']) : 0;
-    		$to		= isset($value['to']) ? intval($value['to']) : 0;
+            $from	= isset($value['from']) ? intval($value['from']) : 0;
+            $to		= isset($value['to']) ? intval($value['to']) : 0;
 
             $where[] = 'round(' . sprintf($priceExpr . ', 4) >= %s', $from) . '' . ($to > 0 ? ' AND round(' . sprintf($priceExpr . ',4) <= %d', $to) : '');
+
+            break;
+
+    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
+    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
+    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
+
+            if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+            {
+                foreach((array)$value as $_value){
+
+                    $where[] = sprintf($priceExpr . ' >= %s', ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf($priceExpr . ' < %d', ($_value['range'] * $_value['index']));
+
+                }
+            }
+            else
+            {
+                $from	= isset($value['from']) ? intval($value['from']) : 0;
+                $to		= isset($value['to']) ? intval($value['to']) : 0;
+
+                $where[] = 'round(' . sprintf($priceExpr . ', 4) >= %s', $from) . '' . ($to > 0 ? ' AND round(' . sprintf($priceExpr . ',4) <= %d', $to) : '');
+            }
     		
     	break;
 		

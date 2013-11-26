@@ -170,7 +170,7 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
     	parent::_prepareFilter();
     	
     	if(Mage::helper('gomage_navigation')->isGomageNavigation()){
-        	
+
         	switch($this->getAttributeModel()->getFilterType()): 
         	
 	        	default:
@@ -186,20 +186,41 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
 	        	break;
 	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
-	        	
-	        		$this->_template = ('gomage/navigation/layer/filter/slider.phtml');
+
+                    if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+                    {
+                        $this->_template = ('gomage/navigation/layer/filter/default.phtml');
+                    }
+                    else
+                    {
+                        $this->_template = ('gomage/navigation/layer/filter/slider.phtml');
+                    }
 	        	
 	        	break;
 	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
-	        	
-	        		$this->_template = ('gomage/navigation/layer/filter/slider-input.phtml');
+
+                    if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+                    {
+                        $this->_template = ('gomage/navigation/layer/filter/default.phtml');
+                    }
+                    else
+                    {
+                        $this->_template = ('gomage/navigation/layer/filter/slider-input.phtml');
+                    }
 	        	
 	        	break;
 	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
-	        	
-	        		$this->_template = ('gomage/navigation/layer/filter/input-slider.phtml');
+
+                    if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+                    {
+                        $this->_template = ('gomage/navigation/layer/filter/default.phtml');
+                    }
+                    else
+                    {
+                        $this->_template = ('gomage/navigation/layer/filter/input-slider.phtml');
+                    }
 	        	
 	        	break;
 	        	
@@ -216,7 +237,7 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
     }
     
     public function getFilterType(){
-        return $this->getAttributeModel()->getFilterType();    
+        return $this->getAttributeModel()->getFilterType();
     }
     
     

@@ -158,20 +158,41 @@ class GoMage_Navigation_Block_Layer_Filter_Decimal extends Mage_Catalog_Block_La
 	        	break;
 	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
-	        	
-	        		$this->_template = ('gomage/navigation/layer/filter/slider.phtml');
+
+                    if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+                    {
+                        $this->_template = ('gomage/navigation/layer/filter/default.phtml');
+                    }
+                    else
+                    {
+                        $this->_template = ('gomage/navigation/layer/filter/slider.phtml');
+                    }
 	        	
 	        	break;
 	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
-	        	
-	        		$this->_template = ('gomage/navigation/layer/filter/slider-input.phtml');
+
+                    if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+                    {
+                        $this->_template = ('gomage/navigation/layer/filter/default.phtml');
+                    }
+                    else
+                    {
+                        $this->_template = ('gomage/navigation/layer/filter/slider-input.phtml');
+                    }
 	        	
 	        	break;
 	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
-	        	
-	        		$this->_template = ('gomage/navigation/layer/filter/input-slider.phtml');
+
+                    if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+                    {
+                        $this->_template = ('gomage/navigation/layer/filter/default.phtml');
+                    }
+                    else
+                    {
+                        $this->_template = ('gomage/navigation/layer/filter/input-slider.phtml');
+                    }
 	        	
 	        	break;
 	        	

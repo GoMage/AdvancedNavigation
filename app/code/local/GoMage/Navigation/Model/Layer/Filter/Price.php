@@ -547,31 +547,100 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
     switch($this->getAttributeModel()->getFilterType()):
     	
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
+            $_from = $request->getParam($this->getRequestVar().'_from', false);
+            $_to = $request->getParam($this->getRequestVar().'_to', false);
+
+            if($_from || $_to){
+
+                $value = array('from'=>$_from, 'to'=>$_to);
+
+                $this->_getResource()->applyFilterToCollection($this, $value);
+
+                $store      = Mage::app()->getStore();
+                $fromPrice  = $store->formatPrice($_from);
+                $toPrice    = $store->formatPrice($_to);
+
+                $this->getLayer()->getState()->addFilter(
+                    $this->_createItem(Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice), $value)
+                );
+
+            }else{
+                return $this;
+            }
+
+            break;
+
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):    
-    		
-    		$_from = $request->getParam($this->getRequestVar().'_from', false);
-    		$_to = $request->getParam($this->getRequestVar().'_to', false);
-    		
-    		if($_from || $_to){
-    			
-    			$value = array('from'=>$_from, 'to'=>$_to);
-    			
-    			$this->_getResource()->applyFilterToCollection($this, $value);
-    			
-    			$store      = Mage::app()->getStore();
-        		$fromPrice  = $store->formatPrice($_from);
-        		$toPrice    = $store->formatPrice($_to);
+    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
 
-    			$this->getLayer()->getState()->addFilter(
-	                $this->_createItem(Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice), $value)
-	            );
-    		
-    		}else{
-    			return $this;
-    		}
-    		
+            if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+            {
+                /**
+                 * Filter must be string: $index,$range
+                 */
+                $filter = $request->getParam($this->getRequestVar());
+                if (!$filter) {
+                    return $this;
+                }
+
+                $filter = explode(',', $filter);
+                if (count($filter) < 2) {
+                    return $this;
+                }
+
+                $length = count($filter);
+
+                $value = array();
+
+                for($i = 0; $i<$length; $i+=2){
+
+                    $value[] = array(
+                        'index'=>$filter[$i],
+                        'range'=>$filter[$i+1],
+                    );
+
+                }
+                if (!empty($value)) {
+
+                    $this->setPriceRange((int)$value[0]['range']);
+
+                    $this->_getResource()->applyFilterToCollection($this, $value);
+
+                    foreach($value as $_value){
+
+                        $this->getLayer()->getState()->addFilter(
+                            $this->_createItem($this->_renderItemLabel($_value['range'], $_value['index']), $_value)
+                        );
+
+                    }
+
+                }
+            }
+            else
+            {
+                $_from = $request->getParam($this->getRequestVar().'_from', false);
+                $_to = $request->getParam($this->getRequestVar().'_to', false);
+
+                if($_from || $_to){
+
+                    $value = array('from'=>$_from, 'to'=>$_to);
+
+                    $this->_getResource()->applyFilterToCollection($this, $value);
+
+                    $store      = Mage::app()->getStore();
+                    $fromPrice  = $store->formatPrice($_from);
+                    $toPrice    = $store->formatPrice($_to);
+
+                    $this->getLayer()->getState()->addFilter(
+                        $this->_createItem(Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice), $value)
+                    );
+
+                }else{
+                    return $this;
+                }
+            }
+
     	break;
     		
     	default:
