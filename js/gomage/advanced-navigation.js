@@ -1451,8 +1451,7 @@ GomageNavigationClass = Class.create({
 
 	ganInitScrollToTop: function(){
 
-		if ($$('div.category-products').length > 0 && $('gan-totop-button')){
-
+		if ($$('div.category-products').length > 0 && $('gan-totop-button') && !$('product-designer')){
 
 	        var left = $$('div.category-products')[0].getDimensions().width + $$('div.category-products')[0].offsetLeft + 20;
 
