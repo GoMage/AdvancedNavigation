@@ -86,23 +86,30 @@ GomageNavigationClass = Class.create({
 		}
 	},
 	
-	click: function(t){
+	click: function(element){
 
-		var url_clean = $(t).readAttribute('data-url');
-		var param = $(t).readAttribute('data-param');
-		var ajax_clean = $(t).readAttribute('data-ajax');
-			
-		var url = this.formUrl(url_clean, param, ajax_clean);
+        if ( $(element) )
+        {
+            var url_clean = $(element).readAttribute('data-url');
+            var param = $(element).readAttribute('data-param');
+            var ajax_clean = $(element).readAttribute('data-ajax');
 
-		if ( ajax_clean == 1 )
-		{
-			this.setNavigationUrl(url);
-		}
-		else
-		{
-			url = url.replace("&ajax=1","");
-			setLocation(url.replace("ajax=1","") );
-		}
+            var url = this.formUrl(url_clean, param, ajax_clean);
+
+            if ( ajax_clean == 1 )
+            {
+                this.setNavigationUrl(url);
+            }
+            else
+            {
+                url = url.replace("&ajax=1","");
+                setLocation(url.replace("ajax=1","") );
+            }
+        }
+        else
+        {
+            return false;
+        }
 	},
 	
 	formUrl: function(url_clean, param, ajax){
@@ -359,7 +366,7 @@ GomageNavigationClass = Class.create({
 			}
 			
 			if (this.gomage_navigation_urlhash){
-				this.GanSetHashUrl(url, params);
+				this.setHashUrl(url, params);
 			}
 
 			var request = new Ajax.Request(url,
@@ -416,7 +423,7 @@ GomageNavigationClass = Class.create({
 		
 	},
 
-	GanSetHashUrl: function(url, params){
+	setHashUrl: function(url, params){
 				
 	    var vars = new Array(); 
 	    var hash = new Object();    
@@ -473,7 +480,7 @@ GomageNavigationClass = Class.create({
 		var url = url.replace(/&amp;/ig, '&');
 		
 		if (this.gomage_navigation_urlhash){
-			this.GanSetHashUrl(url);
+			this.setHashUrl(url);
 		}
 
 		if(this.startLoadNavigationData(more_products)){
@@ -607,7 +614,7 @@ GomageNavigationClass = Class.create({
 	    element.parentNode.replaceChild(content, element);
 	    
 	    if (replace_toolbar && $$('div.category-products').length > 0){
-	    	this.ganReplaceToolbal(response.product_list);        
+	    	this.replaceToolbal(response.product_list);
 	    }   
 	    
 	    if (typeof(need_scroll) != 'undefined' && need_scroll){
@@ -618,7 +625,7 @@ GomageNavigationClass = Class.create({
 	    }
 	},
 
-	ganReplaceToolbal: function(content){	
+	replaceToolbal: function(content){
 		var content_toolbar = Object.toHTML(content);        
 	    content_toolbar.evalScripts.bind(content_toolbar).defer();
 	    content_toolbar = content_toolbar.stripScripts();                
@@ -921,7 +928,7 @@ GomageNavigationClass = Class.create({
 
 	ganAddMoreProducts: function(response){
 
-		this.ganReplaceToolbal(response.product_list);
+		this.replaceToolbal(response.product_list);
 		if($$('div.category-products').length > 0){
 			
 	    	var category_products = $$('div.category-products')[0];

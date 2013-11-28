@@ -187,7 +187,7 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
 	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
 
-                    if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+                    if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
                     {
                         $this->_template = ('gomage/navigation/layer/filter/default.phtml');
                     }
@@ -200,7 +200,7 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
 	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
 
-                    if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+                    if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
                     {
                         $this->_template = ('gomage/navigation/layer/filter/default.phtml');
                     }
@@ -213,7 +213,7 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
 	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
 
-                    if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+                    if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
                     {
                         $this->_template = ('gomage/navigation/layer/filter/default.phtml');
                     }

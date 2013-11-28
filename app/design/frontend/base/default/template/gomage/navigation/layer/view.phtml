@@ -61,7 +61,7 @@ endif;
 			            ?>
 			                <a <?php if ( $_filter->getAjaxEnabled() || ($_filter->getName() == 'Category') ): ?> onclick="GomageNavigation.setNavigationUrl('<?php echo urlencode($clearLinkUrl); ?>'); return false;" <?php endif; ?> class="btn-remove" title="<?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>" href="<?php echo $clearLinkUrl ?>"><?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></a>
 			            <?php else: ?>
-			                <a <?php if ( $_filter->getAjaxEnabled() || ($_filter->getName() == 'Category') ): ?> onclick="GomageNavigation.setNavigationUrl('<?php echo urlencode($this->removeOptionUrl($_filter->getRemoveUrl())); ?>'); return false;" <?php endif; ?> class="btn-remove" href="<?php echo $_filter->getRemoveUrl() ?>" title="<?php echo $this->__('Remove This Item') ?>"><?php echo $this->__('Remove This Item') ?></a>
+			                <a <?php if ( $_filter->getAjaxEnabled() || ($_filter->getName() == 'Category') ): ?> onclick="GomageNavigation.setNavigationUrl('<?php echo urlencode($this->getOptionUrl($_filter->getRemoveUrl())); ?>'); return false;" <?php endif; ?> class="btn-remove" href="<?php echo $_filter->getRemoveUrl() ?>" title="<?php echo $this->__('Remove This Item') ?>"><?php echo $this->__('Remove This Item') ?></a>
 			            <?php endif; ?>
 			        </li>
 			    <?php endforeach; ?>
@@ -87,7 +87,7 @@ endif;
     		</p>
             <div id="narrow-by-list-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?>" class="narrow-by-list filter-align-<?php echo Mage::getStoreConfig('gomage_navigation/general/content_filters'); ?>">
                 <?php $_filters = $this->getFilters() ?>
-                <?php $filter_width = $this->getFiltersCount($check);?>
+                <?php $filter_width = $this->getFiltersWidth($check);?>
 
                 <?php foreach ($_filters as $_filter):
 

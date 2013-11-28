@@ -202,7 +202,7 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
 
-            if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+            if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
             {
                 foreach((array)$value as $_value){
 

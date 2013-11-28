@@ -91,7 +91,7 @@
             return $filters;
         }
 
-		public function getFiltersCount($check)
+		public function getFiltersWidth($check)
         {
             $filters = $this->getFilters();
             $i = 0;
@@ -456,7 +456,7 @@
 	        return $activeFilters;
 	    }
 	    
-	    public function removeOptionUrl($url)
+	    public function getOptionUrl($url)
 	    {
 	    	if ( strpos($url,"?") !== false )
 	    	{
@@ -513,7 +513,7 @@
     				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
     				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
 
-                                if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+                                if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
                                 {
                                     $filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
                                 }
@@ -631,7 +631,7 @@
 				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
 				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
 
-                            if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+                            if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
                             {
                                 $filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
                             }

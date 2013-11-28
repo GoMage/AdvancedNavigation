@@ -17,18 +17,22 @@ class GoMage_Navigation_Model_Observer {
 		
 		$attribute = $event->getAttribute();
 		$attribute_id = ( int ) $attribute->getAttributeId();
-		
-		$connection = Mage::getSingleton('core/resource')->getConnection('read');
-		
-		$table = Mage::getSingleton('core/resource')->getTableName('gomage_navigation_attribute');
-		
-		$data = $connection->fetchRow("SELECT * FROM {$table} WHERE `attribute_id` = {$attribute_id};");
-		
-		$table = Mage::getSingleton('core/resource')->getTableName('gomage_navigation_attribute_option');
-		
+
+        $data = Mage::getModel('gomage_navigation/attribute')->load($attribute_id)->getData();
+
+        $attribute_option = Mage::getModel('gomage_navigation/attribute_option')
+            ->getCollection()
+            ->addFieldToFilter('attribute_id', $attribute_id)
+            ->load();
+
+        $_option_images = array();
+        foreach( $attribute_option as $option )
+        {
+            $_option_images[] = $option->getData();
+        }
+
 		$option_images = array();
-		$_option_images = $connection->fetchAll("SELECT * FROM {$table} WHERE `attribute_id` = {$attribute_id};");
-		
+
 		foreach ($_option_images as $imageInfo) {
 			
 			$option_images[$imageInfo['option_id']] = $imageInfo;

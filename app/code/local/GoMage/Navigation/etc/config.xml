@@ -67,6 +67,9 @@
             		 <attribute_store>
                         <table>gomage_navigation_attribute_store</table>
 		            </attribute_store>
+                    <attribute_option>
+                        <table>gomage_navigation_attribute_option</table>
+                    </attribute_option>
             	</entities>
             </gomage_navigation_mysql4>
             <catalog>

@@ -574,7 +574,7 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
 
-            if ( Mage::helper('gomage_navigation')->isMobileDevice() )
+            if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
             {
                 /**
                  * Filter must be string: $index,$range

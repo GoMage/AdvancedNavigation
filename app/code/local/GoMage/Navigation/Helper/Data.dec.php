@@ -10,6 +10,8 @@
  * @since        Class available since Release 1.0
  */
 
+require_once (Mage::getBaseDir('lib') . DS . 'GoMage' . DS . 'MobileDetect' . DS . 'Mobile_Detect.php');
+
 class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
 
@@ -185,7 +187,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
     }
 
     public function isGomageNavigation(){
-        if ($this->isMobileDevice() && Mage::getStoreConfigFlag('gomage_navigation/general/disable_mobile')){
+        if (Mage::helper('gomage_navigation')->isCompatibleDevice() !== false && Mage::getStoreConfigFlag('gomage_navigation/general/disable_mobile')){
             return false;
         }
         return in_array(Mage::app()->getStore()->getWebsiteId(), $this->getAvailavelWebsites()) &&
@@ -261,7 +263,8 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
         $request_query = $model->getRequest()->getQuery();
         $attr = Mage::registry('gan_filter_attributes');
 
-
+        $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product','price');
+        $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
 
         foreach($model->getRequest()->getQuery() as $param => $value){
             if ($param == 'cat'){
@@ -287,11 +290,8 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
                 }
                 $model->getRequest()->setQuery($param, implode(',', $prepare_values));
             }
-            else if ( $param == 'price' && $filter != 'Price')
+            else if ( $param == 'price' && $attribute->getFrontendInput() != 'price')
             {
-                $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product','price');
-                $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
-
                 if ( ($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
                         ||
                         $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
@@ -333,11 +333,8 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
                     }
                     $params['_query'][$param] = implode(',', $prepare_values);
                 }
-                else if ( $param == 'price' && $filter != 'Price' )
+                else if ( $param == 'price' && $attribute->getFrontendInput() != 'price' )
                 {
-                    $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product','price');
-                    $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
-
                     if ( ($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
                             ||
                             $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
@@ -416,6 +413,32 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
     }
 
+    public function isCompatibleDevice(){
+
+        $detect = new Mobile_Detect();
+        if (!$detect->isMobile()) {
+            return (bool)$this->getConfigData('device/desktop');
+        }
+        if ($detect->isTablet()){
+            $devices = explode(',', $this->getConfigData('device/tablet'));
+        }else{
+            $devices = explode(',', $this->getConfigData('device/smartphone'));
+        }
+
+        if ($detect->isAndroidOS()){
+            return in_array(GoMage_Checkout_Model_Adminhtml_System_Config_Source_Device::ANDROID, $devices);
+        }
+        if ($detect->isBlackBerryOS()){
+            return in_array(GoMage_Checkout_Model_Adminhtml_System_Config_Source_Device::BLACKBERRY, $devices);
+        }
+        if ($detect->isiOS()){
+            return in_array(GoMage_Checkout_Model_Adminhtml_System_Config_Source_Device::IOS, $devices);
+        }
+
+        return in_array(GoMage_Checkout_Model_Adminhtml_System_Config_Source_Device::OTHER, $devices);
+
+    }
+
     public function IsGooglebot(){
         if(preg_match("/Google/",$_SERVER['HTTP_USER_AGENT']) || preg_match("/bot/",$_SERVER['HTTP_USER_AGENT'])){
             $ip = $_SERVER['REMOTE_ADDR'];
@@ -448,7 +471,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
             }
         }
 
-        if ( $count == 0 && $filter->getName() == 'Stock' )
+        if ( $count == 0 && get_class($filter) == 'GoMage_Navigation_Block_Layer_Filter_Stock' )
         {
             return 1;
         }
@@ -560,85 +583,76 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
     }
 
     public function getClearLinkUrl($_filter){
-
-
-        if ( $_filter->getName() == 'Price' || $_filter->getName() == 'Special Price')
+        if(get_class($_filter->getFilter()) != 'GoMage_Navigation_Model_Layer_Filter_Category' && get_class($_filter->getFilter()) != 'GoMage_Navigation_Model_Layer_Filter_Stock')
         {
-            if ( $_filter->getName() == 'Price' )
+            if ( $_filter->getFilter()->getAttributeModel()->getFrontendInput() )
             {
-                $code = 'price';
-            }
-            else
-            {
-                $code = 'special_price';
-            }
+                $attribute = $_filter->getFilter()->getAttributeModel();
 
-            $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product',$code);
-            $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
-
-            if ( in_array($attribute->getFilterType(), array( GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER,
-                        GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT,
-                        GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER) && !Mage::helper('gomage_navigation')->isMobileDevice())
-                ||
-                ($attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
-                    &&
-                    $attribute->getRangeOptions() != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::NO))
-            {
-
-                $params = array();
-                $params['_nosid']       = true;
-                $params['_current']     = true;
-                $params['_use_rewrite'] = true;
-                $params['_escape']      = false;
-
-                $url = Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $params);
-
-                $clean_url = Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array(), '_escape'=>false));
-
-                if ( strpos($clean_url, "?") !== false )
-                {
-                    $clean_url = substr($clean_url, 0, strpos($clean_url, '?'));
-                }
-
-                $params = str_replace($clean_url, "", $url);
-
-
-                $params = str_replace("?", "", $params);
-
-                $parArray = explode("&", $params);
-                $newParArray = array();
-
-                foreach( $parArray as $par )
-                {
-                    $expar = explode("=", $par);
-                    if ( $expar[0] != $code . '_from'
+                if ( in_array($attribute->getFilterType(), array( GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER,
+                            GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT,
+                            GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER) && Mage::helper('gomage_navigation')->isCompatibleDevice() === false)
+                    ||
+                    ($attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
                         &&
-                        $expar[0] != $code . '_to' )
-                    {
-                        $newParArray[] = $par;
-                    }
-                }
+                        $attribute->getRangeOptions() != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::NO))
+                {
 
-                if ( $newParArray )
-                {
-                    if ( $_filter->getAjaxEnabled() )
+                    $params = array();
+                    $params['_nosid']       = true;
+                    $params['_current']     = true;
+                    $params['_use_rewrite'] = true;
+                    $params['_escape']      = false;
+
+                    $url = Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $params);
+
+                    $clean_url = Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array(), '_escape'=>false));
+
+                    if ( strpos($clean_url, "?") !== false )
                     {
-                        return $clean_url . '?' . implode("&", $newParArray) . '&ajax=1';
+                        $clean_url = substr($clean_url, 0, strpos($clean_url, '?'));
+                    }
+
+                    $params = str_replace($clean_url, "", $url);
+
+
+                    $params = str_replace("?", "", $params);
+
+                    $parArray = explode("&", $params);
+                    $newParArray = array();
+
+                    foreach( $parArray as $par )
+                    {
+                        $expar = explode("=", $par);
+                        if ( $expar[0] != $code . '_from'
+                            &&
+                            $expar[0] != $code . '_to' )
+                        {
+                            $newParArray[] = $par;
+                        }
+                    }
+
+                    if ( $newParArray )
+                    {
+                        if ( $_filter->getAjaxEnabled() )
+                        {
+                            return $clean_url . '?' . implode("&", $newParArray) . '&ajax=1';
+                        }
+                        else
+                        {
+                            return $clean_url . '?' . implode("&", $newParArray);
+                        }
                     }
                     else
                     {
-                        return $clean_url . '?' . implode("&", $newParArray);
-                    }
-                }
-                else
-                {
-                    if ( $_filter->getAjaxEnabled() )
-                    {
-                        return $clean_url . '?ajax=1';
-                    }
-                    else
-                    {
-                        return $clean_url;
+                        if ( $_filter->getAjaxEnabled() )
+                        {
+                            return $clean_url . '?ajax=1';
+                        }
+                        else
+                        {
+                            return $clean_url;
+                        }
                     }
                 }
             }
