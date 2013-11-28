@@ -229,28 +229,14 @@
      <?php
      if ( Mage::helper('gomage_navigation')->isEnterprise()):
      ?>
-         /* Block: Layered Navigation */
-         .sidebar-enterprise-block-layered-nav { background:none; }
-         .sidebar-enterprise-block-layered-nav .block-title { padding:26px 17px 12px; /* border-bottom:1px solid #d1d1d1; */ }
-         .sidebar-enterprise-block-layered-nav .block-title h2 { font-size:18px; color:#111; }
-         .sidebar-enterprise-block-layered-nav .block-subtitle { display:none; }
-         .sidebar-enterprise-block-layered-nav .block-content { padding:0; }
-         .sidebar-enterprise-block-layered-nav dl { padding:10px 14px 17px 17px; }
-         .sidebar-enterprise-block-layered-nav dt { margin:2px 0 0; font-weight:bold; font-size:12px; color:#222; }
-         .sidebar-enterprise-block-layered-nav dd { margin:0 0 13px; color:#666; }
-         .sidebar-enterprise-block-layered-nav dd.last { margin:0; }
-         .sidebar-enterprise-block-layered-nav dd li { margin:2px 0; }
-         .sidebar-enterprise-block-layered-nav dd a { color:#222; text-decoration:none; }
-         .sidebar-enterprise-block-layered-nav dd a:hover { text-decoration:underline; }
-         .sidebar-enterprise-block-layered-nav .currently { border:1px solid #d1d1d1; border-width:1px 0; padding:10px 10px 10px 17px; margin-bottom:-1px; background:#f4f4f4 url(../images/bkg_currently.gif) repeat-x 0 -20px; }
+         .sidebar-enterprise-block-layered-nav .currently { border:1px solid #d1d1d1; border-width:1px 0; padding:10px 10px 10px 17px; margin-bottom:-1px; background:#f4f4f4 url(<?php echo $this->getSkinUrl('images/bkg_currently.gif');?>) repeat-x 0 -20px; }
          .sidebar-enterprise-block-layered-nav .currently .block-subtitle { display:block; margin-bottom:5px; }
          .sidebar-enterprise-block-layered-nav .currently li { padding:5px 26px 5px 0; color:#444; position:relative; z-index:1; }
          .sidebar-enterprise-block-layered-nav .currently li .btn-remove { position:absolute; right:-7px; top:4px; }
          .sidebar-enterprise-block-layered-nav .currently li .btn-previous { position:absolute; right:12px; top:4px; }
          .sidebar-enterprise-block-layered-nav .currently .label { font-weight:bold; color:#d33911; font-size:12px; display:inline-block; }
          .sidebar-enterprise-block-layered-nav .currently .value { display:inline-block; }
-         .sidebar-enterprise-block-layered-nav .actions { text-align:right; padding:5px 7px; margin:1px 0 -1px; background:#f4f4f4; border-bottom:1px solid #d1d1d1; }
-         .sidebar-enterprise-block-layered-nav .actions a { float:none; }
+         .sidebar-enterprise-block-layered-nav .currently .btn-remove { float:right; width:13px; height:0; padding-top:12px; margin-top:3px; overflow:hidden; background:url(<?php echo $this->getSkinUrl('images/btn_remove.gif');?>) no-repeat 0 0; }
      <?php
      endif;
      ?>
