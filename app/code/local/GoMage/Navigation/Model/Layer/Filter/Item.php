@@ -34,7 +34,7 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
 
         $params = str_replace($clean_url, "", $url);
 
-        if ( get_class($this->getFilter()) == 'GoMage_Navigation_Model_Layer_Filter_Price' )
+        if ( $this->getFilter()->getRequestVar() == 'price' )
         {
             $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product','price');
             $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);

@@ -50,6 +50,11 @@ class GoMage_Navigation_Model_Layer_Filter_Priceenterprise extends Enterprise_Se
         $this->_requestVar = 'price';
     }
 
+    public function getRequestVar()
+    {
+        return $this->_requestVar;
+    }
+
     /**
      * Retrieve resource instance
      *
@@ -582,7 +587,7 @@ class GoMage_Navigation_Model_Layer_Filter_Priceenterprise extends Enterprise_Se
             case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
             case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
 
-                if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
+                if ( Mage::helper('gomage_navigation')->isMobileDevice() )
                 {
                     /**
                      * Filter must be string: $index,$range

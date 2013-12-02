@@ -13,6 +13,8 @@
 
 class GoMage_Navigation_Model_Layer_Filter_Stock extends GoMage_Navigation_Model_Layer_Filter_Abstract
 {
+    const IN_STOCK = 1;
+    const OUT_OF_STOCK = 2;
 
     /**
      * Class constructor
@@ -21,6 +23,11 @@ class GoMage_Navigation_Model_Layer_Filter_Stock extends GoMage_Navigation_Model
     {
         parent::__construct();
         $this->_requestVar = 'stock_status';
+    }
+
+    public function getRequestVar()
+    {
+        return $this->_requestVar;
     }
 
     /**

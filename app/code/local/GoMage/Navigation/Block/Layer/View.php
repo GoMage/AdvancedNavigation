@@ -130,22 +130,9 @@
         
 		private function _isStockFilter()
         {
-        	if(Mage::helper('gomage_navigation')->isGomageNavigation() 
-        		  &&
-           	   Mage::getStoreConfigFlag('gomage_navigation/stock/active'))
-        	{
-	
-            	return true;
-        	}
-
-        	return false;
+            return Mage::helper('gomage_navigation')->isGomageNavigation() && Mage::getStoreConfigFlag('gomage_navigation/stock/active');
         }
-        
-        /**
-         * Get category filter block
-         *
-         * @return Mage_Catalog_Block_Layer_Filter_Category
-         */
+
         protected function _getStockFilter()
         {
             return $this->getChild('stock_status_filter');
@@ -513,7 +500,7 @@
     				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
     				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
 
-                                if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
+                                if ( Mage::helper('gomage_navigation')->isMobileDevice() )
                                 {
                                     $filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
                                 }
@@ -631,7 +618,7 @@
 				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
 				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
 
-                            if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
+                            if ( Mage::helper('gomage_navigation')->isMobileDevice() )
                             {
                                 $filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
                             }

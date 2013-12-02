@@ -12,7 +12,7 @@
  */
 ?>
 <?php 
-$stock = ($this->getName() == 'Stock') ? true : false;
+$stock = ($this->getFilter()->getRequestVar() == 'stock_status') ? true : false;
 ?>
 <select <?php if($this->ajaxEnabled()):?>onchange="GomageNavigation.setNavigationUrl( this.value ? this.value : '<?php echo urlencode($this->getRemoveUrl(true));?>')"<?php else:?>onchange="setLocation( this.value ? GomageNavigation.decode(this.value) : '<?php echo $this->getParentBlock()->getClearUrl(false);?>')"<?php endif;?>>
 	<option value=""><?php echo $this->__('Please Select')?></option>

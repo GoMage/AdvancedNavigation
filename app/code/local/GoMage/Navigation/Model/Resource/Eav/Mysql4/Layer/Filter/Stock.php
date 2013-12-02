@@ -18,11 +18,11 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Stock extends Mag
 
 		$val = (int)$value[0];
 		
-        $table = "stock_status";
+        $table = Mage::getSingleton('core/resource')->getTableName('cataloginventory/stock_status');
+
         $manageStock = Mage::getStoreConfig(Mage_CatalogInventory_Model_Stock_Item::XML_PATH_MANAGE_STOCK);  
-        if($val == 1)
+        if($val == GoMage_Navigation_Model_Layer_Filter_Stock::IN_STOCK)
         {
-        	
             $cond = array( 
                 "{$table}.use_config_manage_stock = 0 AND {$table}.manage_stock=1 AND {$table}.is_in_stock=1",
                 "{$table}.use_config_manage_stock = 0 AND {$table}.manage_stock=0",
@@ -41,9 +41,8 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Stock extends Mag
             );
                 
         }
-        elseif($val == 2)
+        elseif($val == GoMage_Navigation_Model_Layer_Filter_Stock::OUT_OF_STOCK)
         {
-
             $cond = array(
                 "{$table}.use_config_manage_stock = 0 AND {$table}.manage_stock=1 AND {$table}.is_in_stock=0",
                 "{$table}.use_config_manage_stock = 0 AND {$table}.manage_stock=0",
@@ -120,11 +119,11 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Stock extends Mag
 
         $select->reset(Zend_Db_Select::LIMIT_COUNT);        
         $select->reset(Zend_Db_Select::LIMIT_OFFSET);
-        
+
 		
         $sql = $connection->fetchAll($select);
         $productCollection = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*');
-        
+
         $product_ids = array();
         foreach( $sql as $item )
         {

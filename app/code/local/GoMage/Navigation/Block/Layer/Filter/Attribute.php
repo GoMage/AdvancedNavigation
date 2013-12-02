@@ -14,6 +14,11 @@
 class GoMage_Navigation_Block_Layer_Filter_Attribute extends Mage_Catalog_Block_Layer_Filter_Attribute
 {
 	protected $_activeFilters = array();
+
+    public function getFilter()
+    {
+        return $this->_filter;
+    }
 	
 	public function getRemoveUrl($ajax = false)
     {

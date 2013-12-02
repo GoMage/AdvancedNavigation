@@ -14,6 +14,11 @@
 class GoMage_Navigation_Block_Layer_Filter_Stock extends Mage_Catalog_Block_Layer_Filter_Abstract
 {
 	protected $_activeFilters = array();
+
+    public function getFilter()
+    {
+        return $this->_filter;
+    }
     
     public function __construct()
     {

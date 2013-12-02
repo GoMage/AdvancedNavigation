@@ -62,7 +62,7 @@
 	
 	else:
 	?>
-    <li <?php if (($visible_options && $i > $visible_options && !$show_all)|| (!$_item->getCount() && $this->getName() != 'Stock')): ?>style="display:none;"<?php endif; ?>>
+    <li <?php if (($visible_options && $i > $visible_options && !$show_all)|| (!$_item->getCount() && $this->getFilter()->getRequestVar() != 'stock_status')): ?>style="display:none;"<?php endif; ?>>
     	
     	
     	

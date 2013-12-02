@@ -14,6 +14,11 @@
 class GoMage_Navigation_Block_Layer_Filter_Decimal extends Mage_Catalog_Block_Layer_Filter_Decimal
 {
 	protected $_activeFilters = array();
+
+    public function getFilter()
+    {
+        return $this->_filter;
+    }
 	
 	public function getRemoveUrl($ajax = false)
     {
@@ -159,7 +164,7 @@ class GoMage_Navigation_Block_Layer_Filter_Decimal extends Mage_Catalog_Block_La
 	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
 
-                    if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
+                    if ( Mage::helper('gomage_navigation')->isMobileDevice() )
                     {
                         $this->_template = ('gomage/navigation/layer/filter/default.phtml');
                     }
@@ -172,7 +177,7 @@ class GoMage_Navigation_Block_Layer_Filter_Decimal extends Mage_Catalog_Block_La
 	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
 
-                    if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
+                    if ( Mage::helper('gomage_navigation')->isMobileDevice() )
                     {
                         $this->_template = ('gomage/navigation/layer/filter/default.phtml');
                     }
@@ -185,7 +190,7 @@ class GoMage_Navigation_Block_Layer_Filter_Decimal extends Mage_Catalog_Block_La
 	        	
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
 
-                    if ( Mage::helper('gomage_navigation')->isCompatibleDevice() !== false )
+                    if ( Mage::helper('gomage_navigation')->isMobileDevice() )
                     {
                         $this->_template = ('gomage/navigation/layer/filter/default.phtml');
                     }

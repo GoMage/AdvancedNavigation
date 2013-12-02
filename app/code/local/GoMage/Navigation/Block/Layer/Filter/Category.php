@@ -18,6 +18,11 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
      * Initialize filter template
      *
      */
+
+    public function getFilter()
+    {
+        return $this->_filter;
+    }
 	
     public function __construct()
     {

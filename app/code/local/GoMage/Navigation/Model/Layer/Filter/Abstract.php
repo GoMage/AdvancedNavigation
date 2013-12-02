@@ -13,6 +13,8 @@
 
 abstract class GoMage_Navigation_Model_Layer_Filter_Abstract extends Mage_Catalog_Model_Layer_Filter_Abstract
 {
+    abstract public function getRequestVar();
+
     /**
      * Initialize filter items
      *

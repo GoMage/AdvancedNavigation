@@ -38,6 +38,11 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
         $this->_requestVar = 'cat';
     }
 
+    public function getRequestVar()
+    {
+        return $this->_requestVar;
+    }
+
     /**
      * Get filter value for reset current filter state
      *

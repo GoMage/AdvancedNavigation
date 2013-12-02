@@ -34,6 +34,11 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
         
     }
 
+    public function getRequestVar()
+    {
+        return $this->_requestVar;
+    }
+
     /**
      * Retrieve resource instance
      *

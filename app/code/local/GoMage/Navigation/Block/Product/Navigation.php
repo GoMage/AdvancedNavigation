@@ -16,11 +16,15 @@
 		protected $_current_category = false;
 		protected $_current_product = false;
 		protected $_product_collection = false;
+
+        protected $_next_product = false;
+        protected $_prev_product = false;
 		
 		public function __construct()
 	    {
 	    	if ($this->_canWork())
 	    	{
+                $this->_setNextPrevProduct();
 	    		$this->setTemplate('gomage/navigation/catalog/product/navigation.phtml');
 	    	}
 	    	
@@ -69,7 +73,7 @@
 	    	return $this->_product_collection;
 	    }
 
-		public function categoryLinkHTML()
+		public function getCategoryLinkHTML()
 	    {
 	    	$category = $this->_getCurrentCategory();
 	    	$template = Mage::getStoreConfig('gomage_navigation/products/category_link');
@@ -83,9 +87,9 @@
 	    	return $template;
 	    }
 	    
-	    public function prevLinkHTML()
+	    public function getPrevLinkHTML()
 	    {
-	    	if ( $this->_showPrev() )
+	    	if ( $this->_getPrevProduct() )
 	    	{
 	    		$product = $this->_getPrevProduct();
 	    		$template = Mage::getStoreConfig('gomage_navigation/products/prev_link');
@@ -96,29 +100,12 @@
 	    
 	    protected function _getPrevProduct()
 	    {
-	    	if ( $this->_getProductCollection() )
-	    	{
-	    		$product_array = array();
-	    		$i = 0;
-			    foreach ($this->_getProductCollection() as $product) 
-			    {
-			    	$product_array[$i] = $product;
-			    	
-					if ( $product->getId() == $this->_getCurrentProduct()->getId() )
-					{
-						
-						return Mage::getModel('catalog/product')->load($product_array[$i-1]->getId());
-					}			    	
-			        $i++;
-			    }
-	    	}
-	    	
-	    	return false;
+            return $this->_prev_product;
 	    }
 	    
-		public function nextLinkHTML()
+		public function getNextLinkHTML()
 	    {
-	    	if ( $this->_showNext() )
+	    	if ( $this->_getNextProduct() )
 	    	{
 	    		$product = $this->_getNextProduct();
 	    		$template = Mage::getStoreConfig('gomage_navigation/products/next_link');
@@ -129,24 +116,7 @@
 	    
 		protected function _getNextProduct()
 	    {
-	    	if ( $this->_getProductCollection() )
-	    	{
-	    		$show = false;
-	    		
-			    foreach ($this->_getProductCollection() as $product) 
-			    {
-					if ( $show )
-					{
-						return Mage::getModel('catalog/product')->load($product->getId());
-					}			    	
-			        if ( $product->getId() == $this->_getCurrentProduct()->getId())
-			        {
-			        	$show = true;
-			        }
-			    }
-	    	}
-	    	
-	    	return false;
+            return $this->_next_product;
 	    }
 
         protected function _getBundleDifPrice($_product_id)
@@ -154,10 +124,10 @@
             $model_catalog_product  = Mage::getModel('catalog/product');
             $_product               = $model_catalog_product->load( $_product_id );
 
-            $TypeInstance           = $_product->getTypeInstance(true);
-            $Selections             = $TypeInstance->getSelectionsCollection($OptionIds, $_product );
-            $Options                = $TypeInstance->getOptionsByIds($OptionIds, $_product);
-            $bundleOptions          = $Options->appendSelections($Selections, true);
+            $typeInstance           = $_product->getTypeInstance(true);
+            $selections             = $typeInstance->getSelectionsCollection(array(), $_product );
+            $options                = $typeInstance->getOptionsByIds(array(), $_product);
+            $bundleOptions          = $options->appendSelections($selections, true);
 
             $min_price      = 0;
 
@@ -199,7 +169,7 @@
             }
 
             return Mage::helper('core')->currency($min_price,2) . ' - ' .
-            Mage::helper('core')->currency($max_price);
+            Mage::helper('core')->currency($max_price,2);
         }
 
         protected function _getTemplate($product, $template)
@@ -244,56 +214,37 @@
 
             return $template;
         }
-		
-	    
-	    protected function _showPrev()
-	    {
-	    	if ( $this->_getProductCollection() )
-	    	{
-	    		$i = 0;
-	    		
-			    foreach ($this->_getProductCollection() as $product) 
-			    {
-			        if ( $product->getId() == $this->_getCurrentProduct()->getId()
-			        		&&
-			        	 $i == 0 )
-			        {   	
-			        	return false;
-			        }
-			        
-			        $i++;
-			    }
-			    
-			    return true;
-	    	}	    	
-	    	
-	    	return false;
-	    }
-	    
-		protected function _showNext()
-	    {
-	    	if ( $this->_getProductCollection() )
-	    	{
-	    		$i = 0;
-	    		$j = 0;
-			    foreach ($this->_getProductCollection() as $product)
-			    {
-			    	$i++;
-			        if ( $product->getId() == $this->_getCurrentProduct()->getId())
-			        {
-			        	$j = $i;
-			        }
-			    }
-			    
-			    if ( $j == $i )
-			    {
-			    	return false;
-			    }
-			    
-			    return true;
-	    	}	    	
-	    	
-	    	return false;
-	    }
-	    
-    }
+
+        protected function _setNextPrevProduct()
+        {
+            if ( $this->_getProductCollection() )
+            {
+                $i = 0;
+                $show_next = false;
+                $product_array = array();
+
+                foreach ($this->_getProductCollection() as $product)
+                {
+                    $product_array[$i] = $product;
+
+                    if ( $product->getId() == $this->_getCurrentProduct()->getId() )
+                    {
+                        $this->_prev_product = Mage::getModel('catalog/product')->load($product_array[$i-1]->getId());
+                    }
+
+                    $i++;
+
+                    if ( $show_next )
+                    {
+                        $this->_next_product = Mage::getModel('catalog/product')->load($product->getId());
+                        break;
+                    }
+
+                    if ( $product->getId() == $this->_getCurrentProduct()->getId())
+                    {
+                        $show_next = true;
+                    }
+                }
+            }
+        }
+}
