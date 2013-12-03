@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.0
+ * @version      Release: 4.2
  * @since        Class available since Release 3.2
  */
 
@@ -25,7 +25,7 @@ class GoMage_Navigation_Model_Layer_Filter_Stock extends GoMage_Navigation_Model
         $this->_requestVar = 'stock_status';
     }
 
-    public function getRequestVar()
+    public function getRequestVarValue()
     {
         return $this->_requestVar;
     }
@@ -65,7 +65,7 @@ class GoMage_Navigation_Model_Layer_Filter_Stock extends GoMage_Navigation_Model
      */
     public function apply(Zend_Controller_Request_Abstract $request, $filterBlock)
     {
-        $filter = $request->getParam($this->getRequestVar());
+        $filter = $request->getParam($this->getRequestVarValue());
         
         $filters = explode(',', $filter);
         	

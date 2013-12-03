@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.0
+ * @version      Release: 4.2
  * @since        Class available since Release 1.0
  */
 
@@ -38,7 +38,7 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
         $this->_requestVar = 'cat';
     }
 
-    public function getRequestVar()
+    public function getRequestVarValue()
     {
         return $this->_requestVar;
     }
@@ -81,7 +81,7 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
      */
     public function apply(Zend_Controller_Request_Abstract $request, $filterBlock)
     {
-        $filter = $request->getParam($this->getRequestVar());
+        $filter = $request->getParam($this->getRequestVarValue());
         //$this->_categoryId = $filter;
         
         $filters = explode(',', $filter);

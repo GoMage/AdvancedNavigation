@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.0
+ * @version      Release: 4.2
  * @since        Class available since Release 1.0
  */
 
@@ -16,7 +16,7 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
 
     public function getRemoveUrlParams()
     {
-        $query = array($this->getFilter()->getRequestVar()=>$this->getFilter()->getResetValue($this->getValue()));
+        $query = array($this->getFilter()->getRequestVarValue()=>$this->getFilter()->getResetValue($this->getValue()));
         $params['_nosid']       = true;
         $params['_current']     = true;
         $params['_use_rewrite'] = true;
@@ -34,7 +34,7 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
 
         $params = str_replace($clean_url, "", $url);
 
-        if ( $this->getFilter()->getRequestVar() == 'price' )
+        if ( $this->getFilter()->getRequestVarValue() == 'price' )
         {
             $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product','price');
             $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
@@ -113,7 +113,7 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
     public function getUrlParams($stock = false)
     {
     	$query = array(
-	            $this->getFilter()->getRequestVar()=>$this->getValue(),
+	            $this->getFilter()->getRequestVarValue()=>$this->getValue(),
 	            Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
 	        );
             
@@ -130,7 +130,7 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
     
     public function getRemoveUrl($ajax = false)
     {    	
-        $query = array($this->getFilter()->getRequestVar()=>$this->getFilter()->getResetValue($this->getValue()));
+        $query = array($this->getFilter()->getRequestVarValue()=>$this->getFilter()->getResetValue($this->getValue()));
         $params['_nosid']       = true;
         $params['_current']     = true;
         $params['_use_rewrite'] = true;
@@ -156,7 +156,7 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
     	}
     	
     	$query = array(
-	            $this->getFilter()->getRequestVar()=>$this->getValue(),
+	            $this->getFilter()->getRequestVarValue()=>$this->getValue(),
 	            Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
 	        );
 	    

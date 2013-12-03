@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.0
+ * @version      Release: 4.2
  * @since        Class available since Release 1.0
  */
 	
@@ -482,15 +482,15 @@
     		        	switch($item->getFilter()->getAttributeModel()->getFilterType()):
 
                             case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
-                                $_from	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVar().'_from', $item->getFilter()->getMinValueInt());
-   	                            $_to	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVar().'_to', $item->getFilter()->getMaxValueInt());
+                                $_from	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVarValue().'_from', $item->getFilter()->getMinValueInt());
+   	                            $_to	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVarValue().'_to', $item->getFilter()->getMaxValueInt());
 
    	                            if (($_from != $item->getFilter()->getMinValueInt()) || ($_to != $item->getFilter()->getMaxValueInt()))
    	                            {
-   	                                if (!isset($filterState[$item->getFilter()->getRequestVar().'_from']))
+   	                                if (!isset($filterState[$item->getFilter()->getRequestVarValue().'_from']))
    	                                {
-            		        			$filterState[$item->getFilter()->getRequestVar().'_from'] = null;
-            		        			$filterState[$item->getFilter()->getRequestVar().'_to'] = null;
+            		        			$filterState[$item->getFilter()->getRequestVarValue().'_from'] = null;
+            		        			$filterState[$item->getFilter()->getRequestVarValue().'_to'] = null;
    	                                }
    	                            }
                                 break;
@@ -502,17 +502,17 @@
 
                                 if ( Mage::helper('gomage_navigation')->isMobileDevice() )
                                 {
-                                    $filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
+                                    $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
                                 }
                                 else
                                 {
-                                    $_from	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVar().'_from');
-                                    $_to	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVar().'_to');
+                                    $_from	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVarValue().'_from');
+                                    $_to	= Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVarValue().'_to');
 
                                     if ( $_from && $_to )
                                     {
-                                        $filterState[$item->getFilter()->getRequestVar().'_from'] = null;
-                                        $filterState[$item->getFilter()->getRequestVar().'_to'] = null;
+                                        $filterState[$item->getFilter()->getRequestVarValue().'_from'] = null;
+                                        $filterState[$item->getFilter()->getRequestVarValue().'_to'] = null;
                                     }
                                 }
 
@@ -520,14 +520,14 @@
     		        		
     		        		default:
     		        			
-    		        			$filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();		        			
+    		        			$filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
     		            		
     		            	break;
     		            
     		            endswitch;
     		            
     	            }catch(Exception $e){
-    	            	$filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
+    	            	$filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
     	            	
     	            }
 	            }
@@ -610,8 +610,8 @@
 		        	switch($item->getFilter()->getAttributeModel()->getFilterType()):
 				    	
 				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
-                            $filterState[$item->getFilter()->getRequestVar().'_from'] = null;
-                            $filterState[$item->getFilter()->getRequestVar().'_to'] = null;
+                            $filterState[$item->getFilter()->getRequestVarValue().'_from'] = null;
+                            $filterState[$item->getFilter()->getRequestVarValue().'_to'] = null;
 
                             break;
 				    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
@@ -620,12 +620,12 @@
 
                             if ( Mage::helper('gomage_navigation')->isMobileDevice() )
                             {
-                                $filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
+                                $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
                             }
                             else
                             {
-                                $filterState[$item->getFilter()->getRequestVar().'_from'] = null;
-                                $filterState[$item->getFilter()->getRequestVar().'_to'] = null;
+                                $filterState[$item->getFilter()->getRequestVarValue().'_from'] = null;
+                                $filterState[$item->getFilter()->getRequestVarValue().'_to'] = null;
                             }
 		        		break;
 
@@ -633,12 +633,12 @@
 
                             if ( $item->getFilter()->getAttributeModel()->getRangeOptions() != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::NO)
                             {
-                                $filterState[$item->getFilter()->getRequestVar().'_from'] = null;
-                                $filterState[$item->getFilter()->getRequestVar().'_to'] = null;
+                                $filterState[$item->getFilter()->getRequestVarValue().'_from'] = null;
+                                $filterState[$item->getFilter()->getRequestVarValue().'_to'] = null;
                             }
                             else
                             {
-                                $filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
+                                $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
                             }
 
 
@@ -646,7 +646,7 @@
 		        		
 		        		default:
 		        	
-		            		$filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
+		            		$filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
 		            		
 		            	break;
 		            
@@ -654,7 +654,7 @@
 		            
 	            }catch(Exception $e){
 	            	
-	            	$filterState[$item->getFilter()->getRequestVar()] = $item->getFilter()->getCleanValue();
+	            	$filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
 	            	
 	            }
 	        }

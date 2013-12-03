@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.0
+ * @version      Release: 4.2
  * @since        Class available since Release 3.1
  */
 class GoMage_Navigation_Helper_Checkout_Cart extends Mage_Checkout_Helper_Cart

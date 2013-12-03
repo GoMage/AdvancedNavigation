@@ -7,13 +7,13 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.0
+ * @version      Release: 4.2
  * @since        Class available since Release 1.0
  */
 
 abstract class GoMage_Navigation_Model_Layer_Filter_Abstract extends Mage_Catalog_Model_Layer_Filter_Abstract
 {
-    abstract public function getRequestVar();
+    abstract public function getRequestVarValue();
 
     /**
      * Initialize filter items

@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.0
+ * @version      Release: 4.2
  * @since        Class available since Release 1.0
  */
 ?>
@@ -59,9 +59,9 @@ endif;
 			            	$clearLinkUrl = Mage::helper('gomage_navigation')->getClearLinkUrl($_filter);
 			                if ($clearLinkUrl):
 			            ?>
-			                <a <?php if ( $_filter->getAjaxEnabled() || ($_filter->getFilter()->getRequestVar() == 'cat') ): ?> onclick="GomageNavigation.setNavigationUrl('<?php echo urlencode($clearLinkUrl); ?>'); return false;" <?php endif; ?> class="btn-remove" title="<?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>" href="<?php echo $clearLinkUrl ?>"><?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></a>
+			                <a <?php if ( $_filter->getAjaxEnabled() || ($_filter->getFilter()->getRequestVarValue() == 'cat') ): ?> onclick="GomageNavigation.setNavigationUrl('<?php echo urlencode($clearLinkUrl); ?>'); return false;" <?php endif; ?> class="btn-remove" title="<?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>" href="<?php echo $clearLinkUrl ?>"><?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></a>
 			            <?php else: ?>
-			                <a <?php if ( $_filter->getAjaxEnabled() || ($_filter->getFilter()->getRequestVar() == 'cat') ): ?> onclick="GomageNavigation.setNavigationUrl('<?php echo urlencode($this->getOptionUrl($_filter->getRemoveUrl())); ?>'); return false;" <?php endif; ?> class="btn-remove" href="<?php echo $_filter->getRemoveUrl() ?>" title="<?php echo $this->__('Remove This Item') ?>"><?php echo $this->__('Remove This Item') ?></a>
+			                <a <?php if ( $_filter->getAjaxEnabled() || ($_filter->getFilter()->getRequestVarValue() == 'cat') ): ?> onclick="GomageNavigation.setNavigationUrl('<?php echo urlencode($this->getOptionUrl($_filter->getRemoveUrl())); ?>'); return false;" <?php endif; ?> class="btn-remove" href="<?php echo $_filter->getRemoveUrl() ?>" title="<?php echo $this->__('Remove This Item') ?>"><?php echo $this->__('Remove This Item') ?></a>
 			            <?php endif; ?>
 			        </li>
 			    <?php endforeach; ?>

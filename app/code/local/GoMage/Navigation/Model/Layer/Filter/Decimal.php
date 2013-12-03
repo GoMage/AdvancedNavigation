@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.0
+ * @version      Release: 4.2
  * @since        Class available since Release 2.0
  */
  
@@ -33,7 +33,7 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
         $this->_requestVar = 'decimal';
     }
 
-    public function getRequestVar()
+    public function getRequestVarValue()
     {
         return $this->_requestVar;
     }
@@ -64,8 +64,8 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
 		switch($this->getAttributeModel()->getFilterType()):
     	
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
-            $_from = $request->getParam($this->getRequestVar().'_from', false);
-            $_to = $request->getParam($this->getRequestVar().'_to', false);
+            $_from = $request->getParam($this->getRequestVarValue().'_from', false);
+            $_to = $request->getParam($this->getRequestVarValue().'_to', false);
 
             if($_from || $_to){
 
@@ -95,7 +95,7 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
                 /**
                  * Filter must be string: $index,$range
                  */
-                $filter = $request->getParam($this->getRequestVar());
+                $filter = $request->getParam($this->getRequestVarValue());
                 if (!$filter) {
                     return $this;
                 }
@@ -135,8 +135,8 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
             }
             else
             {
-                $_from = $request->getParam($this->getRequestVar().'_from', false);
-                $_to = $request->getParam($this->getRequestVar().'_to', false);
+                $_from = $request->getParam($this->getRequestVarValue().'_from', false);
+                $_to = $request->getParam($this->getRequestVarValue().'_to', false);
 
                 if($_from || $_to){
 
@@ -165,7 +165,7 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
         /**
          * Filter must be string: $index,$range
          */
-        $filter = $request->getParam($this->getRequestVar());
+        $filter = $request->getParam($this->getRequestVarValue());
         if (!$filter) {
             return $this;
         }
@@ -226,7 +226,7 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
     		
     		$selected = array();
         
-	        if($value = Mage::app()->getFrontController()->getRequest()->getParam($this->getRequestVar())){
+	        if($value = Mage::app()->getFrontController()->getRequest()->getParam($this->getRequestVarValue())){
 	        
 	        	$_selected = array_merge($selected, explode(',', $value));
 	        	

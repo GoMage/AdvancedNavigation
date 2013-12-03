@@ -6,7 +6,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.0
+ * @version      Release: 4.2
  * @since        Class available since Release 1.0
  */
 
@@ -90,7 +90,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_downloadable/key/check'));
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'key='.urlencode($k).'&sku=advanced-navigation&domains='.urlencode(implode(',', $this->getAllStoreDomains())).'&ver='.urlencode('4.1'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'key='.urlencode($k).'&sku=advanced-navigation&domains='.urlencode(implode(',', $this->getAllStoreDomains())).'&ver='.urlencode('4.2'));
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
@@ -458,7 +458,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
             }
         }
 
-        if ( $count == 0 && $filter->getFilter()->getRequestVar() == 'stock_status' )
+        if ( $count == 0 && $filter->getFilter()->getRequestVarValue() == 'stock_status' )
         {
             return 1;
         }
@@ -571,7 +571,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
     public function getClearLinkUrl($_filter){
 
-        if($_filter->getFilter()->getRequestVar() != 'cat' && $_filter->getFilter()->getRequestVar() != 'stock_status')
+        if($_filter->getFilter()->getRequestVarValue() != 'cat' && $_filter->getFilter()->getRequestVarValue() != 'stock_status')
         {
             if ( $_filter->getFilter()->getAttributeModel()->getFrontendInput() )
             {
@@ -676,7 +676,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_notification/index/data'));
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, 'sku=advanced-navigation&timestamp='.$timestamp.'&ver='.urlencode('4.1'));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, 'sku=advanced-navigation&timestamp='.$timestamp.'&ver='.urlencode('4.2'));
             curl_setopt($ch, CURLOPT_TIMEOUT, 30);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 

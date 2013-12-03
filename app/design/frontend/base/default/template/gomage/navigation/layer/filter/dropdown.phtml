@@ -7,12 +7,12 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.0
+ * @version      Release: 4.2
  * @since        Class available since Release 2.0
  */
 ?>
 <?php 
-$stock = ($this->getFilter()->getRequestVar() == 'stock_status') ? true : false;
+$stock = ($this->getFilter()->getRequestVarValue() == 'stock_status') ? true : false;
 ?>
 <select <?php if($this->ajaxEnabled()):?>onchange="GomageNavigation.setNavigationUrl( this.value ? this.value : '<?php echo urlencode($this->getRemoveUrl(true));?>')"<?php else:?>onchange="setLocation( this.value ? GomageNavigation.decode(this.value) : '<?php echo $this->getParentBlock()->getClearUrl(false);?>')"<?php endif;?>>
 	<option value=""><?php echo $this->__('Please Select')?></option>

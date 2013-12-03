@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.0
+ * @version      Release: 4.2
  * @since        Class available since Release 2.0
  */
 ?>
@@ -25,11 +25,11 @@
 ?>
 <?php foreach ($this->getItems() as $_item): ?>
 	<?php $i++; ?>
-    <li <?php if (($visible_options && $i > $visible_options && !$show_all) || (!$_item->getCount() && $this->getFilter()->getRequestVar() != 'stock_status' && $this->getFilter()->getRequestVar() != 'price')): ?>style="display:none;"<?php endif; ?>>
+    <li <?php if (($visible_options && $i > $visible_options && !$show_all) || (!$_item->getCount() && $this->getFilter()->getRequestVarValue() != 'stock_status' && $this->getFilter()->getRequestVarValue() != 'price')): ?>style="display:none;"<?php endif; ?>>
         <?php if ( ( ($_item->getActive() || $this->isActiveFilter($_item->getLabel())) && Mage::getStoreConfig('gomage_navigation/filter_settings/applied_values') != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Appliedvalues::REMOVE) 
         			|| !$_item->getActive() ): ?>
            <?php
-                $stock = ($this->getFilter()->getRequestVar() == 'stock_status');
+                $stock = ($this->getFilter()->getRequestVarValue() == 'stock_status');
                 $data_param = ($_item->getActive() || $this->isActiveFilter($_item->getLabel())) ? $_item->getRemoveUrlParams() : urldecode($_item->getUrlParams($stock));
             ?>
             <a data-ajax="<?php echo ($this->ajaxEnabled()) ? 1 : 0 ;?>" data-param="<?php echo $data_param; ?>" data-url="<?php echo $_item->getCleanUrl(true); ?>" <?php if($_item->getActive() || $this->isActiveFilter($_item->getLabel())):?> class="active" <?php endif;?> onclick="GomageNavigation.click(this); return false;" href="<?php echo $_item->getCleanUrl(true) . $data_param; ?>"><?php echo $_item->getLabel() ?></a>

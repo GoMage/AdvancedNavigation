@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.0
+ * @version      Release: 4.2
  * @since        Class available since Release 1.0
  */
 
@@ -50,7 +50,7 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
         $this->_requestVar = 'price';
     }
 
-    public function getRequestVar()
+    public function getRequestVarValue()
     {
         return $this->_requestVar;
     }
@@ -552,8 +552,8 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
     switch($this->getAttributeModel()->getFilterType()):
     	
     	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
-            $_from = $request->getParam($this->getRequestVar().'_from', false);
-            $_to = $request->getParam($this->getRequestVar().'_to', false);
+            $_from = $request->getParam($this->getRequestVarValue().'_from', false);
+            $_to = $request->getParam($this->getRequestVarValue().'_to', false);
 
             if($_from || $_to){
 
@@ -584,7 +584,7 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
                 /**
                  * Filter must be string: $index,$range
                  */
-                $filter = $request->getParam($this->getRequestVar());
+                $filter = $request->getParam($this->getRequestVarValue());
                 if (!$filter) {
                     return $this;
                 }
@@ -624,8 +624,8 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
             }
             else
             {
-                $_from = $request->getParam($this->getRequestVar().'_from', false);
-                $_to = $request->getParam($this->getRequestVar().'_to', false);
+                $_from = $request->getParam($this->getRequestVarValue().'_from', false);
+                $_to = $request->getParam($this->getRequestVarValue().'_to', false);
 
                 if($_from || $_to){
 
@@ -659,8 +659,8 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
 					&&
 				 $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT )
 			 {
-				$_from = $request->getParam($this->getRequestVar().'_from', false);
-	    		$_to = $request->getParam($this->getRequestVar().'_to', false);
+				$_from = $request->getParam($this->getRequestVarValue().'_from', false);
+	    		$_to = $request->getParam($this->getRequestVarValue().'_to', false);
 	    		
 	    		if($_from || $_to){
 	    			
@@ -686,7 +686,7 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
 			    /**
 		         * Filter must be string: $index,$range
 		         */
-		        $filter = $request->getParam($this->getRequestVar());
+		        $filter = $request->getParam($this->getRequestVarValue());
 		        if (!$filter) {
 		            return $this;
 		        }
