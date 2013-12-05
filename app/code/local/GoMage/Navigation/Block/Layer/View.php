@@ -334,16 +334,31 @@
 
                	switch($position){
                		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN :
+                        if (!Mage::getStoreConfigFlag('gomage_navigation/category/active'))
+                        {
+                            return false;
+                        }
+
                			if (Mage::getStoreConfigFlag('gomage_navigation/category/active') && !Mage::getStoreConfig('gomage_navigation/category/show_shopby')){
                				return false;
                			}               			               			
                		break;
                		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN :
+                        if (!Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active'))
+                        {
+                            return false;
+                        }
+
                			if (Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/show_shopby')){
                				return false;
                			}
                		break;
                		case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::CONTENT :
+
+                        if (!Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active'))
+                        {
+                            return false;
+                        }
 
                			if ((Mage::getStoreConfigFlag('gomage_navigation/category/active') && !Mage::getStoreConfig('gomage_navigation/category/show_shopby')) ||
                				(Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active') && !Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/show_shopby'))){
