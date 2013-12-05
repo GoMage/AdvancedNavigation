@@ -233,19 +233,19 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
             $queryString = false;
             if ( isset($arr['query']) )
             {
-                parse_str(urldecode($arr['query']), $params);
-                if(isset($params['ajax'])) {
-                    unset($params['ajax']);
+                parse_str(urldecode($arr['query']), $par);
+                if(isset($par['ajax'])) {
+                    unset($par['ajax']);
                 }
 
-                $queryString = http_build_query($params);
+                $queryString = http_build_query($par);
             }
 
-            $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'] . '?';
+            $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'];
 
             if ( $queryString )
             {
-                $url .= $queryString;
+                $url .=  '?' . $queryString;
             }
 
             return $url;
@@ -388,19 +388,19 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
         $queryString = false;
         if ( isset($arr['query']) )
         {
-            parse_str(urldecode($arr['query']), $params);
-            if(isset($params['ajax'])) {
-                unset($params['ajax']);
+            parse_str(urldecode($arr['query']), $par);
+            if(isset($par['ajax'])) {
+                unset($par['ajax']);
             }
 
-            $queryString = http_build_query($params);
+            $queryString = http_build_query($par);
         }
 
-        $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'] . '?';
+        $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'];
 
         if ( $queryString )
         {
-            $url .= $queryString;
+            $url .= '?' . $queryString;
         }
 
         foreach($request_query as $param => $value){
