@@ -101,7 +101,18 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute extends
 
             $fieldName = Mage::getResourceSingleton('enterprise_search/engine')
                 ->getSearchEngineFieldName($attribute, 'nav');
-            $filter->getLayer()->getProductCollection()->addFqFilter(array($fieldName => $value));
+
+            $helper = Mage::helper('enterprise_search');
+            $isCatalog = true;
+            if ( Mage::app()->getFrontController()->getRequest()->getParam('q') != null )
+            {
+                $isCatalog = false;
+            }
+
+            if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog) && Mage::helper('gomage_navigation')->isGomageNavigation())
+            {
+                $filter->getLayer()->getProductCollection()->addFqFilter(array($fieldName => $value));
+            }
         }
 
         return $this;

@@ -569,7 +569,17 @@ class GoMage_Navigation_Model_Layer_Filter_Priceenterprise extends Enterprise_Se
                             )
                         );
 
-                        $this->getLayer()->getProductCollection()->addFqFilter($facetValue);
+                        $helper = Mage::helper('enterprise_search');
+                        $isCatalog = true;
+                        if ( Mage::app()->getFrontController()->getRequest()->getParam('q') != null )
+                        {
+                            $isCatalog = false;
+                        }
+
+                        if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog) && Mage::helper('gomage_navigation')->isGomageNavigation())
+                        {
+                            $this->getLayer()->getProductCollection()->addFqFilter($facetValue);
+                        }
                     }
 
 
