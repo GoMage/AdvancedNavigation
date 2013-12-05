@@ -235,7 +235,7 @@ GomageNavigationClass = Class.create({
 	},
 		     
 	generateUrlWithParams: function(url, params) {
-		
+
 		var query    = {},
 			keys     = url.split('?')[1].split('&'),
 			key      = '',
@@ -339,7 +339,7 @@ GomageNavigationClass = Class.create({
 		if (!is_ajax) {
 			setLocation(this.generateUrlWithParams(url, params));
 		} else if(this.startLoadNavigationData()){
-		
+
 			var query    = {},
 			new_query    = {},
 			keys     = url.split('?')[1].split('&'),
@@ -351,12 +351,12 @@ GomageNavigationClass = Class.create({
 				key = keys[i].split('=');
 				query[key[0]] = key[1];
 			}
-				
+
 			for (attrname in query) {
 				if (!form_values.hasOwnProperty(attrname))
-					new_query[attrname] = query[attrname]; 
-			}	
-			
+					new_query[attrname] = query[attrname];
+			}
+
 			for (key in new_query) {
 				strQuery += glue + key + '=' + new_query[key];
 				glue = '&';
@@ -364,7 +364,7 @@ GomageNavigationClass = Class.create({
 			if (strQuery != '') {
 				url = url.split('?')[0] + '?' + strQuery;
 			}
-			
+
 			if (this.gomage_navigation_urlhash){
 				this.setHashUrl(url, params);
 			}
@@ -374,15 +374,15 @@ GomageNavigationClass = Class.create({
 			    method:'GET',
 			    parameters:params,
 			    onSuccess: function(transport){
-			    	
+
 			    	var response = eval('('+(transport.responseText || false)+')');
-			    	
+
 			    	if ($('gan_tmp_shop_by')){
 			    		$('gan_tmp_shop_by').remove();
 			    	}
 
 			    	GomageNavigation.replaceNavigationBlock(response.navigation, '');
-			    	
+
 			    	if ( response.navigation_shop_left != '' )
 			    	{
 			    		GomageNavigation.replaceNavigationBlock(response.navigation_shop_left, 'left');
@@ -397,12 +397,12 @@ GomageNavigationClass = Class.create({
 			    	GomageNavigation.replaceLeftRightNavigationBlocks('gan-right-nav-main-container', response.navigation_right);
                     GomageNavigation.replaceLeftRightNavigationBlocks('gan-content-nav-main-container', response.navigation_content);
 			    	GomageNavigation.ganReplaceMoreButton(response.navigation_more);
-					
+
 					try{
 						if(response.eval_js){
 							eval(response.eval_js);
 							GomageNavigation.ganInitSliders();
-							GomageNavigation.navigation_eval_js = response.eval_js;				
+							GomageNavigation.navigation_eval_js = response.eval_js;
 						}
 					}catch(e){}
 	                try{
@@ -410,15 +410,15 @@ GomageNavigationClass = Class.create({
 							eval(response.eval_js_procart);
 						}
 	   				}catch(e){}
-																
+
 	   				GomageNavigation.stopLoadNavigationData();
-			      
+
 			    },
 			    onFailure: function(){
 			    	GomageNavigation.stopLoadNavigationData();
 			    }
 			  });
-		  
+
 		}
 		
 	},

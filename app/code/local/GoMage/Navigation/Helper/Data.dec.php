@@ -241,11 +241,11 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
                 $queryString = http_build_query($par);
             }
 
-            $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'];
+            $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'] . '?';
 
             if ( $queryString )
             {
-                $url .=  '?' . $queryString;
+                $url .=  $queryString;
             }
 
             return $url;
@@ -396,11 +396,11 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
             $queryString = http_build_query($par);
         }
 
-        $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'];
+        $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'] . '?';
 
         if ( $queryString )
         {
-            $url .= '?' . $queryString;
+            $url .= $queryString;
         }
 
         foreach($request_query as $param => $value){
