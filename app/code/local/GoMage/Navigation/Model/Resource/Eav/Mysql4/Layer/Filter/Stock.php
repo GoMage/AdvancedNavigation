@@ -105,7 +105,10 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Stock extends Mag
     public function getCount($filter)
     {
     	$connection = $this->_getReadAdapter();
-    	
+
+        $table = Mage::getSingleton('core/resource')->getTableName('cataloginventory/stock_status');
+        $tableAlias = 'gan_stock_status';
+
 		$base_select = $filter->getLayer()->getBaseSelect();
 		        
         if(isset($base_select['stock_status'])){
@@ -117,36 +120,36 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Stock extends Mag
         	
         }
 
-        $select->reset(Zend_Db_Select::LIMIT_COUNT);        
+        $select->reset(Zend_Db_Select::COLUMNS);
+        $select->reset(Zend_Db_Select::ORDER);
+        $select->reset(Zend_Db_Select::LIMIT_COUNT);
         $select->reset(Zend_Db_Select::LIMIT_OFFSET);
+        $select->reset(Zend_Db_Select::GROUP);
 
-		
-        $sql = $connection->fetchAll($select);
-        $productCollection = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*');
+        $conditions = array(
+            "{$tableAlias}.product_id = e.entity_id",
+            $connection->quoteInto("{$tableAlias}.website_id = ?",  Mage::app()->getWebsite()->getId()),
+        );
 
-        $product_ids = array();
-        foreach( $sql as $item )
-        {
-        	$product_ids[] = $item['entity_id'];
-        }
-        
-        $collection = $productCollection->addAttributeToFilter('entity_id', array('in'=>$product_ids)); 
-        $collection->joinField('is_in_stock', 'cataloginventory/stock_item', 'is_in_stock', 'product_id=entity_id');
+        $select
+            ->join(
+                array($tableAlias => $table),
+                join(' AND ', $conditions),
+                array("{$tableAlias}.stock_status", 'count' => "COUNT({$tableAlias}.stock_status)"))
+            ->group("{$tableAlias}.stock_status");
+
+        $result = $connection->fetchPairs($select);
 
         $stockCount = array('instock' => 0, 'outofstock' => 0);
 
-        foreach( $collection as $product )
-        {
-        	if ( (int)$product->getIsInStock() > 0 )
-        	{
-        		$stockCount['instock']++;
-        	}
-        	else 
-        	{
-        		$stockCount['outofstock']++;
-        	}
+        if (isset($result[Mage_CatalogInventory_Model_Stock_Status::STATUS_IN_STOCK])){
+            $stockCount['instock'] = $result[Mage_CatalogInventory_Model_Stock_Status::STATUS_IN_STOCK];
         }
-        
+
+        if (isset($result[Mage_CatalogInventory_Model_Stock_Status::STATUS_OUT_OF_STOCK])){
+            $stockCount['outofstock'] = $result[Mage_CatalogInventory_Model_Stock_Status::STATUS_OUT_OF_STOCK];
+        }
+
         return $stockCount;
     }
 }
