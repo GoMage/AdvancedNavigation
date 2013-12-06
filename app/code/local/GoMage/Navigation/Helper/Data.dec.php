@@ -233,7 +233,8 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
             $queryString = false;
             if ( isset($arr['query']) )
             {
-                parse_str(urldecode($arr['query']), $par);
+                parse_str(htmlspecialchars_decode($arr['query']), $par);
+
                 if(isset($par['ajax'])) {
                     unset($par['ajax']);
                 }
@@ -388,7 +389,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
         $queryString = false;
         if ( isset($arr['query']) )
         {
-            parse_str(urldecode($arr['query']), $par);
+            parse_str(htmlspecialchars_decode($arr['query']), $par);
             if(isset($par['ajax'])) {
                 unset($par['ajax']);
             }
