@@ -578,6 +578,8 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
             {
                 $attribute = $_filter->getFilter()->getAttributeModel();
 
+
+
                 if ( (in_array($attribute->getFilterType(), array( GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER,
                             GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT,
                             GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER))&& !Mage::helper('gomage_navigation')->isMobileDevice())
@@ -586,6 +588,8 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
                         &&
                         $attribute->getRangeOptions() != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::NO))
                 {
+
+
                     $params = array();
                     $params['_nosid']       = true;
                     $params['_current']     = true;
