@@ -84,7 +84,7 @@
 	}
 	
 	/* Popup Window Background */
-	#gan-left-nav-main-container filter-note-content-in,
+	#gan-left-nav-main-container .filter-note-content-in,
 	#gan-right-nav-main-container .filter-note-content-in,
     #gan-content-nav-main-container .filter-note-content-in,
 	.narrow-by-list .filter-note-content-in{
