@@ -572,7 +572,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
     public function getClearLinkUrl($_filter){
 
-        if($_filter->getFilter()->getRequestVarValue() != 'cat' && $_filter->getFilter()->getRequestVarValue() != 'stock_status')
+        if($_filter->getFilter()->getRequestVar() != 'cat' && $_filter->getFilter()->getRequestVar() != 'stock_status')
         {
             if ( $_filter->getFilter()->getAttributeModel()->getFrontendInput() )
             {
