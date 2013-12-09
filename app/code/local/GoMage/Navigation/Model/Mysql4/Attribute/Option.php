@@ -15,7 +15,7 @@ class GoMage_Navigation_Model_Mysql4_Attribute_Option extends Mage_Core_Model_My
 {
     public function _construct()
     {
-        $this->_init('gomage_navigation/attribute_option', 'attribute_id');
+        $this->_init('gomage_navigation/attribute_option', 'option_id');
     }
 
 }

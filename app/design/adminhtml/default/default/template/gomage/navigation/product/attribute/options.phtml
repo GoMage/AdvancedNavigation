@@ -32,6 +32,7 @@ $show_options = 10;
  	
  
 ?>
+
 <div>
 <ul class="messages">
     <li class="notice-msg">
@@ -144,7 +145,7 @@ $show_options = 10;
     <?php endif; ?>
     
 </div>
-								
+
 <script type="text/javascript">
 //<![CDATA[
 
@@ -520,78 +521,80 @@ Validation.addAllThese([
  <?php endforeach; ?>
  options.push(preoptions);
 
+
+<?php endif; ?>
+
 arrButton = [];
 itemCountArr = [];
 function addButton(t)
 {
-	var div = $(t).down(0).next();
-	var id_full = div.readAttribute('id');
-	var id = id_full.substr(13);
+    var div = $(t).down(0).next();
+    var id_full = div.readAttribute('id');
+    var id = id_full.substr(13);
 
-	if( typeof arrButton[id] != "undefined" )
-	{
-		var data = arrButton[id];
-		var itemCount = itemCountArr[id];
+    if( typeof arrButton[id] != "undefined" )
+    {
+        var data = arrButton[id];
+        var itemCount = itemCountArr[id];
 
-		delete arrButton[id];
-		delete itemCountArr[id];
-		
-		new Downloadable.FileUploader(
-	            'option_image',
-	            'option_image_'+itemCount,
-	            $('option_image_'+data.id+'').up('td'),
-	            'option[image]['+data.id+']',
-	            data.image_info,
-	            'option_image_'+data.id+'',
-	            <?php echo $json_config ?>
-	        );
-	}
+        delete arrButton[id];
+        delete itemCountArr[id];
+
+        new Downloadable.FileUploader(
+            'option_image',
+            'option_image_'+itemCount,
+            $('option_image_'+data.id+'').up('td'),
+            'option[image]['+data.id+']',
+            data.image_info,
+            'option_image_'+data.id+'',
+            <?php echo $json_config ?>
+        );
+    }
 }
 
 function ganShowNextOptions(type){
-	var arr = options[current];
-	var length = arr.length;
-	element = null;
-	
-	for (var i = 0; i < length; i++) {
-		if ( type == 'noimage' )
-		{
-			attributeOption.addnoimage(arr[i]);
-		}
-		else
-		{
-			attributeOption.add(arr[i]);
-		}	
-	}    
+    var arr = options[current];
+    var length = arr.length;
+    element = null;
 
-	show_options += 20;
+    for (var i = 0; i < length; i++) {
+        if ( type == 'noimage' )
+        {
+            attributeOption.addnoimage(arr[i]);
+        }
+        else
+        {
+            attributeOption.add(arr[i]);
+        }
+    }
 
-	if ( show_options > total )
-	{
-		show_options = total;
-	}
-	
-	$('end').innerHTML = show_options;
-	current++;
+    show_options += 20;
+
+    if ( show_options > total )
+    {
+        show_options = total;
+    }
+
+    $('end').innerHTML = show_options;
+    current++;
 }
 
- function ganShowAllOptions(){
-	 <?php $_i = 0; ?>
-	 <?php foreach ($this->getOptionValues() as $_value): ?>
-	     <?php $_i++; ?>
-	     <?php if ($_i <= $show_options) continue; ?>
-	     attributeOption.add(<?php echo $_value->toJson() ?>);	
+function ganShowAllOptions(){
+    <?php $_i = 0; ?>
+    <?php foreach ($this->getOptionValues() as $_value): ?>
+    <?php $_i++; ?>
+    <?php if ($_i <= $show_options) continue; ?>
+    attributeOption.add(<?php echo $_value->toJson() ?>);
 
-	     <?php 
-	     if ( $_i >= 2000 ):
-			break;	     
-	     endif;
-	     ?>
-		          	     
-	 <?php endforeach; ?>
-	 $('show_all_options_wrapper').hide();
- }
-<?php endif; ?>
+    <?php
+    if ( $_i >= 2000 ):
+       break;
+    endif;
+    ?>
+
+    <?php endforeach; ?>
+    $('show_all_options_wrapper').hide();
+}
 
 //]]>
 </script>
