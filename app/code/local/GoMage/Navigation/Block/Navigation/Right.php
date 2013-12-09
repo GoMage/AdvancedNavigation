@@ -21,11 +21,11 @@ class GoMage_Navigation_Block_Navigation_Right extends Mage_Core_Block_Template
         
         if ($right && Mage::helper('gomage_navigation')->isGomageNavigation() &&
             Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/active'))
-        {   
+        {
             $right->unsetChild('gomage.navigation.right');                  
             $page = Mage::getSingleton('cms/page');                                     
             if ($page->getData('page_id'))
-            {                                                                       
+            {
                 if ($page->getData('navigation_right_column'))
                 {
                    $navigation_right = $this->getLayout()->createBlock('gomage_navigation/navigation', 'gomage.navigation.right')

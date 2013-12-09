@@ -317,6 +317,10 @@
 	    
     	protected function _getCategoryFilter()
         {
+            $categoryFilter = parent::_getCategoryFilter();
+            $categoryFilter->setBlockSide($this->getBlockSide());
+            $categoryFilter->setCustomTemplate();
+
             if(Mage::helper('gomage_navigation')->isGomageNavigation()){
 
             	$currentCategory = Mage::registry('current_category');
