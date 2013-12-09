@@ -131,12 +131,16 @@ class GoMage_Navigation_Block_Adminhtml_Cms_Page_Edit_Tab_Navigation
                     $catArrayOptions = explode("_", $catString);
 
                     $padding = $catArrayOptions[0];
-                    $catId = $catArrayOptions[1];
-                    $name = $catArrayOptions[2];
 
-                    if (!isset($options[$catId]) && $name)
+                    if ( isset($catArrayOptions[1]) )
                     {
-                        $options[$catId] = $padding . $name;
+                        $catId = $catArrayOptions[1];
+                        $name = $catArrayOptions[2];
+
+                        if (!isset($options[$catId]) && $name)
+                        {
+                            $options[$catId] = $padding . $name;
+                        }
                     }
                 }
 	        }
