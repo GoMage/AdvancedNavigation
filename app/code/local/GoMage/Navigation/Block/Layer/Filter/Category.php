@@ -13,11 +13,88 @@
 	
 class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_Layer_Filter_Category
 {
+    protected $_block_side = null;
+
 	protected $_activeFilters = array();
 	/**
      * Initialize filter template
      *
      */
+
+    public function setBlockSide($block_side)
+    {
+        $this->_block_side = $block_side;
+    }
+
+    public function getBlockSide()
+    {
+        if ( $this->_block_side )
+        {
+            return $this->_block_side;
+        }
+
+        return GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::LEFT_BLOCK;
+    }
+
+    public function getConfigTab()
+    {
+        switch($this->getBlockSide()):
+
+            default:
+
+                $tab = 'category';
+
+                break;
+
+            case(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::LEFT_BLOCK):
+
+                $tab = 'category';
+
+                break;
+
+            case(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::RIGHT_BLOCK):
+
+                $tab = 'rightcolumnsettings';
+
+                break;
+
+            case(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT):
+
+                $tab = 'contentcolumnsettings';
+
+                break;
+
+        endswitch;
+
+        return $tab;
+    }
+
+    public function setCustomTemplate()
+    {
+        $type = Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/filter_type');
+
+        switch($type):
+
+            default:
+
+                $this->_template = ('gomage/navigation/layer/filter/category/default.phtml');
+
+                break;
+
+            case(GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE):
+
+                $this->_template = ('gomage/navigation/layer/filter/image.phtml');
+
+                break;
+
+            case(GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN):
+
+                $this->_template = ('gomage/navigation/layer/filter/dropdown.phtml');
+
+                break;
+
+        endswitch;
+    }
 
     public function getFilter()
     {
@@ -36,29 +113,29 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
                 ||
              Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active')
             ) ){
-        	
-        	$type = Mage::getStoreConfig('gomage_navigation/category/filter_type');
-        	
-        	switch($type): 
-        	
+
+            $type = Mage::getStoreConfig('gomage_navigation/category/filter_type');
+
+        	switch($type):
+
 	        	default:
-	        	
+
 	        		$this->_template = ('gomage/navigation/layer/filter/category/default.phtml');
-	        	
+
 	        	break;
-	        	
+
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE):
-	        	
+
 	        		$this->_template = ('gomage/navigation/layer/filter/image.phtml');
-	        	
+
 	        	break;
-	        	
+
 	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN):
-	        	
+
 	        		$this->_template = ('gomage/navigation/layer/filter/dropdown.phtml');
-	        	
+
 	        	break;
-        	
+
         	endswitch;
         	
         }
@@ -130,7 +207,7 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
                        (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE);
 	    }
 	    
-	    $is_ajax = $is_ajax && Mage::getStoreConfigFlag('gomage_navigation/category/ajax_enabled');
+	    $is_ajax = $is_ajax && Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/ajax_enabled');
 	    		
 		return $is_ajax;
 
@@ -149,31 +226,31 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 		}
 		
 		
-		return (bool) Mage::getStoreConfigFlag('gomage_navigation/category/show_minimized');
+		return (bool) Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/show_minimized');
 		
 	}
 	
 	public function canShowPopup(){
 		
-		return (bool) Mage::getStoreConfigFlag('gomage_navigation/category/show_help');
+		return (bool) Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/show_help');
 		
 	}
 	
 	public function getPopupText(){
 		
-		return trim(Mage::getStoreConfig('gomage_navigation/category/popup_text'));
+		return trim(Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/popup_text'));
 		
 	}
 	
 	public function getPopupWidth(){
 		
-		return (int) Mage::getStoreConfig('gomage_navigation/category/popup_width');
+		return (int) Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/popup_width');
 		
 	}
 	
 	public function getPopupHeight(){
 		
-		return (int) Mage::getStoreConfig('gomage_navigation/category/popup_height');
+		return (int) Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/popup_height');
 		
 	}
 	
@@ -181,46 +258,46 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 		
 	    if(Mage::helper('gomage_navigation')->isGomageNavigation() 
 	    		&&
-           Mage::getStoreConfigFlag('gomage_navigation/category/active')){
-				return (bool) Mage::getStoreConfigFlag('gomage_navigation/category/show_checkbox');
+           Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/active')){
+				return (bool) Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/show_checkbox');
           }
            
-        if(Mage::helper('gomage_navigation')->isGomageNavigation() 
-          		&&
-           Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active')){
-		
-				return (bool) Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/show_checkbox');
-          }
-
-        if(Mage::helper('gomage_navigation')->isGomageNavigation()
-            &&
-            Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active')){
-
-            return (bool) Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/show_checkbox');
-        }
+//        if(Mage::helper('gomage_navigation')->isGomageNavigation()
+//          		&&
+//           Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active')){
+//
+//				return (bool) Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/show_checkbox');
+//          }
+//
+//        if(Mage::helper('gomage_navigation')->isGomageNavigation()
+//            &&
+//            Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active')){
+//
+//            return (bool) Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/show_checkbox');
+//        }
 	}
 	
 	public function canShowLabels(){
 		
-		return (bool) Mage::getStoreConfigFlag('gomage_navigation/category/show_image_name');
+		return (bool) Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/show_image_name');
 		
 	}
 	
 	public function getImageWidth(){
 		
-		return (int) Mage::getStoreConfig('gomage_navigation/category/image_width');
+		return (int) Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/image_width');
 		
 	}
 	
 	public function getImageHeight(){
 		
-		return (int) Mage::getStoreConfig('gomage_navigation/category/image_height');
+		return (int) Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/image_height');
 		
 	}
 	
 	public function getImageAlign(){
 		
-		switch(Mage::getStoreConfig('gomage_navigation/category/image_align')):
+		switch(Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/image_align')):
 		
 			default:
 				
@@ -248,7 +325,7 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 	
     public function canShowResetFirler(){
 		
-		return (bool) Mage::getStoreConfig('gomage_navigation/category/filter_reset');
+		return (bool) Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/filter_reset');
 		
 	}
 	
@@ -258,19 +335,19 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
     }
     
     public function getFilterType(){
-        return Mage::getStoreConfig('gomage_navigation/category/filter_type');    
+        return Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/filter_type');
     }
     
     public function getInBlockHeight(){
-        return Mage::getStoreConfig('gomage_navigation/category/inblock_height');    
+        return Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/inblock_height');
     }
     
 	public function getInblockType(){
-        return Mage::getStoreConfig('gomage_navigation/category/inblock_type');    
+        return Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/inblock_type');
     }
     
     public function getMaxInBlockHeight(){
-        return Mage::getStoreConfig('gomage_navigation/category/max_inblock_height');    
+        return Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/max_inblock_height');
     }
 
     public function addFacetCondition()
