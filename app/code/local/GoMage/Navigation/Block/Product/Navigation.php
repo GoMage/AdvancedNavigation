@@ -229,7 +229,14 @@
 
                     if ( $product->getId() == $this->_getCurrentProduct()->getId() )
                     {
-                        $this->_prev_product = Mage::getModel('catalog/product')->load($product_array[$i-1]->getId());
+                        if ( isset($product_array[$i-1]) )
+                        {
+                            $this->_prev_product = Mage::getModel('catalog/product')->load($product_array[$i-1]->getId());
+                        }
+                        else
+                        {
+                            $this->_prev_product = false;
+                        }
                     }
 
                     $i++;
