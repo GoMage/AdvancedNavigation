@@ -16,7 +16,6 @@ class GoMage_Navigation_Block_Navigation_Content extends Mage_Core_Block_Templat
 
     protected function _prepareLayout()
     {
-
         $content = $this->getLayout()->getBlock('content');
 
         if ($content && Mage::helper('gomage_navigation')->isGomageNavigation() &&
@@ -34,8 +33,9 @@ class GoMage_Navigation_Block_Navigation_Content extends Mage_Core_Block_Templat
                     $content->insert($navigation_content, '', false);
                 }
             }
-            else
+            else if ( in_array(Mage::app()->getFrontController()->getRequest()->getControllerName(), array('category', 'result')) )
             {
+
                 if (!Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/show_shopby')){
                     $navigation_content = $this->getLayout()->createBlock('gomage_navigation/navigation', 'gomage.navigation.content')
                         ->setTemplate('gomage/navigation/catalog/navigation/content.phtml');

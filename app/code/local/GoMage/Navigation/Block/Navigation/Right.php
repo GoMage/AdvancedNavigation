@@ -34,7 +34,7 @@ class GoMage_Navigation_Block_Navigation_Right extends Mage_Core_Block_Template
                    $right->insert($navigation_right, '', false);
                 }   
             }
-            else
+            else if ( in_array(Mage::app()->getFrontController()->getRequest()->getControllerName(), array('category', 'result')) )
             {
                 if (!Mage::getStoreConfig('gomage_navigation/rightcolumnsettings/show_shopby')){
                     $navigation_right = $this->getLayout()->createBlock('gomage_navigation/navigation', 'gomage.navigation.right')

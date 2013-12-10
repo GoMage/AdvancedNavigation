@@ -34,7 +34,7 @@ class GoMage_Navigation_Block_Navigation_Left extends Mage_Core_Block_Template
                    $left->insert($navigation_left);
                 }   
             }
-            else
+            else if ( in_array(Mage::app()->getFrontController()->getRequest()->getControllerName(), array('category', 'result')) )
             {                                                                                                   
                 if (!Mage::getStoreConfig('gomage_navigation/category/show_shopby'))
                 {
