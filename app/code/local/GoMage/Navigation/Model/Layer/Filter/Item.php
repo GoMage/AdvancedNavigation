@@ -116,7 +116,7 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
 	            $this->getFilter()->getRequestVarValue()=>$this->getValue(),
 	            Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
 	        );
-            
+
         $url = Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>$query, '_escape'=>false));
         $clean_url = Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array(), '_escape'=>false));
 

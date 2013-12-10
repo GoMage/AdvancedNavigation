@@ -342,12 +342,14 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
     	$parent_ids = $category->getParentIds();
     	
     	foreach ($selected as $cat_id){
+            /*
     		if (in_array($cat_id, $parent_ids)){
 	    		$cat = Mage::getModel('catalog/category')->load($cat_id);
 	    		if ($cat->getLevel() <  $category->getLevel()){
-	    			continue; 
+	    			continue;
 	    		}
     		}
+            */
     		$result[] = $cat_id;    		
     	}
     	
