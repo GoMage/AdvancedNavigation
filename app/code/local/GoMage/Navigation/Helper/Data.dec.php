@@ -316,55 +316,24 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
         }
 
-        foreach ($params['_query'] as $param => $value){
-            if ($value){
+        if ( isset($params['_query']) )
+        {
+            foreach ($params['_query'] as $param => $value){
+                if ($value){
 
-                $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', $param);
+                    $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', $param);
 
-                if ($param == 'cat'){
-                    $values = explode(',', $value);
-                    $prepare_values = array();
-                    foreach($values as $_value){
-                        $category = Mage::getModel('catalog/category')->load($_value);
-                        if ($category && $category->getId()){
-                            $prepare_values[] = $category->getData('url_key');
-                        }
-                    }
-                    $params['_query'][$param] = implode(',', $prepare_values);
-                }elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))){
-                    $values = explode(',', $value);
-                    $prepare_values = array();
-                    foreach($values as $_value){
-                        foreach($attr[$param]['options'] as $_k => $_v){
-                            if ($_v == $_value){
-                                $prepare_values[] = $_k;
-                                break;
+                    if ($param == 'cat'){
+                        $values = explode(',', $value);
+                        $prepare_values = array();
+                        foreach($values as $_value){
+                            $category = Mage::getModel('catalog/category')->load($_value);
+                            if ($category && $category->getId()){
+                                $prepare_values[] = $category->getData('url_key');
                             }
                         }
-                    }
-                    $params['_query'][$param] = implode(',', $prepare_values);
-                }
-                else if ( $attributeModel->getFrontendInput() == $param )
-                {
-                    $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeModel->getId());
-                    if ( ($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
-                            ||
-                            $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
-                        &&
-                        $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT )
-                    {
-                        if (strpos($value, ';')){
-                            $values = explode(';', $value);
-                        }else {
-                            $values = explode(',', $value);
-                        }
-
-                        $params['_query'][$attribute->getAttributeCode() . '_from'] = $values[0];
-                        $params['_query'][$attribute->getAttributeCode() . '_to'] = $values[1];
-                        unset($params['_query'][$attribute->getAttributeCode()]);
-                    }
-                    else
-                    {
+                        $params['_query'][$param] = implode(',', $prepare_values);
+                    }elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))){
                         $values = explode(',', $value);
                         $prepare_values = array();
                         foreach($values as $_value){
@@ -377,8 +346,42 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
                         }
                         $params['_query'][$param] = implode(',', $prepare_values);
                     }
-                }
+                    else if ( $attributeModel->getFrontendInput() == $param )
+                    {
+                        $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeModel->getId());
+                        if ( ($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
+                                ||
+                                $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
+                            &&
+                            $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT )
+                        {
+                            if (strpos($value, ';')){
+                                $values = explode(';', $value);
+                            }else {
+                                $values = explode(',', $value);
+                            }
 
+                            $params['_query'][$attribute->getAttributeCode() . '_from'] = $values[0];
+                            $params['_query'][$attribute->getAttributeCode() . '_to'] = $values[1];
+                            unset($params['_query'][$attribute->getAttributeCode()]);
+                        }
+                        else
+                        {
+                            $values = explode(',', $value);
+                            $prepare_values = array();
+                            foreach($values as $_value){
+                                foreach($attr[$param]['options'] as $_k => $_v){
+                                    if ($_v == $_value){
+                                        $prepare_values[] = $_k;
+                                        break;
+                                    }
+                                }
+                            }
+                            $params['_query'][$param] = implode(',', $prepare_values);
+                        }
+                    }
+
+                }
             }
         }
 
