@@ -358,74 +358,87 @@ var attributeOption = {
     listTemplate : null,
     itemCount : 0,
     totalItems : 0,
+    itemsUsed:[],
     add : function(data) {
-        this.template = new Template(this.templateText, this.templateSyntax);
-        this.listTemplate = new Template(this.fileListTemplate, this.templateSyntax);
-        if(!data.id){
-            data = {};
-            data.id  = 'option_'+this.itemCount;
-        }
-        if (!data.intype)
-            data.intype = optionDefaultInputType;
 
-        Element.insert(this.table, {after: this.template.evaluate(data)});
-        this.bindRemoveButtons();
-        var itemCount = this.itemCount;
-        
-        if (!data.image_info) {
-            data.image_info = [];
-        }else{
-        	
-        	$('option_image_' + data.id + '-old').innerHTML = this.listTemplate.evaluate(data.image_info[0]);
+        var options_array = this.itemsUsed.indexOf(data.id);
+        if ( options_array == '-1' )
+        {
+            this.template = new Template(this.templateText, this.templateSyntax);
+            this.listTemplate = new Template(this.fileListTemplate, this.templateSyntax);
+            if(!data.id){
+                data = {};
+                data.id  = 'option_'+this.itemCount;
+            }
+            if (!data.intype)
+                data.intype = optionDefaultInputType;
+
+            Element.insert(this.table, {after: this.template.evaluate(data)});
+            this.bindRemoveButtons();
+            var itemCount = this.itemCount;
+
+            if (!data.image_info) {
+                data.image_info = [];
+            }else{
+
+                $('option_image_' + data.id + '-old').innerHTML = this.listTemplate.evaluate(data.image_info[0]);
+            }
+            $('option_image_' + data.id + '-new').hide();
+            $('option_image_' + data.id + '-old').show();
+
+            new Downloadable.FileUploader(
+                'option_image',
+                'option_image_'+itemCount,
+                $('option_image_'+data.id+'').up('td'),
+                'option[image]['+data.id+']',
+                data.image_info,
+                'option_image_'+data.id+'',
+                <?php echo $json_config ?>
+            );
+
+            this.itemCount++;
+            this.totalItems++;
+            this.updateItemsCountField();
+
+            this.itemsUsed.push(data.id);
         }
-    	$('option_image_' + data.id + '-new').hide();
-    	$('option_image_' + data.id + '-old').show();
-        
-        new Downloadable.FileUploader(
-            'option_image',
-            'option_image_'+itemCount,
-            $('option_image_'+data.id+'').up('td'),
-            'option[image]['+data.id+']',
-            data.image_info,
-            'option_image_'+data.id+'',
-            <?php echo $json_config ?>
-        );
-        
-        this.itemCount++;
-        this.totalItems++;
-        this.updateItemsCountField();
-        
     },
     addnoimage : function(data) {
-        this.template = new Template(this.templateText, this.templateSyntax);
-        this.listTemplate = new Template(this.fileListTemplate, this.templateSyntax);
-        if(!data.id){
-            data = {};
-            data.id  = 'option_'+this.itemCount;
-        }
-        if (!data.intype)
-            data.intype = optionDefaultInputType;
 
-        Element.insert(this.table, {after: this.template.evaluate(data)});
-        this.bindRemoveButtons();
-        var itemCount = this.itemCount;
-        
-        if (!data.image_info) {
-            data.image_info = [];
-        }else{
-        	
-        	$('option_image_' + data.id + '-old').innerHTML = this.listTemplate.evaluate(data.image_info[0]);
-        }
-    	$('option_image_' + data.id + '-new').hide();
-    	$('option_image_' + data.id + '-old').show();
-        
-        this.itemCount++;
-        this.totalItems++;
-        this.updateItemsCountField();
+        var options_array = this.itemsUsed.indexOf(data.id);
+        if ( options_array == '-1' )
+        {
+            this.template = new Template(this.templateText, this.templateSyntax);
+            this.listTemplate = new Template(this.fileListTemplate, this.templateSyntax);
+            if(!data.id){
+                data = {};
+                data.id  = 'option_'+this.itemCount;
+            }
+            if (!data.intype)
+                data.intype = optionDefaultInputType;
 
-        arrButton[data.id] = data;
-        itemCountArr[data.id] = itemCount;
-        
+            Element.insert(this.table, {after: this.template.evaluate(data)});
+            this.bindRemoveButtons();
+            var itemCount = this.itemCount;
+
+            if (!data.image_info) {
+                data.image_info = [];
+            }else{
+
+                $('option_image_' + data.id + '-old').innerHTML = this.listTemplate.evaluate(data.image_info[0]);
+            }
+            $('option_image_' + data.id + '-new').hide();
+            $('option_image_' + data.id + '-old').show();
+
+            this.itemCount++;
+            this.totalItems++;
+            this.updateItemsCountField();
+
+            arrButton[data.id] = data;
+            itemCountArr[data.id] = itemCount;
+
+            this.itemsUsed.push(data.id);
+        }
     },
     remove : function(event){
         var element = $(Event.findElement(event, 'tr')); // !!! Button already
@@ -502,7 +515,7 @@ Validation.addAllThese([
  var preoptions = [];
  var show_options = <?php echo $show_options; ?>;
  var total = <?php echo count($this->getOptionValues()); ?>;
- 
+
  <?php $_i = 0; ?>
  <?php foreach ($this->getOptionValues() as $_value): ?>
      <?php $_i++; ?>
@@ -510,16 +523,20 @@ Validation.addAllThese([
      <?php if ($_i <= $show_options) continue; ?>
      	preoptions.push(<?php echo $_value->toJson() ?>);	
 
-     <?php 
-     if ( $_i % 20 == 0 ):
+     <?php
+     $_j = 30;
+     if ( $_i % 30 == 0 ):
 		?>
+
 		options.push(preoptions);
 		preoptions = [];
-		<?php 	     
+		<?php
+		$_j = 20;
      endif;
      ?>	          	     
  <?php endforeach; ?>
  options.push(preoptions);
+
 
 
 <?php endif; ?>
@@ -573,6 +590,7 @@ function ganShowNextOptions(type){
     if ( show_options > total )
     {
         show_options = total;
+        $('show_all_options_wrapper').hide();
     }
 
     $('end').innerHTML = show_options;
@@ -580,8 +598,19 @@ function ganShowNextOptions(type){
 }
 
 function ganShowAllOptions(){
+
     <?php $_i = 0; ?>
     <?php foreach ($this->getOptionValues() as $_value): ?>
+
+    <?php
+    if ( $_i <= $show_options ):
+    ?>
+        var data = <?php echo $_value->toJson() ?>;
+        attributeOption.itemsUsed.push(data.id);
+    <?php
+    endif;
+    ?>
+
     <?php $_i++; ?>
     <?php if ($_i <= $show_options) continue; ?>
     attributeOption.add(<?php echo $_value->toJson() ?>);
