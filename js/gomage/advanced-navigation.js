@@ -1486,6 +1486,11 @@ GomageNavigationClass = Class.create({
             var scroll_speed = (this.scrolling_speed - 0)/1000;
         }
 
+        if (typeof(GomageProcartConfig) != 'undefined')
+        {
+            scroll_flag = false;
+        }
+
 		if ( this.back_to_top_action == 0 )
 		{
 			var category_view = $$('body')[0];
@@ -1502,7 +1507,7 @@ GomageNavigationClass = Class.create({
 		}
 		else
 		{
-			if ($$('div.category-view').length > 0){    		
+			if ($$('div.category-view').length > 0){
 				var category_view = $$('div.category-view')[0];
 
                 if ( scroll_flag )
