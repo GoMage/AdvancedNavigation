@@ -14,5 +14,9 @@
 $installer = $this;
 
 $installer->startSetup();
+
+$pageTable = $installer->getTable('cms/page');
+$installer->getConnection()->addColumn($pageTable, 'navigation_content_column',
+    "TINYINT(1) NOT NULL DEFAULT 0");
   
 $installer->endSetup(); 

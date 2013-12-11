@@ -52,7 +52,15 @@ class GoMage_Navigation_Block_Adminhtml_Cms_Page_Edit_Tab_Navigation
             'options'   => $this->getAvailableNavigationStatuses(),
             'disabled'  => $isElementDisabled,
         ));
-        
+
+        $navigationFieldset->addField('navigation_content_column', 'select', array(
+                'label'     => Mage::helper('gomage_navigation')->__('Show in Central Column'),
+                'title'     => Mage::helper('gomage_navigation')->__('Show in Central Column'),
+                'name'      => 'navigation_content_column',
+                'options'   => $this->getAvailableNavigationStatuses(),
+                'disabled'  => $isElementDisabled,
+            ));
+
         $navigationFieldset->addField('navigation_right_column', 'select', array(
             'label'     => Mage::helper('gomage_navigation')->__('Show in Right Column'),
             'title'     => Mage::helper('gomage_navigation')->__('Show in Right Column'),
