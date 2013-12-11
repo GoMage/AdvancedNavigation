@@ -454,13 +454,16 @@ GomageNavigationClass = Class.create({
 	    
 	    if (hash_str){
 	    	hash_str += 'gan_data=true';
+            window.location.hash = hash_str;
 	    }
-	            
-	    window.location.hash = hash_str;    
+        else
+        {
+            window.history.pushState("", document.title, window.location.pathname);
+        }
 	},
 
 	setNavigationUrl: function (url, more_products, need_scroll){
-		
+
 		url = this.decode(url);
 		
 		var last = url.charAt(url.length-1);
@@ -475,10 +478,10 @@ GomageNavigationClass = Class.create({
                 url = url + '&ajax=1';
             }
 		}
-		
+
 		is_ajax = typeof(is_ajax) != 'undefined' ? is_ajax : true;
 		var url = url.replace(/&amp;/ig, '&');
-		
+
 		if (this.gomage_navigation_urlhash){
 			this.setHashUrl(url);
 		}
