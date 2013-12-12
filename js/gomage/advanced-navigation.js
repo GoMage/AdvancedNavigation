@@ -10,6 +10,8 @@
  * @since        Available since Release 4.0
  */
 
+
+
 GomageNavigationClass = Class.create({
 	loadimage: null,
 	loadimagealign: null,
@@ -1489,18 +1491,13 @@ GomageNavigationClass = Class.create({
             var scroll_speed = (this.scrolling_speed - 0)/1000;
         }
 
-        if (typeof(GomageProcartConfig) != 'undefined')
-        {
-            scroll_flag = false;
-        }
-
 		if ( this.back_to_top_action == 0 )
 		{
 			var category_view = $$('body')[0];
 
             if ( scroll_flag )
             {
-                Effect.ScrollTo(category_view, { duration: scroll_speed});
+                this.customScrollTo(category_view, { duration: scroll_speed});
             }
             else
             {
@@ -1515,7 +1512,7 @@ GomageNavigationClass = Class.create({
 
                 if ( scroll_flag )
                 {
-                    Effect.ScrollTo(category_view, { duration: scroll_speed});
+                    this.customScrollTo(category_view, { duration: scroll_speed});
                 }
                 else
                 {
@@ -1527,7 +1524,7 @@ GomageNavigationClass = Class.create({
 
                 if ( scroll_flag )
                 {
-                    Effect.ScrollTo(category_products, { duration: scroll_speed});
+                    this.customScrollTo(category_products, { duration: scroll_speed});
                 }
                 else
                 {
@@ -1536,6 +1533,22 @@ GomageNavigationClass = Class.create({
 			}
 		}
 	},
+    customScrollTo: function(element){
+        var options = arguments[1] || { },
+            scrollOffsets = document.viewport.getScrollOffsets(),
+            elementOffsets = $(element).cumulativeOffset();
+
+        if (options.offset) elementOffsets[1] += options.offset;
+
+        return new CustomEffect.Tween(null,
+            scrollOffsets.top,
+            elementOffsets[1],
+            options,
+            function(p){ scrollTo(scrollOffsets.left, p.round()); }
+        );
+    },
+
+
 
 	ganSHBlockContent: function(control){
 		if ($('gan-block-content-content')){

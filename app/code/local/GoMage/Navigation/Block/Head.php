@@ -19,8 +19,9 @@ class GoMage_Navigation_Block_Head extends Mage_Core_Block_Template
         parent::_prepareLayout();
         if(Mage::helper('gomage_navigation')->isGomageNavigation()){         	        	
         	if($head_block = $this->getLayout()->getBlock('head')){
-	        	$styles_block = $this->getLayout()->createBlock('gomage_navigation/styles', 'advancednavigation_styles')->setTemplate('gomage/navigation/header/styles.php');	        
-		        $head_block->addjs('gomage/advanced-navigation.js');
+	        	$styles_block = $this->getLayout()->createBlock('gomage_navigation/styles', 'advancednavigation_styles')->setTemplate('gomage/navigation/header/styles.php');
+                $head_block->addjs('gomage/navigation/effects.js');
+                $head_block->addjs('gomage/advanced-navigation.js');
 		        $head_block->setChild('advancednavigation_styles', $styles_block);
 		        $head_block->addCss('css/gomage/advanced-navigation.css');
         	}        	                         
