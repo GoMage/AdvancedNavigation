@@ -525,7 +525,6 @@ GomageNavigationClass = Class.create({
 		    		GomageNavigation.ganReplaceMoreButton(response.navigation_more);				
 		    	}
 		    	
-		    	
 				try{
 	                if(response.eval_js){
 	                    eval(response.eval_js);
@@ -600,7 +599,7 @@ GomageNavigationClass = Class.create({
 	            if (this.gan_shop_by_area == 1){
 	            	var shop_by_content = Object.toHTML(response.navigation);        
 	            	shop_by_content.evalScripts.bind(shop_by_content).defer();
-	            	shop_by_content = shop_by_content.stripScripts();                
+	            	shop_by_content = shop_by_content.stripScripts();
 	    			var tempElement = document.createElement('div');
 	    	        tempElement.innerHTML = shop_by_content;
 	    	        var shop_by = this.getElementsByClassName('block-layered-nav', tempElement);

@@ -124,52 +124,10 @@
             $model_catalog_product  = Mage::getModel('catalog/product');
             $_product               = $model_catalog_product->load( $_product_id );
 
-            $typeInstance           = $_product->getTypeInstance(true);
-            $selections             = $typeInstance->getSelectionsCollection(array(), $_product );
-            $options                = $typeInstance->getOptionsByIds(array(), $_product);
-            $bundleOptions          = $options->appendSelections($selections, true);
-
-            $min_price      = 0;
-
-            foreach ($bundleOptions as $bundleOption) {
-                if ($bundleOption->getSelections()) {
-
-                    $bundleSelections       = $bundleOption->getSelections();
-
-                    $pricevalues_array  = array();
-                    foreach ($bundleSelections as $bundleSelection) {
-
-                        $pricevalues_array[] = $bundleSelection->getPrice();
-
-                    }
-
-                    sort($pricevalues_array);
-
-                    $min_price += $pricevalues_array[0];
-                }
-            }
-
-            $max_price      = 0;
-
-            foreach ($bundleOptions as $bundleOption) {
-                if ($bundleOption->getSelections()) {
-
-                    $bundleSelections       = $bundleOption->getSelections();
-
-                    $pricevalues_array  = array();
-                    foreach ($bundleSelections as $bundleSelection) {
-
-                        $pricevalues_array[] = $bundleSelection->getPrice();
-
-                    }
-                    rsort($pricevalues_array);
-
-                    $max_price += $pricevalues_array[0];
-                }
-            }
+            list($min_price, $max_price) = $_product->getPriceModel()->getPrices($_product);
 
             return Mage::helper('core')->currency($min_price,2) . ' - ' .
-            Mage::helper('core')->currency($max_price,2);
+            Mage::helper('core')->currency($max_price);
         }
 
         protected function _getTemplate($product, $template)
@@ -185,6 +143,7 @@
 
             if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE)
             {
+
                 $helper = Mage::helper('gomage_navigation');
                 if ( $helper->getIsAnymoreVersion(1, 5, 2) )
                 {
