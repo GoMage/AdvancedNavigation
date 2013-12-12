@@ -100,7 +100,12 @@
             {
                 if (($_filter->getPopupId() == 'category' && $check == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT))
                 {
-                	continue;
+                    if ( !Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active')
+                            ||
+                        !Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/show_shopby'))
+                    {
+                    	continue;
+                    }
                 }
 
                 $category = Mage::registry("current_category");
