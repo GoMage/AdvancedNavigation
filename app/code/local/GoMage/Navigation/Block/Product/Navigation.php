@@ -68,6 +68,8 @@
 	    	if ( !$this->_product_collection )
 	    	{
 	    		$this->_product_collection = $this->_getCurrentCategory()->getProductCollection();
+
+                Mage::getSingleton('catalog/product_visibility')->addVisibleInSiteFilterToCollection($this->_product_collection);
 	    	}
 	    	
 	    	return $this->_product_collection;
