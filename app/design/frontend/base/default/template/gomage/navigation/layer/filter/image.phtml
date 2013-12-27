@@ -68,7 +68,7 @@
     	
         <?php if (( $_item->getCount() > 0 || $_item->getActive())): ?>
 
-            <?php $data_param = $_item->getActive() ? $_item->getRemoveUrlParams() : $_item->getUrlParams(false); ?>
+            <?php $data_param = urlencode($_item->getActive() ? $_item->getRemoveUrlParams() : $_item->getUrlParams(false)); ?>
 
 	        <a data-ajax="<?php echo ($this->ajaxEnabled()) ? 1 : 0 ;?>" data-param="<?php echo $data_param; ?>" data-url="<?php echo $_item->getCleanUrl(false); ?>"  <?php if($_item->getActive()):?> class="active" <?php endif;?> title="<?php echo $_item->getLabel() ?>" onclick="GomageNavigation.click(this); return false;" href="<?php echo $_item->getCleanUrl(true) . $data_param; ?>">
 	        	
