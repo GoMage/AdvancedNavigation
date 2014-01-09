@@ -92,8 +92,8 @@ GomageNavigationClass = Class.create({
 
         if ( $(element) )
         {
-            var url_clean = $(element).readAttribute('data-url');
-            var param = $(element).readAttribute('data-param');
+            var url_clean = this.decode($(element).readAttribute('data-url'));
+            var param = this.decode($(element).readAttribute('data-param'));
             var ajax_clean = $(element).readAttribute('data-ajax');
 
             var url = this.formUrl(url_clean, param, ajax_clean);
@@ -1015,8 +1015,8 @@ GomageNavigationClass = Class.create({
 		return escape(this._utf8_encode(string)); 
 	}, 
   
-	decode : function (string) { 
-		return this._utf8_decode(unescape(string)); 
+	decode : function (string) {
+		return this._utf8_decode(unescape(string));
 	}, 
   
 	_utf8_encode : function (string) { 
@@ -1045,7 +1045,7 @@ GomageNavigationClass = Class.create({
 		return utftext; 
 	}, 
   
-	_utf8_decode : function (utftext) { 
+	_utf8_decode : function (utftext) {
 		var string = ""; 
 		var i = 0; 
 		var c = c1 = c2 = 0; 
