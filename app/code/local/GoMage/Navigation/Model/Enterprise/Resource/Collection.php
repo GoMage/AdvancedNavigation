@@ -11,9 +11,18 @@
  * @since        Class available since Release 3.0
  */
 
-class GoMage_Navigation_Model_Enterprise_Resource_Collection extends Enterprise_Search_Model_Resource_Collection {
-	
-	public function getSearchedEntityIds() {
-		return $this->_searchedEntityIds;
-	}
+class GoMage_Navigation_Model_Enterprise_Resource_Collection extends Enterprise_Search_Model_Resource_Collection
+{
+
+    public function getSearchedEntityIds()
+    {
+        return $this->_searchedEntityIds;
+    }
+
+    protected function _beforeLoad()
+    {
+        $this->getSelect()->group('e.entity_id');
+        return parent::_beforeLoad();
+    }
+
 }
