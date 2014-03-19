@@ -1,3 +1,5 @@
+<?php
+
 /**
  * GoMage Advanced Navigation Extension
  *
@@ -10,61 +12,54 @@
  * @since        Class available since Release 1.0
  */
 
-require_once (Mage::getBaseDir('lib') . DS . 'GoMage' . DS . 'MobileDetect' . DS . 'Mobile_Detect.php');
+require_once(Mage::getBaseDir('lib') . DS . 'GoMage' . DS . 'MobileDetect' . DS . 'Mobile_Detect.php');
 
-class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
+class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
+{
 
-
-    public function getConfigData($node){
-        return Mage::getStoreConfig('gomage_navigation/'.$node);
+    public function getConfigData($node)
+    {
+        return Mage::getStoreConfig('gomage_navigation/' . $node);
     }
 
-    public function getAllStoreDomains(){
-
+    public function getAllStoreDomains()
+    {
         $domains = array();
 
         foreach (Mage::app()->getWebsites() as $website) {
-
             $url = $website->getConfig('web/unsecure/base_url');
-
-            if($domain = trim(preg_replace('/^.*?\\/\\/(.*)?\\//', '$1', $url))){
-
+            if ($domain = trim(preg_replace('/^.*?\\/\\/(.*)?\\//', '$1', $url))) {
                 $domains[] = $domain;
-
             }
 
             $url = $website->getConfig('web/secure/base_url');
 
-            if($domain = trim(preg_replace('/^.*?\\/\\/(.*)?\\//', '$1', $url))){
-
+            if ($domain = trim(preg_replace('/^.*?\\/\\/(.*)?\\//', '$1', $url))) {
                 $domains[] = $domain;
-
             }
-
         }
-
         return array_unique($domains);
-
-
     }
 
-    public function getAvailabelWebsites(){
+    public function getAvailabelWebsites()
+    {
         return $this->_w();
     }
 
-    public function getAvailavelWebsites(){
+    public function getAvailavelWebsites()
+    {
         return $this->_w();
     }
 
-    protected function _w(){
-
-        if(!Mage::getStoreConfig('gomage_activation/advancednavigation/installed') ||
-            (intval(Mage::getStoreConfig('gomage_activation/advancednavigation/count')) > 10))
-        {
+    protected function _w()
+    {
+        if (!Mage::getStoreConfig('gomage_activation/advancednavigation/installed') ||
+            (intval(Mage::getStoreConfig('gomage_activation/advancednavigation/count')) > 10)
+        ) {
             return array();
         }
 
-        $time_to_update = 60*60*24*15;
+        $time_to_update = 60 * 60 * 24 * 15;
 
         $r = Mage::getStoreConfig('gomage_activation/advancednavigation/ar');
         $t = Mage::getStoreConfig('gomage_activation/advancednavigation/time');
@@ -75,22 +70,22 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
         $allsites = explode(',', str_replace($r, '', Mage::helper('core')->decrypt($s)));
         $allsites = array_diff($allsites, array(""));
 
-        if(($last_check+$time_to_update) < time()){
+        if (($last_check + $time_to_update) < time()) {
             $this->a(Mage::getStoreConfig('gomage_activation/advancednavigation/key'),
                 intval(Mage::getStoreConfig('gomage_activation/advancednavigation/count')),
-                implode(',', $allsites));
+                implode(',', $allsites)
+            );
         }
 
         return $allsites;
-
     }
 
-    public function a($k, $c = 0, $s = ''){
-
+    public function a($k, $c = 0, $s = '')
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_downloadable/key/check'));
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'key='.urlencode($k).'&sku=advanced-navigation&domains='.urlencode(implode(',', $this->getAllStoreDomains())).'&ver='.urlencode('4.2'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'key=' . urlencode($k) . '&sku=advanced-navigation&domains=' . urlencode(implode(',', $this->getAllStoreDomains())) . '&ver=' . urlencode('4.2'));
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
@@ -99,26 +94,26 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
         $content = curl_exec($ch);
 
-        $r	= Zend_Json::decode($content);
+        $r = Zend_Json::decode($content);
         $e = Mage::helper('core');
-        if(empty($r)){
+        if (empty($r)) {
 
             $value1 = Mage::getStoreConfig('gomage_activation/advancednavigation/ar');
 
             $groups = array(
-                'advancednavigation'=>array(
-                    'fields'=>array(
-                        'ar'=>array(
-                            'value'=>$value1
+                'advancednavigation' => array(
+                    'fields' => array(
+                        'ar'       => array(
+                            'value' => $value1
                         ),
-                        'websites'=>array(
-                            'value'=>(string)Mage::getStoreConfig('gomage_activation/advancednavigation/websites')
+                        'websites' => array(
+                            'value' => (string)Mage::getStoreConfig('gomage_activation/advancednavigation/websites')
                         ),
-                        'time'=>array(
-                            'value'=>(string)$e->encrypt($value1.(time()-(60*60*24*15-1800)).$value1)
+                        'time'     => array(
+                            'value' => (string)$e->encrypt($value1 . (time() - (60 * 60 * 24 * 15 - 1800)) . $value1)
                         ),
-                        'count'=>array(
-                            'value'=>$c+1)
+                        'count'    => array(
+                            'value' => $c + 1)
                     )
                 )
             );
@@ -137,36 +132,33 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
         $value1 = '';
         $value2 = '';
 
-
-
-        if(isset($r['d']) && isset($r['c'])){
+        if (isset($r['d']) && isset($r['c'])) {
             $value1 = $e->encrypt(base64_encode(Zend_Json::encode($r)));
 
+            if (!$s) {
+                $s = Mage::getStoreConfig('gomage_activation/advancednavigation/websites');
+            }
 
-            if (!$s) $s = Mage::getStoreConfig('gomage_activation/advancednavigation/websites');
-
-            $s = array_slice(explode(',', $s), 0, $r['c']);
-
-            $value2 = $e->encrypt($value1.implode(',', $s).$value1);
-
+            $s      = array_slice(explode(',', $s), 0, $r['c']);
+            $value2 = $e->encrypt($value1 . implode(',', $s) . $value1);
         }
         $groups = array(
-            'advancednavigation'=>array(
-                'fields'=>array(
-                    'ar'=>array(
-                        'value'=>$value1
+            'advancednavigation' => array(
+                'fields' => array(
+                    'ar'        => array(
+                        'value' => $value1
                     ),
-                    'websites'=>array(
-                        'value'=>(string)$value2
+                    'websites'  => array(
+                        'value' => (string)$value2
                     ),
-                    'time'=>array(
-                        'value'=>(string)$e->encrypt($value1.time().$value1)
+                    'time'      => array(
+                        'value' => (string)$e->encrypt($value1 . time() . $value1)
                     ),
-                    'installed'=>array(
-                        'value'=>1
+                    'installed' => array(
+                        'value' => 1
                     ),
-                    'count'=>array(
-                        'value'=>0)
+                    'count'     => array(
+                        'value' => 0)
 
                 )
             )
@@ -182,60 +174,74 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
     }
 
-    public function ga(){
+    public function ga()
+    {
         return Zend_Json::decode(base64_decode(Mage::helper('core')->decrypt(Mage::getStoreConfig('gomage_activation/advancednavigation/ar'))));
     }
 
-    public function isGomageNavigation(){
-        if ($this->isMobileDevice() && Mage::getStoreConfigFlag('gomage_navigation/general/disable_mobile')){
+    public function isGomageNavigation()
+    {
+        if ($this->isMobileDevice() && Mage::getStoreConfigFlag('gomage_navigation/general/disable_mobile')) {
             return false;
         }
         return in_array(Mage::app()->getStore()->getWebsiteId(), $this->getAvailavelWebsites()) &&
         Mage::getStoreConfigFlag('gomage_navigation/general/mode');
     }
 
-    public function isGomageNavigationAjax(){
-
+    public function isGomageNavigationAjax()
+    {
         return $this->isGomageNavigation() &&
-        Mage::getStoreConfigFlag('gomage_navigation/general/pager')
-        &&
+        Mage::getStoreConfigFlag('gomage_navigation/general/pager') &&
         (Mage::registry('current_category') ||
             (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch' &&
                 Mage::app()->getFrontController()->getRequest()->getControllerName() != 'advanced'));
     }
 
-    public function isGomageNavigationClearAjax(){
-
-        return $this->isGomageNavigation()&&
+    public function isGomageNavigationClearAjax()
+    {
+        return $this->isGomageNavigation() &&
         (Mage::registry('current_category') ||
             (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch' &&
                 Mage::app()->getFrontController()->getRequest()->getControllerName() != 'advanced'));
     }
 
-    public function formatColor($value){
-        if ($value = preg_replace('/[^a-zA-Z0-9\s]/', '', $value)){
+    public function formatColor($value)
+    {
+        if ($value = preg_replace('/[^a-zA-Z0-9\s]/', '', $value)) {
             $value = '#' . $value;
         }
         return $value;
     }
 
-    public function isFrendlyUrl(){
-        return $this->isGomageNavigation() && Mage::getStoreConfigFlag('gomage_navigation/filter_settings/frendlyurl');
+    public function isFrendlyUrl()
+    {
+        return $this->isGomageNavigation() &&
+        Mage::getStoreConfigFlag('gomage_navigation/filter_settings/frendlyurl') &&
+        !$this->isGoMage_SeoBoosterEnabled();
     }
 
-    public function getFilterUrl($route = '', $params = array(), $filter = false){
+    public function isGoMage_SeoBoosterEnabled()
+    {
+        $_modules      = Mage::getConfig()->getNode('modules')->children();
+        $_modulesArray = (array)$_modules;
+        if (!isset($_modulesArray['GoMage_SeoBooster'])) {
+            return false;
+        }
+        return $_modulesArray['GoMage_SeoBooster']->is('active');
+    }
 
-        if (!$this->isFrendlyUrl()){
-            $url =  Mage::getUrl($route, $params);
+    public function getFilterUrl($route = '', $params = array(), $filter = false)
+    {
+        if (!$this->isFrendlyUrl()) {
+            $url = Mage::getUrl($route, $params);
 
             $arr = parse_url($url);
 
             $queryString = false;
-            if ( isset($arr['query']) )
-            {
+            if (isset($arr['query'])) {
                 parse_str(htmlspecialchars_decode($arr['query']), $par);
 
-                if(isset($par['ajax'])) {
+                if (isset($par['ajax'])) {
                     unset($par['ajax']);
                 }
 
@@ -244,143 +250,135 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
             $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'] . '?';
 
-            if ( $queryString )
-            {
-                $url .=  $queryString;
+            if ($queryString) {
+                $url .= $queryString;
             }
 
             return $url;
         }
 
-        $model = Mage::getModel('core/url');
+        $model         = Mage::getModel('core/url');
         $request_query = $model->getRequest()->getQuery();
-        $attr = Mage::registry('gan_filter_attributes');
+        $attr          = Mage::registry('gan_filter_attributes');
 
-        foreach($model->getRequest()->getQuery() as $param => $value){
+        foreach ($model->getRequest()->getQuery() as $param => $value) {
 
             $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', $param);
 
-            if ($param == 'cat'){
-                $values = explode(',', $value);
+            if ($param == 'cat') {
+                $values         = explode(',', $value);
                 $prepare_values = array();
-                foreach($values as $_value){
+                foreach ($values as $_value) {
                     $category = Mage::getModel('catalog/category')->load($_value);
-                    if ($category && $category->getId()){
+                    if ($category && $category->getId()) {
                         $prepare_values[] = $category->getData('url_key');
                     }
                 }
                 $model->getRequest()->setQuery($param, implode(',', $prepare_values));
-            }elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))){
-                $values = explode(',', $value);
+            } elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))) {
+                $values         = explode(',', $value);
                 $prepare_values = array();
-                foreach($values as $_value){
-                    foreach($attr[$param]['options'] as $_k => $_v){
-                        if ($_v == $_value){
+                foreach ($values as $_value) {
+                    foreach ($attr[$param]['options'] as $_k => $_v) {
+                        if ($_v == $_value) {
                             $prepare_values[] = $_k;
                             break;
                         }
                     }
                 }
                 $model->getRequest()->setQuery($param, implode(',', $prepare_values));
-            }
-            else if ( $attributeModel->getFrontendInput() == $param )
-            {
-                $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeModel->getId());
-                if ( ($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
-                        ||
-                        $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
-                    &&
-                    $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT )
-                {
-                    $values = explode(',', $value);
+            } else {
+                if ($attributeModel->getFrontendInput() == $param) {
+                    $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeModel->getId());
+                    if (($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
+                            ||
+                            $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
+                        &&
+                        $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
+                    ) {
+                        $values = explode(',', $value);
 
-                    $params['_query'][$attribute->getAttributeCode() . '_from'] = $values[0];
-                    $params['_query'][$attribute->getAttributeCode() . '_to'] = $values[1];
-                    unset($params['_query'][$attribute->getAttributeCode()]);
-                }
-                else
-                {
-                    $values = explode(',', $value);
-                    $prepare_values = array();
-                    foreach($values as $_value){
-                        foreach($attr[$param]['options'] as $_k => $_v){
-                            if ($_v == $_value){
-                                $prepare_values[] = $_k;
-                                break;
+                        $params['_query'][$attribute->getAttributeCode() . '_from'] = $values[0];
+                        $params['_query'][$attribute->getAttributeCode() . '_to']   = $values[1];
+                        unset($params['_query'][$attribute->getAttributeCode()]);
+                    } else {
+                        $values         = explode(',', $value);
+                        $prepare_values = array();
+                        foreach ($values as $_value) {
+                            foreach ($attr[$param]['options'] as $_k => $_v) {
+                                if ($_v == $_value) {
+                                    $prepare_values[] = $_k;
+                                    break;
+                                }
                             }
                         }
+                        $model->getRequest()->setQuery($param, implode(',', $prepare_values));
                     }
-                    $model->getRequest()->setQuery($param, implode(',', $prepare_values));
                 }
             }
-
         }
 
-        if ( isset($params['_query']) )
-        {
-            foreach ($params['_query'] as $param => $value){
-                if ($value){
+        if (isset($params['_query'])) {
+            foreach ($params['_query'] as $param => $value) {
+                if ($value) {
 
                     $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', $param);
 
-                    if ($param == 'cat'){
-                        $values = explode(',', $value);
+                    if ($param == 'cat') {
+                        $values         = explode(',', $value);
                         $prepare_values = array();
-                        foreach($values as $_value){
+                        foreach ($values as $_value) {
                             $category = Mage::getModel('catalog/category')->load($_value);
-                            if ($category && $category->getId()){
+                            if ($category && $category->getId()) {
                                 $prepare_values[] = $category->getData('url_key');
                             }
                         }
                         $params['_query'][$param] = implode(',', $prepare_values);
-                    }elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))){
-                        $values = explode(',', $value);
+                    } elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))) {
+                        $values         = explode(',', $value);
                         $prepare_values = array();
-                        foreach($values as $_value){
-                            foreach($attr[$param]['options'] as $_k => $_v){
-                                if ($_v == $_value){
+                        foreach ($values as $_value) {
+                            foreach ($attr[$param]['options'] as $_k => $_v) {
+                                if ($_v == $_value) {
                                     $prepare_values[] = $_k;
                                     break;
                                 }
                             }
                         }
                         $params['_query'][$param] = implode(',', $prepare_values);
-                    }
-                    else if ( $attributeModel->getFrontendInput() == $param )
-                    {
-                        $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeModel->getId());
-                        if ( ($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
-                                ||
-                                $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
-                            &&
-                            $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT )
-                        {
-                            if (strpos($value, ';')){
-                                $values = explode(';', $value);
-                            }else {
-                                $values = explode(',', $value);
-                            }
+                    } else {
+                        if ($attributeModel->getFrontendInput() == $param) {
+                            $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeModel->getId());
+                            if (($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
+                                    ||
+                                    $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
+                                &&
+                                $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
+                            ) {
+                                if (strpos($value, ';')) {
+                                    $values = explode(';', $value);
+                                } else {
+                                    $values = explode(',', $value);
+                                }
 
-                            $params['_query'][$attribute->getAttributeCode() . '_from'] = $values[0];
-                            $params['_query'][$attribute->getAttributeCode() . '_to'] = $values[1];
-                            unset($params['_query'][$attribute->getAttributeCode()]);
-                        }
-                        else
-                        {
-                            $values = explode(',', $value);
-                            $prepare_values = array();
-                            foreach($values as $_value){
-                                foreach($attr[$param]['options'] as $_k => $_v){
-                                    if ($_v == $_value){
-                                        $prepare_values[] = $_k;
-                                        break;
+                                $params['_query'][$attribute->getAttributeCode() . '_from'] = $values[0];
+                                $params['_query'][$attribute->getAttributeCode() . '_to']   = $values[1];
+                                unset($params['_query'][$attribute->getAttributeCode()]);
+                            } else {
+                                $values         = explode(',', $value);
+                                $prepare_values = array();
+                                foreach ($values as $_value) {
+                                    foreach ($attr[$param]['options'] as $_k => $_v) {
+                                        if ($_v == $_value) {
+                                            $prepare_values[] = $_k;
+                                            break;
+                                        }
                                     }
                                 }
+                                $params['_query'][$param] = implode(',', $prepare_values);
                             }
-                            $params['_query'][$param] = implode(',', $prepare_values);
                         }
                     }
-
                 }
             }
         }
@@ -390,10 +388,9 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
         $arr = parse_url($url);
 
         $queryString = false;
-        if ( isset($arr['query']) )
-        {
+        if (isset($arr['query'])) {
             parse_str(htmlspecialchars_decode($arr['query']), $par);
-            if(isset($par['ajax'])) {
+            if (isset($par['ajax'])) {
                 unset($par['ajax']);
             }
 
@@ -402,19 +399,19 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
         $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'] . '?';
 
-        if ( $queryString )
-        {
+        if ($queryString) {
             $url .= $queryString;
         }
 
-        foreach($request_query as $param => $value){
+        foreach ($request_query as $param => $value) {
             $model->getRequest()->setQuery($param, $value);
         }
 
         return $url;
     }
 
-    public function formatUrlValue($value){
+    public function formatUrlValue($value)
+    {
         $value = preg_replace('#[^0-9a-z]+#i', '_', Mage::helper('catalog/product_url')->format($value));
         $value = strtolower($value);
         $value = trim($value, '-');
@@ -422,29 +419,26 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
         return $value;
     }
 
-    public function isMobileDevice(){
-
+    public function isMobileDevice()
+    {
         $detect = new Mobile_Detect();
         return $detect->isMobile();
     }
 
-    public function isGooglebot(){
-        if(preg_match("/Google/",Mage::helper('core/http')->getHttpUserAgent()) || preg_match("/bot/",Mage::helper('core/http')->getHttpUserAgent()))
-        {
-            $ip = Mage::helper('core/http')->getRemoteAddr();
+    public function isGooglebot()
+    {
+        if (preg_match("/Google/", Mage::helper('core/http')->getHttpUserAgent()) || preg_match("/bot/", Mage::helper('core/http')->getHttpUserAgent())) {
+            $ip   = Mage::helper('core/http')->getRemoteAddr();
             $name = gethostbyaddr($ip);
-            if(preg_match("/Googlebot/",$name) || preg_match("/bot/",$name))
-            {
+            if (preg_match("/Googlebot/", $name) || preg_match("/bot/", $name)) {
                 $hosts = gethostbynamel($name);
-                foreach($hosts as $host){
-                    if ($host == $ip){
+                foreach ($hosts as $host) {
+                    if ($host == $ip) {
                         return true;
                     }
                 }
             }
-        }
-        else
-        {
+        } else {
             return true;
         }
 
@@ -454,16 +448,13 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
     public function getFilterItemCount($filter)
     {
         $count = 0;
-        if ( $filter && $filter->getItems() )
-        {
-            foreach( $filter->getItems() as $item )
-            {
+        if ($filter && $filter->getItems()) {
+            foreach ($filter->getItems() as $item) {
                 $count += $item->getCount();
             }
         }
 
-        if ( $count == 0 && $filter->getFilter()->getRequestVarValue() == 'stock_status' )
-        {
+        if ($count == 0 && $filter->getFilter()->getRequestVarValue() == 'stock_status') {
             return 1;
         }
 
@@ -474,8 +465,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
     {
         $filter = Mage::getStoreConfig('gomage_navigation/filter/filter_btn_txt');
 
-        if ( $filter == '' )
-        {
+        if ($filter == '') {
             $filter = $this->__('Filter');
         }
 
@@ -486,8 +476,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
     {
         $clear = Mage::getStoreConfig('gomage_navigation/filter/clear_btn_txt');
 
-        if ( $clear == '' )
-        {
+        if ($clear == '') {
             $clear = $this->__('Clear All');
         }
 
@@ -498,8 +487,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
     {
         $more = Mage::getStoreConfig('gomage_navigation/filter/more_btn_txt');
 
-        if ( $more == '' )
-        {
+        if ($more == '') {
             $more = $this->__('More');
         }
 
@@ -510,8 +498,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
     {
         $less = Mage::getStoreConfig('gomage_navigation/filter/less_btn_txt');
 
-        if ( $less == '' )
-        {
+        if ($less == '') {
             $less = $this->__('Less');
         }
 
@@ -522,8 +509,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
     {
         $showmore = Mage::getStoreConfig('gomage_navigation/filter/showmore_btn_txt');
 
-        if ( $showmore == '' )
-        {
+        if ($showmore == '') {
             $showmore = $this->__('Show more products');
         }
 
@@ -534,8 +520,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
     {
         $backtotop = Mage::getStoreConfig('gomage_navigation/filter/backtotop_btn_txt');
 
-        if ( $backtotop == '' )
-        {
+        if ($backtotop == '') {
             $backtotop = $this->__('Back to Top');
         }
 
@@ -544,8 +529,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
     public function isEnterprise()
     {
-        if ( Mage::getConfig ()->getModuleConfig ( 'Enterprise_Enterprise' ) && Mage::getConfig ()->getModuleConfig ( 'Enterprise_AdminGws' ) && Mage::getConfig ()->getModuleConfig ( 'Enterprise_Checkout' ) && Mage::getConfig ()->getModuleConfig ( 'Enterprise_Customer' ) )
-        {
+        if (Mage::getConfig()->getModuleConfig('Enterprise_Enterprise') && Mage::getConfig()->getModuleConfig('Enterprise_AdminGws') && Mage::getConfig()->getModuleConfig('Enterprise_Checkout') && Mage::getConfig()->getModuleConfig('Enterprise_Customer')) {
             return true;
         }
 
@@ -554,7 +538,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
     public function getSide($type)
     {
-        switch ($type){
+        switch ($type) {
             case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::LEFT_BLOCK:
                 return 'left';
                 break;
@@ -573,27 +557,22 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
         }
     }
 
-    public function getClearLinkUrl($_filter){
-
-        if($_filter->getFilter()->getRequestVar() != 'cat' && $_filter->getFilter()->getRequestVar() != 'stock_status')
-        {
-            if ( $_filter->getFilter()->getAttributeModel()->getFrontendInput() )
-            {
+    public function getClearLinkUrl($_filter)
+    {
+        if ($_filter->getFilter()->getRequestVar() != 'cat' && $_filter->getFilter()->getRequestVar() != 'stock_status') {
+            if ($_filter->getFilter()->getAttributeModel()->getFrontendInput()) {
                 $attribute = $_filter->getFilter()->getAttributeModel();
 
-
-
-                if ( (in_array($attribute->getFilterType(), array( GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER,
-                            GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT,
-                            GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER))&& !Mage::helper('gomage_navigation')->isMobileDevice())
+                if ((in_array($attribute->getFilterType(), array(GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER,
+                                GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT,
+                                GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER)
+                        ) && !Mage::helper('gomage_navigation')->isMobileDevice())
                     ||
                     ($attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
                         &&
-                        $attribute->getRangeOptions() != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::NO))
-                {
-
-
-                    $params = array();
+                        $attribute->getRangeOptions() != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::NO)
+                ) {
+                    $params                 = array();
                     $params['_nosid']       = true;
                     $params['_current']     = true;
                     $params['_use_rewrite'] = true;
@@ -601,72 +580,55 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
                     $url = $this->getFilterUrl('*/*/*', $params);
 
-                    $clean_url = $this->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array(), '_escape'=>false));
+                    $clean_url = $this->getFilterUrl('*/*/*', array('_current' => true, '_nosid' => true, '_use_rewrite' => true, '_query' => array(), '_escape' => false));
 
-                    if ( strpos($clean_url, "?") !== false )
-                    {
+                    if (strpos($clean_url, "?") !== false) {
                         $clean_url = substr($clean_url, 0, strpos($clean_url, '?'));
                     }
 
                     $params = str_replace($clean_url, "", $url);
-
-
                     $params = str_replace("?", "", $params);
 
-                    $parArray = explode("&", $params);
+                    $parArray    = explode("&", $params);
                     $newParArray = array();
 
 
-                    foreach( $parArray as $par )
-                    {
+                    foreach ($parArray as $par) {
                         $expar = explode("=", $par);
-                        if ( $expar[0] != $attribute->getAttributeCode() . '_from'
+                        if ($expar[0] != $attribute->getAttributeCode() . '_from'
                             &&
-                            $expar[0] != $attribute->getAttributeCode() . '_to' )
-                        {
+                            $expar[0] != $attribute->getAttributeCode() . '_to'
+                        ) {
                             $newParArray[] = $par;
                         }
                     }
 
-                    if ( $newParArray )
-                    {
-                        if ( $_filter->getAjaxEnabled() )
-                        {
+                    if ($newParArray) {
+                        if ($_filter->getAjaxEnabled()) {
                             return $clean_url . '?' . implode("&", $newParArray) . '&ajax=1';
-                        }
-                        else
-                        {
+                        } else {
                             return $clean_url . '?' . implode("&", $newParArray);
                         }
-                    }
-                    else
-                    {
-                        if ( $_filter->getAjaxEnabled() )
-                        {
+                    } else {
+                        if ($_filter->getAjaxEnabled()) {
                             return $clean_url . '?ajax=1';
-                        }
-                        else
-                        {
+                        } else {
                             return $clean_url;
                         }
                     }
                 }
-            }
-            else
-            {
+            } else {
                 return $_filter->getClearLinkUrl();
             }
-        }
-        else
-        {
+        } else {
             return $_filter->getClearLinkUrl();
         }
     }
 
-    public function notify(){
-
+    public function notify()
+    {
         $frequency = intval(Mage::app()->loadCache('gomage_notifications_frequency'));
-        if (!$frequency){
+        if (!$frequency) {
             $frequency = 24;
         }
         $last_update = intval(Mage::app()->loadCache('gomage_notifications_last_update'));
@@ -676,15 +638,15 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
         }
 
         $timestamp = $last_update;
-        if (!$timestamp){
+        if (!$timestamp) {
             $timestamp = time();
         }
 
-        try{
+        try {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_notification/index/data'));
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, 'sku=advanced-navigation&timestamp='.$timestamp.'&ver='.urlencode('4.2'));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, 'sku=advanced-navigation&timestamp=' . $timestamp . '&ver=' . urlencode('4.2'));
             curl_setopt($ch, CURLOPT_TIMEOUT, 30);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
@@ -693,18 +655,19 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
 
             $content = curl_exec($ch);
 
-            $result	= Zend_Json::decode($content);
+            $result = Zend_Json::decode($content);
 
-            if ($result && isset($result['frequency']) && ($result['frequency'] != $frequency)){
+            if ($result && isset($result['frequency']) && ($result['frequency'] != $frequency)) {
                 Mage::app()->saveCache($result['frequency'], 'gomage_notifications_frequency');
             }
 
-            if ($result && isset($result['data'])){
-                if (!empty($result['data'])){
+            if ($result && isset($result['data'])) {
+                if (!empty($result['data'])) {
                     Mage::getModel('adminnotification/inbox')->parse($result['data']);
                 }
             }
-        } catch (Exception $e){}
+        } catch (Exception $e) {
+        }
 
         Mage::app()->saveCache(time(), 'gomage_notifications_last_update');
 
@@ -715,38 +678,24 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract{
         $version_info = Mage::getVersion();
         $version_info = explode('.', $version_info);
 
-        if ($version_info[0] > $major)
-        {
+        if ($version_info[0] > $major) {
             return true;
-        }
-        elseif ($version_info[0] == $major)
-        {
-            if ($version_info[1] > $minor)
-            {
+        } elseif ($version_info[0] == $major) {
+            if ($version_info[1] > $minor) {
                 return true;
-            }
-            elseif ($version_info[1] == $minor)
-            {
-                if ($version_info[2] >= $revision)
-                {
+            } elseif ($version_info[1] == $minor) {
+                if ($version_info[2] >= $revision) {
                     return true;
-                }
-                else
-                {
+                } else {
                     return false;
                 }
-            }
-            else
-            {
+            } else {
                 return false;
             }
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
-    
 
 }
 
