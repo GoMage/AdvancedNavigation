@@ -1,5 +1,6 @@
 <?php
- /**
+
+/**
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
@@ -10,21 +11,20 @@
  * @version      Release: 4.2
  * @since        Class available since Release 2.3
  */
-
-
 class GoMage_Navigation_Block_Head extends Mage_Core_Block_Template
-{    
+{
     protected function _prepareLayout()
-    { 
+    {
         parent::_prepareLayout();
-        if(Mage::helper('gomage_navigation')->isGomageNavigation()){         	        	
-        	if($head_block = $this->getLayout()->getBlock('head')){
-	        	$styles_block = $this->getLayout()->createBlock('gomage_navigation/styles', 'advancednavigation_styles')->setTemplate('gomage/navigation/header/styles.php');
+        if (Mage::helper('gomage_navigation')->isGomageNavigation()) {
+            if ($head_block = $this->getLayout()->getBlock('head')) {
+                $styles_block = $this->getLayout()->createBlock('gomage_navigation/styles', 'advancednavigation_styles')->setTemplate('gomage/navigation/header/styles.phtml');
+                $head_block->addjs('varien/menu.js');
                 $head_block->addjs('gomage/navigation/effects.js');
                 $head_block->addjs('gomage/advanced-navigation.js');
-		        $head_block->setChild('advancednavigation_styles', $styles_block);
-		        $head_block->addCss('css/gomage/advanced-navigation.css');
-        	}        	                         
-        }       
+                $head_block->setChild('advancednavigation_styles', $styles_block);
+                $head_block->addCss('css/gomage/advanced-navigation.css');
+            }
+        }
     }
 }
