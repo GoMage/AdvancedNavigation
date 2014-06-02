@@ -1,1 +1,701 @@
-<?php eval(base64_decode("LyoqICogR29NYWdlIEFkdmFuY2VkIE5hdmlnYXRpb24gRXh0ZW5zaW9uICogKiBAY2F0ZWdvcnkgRXh0ZW5zaW9uICogQGNvcHlyaWdodCBDb3B5cmlnaHQgKGMpIDIwMTAtMjAxMyBHb01hZ2UgKGh0dHA6Ly93d3cuZ29tYWdlLmNvbSkgKiBAYXV0aG9yIEdvTWFnZSAqIEBsaWNlbnNlIGh0dHA6Ly93d3cuZ29tYWdlLmNvbS9saWNlbnNlLWFncmVlbWVudC8gU2luZ2xlIGRvbWFpbiBsaWNlbnNlICogQHRlcm1zIG9mIHVzZSBodHRwOi8vd3d3LmdvbWFnZS5jb20vdGVybXMtb2YtdXNlICogQHZlcnNpb24gUmVsZWFzZTogNC4yICogQHNpbmNlIENsYXNzIGF2YWlsYWJsZSBzaW5jZSBSZWxlYXNlIDEuMCAqLyByZXF1aXJlX29uY2UoTWFnZTo6Z2V0QmFzZURpcignbGliJykgLiBEUyAuICdHb01hZ2UnIC4gRFMgLiAnTW9iaWxlRGV0ZWN0JyAuIERTIC4gJ01vYmlsZV9EZXRlY3QucGhwJyk7IGNsYXNzIEdvTWFnZV9OYXZpZ2F0aW9uX0hlbHBlcl9EYXRhIGV4dGVuZHMgTWFnZV9Db3JlX0hlbHBlcl9BYnN0cmFjdCB7IHB1YmxpYyBmdW5jdGlvbiBnZXRDb25maWdEYXRhKCRub2RlKSB7IHJldHVybiBNYWdlOjpnZXRTdG9yZUNvbmZpZygnZ29tYWdlX25hdmlnYXRpb24vJyAuICRub2RlKTsgfSBwdWJsaWMgZnVuY3Rpb24gZ2V0QWxsU3RvcmVEb21haW5zKCkgeyAkZG9tYWlucyA9IGFycmF5KCk7IGZvcmVhY2ggKE1hZ2U6OmFwcCgpLT5nZXRXZWJzaXRlcygpIGFzICR3ZWJzaXRlKSB7ICR1cmwgPSAkd2Vic2l0ZS0+Z2V0Q29uZmlnKCd3ZWIvdW5zZWN1cmUvYmFzZV91cmwnKTsgaWYgKCRkb21haW4gPSB0cmltKHByZWdfcmVwbGFjZSgnL14uKj9cXC9cXC8oLiopP1xcLy8nLCAnJDEnLCAkdXJsKSkpIHsgJGRvbWFpbnNbXSA9ICRkb21haW47IH0gJHVybCA9ICR3ZWJzaXRlLT5nZXRDb25maWcoJ3dlYi9zZWN1cmUvYmFzZV91cmwnKTsgaWYgKCRkb21haW4gPSB0cmltKHByZWdfcmVwbGFjZSgnL14uKj9cXC9cXC8oLiopP1xcLy8nLCAnJDEnLCAkdXJsKSkpIHsgJGRvbWFpbnNbXSA9ICRkb21haW47IH0gfSByZXR1cm4gYXJyYXlfdW5pcXVlKCRkb21haW5zKTsgfSBwdWJsaWMgZnVuY3Rpb24gZ2V0QXZhaWxhYmVsV2Vic2l0ZXMoKSB7IHJldHVybiAkdGhpcy0+X3coKTsgfSBwdWJsaWMgZnVuY3Rpb24gZ2V0QXZhaWxhdmVsV2Vic2l0ZXMoKSB7IHJldHVybiAkdGhpcy0+X3coKTsgfSBwcm90ZWN0ZWQgZnVuY3Rpb24gX3coKSB7IGlmICghTWFnZTo6Z2V0U3RvcmVDb25maWcoJ2dvbWFnZV9hY3RpdmF0aW9uL2FkdmFuY2VkbmF2aWdhdGlvbi9pbnN0YWxsZWQnKSB8fCAoaW50dmFsKE1hZ2U6OmdldFN0b3JlQ29uZmlnKCdnb21hZ2VfYWN0aXZhdGlvbi9hZHZhbmNlZG5hdmlnYXRpb24vY291bnQnKSkgPiAxMCkgKSB7IHJldHVybiBhcnJheSgpOyB9ICR0aW1lX3RvX3VwZGF0ZSA9IDYwICogNjAgKiAyNCAqIDE1OyAkciA9IE1hZ2U6OmdldFN0b3JlQ29uZmlnKCdnb21hZ2VfYWN0aXZhdGlvbi9hZHZhbmNlZG5hdmlnYXRpb24vYXInKTsgJHQgPSBNYWdlOjpnZXRTdG9yZUNvbmZpZygnZ29tYWdlX2FjdGl2YXRpb24vYWR2YW5jZWRuYXZpZ2F0aW9uL3RpbWUnKTsgJHMgPSBNYWdlOjpnZXRTdG9yZUNvbmZpZygnZ29tYWdlX2FjdGl2YXRpb24vYWR2YW5jZWRuYXZpZ2F0aW9uL3dlYnNpdGVzJyk7ICRsYXN0X2NoZWNrID0gc3RyX3JlcGxhY2UoJHIsICcnLCBNYWdlOjpoZWxwZXIoJ2NvcmUnKS0+ZGVjcnlwdCgkdCkpOyAkYWxsc2l0ZXMgPSBleHBsb2RlKCcsJywgc3RyX3JlcGxhY2UoJHIsICcnLCBNYWdlOjpoZWxwZXIoJ2NvcmUnKS0+ZGVjcnlwdCgkcykpKTsgJGFsbHNpdGVzID0gYXJyYXlfZGlmZigkYWxsc2l0ZXMsIGFycmF5KCIiKSk7IGlmICgoJGxhc3RfY2hlY2sgKyAkdGltZV90b191cGRhdGUpIDwgdGltZSgpKSB7ICR0aGlzLT5hKE1hZ2U6OmdldFN0b3JlQ29uZmlnKCdnb21hZ2VfYWN0aXZhdGlvbi9hZHZhbmNlZG5hdmlnYXRpb24va2V5JyksIGludHZhbChNYWdlOjpnZXRTdG9yZUNvbmZpZygnZ29tYWdlX2FjdGl2YXRpb24vYWR2YW5jZWRuYXZpZ2F0aW9uL2NvdW50JykpLCBpbXBsb2RlKCcsJywgJGFsbHNpdGVzKSApOyB9IHJldHVybiAkYWxsc2l0ZXM7IH0gcHVibGljIGZ1bmN0aW9uIGEoJGssICRjID0gMCwgJHMgPSAnJykgeyAkY2ggPSBjdXJsX2luaXQoKTsgY3VybF9zZXRvcHQoJGNoLCBDVVJMT1BUX1VSTCwgc3ByaW50ZignaHR0cHM6Ly93d3cuZ29tYWdlLmNvbS9pbmRleC5waHAvZ29tYWdlX2Rvd25sb2FkYWJsZS9rZXkvY2hlY2snKSk7IGN1cmxfc2V0b3B0KCRjaCwgQ1VSTE9QVF9QT1NULCB0cnVlKTsgY3VybF9zZXRvcHQoJGNoLCBDVVJMT1BUX1BPU1RGSUVMRFMsICdrZXk9JyAuIHVybGVuY29kZSgkaykgLiAnJnNrdT1hZHZhbmNlZC1uYXZpZ2F0aW9uJmRvbWFpbnM9JyAuIHVybGVuY29kZShpbXBsb2RlKCcsJywgJHRoaXMtPmdldEFsbFN0b3JlRG9tYWlucygpKSkgLiAnJnZlcj0nIC4gdXJsZW5jb2RlKCc0LjInKSk7IGN1cmxfc2V0b3B0KCRjaCwgQ1VSTE9QVF9USU1FT1VULCAzMCk7IGN1cmxfc2V0b3B0KCRjaCwgQ1VSTE9QVF9SRVRVUk5UUkFOU0ZFUiwgdHJ1ZSk7IGN1cmxfc2V0b3B0KCRjaCwgQ1VSTE9QVF9TU0xfVkVSSUZZUEVFUiwgMCk7IGN1cmxfc2V0b3B0KCRjaCwgQ1VSTE9QVF9TU0xfVkVSSUZZSE9TVCwgMCk7ICRjb250ZW50ID0gY3VybF9leGVjKCRjaCk7ICRyID0gWmVuZF9Kc29uOjpkZWNvZGUoJGNvbnRlbnQpOyAkZSA9IE1hZ2U6OmhlbHBlcignY29yZScpOyBpZiAoZW1wdHkoJHIpKSB7ICR2YWx1ZTEgPSBNYWdlOjpnZXRTdG9yZUNvbmZpZygnZ29tYWdlX2FjdGl2YXRpb24vYWR2YW5jZWRuYXZpZ2F0aW9uL2FyJyk7ICRncm91cHMgPSBhcnJheSggJ2FkdmFuY2VkbmF2aWdhdGlvbicgPT4gYXJyYXkoICdmaWVsZHMnID0+IGFycmF5KCAnYXInID0+IGFycmF5KCAndmFsdWUnID0+ICR2YWx1ZTEgKSwgJ3dlYnNpdGVzJyA9PiBhcnJheSggJ3ZhbHVlJyA9PiAoc3RyaW5nKU1hZ2U6OmdldFN0b3JlQ29uZmlnKCdnb21hZ2VfYWN0aXZhdGlvbi9hZHZhbmNlZG5hdmlnYXRpb24vd2Vic2l0ZXMnKSApLCAndGltZScgPT4gYXJyYXkoICd2YWx1ZScgPT4gKHN0cmluZykkZS0+ZW5jcnlwdCgkdmFsdWUxIC4gKHRpbWUoKSAtICg2MCAqIDYwICogMjQgKiAxNSAtIDE4MDApKSAuICR2YWx1ZTEpICksICdjb3VudCcgPT4gYXJyYXkoICd2YWx1ZScgPT4gJGMgKyAxKSApICkgKTsgTWFnZTo6Z2V0TW9kZWwoJ2FkbWluaHRtbC9jb25maWdfZGF0YScpIC0+c2V0U2VjdGlvbignZ29tYWdlX2FjdGl2YXRpb24nKSAtPnNldEdyb3VwcygkZ3JvdXBzKSAtPnNhdmUoKTsgTWFnZTo6Z2V0Q29uZmlnKCktPnJlaW5pdCgpOyBNYWdlOjphcHAoKS0+cmVpbml0U3RvcmVzKCk7IHJldHVybjsgfSAkdmFsdWUxID0gJyc7ICR2YWx1ZTIgPSAnJzsgaWYgKGlzc2V0KCRyWydkJ10pICYmIGlzc2V0KCRyWydjJ10pKSB7ICR2YWx1ZTEgPSAkZS0+ZW5jcnlwdChiYXNlNjRfZW5jb2RlKFplbmRfSnNvbjo6ZW5jb2RlKCRyKSkpOyBpZiAoISRzKSB7ICRzID0gTWFnZTo6Z2V0U3RvcmVDb25maWcoJ2dvbWFnZV9hY3RpdmF0aW9uL2FkdmFuY2VkbmF2aWdhdGlvbi93ZWJzaXRlcycpOyB9ICRzID0gYXJyYXlfc2xpY2UoZXhwbG9kZSgnLCcsICRzKSwgMCwgJHJbJ2MnXSk7ICR2YWx1ZTIgPSAkZS0+ZW5jcnlwdCgkdmFsdWUxIC4gaW1wbG9kZSgnLCcsICRzKSAuICR2YWx1ZTEpOyB9ICRncm91cHMgPSBhcnJheSggJ2FkdmFuY2VkbmF2aWdhdGlvbicgPT4gYXJyYXkoICdmaWVsZHMnID0+IGFycmF5KCAnYXInID0+IGFycmF5KCAndmFsdWUnID0+ICR2YWx1ZTEgKSwgJ3dlYnNpdGVzJyA9PiBhcnJheSggJ3ZhbHVlJyA9PiAoc3RyaW5nKSR2YWx1ZTIgKSwgJ3RpbWUnID0+IGFycmF5KCAndmFsdWUnID0+IChzdHJpbmcpJGUtPmVuY3J5cHQoJHZhbHVlMSAuIHRpbWUoKSAuICR2YWx1ZTEpICksICdpbnN0YWxsZWQnID0+IGFycmF5KCAndmFsdWUnID0+IDEgKSwgJ2NvdW50JyA9PiBhcnJheSggJ3ZhbHVlJyA9PiAwKSApICkgKTsgTWFnZTo6Z2V0TW9kZWwoJ2FkbWluaHRtbC9jb25maWdfZGF0YScpIC0+c2V0U2VjdGlvbignZ29tYWdlX2FjdGl2YXRpb24nKSAtPnNldEdyb3VwcygkZ3JvdXBzKSAtPnNhdmUoKTsgTWFnZTo6Z2V0Q29uZmlnKCktPnJlaW5pdCgpOyBNYWdlOjphcHAoKS0+cmVpbml0U3RvcmVzKCk7IH0gcHVibGljIGZ1bmN0aW9uIGdhKCkgeyByZXR1cm4gWmVuZF9Kc29uOjpkZWNvZGUoYmFzZTY0X2RlY29kZShNYWdlOjpoZWxwZXIoJ2NvcmUnKS0+ZGVjcnlwdChNYWdlOjpnZXRTdG9yZUNvbmZpZygnZ29tYWdlX2FjdGl2YXRpb24vYWR2YW5jZWRuYXZpZ2F0aW9uL2FyJykpKSk7IH0gcHVibGljIGZ1bmN0aW9uIGlzR29tYWdlTmF2aWdhdGlvbigpIHsgaWYgKCR0aGlzLT5pc01vYmlsZURldmljZSgpICYmIE1hZ2U6OmdldFN0b3JlQ29uZmlnRmxhZygnZ29tYWdlX25hdmlnYXRpb24vZ2VuZXJhbC9kaXNhYmxlX21vYmlsZScpKSB7IHJldHVybiBmYWxzZTsgfSByZXR1cm4gaW5fYXJyYXkoTWFnZTo6YXBwKCktPmdldFN0b3JlKCktPmdldFdlYnNpdGVJZCgpLCAkdGhpcy0+Z2V0QXZhaWxhdmVsV2Vic2l0ZXMoKSkgJiYgTWFnZTo6Z2V0U3RvcmVDb25maWdGbGFnKCdnb21hZ2VfbmF2aWdhdGlvbi9nZW5lcmFsL21vZGUnKTsgfSBwdWJsaWMgZnVuY3Rpb24gaXNHb21hZ2VOYXZpZ2F0aW9uQWpheCgpIHsgcmV0dXJuICR0aGlzLT5pc0dvbWFnZU5hdmlnYXRpb24oKSAmJiBNYWdlOjpnZXRTdG9yZUNvbmZpZ0ZsYWcoJ2dvbWFnZV9uYXZpZ2F0aW9uL2dlbmVyYWwvcGFnZXInKSAmJiAoTWFnZTo6cmVnaXN0cnkoJ2N1cnJlbnRfY2F0ZWdvcnknKSB8fCAoTWFnZTo6YXBwKCktPmdldEZyb250Q29udHJvbGxlcigpLT5nZXRSZXF1ZXN0KCktPmdldFJvdXRlTmFtZSgpID09ICdjYXRhbG9nc2VhcmNoJyAmJiBNYWdlOjphcHAoKS0+Z2V0RnJvbnRDb250cm9sbGVyKCktPmdldFJlcXVlc3QoKS0+Z2V0Q29udHJvbGxlck5hbWUoKSAhPSAnYWR2YW5jZWQnKSk7IH0gcHVibGljIGZ1bmN0aW9uIGlzR29tYWdlTmF2aWdhdGlvbkNsZWFyQWpheCgpIHsgcmV0dXJuICR0aGlzLT5pc0dvbWFnZU5hdmlnYXRpb24oKSAmJiAoTWFnZTo6cmVnaXN0cnkoJ2N1cnJlbnRfY2F0ZWdvcnknKSB8fCAoTWFnZTo6YXBwKCktPmdldEZyb250Q29udHJvbGxlcigpLT5nZXRSZXF1ZXN0KCktPmdldFJvdXRlTmFtZSgpID09ICdjYXRhbG9nc2VhcmNoJyAmJiBNYWdlOjphcHAoKS0+Z2V0RnJvbnRDb250cm9sbGVyKCktPmdldFJlcXVlc3QoKS0+Z2V0Q29udHJvbGxlck5hbWUoKSAhPSAnYWR2YW5jZWQnKSk7IH0gcHVibGljIGZ1bmN0aW9uIGZvcm1hdENvbG9yKCR2YWx1ZSkgeyBpZiAoJHZhbHVlID0gcHJlZ19yZXBsYWNlKCcvW15hLXpBLVowLTlcc10vJywgJycsICR2YWx1ZSkpIHsgJHZhbHVlID0gJyMnIC4gJHZhbHVlOyB9IHJldHVybiAkdmFsdWU7IH0gcHVibGljIGZ1bmN0aW9uIGlzRnJlbmRseVVybCgpIHsgcmV0dXJuICR0aGlzLT5pc0dvbWFnZU5hdmlnYXRpb24oKSAmJiBNYWdlOjpnZXRTdG9yZUNvbmZpZ0ZsYWcoJ2dvbWFnZV9uYXZpZ2F0aW9uL2ZpbHRlcl9zZXR0aW5ncy9mcmVuZGx5dXJsJykgJiYgISR0aGlzLT5pc0dvTWFnZV9TZW9Cb29zdGVyRW5hYmxlZCgpOyB9IHB1YmxpYyBmdW5jdGlvbiBpc0dvTWFnZV9TZW9Cb29zdGVyRW5hYmxlZCgpIHsgJF9tb2R1bGVzID0gTWFnZTo6Z2V0Q29uZmlnKCktPmdldE5vZGUoJ21vZHVsZXMnKS0+Y2hpbGRyZW4oKTsgJF9tb2R1bGVzQXJyYXkgPSAoYXJyYXkpJF9tb2R1bGVzOyBpZiAoIWlzc2V0KCRfbW9kdWxlc0FycmF5WydHb01hZ2VfU2VvQm9vc3RlciddKSkgeyByZXR1cm4gZmFsc2U7IH0gcmV0dXJuICRfbW9kdWxlc0FycmF5WydHb01hZ2VfU2VvQm9vc3RlciddLT5pcygnYWN0aXZlJyk7IH0gcHVibGljIGZ1bmN0aW9uIGdldEZpbHRlclVybCgkcm91dGUgPSAnJywgJHBhcmFtcyA9IGFycmF5KCksICRmaWx0ZXIgPSBmYWxzZSkgeyBpZiAoISR0aGlzLT5pc0ZyZW5kbHlVcmwoKSkgeyAkdXJsID0gTWFnZTo6Z2V0VXJsKCRyb3V0ZSwgJHBhcmFtcyk7ICRhcnIgPSBwYXJzZV91cmwoJHVybCk7ICRxdWVyeVN0cmluZyA9IGZhbHNlOyBpZiAoaXNzZXQoJGFyclsncXVlcnknXSkpIHsgcGFyc2Vfc3RyKGh0bWxzcGVjaWFsY2hhcnNfZGVjb2RlKCRhcnJbJ3F1ZXJ5J10pLCAkcGFyKTsgaWYgKGlzc2V0KCRwYXJbJ2FqYXgnXSkpIHsgdW5zZXQoJHBhclsnYWpheCddKTsgfSAkcXVlcnlTdHJpbmcgPSBodHRwX2J1aWxkX3F1ZXJ5KCRwYXIpOyB9ICR1cmwgPSAkYXJyWydzY2hlbWUnXSAuICc6Ly8nIC4gJGFyclsnaG9zdCddIC4gJGFyclsncGF0aCddIC4gJz8nOyBpZiAoJHF1ZXJ5U3RyaW5nKSB7ICR1cmwgLj0gJHF1ZXJ5U3RyaW5nOyB9IHJldHVybiAkdXJsOyB9ICRtb2RlbCA9IE1hZ2U6OmdldE1vZGVsKCdjb3JlL3VybCcpOyAkcmVxdWVzdF9xdWVyeSA9ICRtb2RlbC0+Z2V0UmVxdWVzdCgpLT5nZXRRdWVyeSgpOyAkYXR0ciA9IE1hZ2U6OnJlZ2lzdHJ5KCdnYW5fZmlsdGVyX2F0dHJpYnV0ZXMnKTsgZm9yZWFjaCAoJG1vZGVsLT5nZXRSZXF1ZXN0KCktPmdldFF1ZXJ5KCkgYXMgJHBhcmFtID0+ICR2YWx1ZSkgeyAkYXR0cmlidXRlTW9kZWwgPSBNYWdlOjpnZXRNb2RlbCgnZWF2L2VudGl0eV9hdHRyaWJ1dGUnKS0+bG9hZEJ5Q29kZSgnY2F0YWxvZ19wcm9kdWN0JywgJHBhcmFtKTsgaWYgKCRwYXJhbSA9PSAnY2F0JykgeyAkdmFsdWVzID0gZXhwbG9kZSgnLCcsICR2YWx1ZSk7ICRwcmVwYXJlX3ZhbHVlcyA9IGFycmF5KCk7IGZvcmVhY2ggKCR2YWx1ZXMgYXMgJF92YWx1ZSkgeyAkY2F0ZWdvcnkgPSBNYWdlOjpnZXRNb2RlbCgnY2F0YWxvZy9jYXRlZ29yeScpLT5sb2FkKCRfdmFsdWUpOyBpZiAoJGNhdGVnb3J5ICYmICRjYXRlZ29yeS0+Z2V0SWQoKSkgeyAkcHJlcGFyZV92YWx1ZXNbXSA9ICRjYXRlZ29yeS0+Z2V0RGF0YSgndXJsX2tleScpOyB9IH0gJG1vZGVsLT5nZXRSZXF1ZXN0KCktPnNldFF1ZXJ5KCRwYXJhbSwgaW1wbG9kZSgnLCcsICRwcmVwYXJlX3ZhbHVlcykpOyB9IGVsc2VpZiAoaXNzZXQoJGF0dHJbJHBhcmFtXSkgJiYgIWluX2FycmF5KCRhdHRyWyRwYXJhbV1bJ3R5cGUnXSwgYXJyYXkoJ3ByaWNlJywgJ2RlY2ltYWwnKSkpIHsgJHZhbHVlcyA9IGV4cGxvZGUoJywnLCAkdmFsdWUpOyAkcHJlcGFyZV92YWx1ZXMgPSBhcnJheSgpOyBmb3JlYWNoICgkdmFsdWVzIGFzICRfdmFsdWUpIHsgZm9yZWFjaCAoJGF0dHJbJHBhcmFtXVsnb3B0aW9ucyddIGFzICRfayA9PiAkX3YpIHsgaWYgKCRfdiA9PSAkX3ZhbHVlKSB7ICRwcmVwYXJlX3ZhbHVlc1tdID0gJF9rOyBicmVhazsgfSB9IH0gJG1vZGVsLT5nZXRSZXF1ZXN0KCktPnNldFF1ZXJ5KCRwYXJhbSwgaW1wbG9kZSgnLCcsICRwcmVwYXJlX3ZhbHVlcykpOyB9IGVsc2UgeyBpZiAoJGF0dHJpYnV0ZU1vZGVsLT5nZXRGcm9udGVuZElucHV0KCkgPT0gJHBhcmFtKSB7ICRhdHRyaWJ1dGUgPSBNYWdlOjpnZXRNb2RlbCgnY2F0YWxvZy9yZXNvdXJjZV9lYXZfYXR0cmlidXRlJyktPmxvYWQoJGF0dHJpYnV0ZU1vZGVsLT5nZXRJZCgpKTsgaWYgKCgkYXR0cmlidXRlLT5nZXRSYW5nZU9wdGlvbnMoKSA9PSBHb01hZ2VfTmF2aWdhdGlvbl9Nb2RlbF9BZG1pbmh0bWxfU3lzdGVtX0NvbmZpZ19Tb3VyY2VfRmlsdGVyX09wdGlvbnNyYW5nZTo6TUFOVUFMTFkgfHwgJGF0dHJpYnV0ZS0+Z2V0UmFuZ2VPcHRpb25zKCkgPT0gR29NYWdlX05hdmlnYXRpb25fTW9kZWxfQWRtaW5odG1sX1N5c3RlbV9Db25maWdfU291cmNlX0ZpbHRlcl9PcHRpb25zcmFuZ2U6OkFVVE8pICYmICRhdHRyaWJ1dGUtPmdldEZpbHRlclR5cGUoKSA9PSBHb01hZ2VfTmF2aWdhdGlvbl9Nb2RlbF9MYXllcjo6RklMVEVSX1RZUEVfREVGQVVMVCApIHsgJHZhbHVlcyA9IGV4cGxvZGUoJywnLCAkdmFsdWUpOyAkcGFyYW1zWydfcXVlcnknXVskYXR0cmlidXRlLT5nZXRBdHRyaWJ1dGVDb2RlKCkgLiAnX2Zyb20nXSA9ICR2YWx1ZXNbMF07ICRwYXJhbXNbJ19xdWVyeSddWyRhdHRyaWJ1dGUtPmdldEF0dHJpYnV0ZUNvZGUoKSAuICdfdG8nXSA9ICR2YWx1ZXNbMV07IHVuc2V0KCRwYXJhbXNbJ19xdWVyeSddWyRhdHRyaWJ1dGUtPmdldEF0dHJpYnV0ZUNvZGUoKV0pOyB9IGVsc2UgeyAkdmFsdWVzID0gZXhwbG9kZSgnLCcsICR2YWx1ZSk7ICRwcmVwYXJlX3ZhbHVlcyA9IGFycmF5KCk7IGZvcmVhY2ggKCR2YWx1ZXMgYXMgJF92YWx1ZSkgeyBmb3JlYWNoICgkYXR0clskcGFyYW1dWydvcHRpb25zJ10gYXMgJF9rID0+ICRfdikgeyBpZiAoJF92ID09ICRfdmFsdWUpIHsgJHByZXBhcmVfdmFsdWVzW10gPSAkX2s7IGJyZWFrOyB9IH0gfSAkbW9kZWwtPmdldFJlcXVlc3QoKS0+c2V0UXVlcnkoJHBhcmFtLCBpbXBsb2RlKCcsJywgJHByZXBhcmVfdmFsdWVzKSk7IH0gfSB9IH0gaWYgKGlzc2V0KCRwYXJhbXNbJ19xdWVyeSddKSkgeyBmb3JlYWNoICgkcGFyYW1zWydfcXVlcnknXSBhcyAkcGFyYW0gPT4gJHZhbHVlKSB7IGlmICgkdmFsdWUpIHsgJGF0dHJpYnV0ZU1vZGVsID0gTWFnZTo6Z2V0TW9kZWwoJ2Vhdi9lbnRpdHlfYXR0cmlidXRlJyktPmxvYWRCeUNvZGUoJ2NhdGFsb2dfcHJvZHVjdCcsICRwYXJhbSk7IGlmICgkcGFyYW0gPT0gJ2NhdCcpIHsgJHZhbHVlcyA9IGV4cGxvZGUoJywnLCAkdmFsdWUpOyAkcHJlcGFyZV92YWx1ZXMgPSBhcnJheSgpOyBmb3JlYWNoICgkdmFsdWVzIGFzICRfdmFsdWUpIHsgJGNhdGVnb3J5ID0gTWFnZTo6Z2V0TW9kZWwoJ2NhdGFsb2cvY2F0ZWdvcnknKS0+bG9hZCgkX3ZhbHVlKTsgaWYgKCRjYXRlZ29yeSAmJiAkY2F0ZWdvcnktPmdldElkKCkpIHsgJHByZXBhcmVfdmFsdWVzW10gPSAkY2F0ZWdvcnktPmdldERhdGEoJ3VybF9rZXknKTsgfSB9ICRwYXJhbXNbJ19xdWVyeSddWyRwYXJhbV0gPSBpbXBsb2RlKCcsJywgJHByZXBhcmVfdmFsdWVzKTsgfSBlbHNlaWYgKGlzc2V0KCRhdHRyWyRwYXJhbV0pICYmICFpbl9hcnJheSgkYXR0clskcGFyYW1dWyd0eXBlJ10sIGFycmF5KCdwcmljZScsICdkZWNpbWFsJykpKSB7ICR2YWx1ZXMgPSBleHBsb2RlKCcsJywgJHZhbHVlKTsgJHByZXBhcmVfdmFsdWVzID0gYXJyYXkoKTsgZm9yZWFjaCAoJHZhbHVlcyBhcyAkX3ZhbHVlKSB7IGZvcmVhY2ggKCRhdHRyWyRwYXJhbV1bJ29wdGlvbnMnXSBhcyAkX2sgPT4gJF92KSB7IGlmICgkX3YgPT0gJF92YWx1ZSkgeyAkcHJlcGFyZV92YWx1ZXNbXSA9ICRfazsgYnJlYWs7IH0gfSB9ICRwYXJhbXNbJ19xdWVyeSddWyRwYXJhbV0gPSBpbXBsb2RlKCcsJywgJHByZXBhcmVfdmFsdWVzKTsgfSBlbHNlIHsgaWYgKCRhdHRyaWJ1dGVNb2RlbC0+Z2V0RnJvbnRlbmRJbnB1dCgpID09ICRwYXJhbSkgeyAkYXR0cmlidXRlID0gTWFnZTo6Z2V0TW9kZWwoJ2NhdGFsb2cvcmVzb3VyY2VfZWF2X2F0dHJpYnV0ZScpLT5sb2FkKCRhdHRyaWJ1dGVNb2RlbC0+Z2V0SWQoKSk7IGlmICgoJGF0dHJpYnV0ZS0+Z2V0UmFuZ2VPcHRpb25zKCkgPT0gR29NYWdlX05hdmlnYXRpb25fTW9kZWxfQWRtaW5odG1sX1N5c3RlbV9Db25maWdfU291cmNlX0ZpbHRlcl9PcHRpb25zcmFuZ2U6Ok1BTlVBTExZIHx8ICRhdHRyaWJ1dGUtPmdldFJhbmdlT3B0aW9ucygpID09IEdvTWFnZV9OYXZpZ2F0aW9uX01vZGVsX0FkbWluaHRtbF9TeXN0ZW1fQ29uZmlnX1NvdXJjZV9GaWx0ZXJfT3B0aW9uc3JhbmdlOjpBVVRPKSAmJiAkYXR0cmlidXRlLT5nZXRGaWx0ZXJUeXBlKCkgPT0gR29NYWdlX05hdmlnYXRpb25fTW9kZWxfTGF5ZXI6OkZJTFRFUl9UWVBFX0RFRkFVTFQgKSB7IGlmIChzdHJwb3MoJHZhbHVlLCAnOycpKSB7ICR2YWx1ZXMgPSBleHBsb2RlKCc7JywgJHZhbHVlKTsgfSBlbHNlIHsgJHZhbHVlcyA9IGV4cGxvZGUoJywnLCAkdmFsdWUpOyB9ICRwYXJhbXNbJ19xdWVyeSddWyRhdHRyaWJ1dGUtPmdldEF0dHJpYnV0ZUNvZGUoKSAuICdfZnJvbSddID0gJHZhbHVlc1swXTsgJHBhcmFtc1snX3F1ZXJ5J11bJGF0dHJpYnV0ZS0+Z2V0QXR0cmlidXRlQ29kZSgpIC4gJ190byddID0gJHZhbHVlc1sxXTsgdW5zZXQoJHBhcmFtc1snX3F1ZXJ5J11bJGF0dHJpYnV0ZS0+Z2V0QXR0cmlidXRlQ29kZSgpXSk7IH0gZWxzZSB7ICR2YWx1ZXMgPSBleHBsb2RlKCcsJywgJHZhbHVlKTsgJHByZXBhcmVfdmFsdWVzID0gYXJyYXkoKTsgZm9yZWFjaCAoJHZhbHVlcyBhcyAkX3ZhbHVlKSB7IGZvcmVhY2ggKCRhdHRyWyRwYXJhbV1bJ29wdGlvbnMnXSBhcyAkX2sgPT4gJF92KSB7IGlmICgkX3YgPT0gJF92YWx1ZSkgeyAkcHJlcGFyZV92YWx1ZXNbXSA9ICRfazsgYnJlYWs7IH0gfSB9ICRwYXJhbXNbJ19xdWVyeSddWyRwYXJhbV0gPSBpbXBsb2RlKCcsJywgJHByZXBhcmVfdmFsdWVzKTsgfSB9IH0gfSB9IH0gJHVybCA9ICRtb2RlbC0+Z2V0VXJsKCRyb3V0ZSwgJHBhcmFtcyk7ICRhcnIgPSBwYXJzZV91cmwoJHVybCk7ICRxdWVyeVN0cmluZyA9IGZhbHNlOyBpZiAoaXNzZXQoJGFyclsncXVlcnknXSkpIHsgcGFyc2Vfc3RyKGh0bWxzcGVjaWFsY2hhcnNfZGVjb2RlKCRhcnJbJ3F1ZXJ5J10pLCAkcGFyKTsgaWYgKGlzc2V0KCRwYXJbJ2FqYXgnXSkpIHsgdW5zZXQoJHBhclsnYWpheCddKTsgfSAkcXVlcnlTdHJpbmcgPSBodHRwX2J1aWxkX3F1ZXJ5KCRwYXIpOyB9ICR1cmwgPSAkYXJyWydzY2hlbWUnXSAuICc6Ly8nIC4gJGFyclsnaG9zdCddIC4gJGFyclsncGF0aCddIC4gJz8nOyBpZiAoJHF1ZXJ5U3RyaW5nKSB7ICR1cmwgLj0gJHF1ZXJ5U3RyaW5nOyB9IGZvcmVhY2ggKCRyZXF1ZXN0X3F1ZXJ5IGFzICRwYXJhbSA9PiAkdmFsdWUpIHsgJG1vZGVsLT5nZXRSZXF1ZXN0KCktPnNldFF1ZXJ5KCRwYXJhbSwgJHZhbHVlKTsgfSByZXR1cm4gJHVybDsgfSBwdWJsaWMgZnVuY3Rpb24gZm9ybWF0VXJsVmFsdWUoJHZhbHVlKSB7ICR2YWx1ZSA9IHByZWdfcmVwbGFjZSgnI1teMC05YS16XSsjaScsICdfJywgTWFnZTo6aGVscGVyKCdjYXRhbG9nL3Byb2R1Y3RfdXJsJyktPmZvcm1hdCgkdmFsdWUpKTsgJHZhbHVlID0gc3RydG9sb3dlcigkdmFsdWUpOyAkdmFsdWUgPSB0cmltKCR2YWx1ZSwgJy0nKTsgcmV0dXJuICR2YWx1ZTsgfSBwdWJsaWMgZnVuY3Rpb24gaXNNb2JpbGVEZXZpY2UoKSB7ICRkZXRlY3QgPSBuZXcgTW9iaWxlX0RldGVjdCgpOyByZXR1cm4gJGRldGVjdC0+aXNNb2JpbGUoKTsgfSBwdWJsaWMgZnVuY3Rpb24gaXNHb29nbGVib3QoKSB7IGlmIChwcmVnX21hdGNoKCIvR29vZ2xlLyIsIE1hZ2U6OmhlbHBlcignY29yZS9odHRwJyktPmdldEh0dHBVc2VyQWdlbnQoKSkgfHwgcHJlZ19tYXRjaCgiL2JvdC8iLCBNYWdlOjpoZWxwZXIoJ2NvcmUvaHR0cCcpLT5nZXRIdHRwVXNlckFnZW50KCkpKSB7ICRpcCA9IE1hZ2U6OmhlbHBlcignY29yZS9odHRwJyktPmdldFJlbW90ZUFkZHIoKTsgJG5hbWUgPSBnZXRob3N0YnlhZGRyKCRpcCk7IGlmIChwcmVnX21hdGNoKCIvR29vZ2xlYm90LyIsICRuYW1lKSB8fCBwcmVnX21hdGNoKCIvYm90LyIsICRuYW1lKSkgeyAkaG9zdHMgPSBnZXRob3N0YnluYW1lbCgkbmFtZSk7IGZvcmVhY2ggKCRob3N0cyBhcyAkaG9zdCkgeyBpZiAoJGhvc3QgPT0gJGlwKSB7IHJldHVybiB0cnVlOyB9IH0gfSB9IGVsc2UgeyByZXR1cm4gdHJ1ZTsgfSByZXR1cm4gZmFsc2U7IH0gcHVibGljIGZ1bmN0aW9uIGdldEZpbHRlckl0ZW1Db3VudCgkZmlsdGVyKSB7ICRjb3VudCA9IDA7IGlmICgkZmlsdGVyICYmICRmaWx0ZXItPmdldEl0ZW1zKCkpIHsgZm9yZWFjaCAoJGZpbHRlci0+Z2V0SXRlbXMoKSBhcyAkaXRlbSkgeyAkY291bnQgKz0gJGl0ZW0tPmdldENvdW50KCk7IH0gfSBpZiAoJGNvdW50ID09IDAgJiYgJGZpbHRlci0+Z2V0RmlsdGVyKCktPmdldFJlcXVlc3RWYXJWYWx1ZSgpID09ICdzdG9ja19zdGF0dXMnKSB7IHJldHVybiAxOyB9IHJldHVybiAkY291bnQ7IH0gcHVibGljIGZ1bmN0aW9uIGdldEZpbHRlcigpIHsgJGZpbHRlciA9IE1hZ2U6OmdldFN0b3JlQ29uZmlnKCdnb21hZ2VfbmF2aWdhdGlvbi9maWx0ZXIvZmlsdGVyX2J0bl90eHQnKTsgaWYgKCRmaWx0ZXIgPT0gJycpIHsgJGZpbHRlciA9ICR0aGlzLT5fXygnRmlsdGVyJyk7IH0gcmV0dXJuICRmaWx0ZXI7IH0gcHVibGljIGZ1bmN0aW9uIGdldENsZWFyQWxsKCkgeyAkY2xlYXIgPSBNYWdlOjpnZXRTdG9yZUNvbmZpZygnZ29tYWdlX25hdmlnYXRpb24vZmlsdGVyL2NsZWFyX2J0bl90eHQnKTsgaWYgKCRjbGVhciA9PSAnJykgeyAkY2xlYXIgPSAkdGhpcy0+X18oJ0NsZWFyIEFsbCcpOyB9IHJldHVybiAkY2xlYXI7IH0gcHVibGljIGZ1bmN0aW9uIGdldE1vcmUoKSB7ICRtb3JlID0gTWFnZTo6Z2V0U3RvcmVDb25maWcoJ2dvbWFnZV9uYXZpZ2F0aW9uL2ZpbHRlci9tb3JlX2J0bl90eHQnKTsgaWYgKCRtb3JlID09ICcnKSB7ICRtb3JlID0gJHRoaXMtPl9fKCdNb3JlJyk7IH0gcmV0dXJuICRtb3JlOyB9IHB1YmxpYyBmdW5jdGlvbiBnZXRMZXNzKCkgeyAkbGVzcyA9IE1hZ2U6OmdldFN0b3JlQ29uZmlnKCdnb21hZ2VfbmF2aWdhdGlvbi9maWx0ZXIvbGVzc19idG5fdHh0Jyk7IGlmICgkbGVzcyA9PSAnJykgeyAkbGVzcyA9ICR0aGlzLT5fXygnTGVzcycpOyB9IHJldHVybiAkbGVzczsgfSBwdWJsaWMgZnVuY3Rpb24gZ2V0U2hvd21vcmUoKSB7ICRzaG93bW9yZSA9IE1hZ2U6OmdldFN0b3JlQ29uZmlnKCdnb21hZ2VfbmF2aWdhdGlvbi9maWx0ZXIvc2hvd21vcmVfYnRuX3R4dCcpOyBpZiAoJHNob3dtb3JlID09ICcnKSB7ICRzaG93bW9yZSA9ICR0aGlzLT5fXygnU2hvdyBtb3JlIHByb2R1Y3RzJyk7IH0gcmV0dXJuICRzaG93bW9yZTsgfSBwdWJsaWMgZnVuY3Rpb24gZ2V0QmFja3RvdG9wKCkgeyAkYmFja3RvdG9wID0gTWFnZTo6Z2V0U3RvcmVDb25maWcoJ2dvbWFnZV9uYXZpZ2F0aW9uL2ZpbHRlci9iYWNrdG90b3BfYnRuX3R4dCcpOyBpZiAoJGJhY2t0b3RvcCA9PSAnJykgeyAkYmFja3RvdG9wID0gJHRoaXMtPl9fKCdCYWNrIHRvIFRvcCcpOyB9IHJldHVybiAkYmFja3RvdG9wOyB9IHB1YmxpYyBmdW5jdGlvbiBpc0VudGVycHJpc2UoKSB7IGlmIChNYWdlOjpnZXRDb25maWcoKS0+Z2V0TW9kdWxlQ29uZmlnKCdFbnRlcnByaXNlX0VudGVycHJpc2UnKSAmJiBNYWdlOjpnZXRDb25maWcoKS0+Z2V0TW9kdWxlQ29uZmlnKCdFbnRlcnByaXNlX0FkbWluR3dzJykgJiYgTWFnZTo6Z2V0Q29uZmlnKCktPmdldE1vZHVsZUNvbmZpZygnRW50ZXJwcmlzZV9DaGVja291dCcpICYmIE1hZ2U6OmdldENvbmZpZygpLT5nZXRNb2R1bGVDb25maWcoJ0VudGVycHJpc2VfQ3VzdG9tZXInKSkgeyByZXR1cm4gdHJ1ZTsgfSByZXR1cm4gZmFsc2U7IH0gcHVibGljIGZ1bmN0aW9uIGdldFNpZGUoJHR5cGUpIHsgc3dpdGNoICgkdHlwZSkgeyBjYXNlIEdvTWFnZV9OYXZpZ2F0aW9uX01vZGVsX0FkbWluaHRtbF9TeXN0ZW1fQ29uZmlnX1NvdXJjZV9GaWx0ZXJfQXR0cmlidXRlbG9jYXRpb246OkxFRlRfQkxPQ0s6IHJldHVybiAnbGVmdCc7IGJyZWFrOyBjYXNlIEdvTWFnZV9OYXZpZ2F0aW9uX01vZGVsX0FkbWluaHRtbF9TeXN0ZW1fQ29uZmlnX1NvdXJjZV9GaWx0ZXJfQXR0cmlidXRlbG9jYXRpb246OkNPTlRFTlQ6IHJldHVybiAnY29udGVudCc7IGJyZWFrOyBjYXNlIEdvTWFnZV9OYXZpZ2F0aW9uX01vZGVsX0FkbWluaHRtbF9TeXN0ZW1fQ29uZmlnX1NvdXJjZV9GaWx0ZXJfQXR0cmlidXRlbG9jYXRpb246OlJJR0hUX0JMT0NLOiByZXR1cm4gJ3JpZ2h0JzsgYnJlYWs7IGRlZmF1bHQ6IHJldHVybiAnbGVmdCc7IGJyZWFrOyB9IH0gcHVibGljIGZ1bmN0aW9uIGdldENsZWFyTGlua1VybCgkX2ZpbHRlcikgeyBpZiAoJF9maWx0ZXItPmdldEZpbHRlcigpLT5nZXRSZXF1ZXN0VmFyKCkgIT0gJ2NhdCcgJiYgJF9maWx0ZXItPmdldEZpbHRlcigpLT5nZXRSZXF1ZXN0VmFyKCkgIT0gJ3N0b2NrX3N0YXR1cycpIHsgaWYgKCRfZmlsdGVyLT5nZXRGaWx0ZXIoKS0+Z2V0QXR0cmlidXRlTW9kZWwoKS0+Z2V0RnJvbnRlbmRJbnB1dCgpKSB7ICRhdHRyaWJ1dGUgPSAkX2ZpbHRlci0+Z2V0RmlsdGVyKCktPmdldEF0dHJpYnV0ZU1vZGVsKCk7IGlmICgoaW5fYXJyYXkoJGF0dHJpYnV0ZS0+Z2V0RmlsdGVyVHlwZSgpLCBhcnJheShHb01hZ2VfTmF2aWdhdGlvbl9Nb2RlbF9MYXllcjo6RklMVEVSX1RZUEVfU0xJREVSLCBHb01hZ2VfTmF2aWdhdGlvbl9Nb2RlbF9MYXllcjo6RklMVEVSX1RZUEVfU0xJREVSX0lOUFVULCBHb01hZ2VfTmF2aWdhdGlvbl9Nb2RlbF9MYXllcjo6RklMVEVSX1RZUEVfSU5QVVRfU0xJREVSKSApICYmICFNYWdlOjpoZWxwZXIoJ2dvbWFnZV9uYXZpZ2F0aW9uJyktPmlzTW9iaWxlRGV2aWNlKCkpIHx8ICgkYXR0cmlidXRlLT5nZXRGaWx0ZXJUeXBlKCkgPT0gR29NYWdlX05hdmlnYXRpb25fTW9kZWxfTGF5ZXI6OkZJTFRFUl9UWVBFX0RFRkFVTFQgJiYgJGF0dHJpYnV0ZS0+Z2V0UmFuZ2VPcHRpb25zKCkgIT0gR29NYWdlX05hdmlnYXRpb25fTW9kZWxfQWRtaW5odG1sX1N5c3RlbV9Db25maWdfU291cmNlX0ZpbHRlcl9PcHRpb25zcmFuZ2U6Ok5PKSApIHsgJHBhcmFtcyA9IGFycmF5KCk7ICRwYXJhbXNbJ19ub3NpZCddID0gdHJ1ZTsgJHBhcmFtc1snX2N1cnJlbnQnXSA9IHRydWU7ICRwYXJhbXNbJ191c2VfcmV3cml0ZSddID0gdHJ1ZTsgJHBhcmFtc1snX2VzY2FwZSddID0gZmFsc2U7ICR1cmwgPSAkdGhpcy0+Z2V0RmlsdGVyVXJsKCcqLyovKicsICRwYXJhbXMpOyAkY2xlYW5fdXJsID0gJHRoaXMtPmdldEZpbHRlclVybCgnKi8qLyonLCBhcnJheSgnX2N1cnJlbnQnID0+IHRydWUsICdfbm9zaWQnID0+IHRydWUsICdfdXNlX3Jld3JpdGUnID0+IHRydWUsICdfcXVlcnknID0+IGFycmF5KCksICdfZXNjYXBlJyA9PiBmYWxzZSkpOyBpZiAoc3RycG9zKCRjbGVhbl91cmwsICI/IikgIT09IGZhbHNlKSB7ICRjbGVhbl91cmwgPSBzdWJzdHIoJGNsZWFuX3VybCwgMCwgc3RycG9zKCRjbGVhbl91cmwsICc/JykpOyB9ICRwYXJhbXMgPSBzdHJfcmVwbGFjZSgkY2xlYW5fdXJsLCAiIiwgJHVybCk7ICRwYXJhbXMgPSBzdHJfcmVwbGFjZSgiPyIsICIiLCAkcGFyYW1zKTsgJHBhckFycmF5ID0gZXhwbG9kZSgiJiIsICRwYXJhbXMpOyAkbmV3UGFyQXJyYXkgPSBhcnJheSgpOyBmb3JlYWNoICgkcGFyQXJyYXkgYXMgJHBhcikgeyAkZXhwYXIgPSBleHBsb2RlKCI9IiwgJHBhcik7IGlmICgkZXhwYXJbMF0gIT0gJGF0dHJpYnV0ZS0+Z2V0QXR0cmlidXRlQ29kZSgpIC4gJ19mcm9tJyAmJiAkZXhwYXJbMF0gIT0gJGF0dHJpYnV0ZS0+Z2V0QXR0cmlidXRlQ29kZSgpIC4gJ190bycgKSB7ICRuZXdQYXJBcnJheVtdID0gJHBhcjsgfSB9IGlmICgkbmV3UGFyQXJyYXkpIHsgaWYgKCRfZmlsdGVyLT5nZXRBamF4RW5hYmxlZCgpKSB7IHJldHVybiAkY2xlYW5fdXJsIC4gJz8nIC4gaW1wbG9kZSgiJiIsICRuZXdQYXJBcnJheSkgLiAnJmFqYXg9MSc7IH0gZWxzZSB7IHJldHVybiAkY2xlYW5fdXJsIC4gJz8nIC4gaW1wbG9kZSgiJiIsICRuZXdQYXJBcnJheSk7IH0gfSBlbHNlIHsgaWYgKCRfZmlsdGVyLT5nZXRBamF4RW5hYmxlZCgpKSB7IHJldHVybiAkY2xlYW5fdXJsIC4gJz9hamF4PTEnOyB9IGVsc2UgeyByZXR1cm4gJGNsZWFuX3VybDsgfSB9IH0gfSBlbHNlIHsgcmV0dXJuICRfZmlsdGVyLT5nZXRDbGVhckxpbmtVcmwoKTsgfSB9IGVsc2UgeyByZXR1cm4gJF9maWx0ZXItPmdldENsZWFyTGlua1VybCgpOyB9IH0gcHVibGljIGZ1bmN0aW9uIG5vdGlmeSgpIHsgJGZyZXF1ZW5jeSA9IGludHZhbChNYWdlOjphcHAoKS0+bG9hZENhY2hlKCdnb21hZ2Vfbm90aWZpY2F0aW9uc19mcmVxdWVuY3knKSk7IGlmICghJGZyZXF1ZW5jeSkgeyAkZnJlcXVlbmN5ID0gMjQ7IH0gJGxhc3RfdXBkYXRlID0gaW50dmFsKE1hZ2U6OmFwcCgpLT5sb2FkQ2FjaGUoJ2dvbWFnZV9ub3RpZmljYXRpb25zX2xhc3RfdXBkYXRlJykpOyBpZiAoKCRmcmVxdWVuY3kgKiA2MCAqIDYwICsgJGxhc3RfdXBkYXRlKSA+IHRpbWUoKSkgeyByZXR1cm4gZmFsc2U7IH0gJHRpbWVzdGFtcCA9ICRsYXN0X3VwZGF0ZTsgaWYgKCEkdGltZXN0YW1wKSB7ICR0aW1lc3RhbXAgPSB0aW1lKCk7IH0gdHJ5IHsgJGNoID0gY3VybF9pbml0KCk7IGN1cmxfc2V0b3B0KCRjaCwgQ1VSTE9QVF9VUkwsIHNwcmludGYoJ2h0dHBzOi8vd3d3LmdvbWFnZS5jb20vaW5kZXgucGhwL2dvbWFnZV9ub3RpZmljYXRpb24vaW5kZXgvZGF0YScpKTsgY3VybF9zZXRvcHQoJGNoLCBDVVJMT1BUX1BPU1QsIHRydWUpOyBjdXJsX3NldG9wdCgkY2gsIENVUkxPUFRfUE9TVEZJRUxEUywgJ3NrdT1hZHZhbmNlZC1uYXZpZ2F0aW9uJnRpbWVzdGFtcD0nIC4gJHRpbWVzdGFtcCAuICcmdmVyPScgLiB1cmxlbmNvZGUoJzQuMicpKTsgY3VybF9zZXRvcHQoJGNoLCBDVVJMT1BUX1RJTUVPVVQsIDMwKTsgY3VybF9zZXRvcHQoJGNoLCBDVVJMT1BUX1JFVFVSTlRSQU5TRkVSLCB0cnVlKTsgY3VybF9zZXRvcHQoJGNoLCBDVVJMT1BUX1NTTF9WRVJJRllQRUVSLCAwKTsgY3VybF9zZXRvcHQoJGNoLCBDVVJMT1BUX1NTTF9WRVJJRllIT1NULCAwKTsgJGNvbnRlbnQgPSBjdXJsX2V4ZWMoJGNoKTsgJHJlc3VsdCA9IFplbmRfSnNvbjo6ZGVjb2RlKCRjb250ZW50KTsgaWYgKCRyZXN1bHQgJiYgaXNzZXQoJHJlc3VsdFsnZnJlcXVlbmN5J10pICYmICgkcmVzdWx0WydmcmVxdWVuY3knXSAhPSAkZnJlcXVlbmN5KSkgeyBNYWdlOjphcHAoKS0+c2F2ZUNhY2hlKCRyZXN1bHRbJ2ZyZXF1ZW5jeSddLCAnZ29tYWdlX25vdGlmaWNhdGlvbnNfZnJlcXVlbmN5Jyk7IH0gaWYgKCRyZXN1bHQgJiYgaXNzZXQoJHJlc3VsdFsnZGF0YSddKSkgeyBpZiAoIWVtcHR5KCRyZXN1bHRbJ2RhdGEnXSkpIHsgTWFnZTo6Z2V0TW9kZWwoJ2FkbWlubm90aWZpY2F0aW9uL2luYm94JyktPnBhcnNlKCRyZXN1bHRbJ2RhdGEnXSk7IH0gfSB9IGNhdGNoIChFeGNlcHRpb24gJGUpIHsgfSBNYWdlOjphcHAoKS0+c2F2ZUNhY2hlKHRpbWUoKSwgJ2dvbWFnZV9ub3RpZmljYXRpb25zX2xhc3RfdXBkYXRlJyk7IH0gcHVibGljIGZ1bmN0aW9uIGdldElzQW55bW9yZVZlcnNpb24oJG1ham9yLCAkbWlub3IsICRyZXZpc2lvbiA9IDApIHsgJHZlcnNpb25faW5mbyA9IE1hZ2U6OmdldFZlcnNpb24oKTsgJHZlcnNpb25faW5mbyA9IGV4cGxvZGUoJy4nLCAkdmVyc2lvbl9pbmZvKTsgaWYgKCR2ZXJzaW9uX2luZm9bMF0gPiAkbWFqb3IpIHsgcmV0dXJuIHRydWU7IH0gZWxzZWlmICgkdmVyc2lvbl9pbmZvWzBdID09ICRtYWpvcikgeyBpZiAoJHZlcnNpb25faW5mb1sxXSA+ICRtaW5vcikgeyByZXR1cm4gdHJ1ZTsgfSBlbHNlaWYgKCR2ZXJzaW9uX2luZm9bMV0gPT0gJG1pbm9yKSB7IGlmICgkdmVyc2lvbl9pbmZvWzJdID49ICRyZXZpc2lvbikgeyByZXR1cm4gdHJ1ZTsgfSBlbHNlIHsgcmV0dXJuIGZhbHNlOyB9IH0gZWxzZSB7IHJldHVybiBmYWxzZTsgfSB9IGVsc2UgeyByZXR1cm4gZmFsc2U7IH0gfSB9"));
+<?php
+
+/**
+ * GoMage Advanced Navigation Extension
+ *
+ * @category     Extension
+ * @copyright    Copyright (c) 2010-2013 GoMage (http://www.gomage.com)
+ * @author       GoMage
+ * @license      http://www.gomage.com/license-agreement/  Single domain license
+ * @terms of use http://www.gomage.com/terms-of-use
+ * @version      Release: 4.2
+ * @since        Class available since Release 1.0
+ */
+
+require_once(Mage::getBaseDir('lib') . DS . 'GoMage' . DS . 'MobileDetect' . DS . 'Mobile_Detect.php');
+
+class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
+{
+
+    public function getConfigData($node)
+    {
+        return Mage::getStoreConfig('gomage_navigation/' . $node);
+    }
+
+    public function getAllStoreDomains()
+    {
+        $domains = array();
+
+        foreach (Mage::app()->getWebsites() as $website) {
+            $url = $website->getConfig('web/unsecure/base_url');
+            if ($domain = trim(preg_replace('/^.*?\\/\\/(.*)?\\//', '$1', $url))) {
+                $domains[] = $domain;
+            }
+
+            $url = $website->getConfig('web/secure/base_url');
+
+            if ($domain = trim(preg_replace('/^.*?\\/\\/(.*)?\\//', '$1', $url))) {
+                $domains[] = $domain;
+            }
+        }
+        return array_unique($domains);
+    }
+
+    public function getAvailabelWebsites()
+    {
+        return $this->_w();
+    }
+
+    public function getAvailavelWebsites()
+    {
+        return $this->_w();
+    }
+
+    protected function _w()
+    {
+        if (!Mage::getStoreConfig('gomage_activation/advancednavigation/installed') ||
+            (intval(Mage::getStoreConfig('gomage_activation/advancednavigation/count')) > 10)
+        ) {
+            return array();
+        }
+
+        $time_to_update = 60 * 60 * 24 * 15;
+
+        $r = Mage::getStoreConfig('gomage_activation/advancednavigation/ar');
+        $t = Mage::getStoreConfig('gomage_activation/advancednavigation/time');
+        $s = Mage::getStoreConfig('gomage_activation/advancednavigation/websites');
+
+        $last_check = str_replace($r, '', Mage::helper('core')->decrypt($t));
+
+        $allsites = explode(',', str_replace($r, '', Mage::helper('core')->decrypt($s)));
+        $allsites = array_diff($allsites, array(""));
+
+        if (($last_check + $time_to_update) < time()) {
+            $this->a(Mage::getStoreConfig('gomage_activation/advancednavigation/key'),
+                intval(Mage::getStoreConfig('gomage_activation/advancednavigation/count')),
+                implode(',', $allsites)
+            );
+        }
+
+        return $allsites;
+    }
+
+    public function a($k, $c = 0, $s = '')
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_downloadable/key/check'));
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'key=' . urlencode($k) . '&sku=advanced-navigation&domains=' . urlencode(implode(',', $this->getAllStoreDomains())) . '&ver=' . urlencode('4.2'));
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
+        $content = curl_exec($ch);
+
+        $r = Zend_Json::decode($content);
+        $e = Mage::helper('core');
+        if (empty($r)) {
+
+            $value1 = Mage::getStoreConfig('gomage_activation/advancednavigation/ar');
+
+            $groups = array(
+                'advancednavigation' => array(
+                    'fields' => array(
+                        'ar'       => array(
+                            'value' => $value1
+                        ),
+                        'websites' => array(
+                            'value' => (string)Mage::getStoreConfig('gomage_activation/advancednavigation/websites')
+                        ),
+                        'time'     => array(
+                            'value' => (string)$e->encrypt($value1 . (time() - (60 * 60 * 24 * 15 - 1800)) . $value1)
+                        ),
+                        'count'    => array(
+                            'value' => $c + 1)
+                    )
+                )
+            );
+
+            Mage::getModel('adminhtml/config_data')
+                ->setSection('gomage_activation')
+                ->setGroups($groups)
+                ->save();
+
+            Mage::getConfig()->reinit();
+            Mage::app()->reinitStores();
+
+            return;
+        }
+
+        $value1 = '';
+        $value2 = '';
+
+        if (isset($r['d']) && isset($r['c'])) {
+            $value1 = $e->encrypt(base64_encode(Zend_Json::encode($r)));
+
+            if (!$s) {
+                $s = Mage::getStoreConfig('gomage_activation/advancednavigation/websites');
+            }
+
+            $s      = array_slice(explode(',', $s), 0, $r['c']);
+            $value2 = $e->encrypt($value1 . implode(',', $s) . $value1);
+        }
+        $groups = array(
+            'advancednavigation' => array(
+                'fields' => array(
+                    'ar'        => array(
+                        'value' => $value1
+                    ),
+                    'websites'  => array(
+                        'value' => (string)$value2
+                    ),
+                    'time'      => array(
+                        'value' => (string)$e->encrypt($value1 . time() . $value1)
+                    ),
+                    'installed' => array(
+                        'value' => 1
+                    ),
+                    'count'     => array(
+                        'value' => 0)
+
+                )
+            )
+        );
+
+        Mage::getModel('adminhtml/config_data')
+            ->setSection('gomage_activation')
+            ->setGroups($groups)
+            ->save();
+
+        Mage::getConfig()->reinit();
+        Mage::app()->reinitStores();
+
+    }
+
+    public function ga()
+    {
+        return Zend_Json::decode(base64_decode(Mage::helper('core')->decrypt(Mage::getStoreConfig('gomage_activation/advancednavigation/ar'))));
+    }
+
+    public function isGomageNavigation()
+    {
+        if ($this->isMobileDevice() && Mage::getStoreConfigFlag('gomage_navigation/general/disable_mobile')) {
+            return false;
+        }
+        return in_array(Mage::app()->getStore()->getWebsiteId(), $this->getAvailavelWebsites()) &&
+        Mage::getStoreConfigFlag('gomage_navigation/general/mode');
+    }
+
+    public function isGomageNavigationAjax()
+    {
+        return $this->isGomageNavigation() &&
+        Mage::getStoreConfigFlag('gomage_navigation/general/pager') &&
+        (Mage::registry('current_category') ||
+            (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch' &&
+                Mage::app()->getFrontController()->getRequest()->getControllerName() != 'advanced'));
+    }
+
+    public function isGomageNavigationClearAjax()
+    {
+        return $this->isGomageNavigation() &&
+        (Mage::registry('current_category') ||
+            (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch' &&
+                Mage::app()->getFrontController()->getRequest()->getControllerName() != 'advanced'));
+    }
+
+    public function formatColor($value)
+    {
+        if ($value = preg_replace('/[^a-zA-Z0-9\s]/', '', $value)) {
+            $value = '#' . $value;
+        }
+        return $value;
+    }
+
+    public function isFrendlyUrl()
+    {
+        return $this->isGomageNavigation() &&
+        Mage::getStoreConfigFlag('gomage_navigation/filter_settings/frendlyurl') &&
+        !$this->isGoMage_SeoBoosterEnabled();
+    }
+
+    public function isGoMage_SeoBoosterEnabled()
+    {
+        $_modules      = Mage::getConfig()->getNode('modules')->children();
+        $_modulesArray = (array)$_modules;
+        if (!isset($_modulesArray['GoMage_SeoBooster'])) {
+            return false;
+        }
+        return $_modulesArray['GoMage_SeoBooster']->is('active');
+    }
+
+    public function getFilterUrl($route = '', $params = array(), $filter = false)
+    {
+        if (!$this->isFrendlyUrl()) {
+            $url = Mage::getUrl($route, $params);
+
+            $arr = parse_url($url);
+
+            $queryString = false;
+            if (isset($arr['query'])) {
+                parse_str(htmlspecialchars_decode($arr['query']), $par);
+
+                if (isset($par['ajax'])) {
+                    unset($par['ajax']);
+                }
+
+                $queryString = http_build_query($par);
+            }
+
+            $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'] . '?';
+
+            if ($queryString) {
+                $url .= $queryString;
+            }
+
+            return $url;
+        }
+
+        $model         = Mage::getModel('core/url');
+        $request_query = $model->getRequest()->getQuery();
+        $attr          = Mage::registry('gan_filter_attributes');
+
+        foreach ($model->getRequest()->getQuery() as $param => $value) {
+
+            $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', $param);
+
+            if ($param == 'cat') {
+                $values         = explode(',', $value);
+                $prepare_values = array();
+                foreach ($values as $_value) {
+                    $category = Mage::getModel('catalog/category')->load($_value);
+                    if ($category && $category->getId()) {
+                        $prepare_values[] = $category->getData('url_key');
+                    }
+                }
+                $model->getRequest()->setQuery($param, implode(',', $prepare_values));
+            } elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))) {
+                $values         = explode(',', $value);
+                $prepare_values = array();
+                foreach ($values as $_value) {
+                    foreach ($attr[$param]['options'] as $_k => $_v) {
+                        if ($_v == $_value) {
+                            $prepare_values[] = $_k;
+                            break;
+                        }
+                    }
+                }
+                $model->getRequest()->setQuery($param, implode(',', $prepare_values));
+            } else {
+                if ($attributeModel->getFrontendInput() == $param) {
+                    $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeModel->getId());
+                    if (($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
+                            ||
+                            $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
+                        &&
+                        $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
+                    ) {
+                        $values = explode(',', $value);
+
+                        $params['_query'][$attribute->getAttributeCode() . '_from'] = $values[0];
+                        $params['_query'][$attribute->getAttributeCode() . '_to']   = $values[1];
+                        unset($params['_query'][$attribute->getAttributeCode()]);
+                    } else {
+                        $values         = explode(',', $value);
+                        $prepare_values = array();
+                        foreach ($values as $_value) {
+                            foreach ($attr[$param]['options'] as $_k => $_v) {
+                                if ($_v == $_value) {
+                                    $prepare_values[] = $_k;
+                                    break;
+                                }
+                            }
+                        }
+                        $model->getRequest()->setQuery($param, implode(',', $prepare_values));
+                    }
+                }
+            }
+        }
+
+        if (isset($params['_query'])) {
+            foreach ($params['_query'] as $param => $value) {
+                if ($value) {
+
+                    $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', $param);
+
+                    if ($param == 'cat') {
+                        $values         = explode(',', $value);
+                        $prepare_values = array();
+                        foreach ($values as $_value) {
+                            $category = Mage::getModel('catalog/category')->load($_value);
+                            if ($category && $category->getId()) {
+                                $prepare_values[] = $category->getData('url_key');
+                            }
+                        }
+                        $params['_query'][$param] = implode(',', $prepare_values);
+                    } elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))) {
+                        $values         = explode(',', $value);
+                        $prepare_values = array();
+                        foreach ($values as $_value) {
+                            foreach ($attr[$param]['options'] as $_k => $_v) {
+                                if ($_v == $_value) {
+                                    $prepare_values[] = $_k;
+                                    break;
+                                }
+                            }
+                        }
+                        $params['_query'][$param] = implode(',', $prepare_values);
+                    } else {
+                        if ($attributeModel->getFrontendInput() == $param) {
+                            $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeModel->getId());
+                            if (($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
+                                    ||
+                                    $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
+                                &&
+                                $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
+                            ) {
+                                if (strpos($value, ';')) {
+                                    $values = explode(';', $value);
+                                } else {
+                                    $values = explode(',', $value);
+                                }
+
+                                $params['_query'][$attribute->getAttributeCode() . '_from'] = $values[0];
+                                $params['_query'][$attribute->getAttributeCode() . '_to']   = $values[1];
+                                unset($params['_query'][$attribute->getAttributeCode()]);
+                            } else {
+                                $values         = explode(',', $value);
+                                $prepare_values = array();
+                                foreach ($values as $_value) {
+                                    foreach ($attr[$param]['options'] as $_k => $_v) {
+                                        if ($_v == $_value) {
+                                            $prepare_values[] = $_k;
+                                            break;
+                                        }
+                                    }
+                                }
+                                $params['_query'][$param] = implode(',', $prepare_values);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $url = $model->getUrl($route, $params);
+
+        $arr = parse_url($url);
+
+        $queryString = false;
+        if (isset($arr['query'])) {
+            parse_str(htmlspecialchars_decode($arr['query']), $par);
+            if (isset($par['ajax'])) {
+                unset($par['ajax']);
+            }
+
+            $queryString = http_build_query($par);
+        }
+
+        $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'] . '?';
+
+        if ($queryString) {
+            $url .= $queryString;
+        }
+
+        foreach ($request_query as $param => $value) {
+            $model->getRequest()->setQuery($param, $value);
+        }
+
+        return $url;
+    }
+
+    public function formatUrlValue($value)
+    {
+        $value = preg_replace('#[^0-9a-z]+#i', '_', Mage::helper('catalog/product_url')->format($value));
+        $value = strtolower($value);
+        $value = trim($value, '-');
+
+        return $value;
+    }
+
+    public function isMobileDevice()
+    {
+        $detect = new Mobile_Detect();
+        return $detect->isMobile();
+    }
+
+    public function isGooglebot()
+    {
+        if (preg_match("/Google/", Mage::helper('core/http')->getHttpUserAgent()) || preg_match("/bot/", Mage::helper('core/http')->getHttpUserAgent())) {
+            $ip   = Mage::helper('core/http')->getRemoteAddr();
+            $name = gethostbyaddr($ip);
+            if (preg_match("/Googlebot/", $name) || preg_match("/bot/", $name)) {
+                $hosts = gethostbynamel($name);
+                foreach ($hosts as $host) {
+                    if ($host == $ip) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getFilterItemCount($filter)
+    {
+        $count = 0;
+        if ($filter && $filter->getItems()) {
+            foreach ($filter->getItems() as $item) {
+                $count += $item->getCount();
+            }
+        }
+
+        if ($count == 0 && $filter->getFilter()->getRequestVarValue() == 'stock_status') {
+            return 1;
+        }
+
+        return $count;
+    }
+
+    public function getFilter()
+    {
+        $filter = Mage::getStoreConfig('gomage_navigation/filter/filter_btn_txt');
+
+        if ($filter == '') {
+            $filter = $this->__('Filter');
+        }
+
+        return $filter;
+    }
+
+    public function getClearAll()
+    {
+        $clear = Mage::getStoreConfig('gomage_navigation/filter/clear_btn_txt');
+
+        if ($clear == '') {
+            $clear = $this->__('Clear All');
+        }
+
+        return $clear;
+    }
+
+    public function getMore()
+    {
+        $more = Mage::getStoreConfig('gomage_navigation/filter/more_btn_txt');
+
+        if ($more == '') {
+            $more = $this->__('More');
+        }
+
+        return $more;
+    }
+
+    public function getLess()
+    {
+        $less = Mage::getStoreConfig('gomage_navigation/filter/less_btn_txt');
+
+        if ($less == '') {
+            $less = $this->__('Less');
+        }
+
+        return $less;
+    }
+
+    public function getShowmore()
+    {
+        $showmore = Mage::getStoreConfig('gomage_navigation/filter/showmore_btn_txt');
+
+        if ($showmore == '') {
+            $showmore = $this->__('Show more products');
+        }
+
+        return $showmore;
+    }
+
+    public function getBacktotop()
+    {
+        $backtotop = Mage::getStoreConfig('gomage_navigation/filter/backtotop_btn_txt');
+
+        if ($backtotop == '') {
+            $backtotop = $this->__('Back to Top');
+        }
+
+        return $backtotop;
+    }
+
+    public function isEnterprise()
+    {
+        if (Mage::getConfig()->getModuleConfig('Enterprise_Enterprise') && Mage::getConfig()->getModuleConfig('Enterprise_AdminGws') && Mage::getConfig()->getModuleConfig('Enterprise_Checkout') && Mage::getConfig()->getModuleConfig('Enterprise_Customer')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getSide($type)
+    {
+        switch ($type) {
+            case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::LEFT_BLOCK:
+                return 'left';
+                break;
+
+            case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT:
+                return 'content';
+                break;
+
+            case GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::RIGHT_BLOCK:
+                return 'right';
+                break;
+
+            default:
+                return 'left';
+                break;
+        }
+    }
+
+    public function getClearLinkUrl($_filter)
+    {
+        if ($_filter->getFilter()->getRequestVar() != 'cat' && $_filter->getFilter()->getRequestVar() != 'stock_status') {
+            if ($_filter->getFilter()->getAttributeModel()->getFrontendInput()) {
+                $attribute = $_filter->getFilter()->getAttributeModel();
+
+                if ((in_array($attribute->getFilterType(), array(GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER,
+                                GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT,
+                                GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER)
+                        ) && !Mage::helper('gomage_navigation')->isMobileDevice())
+                    ||
+                    ($attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
+                        &&
+                        $attribute->getRangeOptions() != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::NO)
+                ) {
+                    $params                 = array();
+                    $params['_nosid']       = true;
+                    $params['_current']     = true;
+                    $params['_use_rewrite'] = true;
+                    $params['_escape']      = false;
+
+                    $url = $this->getFilterUrl('*/*/*', $params);
+
+                    $clean_url = $this->getFilterUrl('*/*/*', array('_current' => true, '_nosid' => true, '_use_rewrite' => true, '_query' => array(), '_escape' => false));
+
+                    if (strpos($clean_url, "?") !== false) {
+                        $clean_url = substr($clean_url, 0, strpos($clean_url, '?'));
+                    }
+
+                    $params = str_replace($clean_url, "", $url);
+                    $params = str_replace("?", "", $params);
+
+                    $parArray    = explode("&", $params);
+                    $newParArray = array();
+
+
+                    foreach ($parArray as $par) {
+                        $expar = explode("=", $par);
+                        if ($expar[0] != $attribute->getAttributeCode() . '_from'
+                            &&
+                            $expar[0] != $attribute->getAttributeCode() . '_to'
+                        ) {
+                            $newParArray[] = $par;
+                        }
+                    }
+
+                    if ($newParArray) {
+                        if ($_filter->getAjaxEnabled()) {
+                            return $clean_url . '?' . implode("&", $newParArray) . '&ajax=1';
+                        } else {
+                            return $clean_url . '?' . implode("&", $newParArray);
+                        }
+                    } else {
+                        if ($_filter->getAjaxEnabled()) {
+                            return $clean_url . '?ajax=1';
+                        } else {
+                            return $clean_url;
+                        }
+                    }
+                }
+            } else {
+                return $_filter->getClearLinkUrl();
+            }
+        } else {
+            return $_filter->getClearLinkUrl();
+        }
+    }
+
+    public function notify()
+    {
+        $frequency = intval(Mage::app()->loadCache('gomage_notifications_frequency'));
+        if (!$frequency) {
+            $frequency = 24;
+        }
+        $last_update = intval(Mage::app()->loadCache('gomage_notifications_last_update'));
+
+        if (($frequency * 60 * 60 + $last_update) > time()) {
+            return false;
+        }
+
+        $timestamp = $last_update;
+        if (!$timestamp) {
+            $timestamp = time();
+        }
+
+        try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_notification/index/data'));
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, 'sku=advanced-navigation&timestamp=' . $timestamp . '&ver=' . urlencode('4.2'));
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
+            $content = curl_exec($ch);
+
+            $result = Zend_Json::decode($content);
+
+            if ($result && isset($result['frequency']) && ($result['frequency'] != $frequency)) {
+                Mage::app()->saveCache($result['frequency'], 'gomage_notifications_frequency');
+            }
+
+            if ($result && isset($result['data'])) {
+                if (!empty($result['data'])) {
+                    Mage::getModel('adminnotification/inbox')->parse($result['data']);
+                }
+            }
+        } catch (Exception $e) {
+        }
+
+        Mage::app()->saveCache(time(), 'gomage_notifications_last_update');
+
+    }
+
+    public function getIsAnymoreVersion($major, $minor, $revision = 0)
+    {
+        $version_info = Mage::getVersion();
+        $version_info = explode('.', $version_info);
+
+        if ($version_info[0] > $major) {
+            return true;
+        } elseif ($version_info[0] == $major) {
+            if ($version_info[1] > $minor) {
+                return true;
+            } elseif ($version_info[1] == $minor) {
+                if ($version_info[2] >= $revision) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+}
+
