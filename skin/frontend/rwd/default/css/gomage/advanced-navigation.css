@@ -1,7 +1,4 @@
 /* Common styles */
-.gan-top{
-	background: url("../../images/gomage/advanced-navigation/bkg_nav0.jpg") repeat-y 50% 0 #0A263D;
-}
 .block-layered-nav .hidden{display:block !important; border:0 !important; margin:0 !important; padding:0 !important; font-size:0 !important; line-height:0 !important; width:0 !important; height:0 !important; overflow:hidden !important; }
 .block-layered-nav,
 .gan-sidebar-nav{
@@ -94,28 +91,30 @@ span.plain_column{float:left;}
 
 /* Top plain */
 .gan-plain-items ul{float:left;}
-#gan_nav_top.gan-plain-list{margin:0 auto; padding:0 16px; width:918px; font-size:13px;}
+#gan_nav_top.gan-plain-list{margin:15px 0 0; padding:0; font-size:14px;}
 #gan_nav_top.gan-plain-list li{ position:relative; text-align:left; float:left;}
 #gan_nav_top.gan-plain-list li.over { z-index:998; }
-#gan_nav_top.gan-plain-list li.active a { color:#d96708; }
-#gan_nav_top.gan-plain-list a,
-#gan_nav_top.gan-plain-list a:hover { display:block; line-height:1.3em; text-decoration:none; float:left; padding:5px 12px 6px 8px; color:#a7c6dd; font-weight:700;}
+#gan_nav_top.gan-plain-list li.active > a { color:#3399CC; }
+#gan_nav_top.gan-plain-list li.level0 > a{
+  text-transform: uppercase;
+  padding: 0 25px;
+  }
+#gan_nav_top.gan-plain-list a{ display:block; line-height:1.3em; text-decoration:none; float:left; padding:0; color:#636363; line-height: 30px;}
 #gan_nav_top.gan-plain-list span { display:block; cursor:pointer; white-space:nowrap; }
 #gan_nav_top.gan-plain-list li ul span {white-space:normal; }
-#gan_nav_top.gan-plain-list li.over a,
-#gan_nav_top.gan-plain-list a:hover { color:#d96708; }
-#gan_nav_top.gan-plain-list div.gan-plain{ position:absolute; width:15em; top:100%; left:-10000px; border:1px solid #899ba5; background:#fff;}
+#gan_nav_top.gan-plain-list li.over > a,
+#gan_nav_top.gan-plain-list a:hover { color:#3399CC; }
+#gan_nav_top.gan-plain-list div.gan-plain{ position:absolute; width:15em; top:100%; left:-10000px; border:1px solid #ccc; background:#fff;}
 #gan_nav_top.gan-plain-list ul li,
-#gan_nav_top.gan-plain-list ul li.active{float:none; padding:0; margin:0;}
+#gan_nav_top.gan-plain-list ul li.active{float:none; padding:0; margin:0; border-bottom: 1px solid #CCC;}
 #gan_nav_top.gan-plain-list ul a,
 #gan_nav_top.gan-plain-list ul a:hover { float:none; padding:0; background:none; }
-#gan_nav_top.gan-plain-list ul span,
-#gan_nav_top.gan-plain-list ul li.last li span { padding:3px 15px 4px 0; }
-#gan_nav_top.gan-plain-list div.gan-plain ul li a,
-#gan_nav_top.gan-plain-list div.gan-plain ul li a:hover { color:#2f2f2f; font-weight:400;}
-#gan_nav_top.gan-plain-list ul li a:hover { background:#d5e4eb; }
+#gan_nav_top.gan-plain-list ul li a:hover { color:#3399CC; }
 #gan_nav_top.gan-plain-list li div.gan-plain.shown-sub { left:0; z-index:999; }
-.gan-wrapper .gan-plain .gan-plain-items li.gan-plain-item-bold a{font-weight:700 !important;}
+#gan_nav_top.gan-plain-list .gan-plain-item li:last-child{
+  border-bottom: 0;
+  }
+/* .gan-wrapper .gan-plain .gan-plain-items li.gan-plain-item-bold a{font-weight:700 !important;} */
 
 .gan-attr-more,
 .gan-attr-less{
@@ -169,11 +168,12 @@ span.plain_column{float:left;}
 
 
 /* Dropdown */
-.gan-top .gan-dropdown-list{text-align:left;width:910px;display:block;margin:0 auto;padding:7px 20px;}
-.gan-top .gan-dropdown-list li{display:inline;padding-right:5px;}
+.gan-top .gan-dropdown-list{text-align:left;display:block;margin:0 auto;padding:7px 0;}
+.gan-top .gan-dropdown-list li{display: inline-block;padding-right:5px; margin: 0 0 7px;}
 .gan-sidebar-nav .gan-dropdown-list li select{width:100%;}
 .gan-dropdown-list li select.active{font-weight:700;}
-.gan-dropdown-list option.gan-dropdown-top{background-color:#D96708;font-weight:700;color:#fff;}
+.gan-dropdown-list li select{border: 1px solid #C0C0C0; padding: 5px;}
+.gan-dropdown-list option.gan-dropdown-top{background-color:#3399CC;font-weight:700;color:#fff;}
 .gan-sidebar-nav .gan-dropdown-list li{padding:3px;}
 /* Dropdown END */
 
@@ -482,9 +482,11 @@ ul.image-align-2-columns li{
   text-align:center;
   margin:10px 0;
   white-space:nowrap;
-  }#navigation_loadinfo_more img{
+  }
+  #navigation_loadinfo_more img{
     vertical-align:middle;
     padding-right:5px;
+    display: inline-block;
     }
 .narrow-by-list dd ol a,
 .gan-sidebar-nav .gan-image-list a{
@@ -896,10 +898,81 @@ ul.image-align-2-columns li{
 /* Media queries
 -------------------------------------------------- */
 @media only screen and (max-width: 1000px) {
+  
   .gan-totop-button{
     bottom: 30px;
     left: auto !important;
     right: 30px;
+    }
+
+}
+
+@media only screen and (max-width: 771px){
+  
+  /* Dropdown main menu */
+  .gan-top .gan-dropdown-list{
+    padding: 0 10px;
+    }
+    .gan-top .gan-dropdown-list li{
+      display: block;
+      padding: 0;
+      }
+    .gan-top .gan-dropdown-list select{
+      width: 100%;
+      }
+      
+  /* Plain main menu */
+  #gan_nav_top.gan-plain-list{
+    margin: 0;
+    }
+  #gan_nav_top.gan-plain-list li,
+  #gan_nav_top.gan-plain-list a{
+    float: none;
+    }
+  #gan_nav_top.gan-plain-list a{
+    line-height: 35px;
+    }
+  #gan_nav_top.gan-plain-list li{
+    border-bottom: 1px solid #ccc;
+    }
+    #gan_nav_top.gan-plain-list li:last-child{
+      border: 0;
+      }
+  #gan_nav_top.gan-plain-list li.parent > a:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    display: block;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid #ccc;
+    border-right: none;
+    top: 50%;
+    left: 10px;
+    right: auto;
+    margin-top: -5px;
+    }
+  #gan_nav_top.gan-plain-list li.active,
+  #gan_nav_top.gan-plain-list li a:hover{
+    background: #F4F4F4;
+    }
+  #gan_nav_top.gan-plain-list li.active > a,
+  #gan_nav_top.gan-plain-list li.over > a,
+  #gan_nav_top.gan-plain-list a:hover{
+    color: #636363;
+    }
+  #gan_nav_top.gan-plain-list .gan-plain-items,
+  .gan-plain-items ul{
+    float: none !important;
+    width: auto !important;
+    }
+  #gan_nav_top.gan-plain-list [class*="gan-plain-ob"]{
+    width: auto !important;
+    float: none !important;
+    }
+  #gan_nav_top.gan-plain-list div.gan-plain{
+    max-width: 100%;
     }
 
 }
