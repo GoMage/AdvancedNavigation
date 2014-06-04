@@ -7,52 +7,56 @@
   clear:both;
 }
 /* 1900 */
-.sidebar .block-layered-nav .block-content{
-  padding:0;
-}
-.sidebar .block-layered-nav .block-subtitle{
-  display:block;
-  padding:3px 9px;
-}
-
-.block.block-layered-nav .block-content{
-  background:#E7F1F4;
-  border:1px solid #A0B3C3;
-  padding:0;
-}
-.block.block-layered-nav .block-content{
-  position:relative;
-  padding-bottom:5px;
-  }
 .sidebar .block-layered-nav dl{
   padding:0;
   }
 .block-layered-nav .narrow-by-list dt{
-	cursor:pointer;
-	padding:7px 30px 2px 0;
-	font-weight: 700;
-	text-transform:uppercase;
-  background:none;
-  overflow:hidden;
-}
-.block-layered-nav .narrow-by-list .gan-attribute{
-  background:url("../../images/gomage/advanced-navigation/bkg_block-layered-dd.gif") repeat-x 0 0;
+  margin: 0;
+  margin-bottom: 10px;
+  color: #636363;
+  font-family: "Raleway", "Helvetica Neue", Verdana, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
+  line-height: 1.4;
+  text-rendering: optimizeSpeed;
+  text-transform: uppercase;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  font-weight: normal;
+  margin-bottom: 0px;
+  padding: 7px 10px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ccc;
+  position: relative;
+  background-color: #f4f4f4;
+  display: block;
   }
-.block-layered-nav .narrow-by-list .gan-attribute:first-child,
-.block-layered-nav .narrow-by-list .filter-note-content:first-child + .gan-attribute{
-  background:none;
-}
+  .block-layered-nav .narrow-by-list dt.filter-content-hide{
+    border-bottom: 0;
+    }
+.block-layered-nav .block-subtitle > span{
+  display: none;
+  }
 .block-layered-nav .narrow-by-list dt .filter-name{
-  background:url("../../images/gomage/advanced-navigation/bkg_block-layered-dt.gif") no-repeat 9px 4px;
   float:left;
-  padding:2px 0 0 28px;
-  line-height:16px;
+  cursor: pointer;
 }
 .block.block-layered-nav dd{
-  padding:0 12px 12px;
-  margin:0;
-  background:none;
-}
+  padding: 10px;
+  margin: 0;
+  border-width: 0 1px;
+  border-style: solid;
+  border-color: #ccc;
+  }
+  .block.block-layered-nav .gan-attribute:last-child dd,
+  .block-layered-nav .narrow-by-list .gan-attribute:last-child dt.filter-content-hide{
+    border-bottom: 1px solid #ccc;
+    }
 .block-layered-nav li.active a{
 	font-weight:700;
 }
@@ -369,7 +373,7 @@ ul.gan-list-checkbox.gan-image-list li a.active{
 ul.image-align-horizontally li a,
 ul.image-align-default li a,
 ul.image-align-2-columns li a{
-	background-position:0 0;
+	background-position:0 8px;
 }
 .narrow-by-list dd ol.image-align-horizontally li,
 ul.image-align-horizontally li{
@@ -390,13 +394,10 @@ ul.image-align-2-columns li{
 	padding-bottom:3px;
 	float:left;
 }
-.narrow-by-list dd ol.gan-list-checkbox li a,
-.narrow-by-list dd ol.image-align-horizontally li{
-	/display:inline;
-}
 .narrow-by-list dd select{
 	width:100%;
-  margin-top:5px;
+  padding: 5px;
+  border: 1px solid #ccc;
 }
 .narrow-by-list .filter-fieldset .fields{
   float:left;
@@ -406,12 +407,16 @@ ul.image-align-2-columns li{
 	float:left;
 }
 .narrow-by-list .filter-fieldset .fields .from-wrapper span{
-	float:left;
+	display: inline-block;
+  line-height: 22px;
 	text-align:center;
 	width:25px;
+  font-weight: 400;
 }
 .narrow-by-list .filter-fieldset .fields .from-wrapper input{
-	width:34px;
+	width:52px;
+  height: 23px;
+  font-size: 12px;
 }
 .narrow-by-list .slider-input-action{
 	float:right;
@@ -502,7 +507,7 @@ ul.image-align-2-columns li{
 .gan-totop-button button { -webkit-border-fit:lines; } /* <- Safari & Google Chrome Fix */
 .block-layered-nav button.button,
 .gan-more-button button,
-.gan-totop-button button { overflow:visible; float:none; width:auto; border:0; padding:0; margin:0; background:none !important; cursor:pointer; text-indent:0px !important; height:23px !important;}
+.gan-totop-button button { overflow:visible; float:none; width:auto; border:0; padding:0; margin:0; background:none !important; cursor:pointer; text-indent:0px !important; height:25px !important;}
 
 .block-layered-nav .block-content button.button span{
   border: 0;
@@ -513,7 +518,7 @@ ul.image-align-2-columns li{
 	text-transform:uppercase;
 	text-align:center;
 	white-space:nowrap;
-  height: 23px;
+  height: 25px;
 }
 .block-layered-nav .block-content button.button span span{
 	padding:0 12px;
