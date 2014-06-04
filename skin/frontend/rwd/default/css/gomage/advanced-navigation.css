@@ -6,7 +6,9 @@
 	border:0;
   clear:both;
 }
-/* 1900 */
+.block.block-layered-nav .block-content{
+  position: relative;
+  }
 .sidebar .block-layered-nav dl{
   padding:0;
   }
