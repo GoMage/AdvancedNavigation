@@ -1,5 +1,6 @@
 <?php
- /**
+
+/**
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
@@ -10,10 +11,18 @@
  * @version      Release: 4.2
  * @since        Class available since Release 2.0
  */
- 
 class GoMage_Navigation_Block_Layer_Searchview extends GoMage_Navigation_Block_Layer_View
 {
-	
+
+    /**
+     * Internal constructor
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+        Mage::register('current_layer', $this->getLayer(), true);
+    }
+
     /**
      * Get layer object
      *
@@ -21,14 +30,11 @@ class GoMage_Navigation_Block_Layer_Searchview extends GoMage_Navigation_Block_L
      */
     public function getLayer()
     {
-    	if ( Mage::helper('gomage_navigation')->isEnterprise() )
-       	{
-       		return Mage::getSingleton('enterprise_search/search_layer');	
-       	}
-       	else 
-       	{
-       		return Mage::getSingleton('catalogsearch/layer');
-       	}
+        if (Mage::helper('gomage_navigation')->isEnterprise()) {
+            return Mage::getSingleton('enterprise_search/search_layer');
+        } else {
+            return Mage::getSingleton('catalogsearch/layer');
+        }
     }
 
     /**
@@ -38,25 +44,24 @@ class GoMage_Navigation_Block_Layer_Searchview extends GoMage_Navigation_Block_L
      */
     public function canShowBlock()
     {
-        $availableResCount = (int) Mage::app()->getStore()
-            ->getConfig(Mage_CatalogSearch_Model_Layer::XML_PATH_DISPLAY_LAYER_COUNT );
+        $availableResCount = (int)Mage::app()->getStore()
+            ->getConfig(Mage_CatalogSearch_Model_Layer::XML_PATH_DISPLAY_LAYER_COUNT);
 
         if (!$availableResCount
-            || ($availableResCount>=$this->getLayer()->getProductCollection()->getSize())) {
+            || ($availableResCount >= $this->getLayer()->getProductCollection()->getSize())
+        ) {
             return parent::canShowBlock();
         }
         return false;
     }
 
-    protected function _prepareLayout(){
-
+    protected function _prepareLayout()
+    {
         parent::_prepareLayout();
 
-        if ( Mage::helper('gomage_navigation')->isEnterprise() )
-        {
+        if (Mage::helper('gomage_navigation')->isEnterprise()) {
             $isCatalog = true;
-            if ( Mage::app()->getFrontController()->getRequest()->getParam('q') != null )
-            {
+            if (Mage::app()->getFrontController()->getRequest()->getParam('q') != null) {
                 $isCatalog = false;
             }
 
@@ -64,7 +69,7 @@ class GoMage_Navigation_Block_Layer_Searchview extends GoMage_Navigation_Block_L
             if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog) && Mage::helper('gomage_navigation')->isGomageNavigation()) {
 
                 $children = $this->getChild();
-                foreach ($children as $child){
+                foreach ($children as $child) {
                     $child->addFacetCondition();
                 }
             }
