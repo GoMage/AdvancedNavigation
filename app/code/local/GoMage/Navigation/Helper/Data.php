@@ -248,7 +248,11 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                 $queryString = http_build_query($par);
             }
 
-            $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'] . '?';
+            $port = '';
+            if (isset($arr['port']) && $arr['port'] !== '80') {
+                $port = ':' . $arr['port'];
+            }
+            $url = $arr['scheme'] . '://' . $arr['host'] . $port . $arr['path'] . '?';
 
             if ($queryString) {
                 $url .= $queryString;
