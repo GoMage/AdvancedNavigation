@@ -526,6 +526,11 @@ GomageNavigationClass = Class.create({
                             GomageNavigation.gan_static_navigation_url = undefined;
                         }
 
+                        try {
+                            $j(window).trigger('delayed-resize');
+                        } catch (e) {
+                        }
+
                         GomageNavigation.stopLoadNavigationData();
 
                     },
