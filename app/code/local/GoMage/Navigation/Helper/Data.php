@@ -275,7 +275,13 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                 foreach ($values as $_value) {
                     $category = Mage::getModel('catalog/category')->load($_value);
                     if ($category && $category->getId()) {
-                        $prepare_values[] = $category->getData('url_key');
+                        if (Mage::getStoreConfigFlag('gomage_navigation/filter_settings/expend_frendlyurl')) {
+                            $parent_ids       = $category->getParentIds();
+                            $parent_category  = Mage::getModel('catalog/category')->load(end($parent_ids));
+                            $prepare_values[] = $parent_category->getData('url_key') . '|' . $category->getData('url_key');
+                        } else {
+                            $prepare_values[] = $category->getData('url_key');
+                        }
                     }
                 }
                 $model->getRequest()->setQuery($param, implode(',', $prepare_values));
@@ -334,7 +340,13 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                         foreach ($values as $_value) {
                             $category = Mage::getModel('catalog/category')->load($_value);
                             if ($category && $category->getId()) {
-                                $prepare_values[] = $category->getData('url_key');
+                                if (Mage::getStoreConfigFlag('gomage_navigation/filter_settings/expend_frendlyurl')) {
+                                    $parent_ids       = $category->getParentIds();
+                                    $parent_category  = Mage::getModel('catalog/category')->load(end($parent_ids));
+                                    $prepare_values[] = $parent_category->getData('url_key') . '|' . $category->getData('url_key');
+                                } else {
+                                    $prepare_values[] = $category->getData('url_key');
+                                }
                             }
                         }
                         $params['_query'][$param] = implode(',', $prepare_values);

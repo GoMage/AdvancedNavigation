@@ -271,7 +271,16 @@
 							<show_in_store>1</show_in_store>	
 							<comment>It will replace Attribute Numbers to Names</comment>						
 						</frendlyurl>
-						<applied_values>
+                        <expend_frendlyurl>
+                            <label>Expend Category URLs</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>21</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </expend_frendlyurl>
+                        <applied_values>
 							<label>Show Applied Values in Results</label>
 							<frontend_type>select</frontend_type>
 							<source_model>gomage_navigation/adminhtml_system_config_source_filter_appliedvalues</source_model>
