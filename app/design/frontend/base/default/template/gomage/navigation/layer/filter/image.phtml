@@ -80,7 +80,7 @@
 
 		    	<span class="filter-label"><?php echo $_item->getLabel() ?>
 		    		<?php if ( Mage::getStoreConfigFlag('gomage_navigation/filter_settings/values_qty') == 1 ):?>
-		        		(<?php echo $_item->getCount() ?>)
+                        <span class="count">(<?php echo $_item->getCount() ?>)</span>
 		        	<?php endif;?>
 			    </span>
 		    	<?php endif;?>
