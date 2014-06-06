@@ -426,13 +426,19 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
         return $url;
     }
 
-    public function formatUrlValue($value)
+    public function formatUrlValue($value, $default)
     {
-        $value = preg_replace('#[^0-9a-z]+#i', '_', Mage::helper('catalog/product_url')->format($value));
+        $oldLocale  = setlocale(LC_COLLATE, "0");
+        $localeCode = Mage::app()->getLocale()->getLocaleCode();
+        setlocale(LC_COLLATE, $localeCode . '.UTF8', 'C.UTF-8', 'en_US.utf8');
+        $value = iconv(mb_detect_encoding($value), 'ASCII//TRANSLIT', $value);
+        setlocale(LC_COLLATE, $oldLocale);
+
         $value = strtolower($value);
+        $value = preg_replace('#[^0-9a-z]+#i', '-', Mage::helper('catalog/product_url')->format($value));
         $value = trim($value, '-');
 
-        return $value;
+        return $value ? $value : $default;
     }
 
     public function isMobileDevice()

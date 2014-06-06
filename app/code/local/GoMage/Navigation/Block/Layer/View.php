@@ -540,7 +540,7 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
                     $attr[$attribute->getAttributeCode()]['type'] = $attribute->getBackendType();
                     $options                                      = $attribute->getSource()->getAllOptions();
                     foreach ($options as $option) {
-                        $attr[$attribute->getAttributeCode()]['options'][$helper->formatUrlValue($option['label'])] = $option['value'];
+                        $attr[$attribute->getAttributeCode()]['options'][$helper->formatUrlValue($option['label'], $option['value'])] = $option['value'];
                     }
                 }
                 $url = Mage::getUrl('*/*/*', $params);

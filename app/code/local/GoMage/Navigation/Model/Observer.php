@@ -307,7 +307,7 @@ class GoMage_Navigation_Model_Observer
                 $attr[$attribute->getAttributeCode()]['type'] = $attribute->getBackendType();
                 $options                                      = $attribute->getSource()->getAllOptions();
                 foreach ($options as $option) {
-                    $attr[$attribute->getAttributeCode()]['options'][$helper->formatUrlValue($option['label'])] = $option['value'];
+                    $attr[$attribute->getAttributeCode()]['options'][$helper->formatUrlValue($option['label'], $option['value'])] = $option['value'];
                 }
             }
             Mage::register('gan_filter_attributes', $attr);
