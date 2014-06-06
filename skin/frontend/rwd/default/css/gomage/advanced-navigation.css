@@ -355,11 +355,11 @@ ul.gan-list-checkbox.gan-folding-list li a span,
 	background:url('../../images/gomage/advanced-navigation/gan_checkbox.gif') 0 2px no-repeat;
 }
 .narrow-by-list dd ol.gan-list-checkbox li a.active{
-	background:url('../../images/gomage/advanced-navigation/gan_checkbox_active.gif') 0 2px no-repeat;
+	background:url('../../images/gomage/advanced-navigation/gan_checkbox_active.gif') 0 8px no-repeat;
 }
 ul.gan-list-checkbox.gan-default-list li a.active span,
 ul.gan-list-checkbox.gan-folding-list li a.active span{
-	background:url('../../images/gomage/advanced-navigation/gan_checkbox_active.gif') 9px 7px no-repeat;
+	background:url('../../images/gomage/advanced-navigation/gan_checkbox_active.gif') 0 2px no-repeat;
 }
 ul.gan-list-checkbox.gan-image-list li a.active{
 	background:url('../../images/gomage/advanced-navigation/gan_checkbox_active.gif') 0 2px no-repeat;
@@ -476,18 +476,6 @@ ul.image-align-2-columns li{
     padding-right:5px;
     display: inline-block;
     }
-.narrow-by-list dd ol a,
-.gan-sidebar-nav .gan-image-list a{
-	text-decoration:none;
-}
-.narrow-by-list dd ol a span,
-.gan-sidebar-nav .gan-image-list a span{
-	text-decoration:underline;
-}
-.narrow-by-list dd ol a:hover span,
-.gan-sidebar-nav .gan-image-list a:hover span{
-	text-decoration:none;
-}
 
 .gan-track-values{
   overflow:hidden;
