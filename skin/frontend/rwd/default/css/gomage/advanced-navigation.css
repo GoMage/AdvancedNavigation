@@ -105,7 +105,7 @@ span.plain_column{float:left;}
 
 .gan-attr-more,
 .gan-attr-less{
-  padding:0 10px 0 0 !important;
+  padding:0 10px 0 15px !important;
   display:inline !important;
   }
 .gan-attr-more{
@@ -349,25 +349,30 @@ ul.gan-inblock-list.gan-default-list{
 ul.gan-list-checkbox.gan-default-list li a span,
 ul.gan-list-checkbox.gan-folding-list li a span,
 .gan-sidebar-nav .gan-image-list.gan-list-checkbox li a{
-	display:inline-block;
-	padding-left:16px;
+	padding-left:31px;
 	line-height:16px;
-	background:url('../../images/gomage/advanced-navigation/gan_checkbox.gif') 0 2px no-repeat;
+	background:url('../../images/gomage/advanced-navigation/gan_checkbox.gif') 15px 2px no-repeat;
 }
+.gan-sidebar-nav .gan-image-list.gan-list-checkbox li a{
+  padding-left: 16px;
+  display: inline-block;
+  background-position: 0 2px;
+  }
 .narrow-by-list dd ol.gan-list-checkbox li a.active{
-	background:url('../../images/gomage/advanced-navigation/gan_checkbox_active.gif') 0 8px no-repeat;
+	background:url('../../images/gomage/advanced-navigation/gan_checkbox_active.gif') 15px 8px no-repeat;
 }
 ul.gan-list-checkbox.gan-default-list li a.active span,
 ul.gan-list-checkbox.gan-folding-list li a.active span{
-	background:url('../../images/gomage/advanced-navigation/gan_checkbox_active.gif') 0 2px no-repeat;
+	background:url('../../images/gomage/advanced-navigation/gan_checkbox_active.gif') 0 9px no-repeat;
 }
 ul.gan-list-checkbox.gan-image-list li a.active{
 	background:url('../../images/gomage/advanced-navigation/gan_checkbox_active.gif') 0 2px no-repeat;
 }
 .gan-wrapper .gan-folding-list.gan-list-checkbox li a span,
 .gan-wrapper .gan-default-list.gan-list-checkbox li a span{
-	background-position:0 3px;
+	background-position:0 9px;
 	padding-left:18px;
+  line-height: 30px;
 }
 .narrow-by-list dd ol.image-align-horizontally li a,
 .narrow-by-list dd ol.image-align-default li a,
@@ -375,7 +380,7 @@ ul.gan-list-checkbox.gan-image-list li a.active{
 ul.image-align-horizontally li a,
 ul.image-align-default li a,
 ul.image-align-2-columns li a{
-	background-position:0 8px;
+	background-position:15px 8px;
 }
 .narrow-by-list dd ol.image-align-horizontally li,
 ul.image-align-horizontally li{
@@ -668,7 +673,7 @@ ul.image-align-2-columns li{
 }
 .narrow-by-list dd ol.gan-list-checkbox.no-titles  li a,
 .gan-sidebar-nav .gan-list-checkbox.no-titles  li a{
-	background-position:0 2px;
+	background-position:0 7px;
 }
 .narrow-by-list dd ol.gan-list-checkbox.no-titles  li a.active img,
 .gan-sidebar-nav .gan-list-checkbox.no-titles  li a.active img{
@@ -726,50 +731,51 @@ ul.image-align-2-columns li{
 
 /* Shop By in Main col
 -------------------------------------------------- */
+.block.block-layered-nav-content .block-content{
+  margin: 0;
+  border: 1px solid #ccc;
+  }
 .block-layered-nav.gan-content-area .block-subtitle{
   padding:3px 9px;
   }
-.block-layered-nav.gan-content-area .block-title{
-  background:url(../../images/gomage/advanced-navigation/bkg_block-layered-title.gif) no-repeat 100% 0;
-  padding:0 5px 0 0;
-  height:24px;
-  overflow:hidden;
-  text-indent:-999em;
-  border:0;
-  margin:0;
-  }
-  .block-layered-nav.gan-content-area .block-title strong{
-    background:url(../../images/gomage/advanced-navigation/bkg_block-layered-title.gif) no-repeat 0 0;
-    padding:0;
-    height:24px;
-    display:block;
+  .block-layered-nav.gan-content-area .block-title{
+    overflow: hidden;
     }
   .block-layered-nav.gan-content-area .block-title span{
-    display:none;
-    }    
+    float: left;
+    }
   .block-layered-nav.gan-content-area .block-title a{
     text-indent:0px;
     float:right;
-    color:#fff;
     text-decoration:none;
     white-space:nowrap;
     text-transform:none;
     margin:4px 2px 0 0;
+    font-size: 12px;
     }
     .block-layered-nav.gan-content-area .block-title a:hover{
       text-decoration:underline;
       font-weight:bold;
       }
+.gan-content-area .narrow-by-list .gan-attribute{
+  border-top: 1px solid #ccc;
+  }
+  .gan-content-area .narrow-by-list .gan-attribute:first-child{
+    border: 0;
+    }
 .gan-content-area .narrow-by-list dt{
   float:left;
   width:26%;
   padding-bottom:7px;
   word-wrap:break-word;
+  background: none;
+  border: 0;
   }
 .gan-content-area .narrow-by-list dd{
   float:left;
   width:63%;
   padding:7px;
+  border: 0;
   }
 .gan-content-area .narrow-by-list ol li{
   float:left;
