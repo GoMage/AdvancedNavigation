@@ -435,6 +435,7 @@ ul.image-align-2-columns li{
 }
 .gan-loadinfo{
 	position:fixed;
+  font-size: 12px;
 	-position:absolute;
 	left:50%;
 	top:45%;
