@@ -300,7 +300,14 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
             } else {
                 if ($attributeModel->getFrontendInput() == $param) {
                     $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeModel->getId());
-                    if (($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
+                    if (is_array($value)) {
+                        if (isset($value['from'])) {
+                            $params['_query'][$attribute->getAttributeCode() . '_from'] = $value['from'];
+                        }
+                        if (isset($value['to'])) {
+                            $params['_query'][$attribute->getAttributeCode() . '_to'] = $value['to'];
+                        }
+                    } elseif (($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
                             ||
                             $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
                         &&
