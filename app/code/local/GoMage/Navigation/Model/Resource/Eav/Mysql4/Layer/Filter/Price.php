@@ -1,5 +1,6 @@
 <?php
- /**
+
+/**
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
@@ -10,10 +11,9 @@
  * @version      Release: 4.2
  * @since        Class available since Release 1.0
  */
-
 class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mage_Core_Model_Mysql4_Abstract
 {
-    
+
     /**
      * Initialize connection and define main table name
      *
@@ -68,8 +68,8 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
 
         return $response;
     }
-	
-	/**
+
+    /**
      * Retrieve minimal price for attribute
      *
      * @param Mage_Catalog_Model_Layer_Filter_Price $filter
@@ -77,21 +77,21 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
      */
     public function getMinPrice($filter)
     {
-        $select     = $this->_getSelect($filter);
+        $select = $this->_getSelect($filter);
 
         $connection = $this->_getReadAdapter();
         $response   = $this->_dispatchPreparePriceEvent($filter, $select);
 
         $table = $this->_getIndexTableAlias();
 
-        $additional     = join('', $response->getAdditionalCalculations());
-        $minPriceExpr   = new Zend_Db_Expr("MIN({$table}.min_price {$additional})");
+        $additional   = join('', $response->getAdditionalCalculations());
+        $minPriceExpr = new Zend_Db_Expr("MIN({$table}.min_price {$additional})");
 
         $select->columns(array($minPriceExpr));
 
         return $connection->fetchOne($select) * $filter->getCurrencyRate();
     }
-	
+
     /**
      * Retrieve maximal price for attribute
      *
@@ -106,46 +106,42 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
 
         $table = $this->_getIndexTableAlias();
 
-        $additional     = join('', $response->getAdditionalCalculations());
-        $maxPriceExpr   = new Zend_Db_Expr("MAX({$table}.min_price {$additional})");
+        $additional   = join('', $response->getAdditionalCalculations());
+        $maxPriceExpr = new Zend_Db_Expr("MAX({$table}.min_price {$additional})");
 
         $select->columns(array($maxPriceExpr));
 
         return $connection->fetchOne($select) * $filter->getCurrencyRate();
     }
-    
+
     protected function _getSelect($filter)
     {
-    	$base_select = $filter->getLayer()->getBaseSelect();
-    	    	
-    	if(isset($base_select['price'])){
-        	
-        	$select = $base_select['price'];        	
-        
-        }else{
-        	
-        	$collection = $filter->getLayer()->getProductCollection();
-        	$collection->addPriceData($filter->getCustomerGroupId(), $filter->getWebsiteId());
-        	$select = clone $collection->getSelect();
-        	
+        $base_select = $filter->getLayer()->getBaseSelect();
+
+        if (isset($base_select['price'])) {
+            $select = $base_select['price'];
+        } else {
+            $collection = $filter->getLayer()->getProductCollection();
+            $collection->addPriceData($filter->getCustomerGroupId(), $filter->getWebsiteId());
+            $select = clone $collection->getSelect();
         }
-    	
+
         // reset columns, order and limitation conditions
         $select->reset(Zend_Db_Select::COLUMNS);
         $select->reset(Zend_Db_Select::ORDER);
         $select->reset(Zend_Db_Select::LIMIT_COUNT);
         $select->reset(Zend_Db_Select::LIMIT_OFFSET);
-		$select->reset(Zend_Db_Select::GROUP);
+        $select->reset(Zend_Db_Select::GROUP);
 
-		$_collection = clone $filter->getLayer()->getProductCollection();
-    	$searched_entity_ids = $_collection->load()->getSearchedEntityIds();
-		if ($searched_entity_ids && is_array($searched_entity_ids) && count($searched_entity_ids)){
-        	$select->where('e.entity_id IN (?)', $searched_entity_ids);	
-        } 
-		
+        $_collection         = clone $filter->getLayer()->getProductCollection();
+        $searched_entity_ids = $_collection->load()->getSearchedEntityIds();
+        if ($searched_entity_ids && is_array($searched_entity_ids) && count($searched_entity_ids)) {
+            $select->where('e.entity_id IN (?)', $searched_entity_ids);
+        }
+
         return $select;
     }
-	
+
     /**
      * Retrieve array with products counts per price range
      *
@@ -155,7 +151,6 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
      */
     public function getCount($filter, $range)
     {
-    	
         $select     = $this->_getSelect($filter);
         $connection = $this->_getReadAdapter();
         $response   = $this->_dispatchPreparePriceEvent($filter, $select);
@@ -168,122 +163,90 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price extends Mag
         $rangeExpr  = new Zend_Db_Expr("FLOOR((({$table}.min_price {$additional}) * {$rate}) / {$range}) + 1");
 
         $select->columns(array(
-            'range' => $rangeExpr,
-            'count' => $countExpr
-        ));
+                'range' => $rangeExpr,
+                'count' => $countExpr
+            )
+        );
         $select->where("{$table}.min_price > 0");
         $select->group('range');
-        
+
         return $connection->fetchPairs($select);
     }
-	
-	public function prepareSelect($filter, $value, $select){
 
-        $response   = $this->_dispatchPreparePriceEvent($filter, $select);
+    public function prepareSelect($filter, $value, $select)
+    {
+
+        $response = $this->_dispatchPreparePriceEvent($filter, $select);
 
         $table      = $this->_getIndexTableAlias();
         $additional = join('', $response->getAdditionalCalculations());
         $rate       = $filter->getCurrencyRate();
         $priceExpr  = new Zend_Db_Expr("(({$table}.min_price {$additional}) * {$rate})");
-		
-		$where = array();
-		
-		switch($filter->getAttributeModel()->getFilterType()):
-		
-		case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
-            $from	= isset($value['from']) ? intval($value['from']) : 0;
-            $to		= isset($value['to']) ? intval($value['to']) : 0;
 
-            $where[] = 'round(' . sprintf($priceExpr . ', 4) >= %s', $from) . '' . ($to > 0 ? ' AND round(' . sprintf($priceExpr . ',4) <= %d', $to) : '');
+        $where = array();
 
-            break;
+        switch ($filter->getAttributeModel()->getFilterType()) {
 
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
-
-            if ( Mage::helper('gomage_navigation')->isMobileDevice() )
-            {
-                foreach((array)$value as $_value){
-
-                    $where[] = sprintf($priceExpr . ' >= %s', ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf($priceExpr . ' < %d', ($_value['range'] * $_value['index']));
-
-                }
-            }
-            else
-            {
-                $from	= isset($value['from']) ? intval($value['from']) : 0;
-                $to		= isset($value['to']) ? intval($value['to']) : 0;
-
+            case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
+                $from    = isset($value['from']) ? intval($value['from']) : 0;
+                $to      = isset($value['to']) ? intval($value['to']) : 0;
                 $where[] = 'round(' . sprintf($priceExpr . ', 4) >= %s', $from) . '' . ($to > 0 ? ' AND round(' . sprintf($priceExpr . ',4) <= %d', $to) : '');
-            }
-    		
-    	break;
-		
-		default:
-			
-			$attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product','price');
-			$attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
-			
-			if ( ($filter->getAttributeModel()->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
-					||
-				 $filter->getAttributeModel()->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
-					&&
-				 $filter->getAttributeModel()->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT )
-			{
-				$from	= isset($value['from']) ? intval($value['from']) : 0;
-	    		$to		= isset($value['to']) ? intval($value['to']) : 0;
-	    		
-	    		$where[] = sprintf($priceExpr . ' >= %s', $from) . ($to > 0 ? ' AND ' . sprintf($priceExpr . ' <= %d', $to) : '');
-	    		 	
-			}
-			else 
-			{
-				foreach((array)$value as $_value){
-					
-					$where[] = sprintf($priceExpr . ' >= %s', ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf($priceExpr . ' < %d', ($_value['range'] * $_value['index']));
-					
-				}		
-			}
-		
-		break;
-		
-		endswitch;
-		
+                break;
+
+            case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
+            case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
+            case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
+                if (Mage::helper('gomage_navigation')->isMobileDevice()) {
+                    foreach ((array)$value as $_value) {
+                        $where[] = sprintf($priceExpr . ' >= %s', ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf($priceExpr . ' < %d', ($_value['range'] * $_value['index']));
+                    }
+                } else {
+                    $from    = isset($value['from']) ? intval($value['from']) : 0;
+                    $to      = isset($value['to']) ? intval($value['to']) : 0;
+                    $where[] = 'round(' . sprintf($priceExpr . ', 4) >= %s', $from) . '' . ($to > 0 ? ' AND round(' . sprintf($priceExpr . ',4) <= %d', $to) : '');
+                }
+                break;
+
+            default:
+                if (($filter->getAttributeModel()->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
+                        ||
+                        $filter->getAttributeModel()->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
+                    &&
+                    $filter->getAttributeModel()->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
+                    && (isset($value['from']) || isset($value['to']))
+                ) {
+                    $from    = isset($value['from']) ? intval($value['from']) : 0;
+                    $to      = isset($value['to']) ? intval($value['to']) : 0;
+                    $where[] = sprintf($priceExpr . ' >= %s', $from) . ($to > 0 ? ' AND ' . sprintf($priceExpr . ' <= %d', $to) : '');
+                } else {
+                    foreach ((array)$value as $_value) {
+                        $where[] = sprintf($priceExpr . ' >= %s', ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf($priceExpr . ' < %d', ($_value['range'] * $_value['index']));
+                    }
+                }
+                break;
+        }
+
         $select->where(implode(' OR ', $where));
-	}
-	
-    /**
-     * Apply attribute filter to product collection
-     *
-     * @param Mage_Catalog_Model_Layer_Filter_Price $filter
-     * @param int $range
-     * @param int $index    the range factor
-     * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute
-     */
+    }
+
+
     public function applyFilterToCollection($filter, $value)
     {
         $collection = $filter->getLayer()->getProductCollection();
-        //$collection->addPriceData($filter->getCustomerGroupId(), $filter->getWebsiteId());
         $select     = $collection->getSelect();
-        
+
         $this->prepareSelect($filter, $value, $select);
-        
+
         $attribute_code = 'price';
-        
+
         $base_select = $filter->getLayer()->getBaseSelect();
-        
-        foreach($base_select as $code=>$select){
-        	
-        	
-        	if($attribute_code != $code){
-        	
-        		$this->prepareSelect($filter, $value, $select);
-        	
-        	}
-        	
+
+        foreach ($base_select as $code => $select) {
+            if ($attribute_code != $code) {
+                $this->prepareSelect($filter, $value, $select);
+            }
         }
-        
         return $this;
     }
+
 }
