@@ -106,7 +106,7 @@
 		color:#519cde;
 		<?php endif;?>
 	}
-	<?php if (Mage::helper('gomage_navigation')->isGomageNavigation() &&
+	<?php if ((Mage::helper('gomage_navigation')->isGomageNavigation() || Mage::helper('gomage_navigation')->isGomageNavigationMenu()) &&
 			  Mage::getStoreConfig('gomage_navigation/menubarsettings/navigation') == GoMage_Navigation_Model_Layer::FILTER_TYPE_PLAIN): ?>
 		<?php $categories = $this->getStoreCategories(); ?>
 		<?php $_size = intval($this->getRootCategory()->getData('navigation_pw_m_bsize')); ?>		

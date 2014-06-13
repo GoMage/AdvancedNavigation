@@ -16,7 +16,9 @@ class GoMage_Navigation_Block_Head extends Mage_Core_Block_Template
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        if (Mage::helper('gomage_navigation')->isGomageNavigation()) {
+        $helper = Mage::helper('gomage_navigation');
+
+        if ($helper->isGomageNavigation() || $helper->isGomageNavigationMenu()) {
             if ($head_block = $this->getLayout()->getBlock('head')) {
                 $styles_block = $this->getLayout()->createBlock('gomage_navigation/styles', 'advancednavigation_styles')->setTemplate('gomage/navigation/header/styles.phtml');
                 $head_block->addjs('varien/menu.js');

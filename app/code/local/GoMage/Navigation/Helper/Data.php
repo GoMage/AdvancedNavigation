@@ -188,6 +188,12 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
         Mage::getStoreConfigFlag('gomage_navigation/general/mode');
     }
 
+    public function isGomageNavigationMenu()
+    {
+        return in_array(Mage::app()->getStore()->getWebsiteId(), $this->getAvailavelWebsites()) &&
+        Mage::getStoreConfigFlag('gomage_navigation/menubarsettings/navigation');
+    }
+
     public function isGomageNavigationAjax()
     {
         return $this->isGomageNavigation() &&

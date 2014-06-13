@@ -83,7 +83,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
         switch ($this->_navigation_place)
         {
             case self::MENU_BAR :
-                  if(Mage::helper('gomage_navigation')->isGomageNavigation())  
+                  if(Mage::helper('gomage_navigation')->isGomageNavigationMenu())
                       $this->_type_navigation = Mage::getStoreConfig('gomage_navigation/menubarsettings/navigation');
                   else
                       $this->_type_navigation = GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT;    
