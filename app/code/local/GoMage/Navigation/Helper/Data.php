@@ -404,7 +404,9 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                                         }
                                     }
                                 }
-                                $params['_query'][$param] = implode(',', $prepare_values);
+                                if (!empty($prepare_values)) {
+                                    $params['_query'][$param] = implode(',', $prepare_values);
+                                }
                             }
                         }
                     }
