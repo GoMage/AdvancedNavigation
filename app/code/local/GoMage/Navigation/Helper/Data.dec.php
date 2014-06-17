@@ -85,7 +85,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_downloadable/key/check'));
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'key=' . urlencode($k) . '&sku=advanced-navigation&domains=' . urlencode(implode(',', $this->getAllStoreDomains())) . '&ver=' . urlencode('4.2'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'key=' . urlencode($k) . '&sku=advanced-navigation&domains=' . urlencode(implode(',', $this->getAllStoreDomains())) . '&ver=' . urlencode('4.3'));
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
@@ -188,6 +188,12 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
         Mage::getStoreConfigFlag('gomage_navigation/general/mode');
     }
 
+    public function isGomageNavigationMenu()
+    {
+        return in_array(Mage::app()->getStore()->getWebsiteId(), $this->getAvailavelWebsites()) &&
+        Mage::getStoreConfigFlag('gomage_navigation/menubarsettings/navigation');
+    }
+
     public function isGomageNavigationAjax()
     {
         return $this->isGomageNavigation() &&
@@ -248,7 +254,11 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                 $queryString = http_build_query($par);
             }
 
-            $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'] . '?';
+            $port = '';
+            if (isset($arr['port']) && $arr['port'] !== '80') {
+                $port = ':' . $arr['port'];
+            }
+            $url = $arr['scheme'] . '://' . $arr['host'] . $port . $arr['path'] . '?';
 
             if ($queryString) {
                 $url .= $queryString;
@@ -271,7 +281,13 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                 foreach ($values as $_value) {
                     $category = Mage::getModel('catalog/category')->load($_value);
                     if ($category && $category->getId()) {
-                        $prepare_values[] = $category->getData('url_key');
+                        if (Mage::getStoreConfigFlag('gomage_navigation/filter_settings/expend_frendlyurl')) {
+                            $parent_ids       = $category->getParentIds();
+                            $parent_category  = Mage::getModel('catalog/category')->load(end($parent_ids));
+                            $prepare_values[] = $parent_category->getData('url_key') . '|' . $category->getData('url_key');
+                        } else {
+                            $prepare_values[] = $category->getData('url_key');
+                        }
                     }
                 }
                 $model->getRequest()->setQuery($param, implode(',', $prepare_values));
@@ -290,7 +306,14 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
             } else {
                 if ($attributeModel->getFrontendInput() == $param) {
                     $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeModel->getId());
-                    if (($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
+                    if (is_array($value)) {
+                        if (isset($value['from'])) {
+                            $params['_query'][$attribute->getAttributeCode() . '_from'] = $value['from'];
+                        }
+                        if (isset($value['to'])) {
+                            $params['_query'][$attribute->getAttributeCode() . '_to'] = $value['to'];
+                        }
+                    } elseif (($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
                             ||
                             $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
                         &&
@@ -312,7 +335,9 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                                 }
                             }
                         }
-                        $model->getRequest()->setQuery($param, implode(',', $prepare_values));
+                        if (!empty($prepare_values)) {
+                            $model->getRequest()->setQuery($param, implode(',', $prepare_values));
+                        }
                     }
                 }
             }
@@ -330,7 +355,13 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                         foreach ($values as $_value) {
                             $category = Mage::getModel('catalog/category')->load($_value);
                             if ($category && $category->getId()) {
-                                $prepare_values[] = $category->getData('url_key');
+                                if (Mage::getStoreConfigFlag('gomage_navigation/filter_settings/expend_frendlyurl')) {
+                                    $parent_ids       = $category->getParentIds();
+                                    $parent_category  = Mage::getModel('catalog/category')->load(end($parent_ids));
+                                    $prepare_values[] = $parent_category->getData('url_key') . '|' . $category->getData('url_key');
+                                } else {
+                                    $prepare_values[] = $category->getData('url_key');
+                                }
                             }
                         }
                         $params['_query'][$param] = implode(',', $prepare_values);
@@ -375,7 +406,9 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                                         }
                                     }
                                 }
-                                $params['_query'][$param] = implode(',', $prepare_values);
+                                if (!empty($prepare_values)) {
+                                    $params['_query'][$param] = implode(',', $prepare_values);
+                                }
                             }
                         }
                     }
@@ -410,13 +443,19 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
         return $url;
     }
 
-    public function formatUrlValue($value)
+    public function formatUrlValue($value, $default)
     {
-        $value = preg_replace('#[^0-9a-z]+#i', '_', Mage::helper('catalog/product_url')->format($value));
+        $oldLocale  = setlocale(LC_COLLATE, "0");
+        $localeCode = Mage::app()->getLocale()->getLocaleCode();
+        setlocale(LC_COLLATE, $localeCode . '.UTF8', 'C.UTF-8', 'en_US.utf8');
+        $value = iconv(mb_detect_encoding($value), 'ASCII//TRANSLIT', $value);
+        setlocale(LC_COLLATE, $oldLocale);
+
         $value = strtolower($value);
+        $value = preg_replace('#[^0-9a-z]+#i', '-', Mage::helper('catalog/product_url')->format($value));
         $value = trim($value, '-');
 
-        return $value;
+        return $value ? $value : $default;
     }
 
     public function isMobileDevice()
@@ -646,7 +685,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_notification/index/data'));
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, 'sku=advanced-navigation&timestamp=' . $timestamp . '&ver=' . urlencode('4.2'));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, 'sku=advanced-navigation&timestamp=' . $timestamp . '&ver=' . urlencode('4.3'));
             curl_setopt($ch, CURLOPT_TIMEOUT, 30);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
