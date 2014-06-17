@@ -335,7 +335,9 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                                 }
                             }
                         }
-                        $model->getRequest()->setQuery($param, implode(',', $prepare_values));
+                        if (!empty($prepare_values)) {
+                            $model->getRequest()->setQuery($param, implode(',', $prepare_values));
+                        }
                     }
                 }
             }
