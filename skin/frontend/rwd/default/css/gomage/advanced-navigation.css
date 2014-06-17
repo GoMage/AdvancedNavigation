@@ -6,6 +6,9 @@
 	border:0;
   clear:both;
 }
+.block-layered-nav.block-layered-nav-content .currently ol{
+  padding-right: 10px;
+  }
 .block.block-layered-nav .block-content{
   position: relative;
   }
