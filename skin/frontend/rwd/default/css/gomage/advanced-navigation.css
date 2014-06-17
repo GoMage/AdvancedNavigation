@@ -6,6 +6,9 @@
 	border:0;
   clear:both;
 }
+.block-layered-nav.block-layered-nav-content .currently ol{
+  padding-right: 10px;
+  }
 .block.block-layered-nav .block-content{
   position: relative;
   }
@@ -958,5 +961,18 @@ ul.image-align-2-columns li{
   #gan_nav_top.gan-plain-list div.gan-plain{
     max-width: 100%;
     }
-
+  .narrow-by-list dd ol.gan-list-checkbox li a,
+  .narrow-by-list dd ol.gan-list-checkbox li a.active{
+    background-color: #f4f4f4;
+    }
+  .narrow-by-list dd ol.gan-list-checkbox li a:hover{
+    background:url('../../images/gomage/advanced-navigation/gan_checkbox.gif') 15px 8px no-repeat #f4f4f4;
+    }
+  .narrow-by-list dd ol.gan-list-checkbox.no-titles li a:hover,
+  .gan-sidebar-nav .gan-list-checkbox.no-titles li a:hover{
+    background:url('../../images/gomage/advanced-navigation/gan_checkbox.gif') 0 7px no-repeat #f4f4f4;
+    }
+  .gan-sidebar-nav .block-title .filter-note-handle{
+    top: 8px;
+    }
 }
