@@ -1,5 +1,6 @@
 <?php
- /**
+
+/**
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
@@ -10,7 +11,6 @@
  * @version      Release: 4.3
  * @since        Class available since Release 1.0
  */
-
 class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_Model_Layer_Filter_Abstract
 {
     const OPTIONS_ONLY_WITH_RESULTS = 1;
@@ -29,9 +29,9 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->_requestVar = 'attribute';
-        
+
     }
 
     public function getRequestVarValue()
@@ -72,28 +72,28 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
      */
     public function apply(Zend_Controller_Request_Abstract $request, $filterBlock)
     {
-    	
+
         $filter = $request->getParam($this->_requestVar);
-        
+
         if (is_array($filter)) {
             return $this;
         }
-        
+
         if ($filter) {
-        	
-        	$filters = explode(',', $filter);
-        	
+
+            $filters = explode(',', $filter);
+
             $this->_getResource()->applyFilterToCollection($this, $filters);
-            
-            foreach($filters as $filter){
-            	
-            	$text = $this->_getOptionText($filter);
-            	
-	            $this->getLayer()->getState()->addFilter($this->_createItem($text, $filter));
-	            
-            
+
+            foreach ($filters as $filter) {
+
+                $text = $this->_getOptionText($filter);
+
+                $this->getLayer()->getState()->addFilter($this->_createItem($text, $filter));
+
+
             }
-            
+
         }
         return $this;
     }
@@ -114,163 +114,139 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
      *
      * @return array
      */
-     
-     
+
+
     protected function _getItemsData()
     {
-    	
-        $attribute = $this->getAttributeModel();
+
+        $attribute         = $this->getAttributeModel();
         $this->_requestVar = $attribute->getAttributeCode();
-        
+
         $option_images = $attribute->getOptionImages();
-        
+
         $selected = array();
-        
-        if($value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)){
-        
-        	$selected = array_merge($selected, explode(',', $value));
-        
+
+        if ($value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)) {
+            $selected = array_merge($selected, explode(',', $value));
         }
-        
-        $key = $this->getLayer()->getStateKey().'_'.$this->_requestVar;
+
+        $key  = $this->getLayer()->getStateKey() . '_' . $this->_requestVar;
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
-        
-        $filter_mode = Mage::helper('gomage_navigation')->isGomageNavigation();
-        
 
         if ($data === null) {
-            $options = $attribute->getFrontend()->getSelectOptions();
 
-            if ( Mage::helper('gomage_navigation')->isEnterprise() )
-            {
+            $filter_mode = Mage::helper('gomage_navigation')->isGomageNavigation();
+            $options     = $attribute->getFrontend()->getSelectOptions();
+
+            if (Mage::helper('gomage_navigation')->isEnterprise()) {
                 $isCatalog = is_null(Mage::app()->getFrontController()->getRequest()->getParam('q'));
 
                 $helper = Mage::helper('enterprise_search');
                 if (!$isCatalog && $helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog) && Mage::helper('gomage_navigation')->isGomageNavigation()) {
-                    $engine = Mage::getResourceSingleton('enterprise_search/engine');
+                    $engine    = Mage::getResourceSingleton('enterprise_search/engine');
                     $fieldName = $engine->getSearchEngineFieldName($attribute, 'nav');
 
                     $productCollection = $this->getLayer()->getProductCollection();
-                    $optionsCount = $productCollection->getFacetedData($fieldName);
+                    $optionsCount      = $productCollection->getFacetedData($fieldName);
 
-                }else {
+                } else {
                     $optionsCount = $this->_getResource()->getCount($this);
                 }
-            }
-            else
-            {
+            } else {
                 $optionsCount = $this->_getResource()->getCount($this);
             }
 
             $data = array();
 
             foreach ($options as $option) {
-            	
-            	$image = '';
-            	
+
+                $image = '';
+
                 if (is_array($option['value']) || (in_array($option['value'], $selected) && !$filter_mode)) {
                     continue;
                 }
-                
+
                 if (Mage::helper('core/string')->strlen($option['value'])) {
-                	
-                	if($option_images && isset($option_images[$option['value']])){
-                		
-                		$image = $option_images[$option['value']];
-                		
-                	}
-                	
-                	if(in_array($option['value'], $selected) && $filter_mode){
-                		
-                		$active = true;
-                		
-                		$value = $option['value'];
-                		
-                	}else{
-                		
-                		$active = false;
-                		
-	                	if(!empty($selected) && $attribute->getFilterType() != GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN){
-	                	
-	                		$value = implode(',',array_merge($selected, (array)$option['value']));
-	                	
-	                	}else{
-	                		
-	                		$value = $option['value'];
-	                		
-	                	}
-	                	
-                	}
-                	
+
+                    if ($option_images && isset($option_images[$option['value']])) {
+                        $image = $option_images[$option['value']];
+                    }
+
+                    if (in_array($option['value'], $selected) && $filter_mode) {
+                        $active = true;
+                        $value  = $option['value'];
+                    } else {
+                        $active = false;
+                        if (!empty($selected) && $attribute->getFilterType() != GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN) {
+                            $value = implode(',', array_merge($selected, (array)$option['value']));
+                        } else {
+                            $value = $option['value'];
+                        }
+                    }
+
                     // Check filter type
                     if ($this->_getIsFilterableAttribute($attribute) == self::OPTIONS_ONLY_WITH_RESULTS) {
                         if (!empty($optionsCount[$option['value']]) || in_array($option['value'], $selected)) {
                             $data[] = array(
-                                'label' 	=> $option['label'],
-                                'value' 	=> $value,
-                                'count' 	=> isset($optionsCount[$option['value']]) ? $optionsCount[$option['value']] : 0,
-                                'active'	=> $active,
-                                'image'		=> $image,
+                                'label'  => $option['label'],
+                                'value'  => $value,
+                                'count'  => isset($optionsCount[$option['value']]) ? $optionsCount[$option['value']] : 0,
+                                'active' => $active,
+                                'image'  => $image,
                             );
                         }
-                    }
-                    else {
+                    } else {
                         $data[] = array(
-                            'label' => $option['label'],
-                            'value' => $value,
-                            'count' => isset($optionsCount[$option['value']]) ? $optionsCount[$option['value']] : 0,
-                            'active'	=> $active,
-                            'image'		=> $image,
+                            'label'  => $option['label'],
+                            'value'  => $value,
+                            'count'  => isset($optionsCount[$option['value']]) ? $optionsCount[$option['value']] : 0,
+                            'active' => $active,
+                            'image'  => $image,
                         );
                     }
                 }
             }
 
             $tags = array(
-                Mage_Eav_Model_Entity_Attribute::CACHE_TAG.':'.$attribute->getId()
+                Mage_Eav_Model_Entity_Attribute::CACHE_TAG . ':' . $attribute->getId()
             );
 
             $tags = $this->getLayer()->getStateTags($tags);
             $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
+
         return $data;
     }
-    
-    /**
-     * Get filter value for reset current filter state
-     *
-     * @return mixed
-     */
+
     public function getResetValue($value_to_remove = null)
     {
-    	
-    	if($value_to_remove && ($current_value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar))){
-    		
-    		$current_value = explode(',', $current_value);
-    		
-    		if(false !== ($position = array_search($value_to_remove, $current_value))){
-    			
-    			unset($current_value[$position]);
-    			
-    			if(!empty($current_value)){
-    				
-    				return implode(',', $current_value);
-    				
-    			}
-    			
-    		}
-    		
-    		
-    	}
-    	
+
+        if ($value_to_remove && ($current_value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar))) {
+
+            $current_value = explode(',', $current_value);
+
+            if (false !== ($position = array_search($value_to_remove, $current_value))) {
+
+                unset($current_value[$position]);
+
+                if (!empty($current_value)) {
+
+                    return implode(',', $current_value);
+
+                }
+
+            }
+
+
+        }
+
         return null;
     }
 
     public function addFacetCondition()
     {
-        if ( Mage::helper('gomage_navigation')->isEnterprise() )
-        {
-            $engine = Mage::getResourceSingleton('enterprise_search/engine');
+        if (Mage::helper('gomage_navigation')->isEnterprise()) {
+            $engine     = Mage::getResourceSingleton('enterprise_search/engine');
             $facetField = $engine->getSearchEngineFieldName($this->getAttributeModel(), 'nav');
             $this->getLayer()->getProductCollection()->setFacetCondition($facetField);
         }

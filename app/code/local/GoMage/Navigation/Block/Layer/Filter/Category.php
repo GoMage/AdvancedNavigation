@@ -1,5 +1,6 @@
 <?php
- /**
+
+/**
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
@@ -10,13 +11,13 @@
  * @version      Release: 4.3
  * @since        Class available since Release 1.0
  */
-	
 class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_Layer_Filter_Category
 {
     protected $_block_side = null;
 
-	protected $_activeFilters = array();
-	/**
+    protected $_activeFilters = array();
+
+    /**
      * Initialize filter template
      *
      */
@@ -28,8 +29,7 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 
     public function getBlockSide()
     {
-        if ( $this->_block_side )
-        {
+        if ($this->_block_side) {
             return $this->_block_side;
         }
 
@@ -38,33 +38,20 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 
     public function getConfigTab()
     {
-        switch($this->getBlockSide()):
-
+        switch ($this->getBlockSide()) {
             default:
-
                 $tab = 'category';
-
                 break;
-
             case(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::LEFT_BLOCK):
-
                 $tab = 'category';
-
                 break;
-
             case(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::RIGHT_BLOCK):
-
                 $tab = 'rightcolumnsettings';
-
                 break;
-
             case(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT):
-
                 $tab = 'contentcolumnsettings';
-
                 break;
-
-        endswitch;
+        }
 
         return $tab;
     }
@@ -73,289 +60,222 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
     {
         $type = Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/filter_type');
 
-        switch($type):
-
+        switch ($type) {
             default:
-
                 $this->_template = ('gomage/navigation/layer/filter/category/default.phtml');
-
                 break;
-
             case(GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE):
-
                 $this->_template = ('gomage/navigation/layer/filter/image.phtml');
-
                 break;
-
             case(GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN):
-
                 $this->_template = ('gomage/navigation/layer/filter/dropdown.phtml');
-
                 break;
-
-        endswitch;
+        }
     }
 
     public function getFilter()
     {
         return $this->_filter;
     }
-	
+
     public function __construct()
     {
         parent::__construct();
-        
-        if( Mage::helper('gomage_navigation')->isGomageNavigation() 
-        	   &&
-            (Mage::getStoreConfigFlag('gomage_navigation/category/active') 
-                || 
-             Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active')
+
+        if (Mage::helper('gomage_navigation')->isGomageNavigation()
+            &&
+            (Mage::getStoreConfigFlag('gomage_navigation/category/active')
                 ||
-             Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active')
-            ) ){
+                Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active')
+                ||
+                Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active')
+            )
+        ) {
 
             $type = Mage::getStoreConfig('gomage_navigation/category/filter_type');
 
-        	switch($type):
+            switch ($type) {
+                default:
+                    $this->_template = ('gomage/navigation/layer/filter/category/default.phtml');
+                    break;
+                case(GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE):
+                    $this->_template = ('gomage/navigation/layer/filter/image.phtml');
+                    break;
+                case(GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN):
+                    $this->_template = ('gomage/navigation/layer/filter/dropdown.phtml');
+                    break;
+            }
 
-	        	default:
-
-	        		$this->_template = ('gomage/navigation/layer/filter/category/default.phtml');
-
-	        	break;
-
-	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE):
-
-	        		$this->_template = ('gomage/navigation/layer/filter/image.phtml');
-
-	        	break;
-
-	        	case(GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN):
-
-	        		$this->_template = ('gomage/navigation/layer/filter/dropdown.phtml');
-
-	        	break;
-
-        	endswitch;
-        	
         }
-        
+
     }
-	
-	public function getRemoveUrl($ajax = false)
+
+    public function getRemoveUrl($ajax = false)
     {
-        $query = array($this->_filter->getRequestVar()=>null);
+        $query                  = array($this->_filter->getRequestVar() => null);
         $params['_nosid']       = true;
         $params['_current']     = true;
         $params['_use_rewrite'] = true;
         $params['_query']       = $query;
         $params['_escape']      = false;
-        
+
         $params['_query']['ajax'] = null;
-        
-        if($ajax){
-        	
-        	$params['_query']['ajax'] = true;
-        	
-        	
+
+        if ($ajax) {
+            $params['_query']['ajax'] = true;
         }
 
         return Mage::getUrl('*/*/*', $params);
     }
-	
-	public function getItems(){
-		
-	    if(Mage::helper('gomage_navigation')->isGomageNavigation() && 
-	       Mage::getStoreConfigFlag('gomage_navigation/category/active')){
 
-	        if(!$this->ajaxEnabled()){
-    						
-    			$items = parent::getItems();;
-    			
-    			foreach($items as $key=>$item){
-    				
-    			    if($category = Mage::getModel('catalog/category')->load($item->getValue())){				
-    					
-    					$items[$key]->setUrl($category->getUrl());
-    					
-    				}
-    				
-    			}
-    			
-    			return $items;
-    			
-    		}
-	    }
-	    
-		return parent::getItems();
-		
-	}
-	
-	public function getPopupId(){
-		
-		return 'category';
-		
-	}
-	
-	public function ajaxEnabled(){
-		
-	    if (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch'){
-	        $is_ajax = true; 
-	    }else{
-	        $is_ajax = Mage::registry('current_category') && 
-                       Mage::registry('current_category')->getisAnchor() &&
-                       (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE);
-	    }
-	    
-	    $is_ajax = $is_ajax && Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/ajax_enabled');
-	    		
-		return $is_ajax;
+    public function getItems()
+    {
+        if (Mage::helper('gomage_navigation')->isGomageNavigation() &&
+            Mage::getStoreConfigFlag('gomage_navigation/category/active')
+        ) {
+            if (!$this->ajaxEnabled()) {
+                $items = parent::getItems();;
+                foreach ($items as $key => $item) {
+                    if ($category = Mage::getModel('catalog/category')->load($item->getValue())) {
+                        $items[$key]->setUrl($category->getUrl());
+                    }
+                }
+                return $items;
+            }
+        }
 
-	}
-	
-	public function canShowMinimized($side){
-		
-		if('true' === Mage::app()->getFrontController()->getRequest()->getParam('cat' . '-' . $side . '_is_open')){
-		
-			return false;
-		
-		}elseif('false' === Mage::app()->getFrontController()->getRequest()->getParam('cat' . '-' . $side . '_is_open')){
-			
-			return true;
-			
-		}
-		
-		
-		return (bool) Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/show_minimized');
-		
-	}
-	
-	public function canShowPopup(){
-		
-		return (bool) Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/show_help');
-		
-	}
-	
-	public function getPopupText(){
-		
-		return trim(Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/popup_text'));
-		
-	}
-	
-	public function getPopupWidth(){
-		
-		return (int) Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/popup_width');
-		
-	}
-	
-	public function getPopupHeight(){
-		
-		return (int) Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/popup_height');
-		
-	}
-	
-	public function canShowCheckbox(){
-		
-	    if(Mage::helper('gomage_navigation')->isGomageNavigation() 
-	    		&&
-           Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/active')){
-				return (bool) Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/show_checkbox');
-          }
-           
-//        if(Mage::helper('gomage_navigation')->isGomageNavigation()
-//          		&&
-//           Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/active')){
-//
-//				return (bool) Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/show_checkbox');
-//          }
-//
-//        if(Mage::helper('gomage_navigation')->isGomageNavigation()
-//            &&
-//            Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/active')){
-//
-//            return (bool) Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/show_checkbox');
-//        }
-	}
-	
-	public function canShowLabels(){
-		
-		return (bool) Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/show_image_name');
-		
-	}
-	
-	public function getImageWidth(){
-		
-		return (int) Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/image_width');
-		
-	}
-	
-	public function getImageHeight(){
-		
-		return (int) Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/image_height');
-		
-	}
-	
-	public function getImageAlign(){
-		
-		switch(Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/image_align')):
-		
-			default:
-				
-				$image_align = 'default';
-				
-			break;
-			
-			case (1):
-				
-				$image_align = 'horizontally';
-				
-			break;
-			
-			case (2):
-				
-				$image_align = '2-columns';
-				
-			break;
-			
-		endswitch;
-		
-		return $image_align;
-		
-	}
-	
-    public function canShowResetFirler(){
-		
-		return (bool) Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/filter_reset');
-		
-	}
-	
+        return parent::getItems();
+    }
+
+    public function getPopupId()
+    {
+        return 'category';
+    }
+
+    public function ajaxEnabled()
+    {
+        if (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'catalogsearch') {
+            $is_ajax = true;
+        } else {
+            $is_ajax = Mage::registry('current_category') &&
+                Mage::registry('current_category')->getisAnchor() &&
+                (Mage::registry('current_category')->getDisplayMode() != Mage_Catalog_Model_Category::DM_PAGE);
+        }
+
+        $is_ajax = $is_ajax && Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/ajax_enabled');
+
+        return $is_ajax;
+    }
+
+    public function canShowMinimized($side)
+    {
+        if ('true' === Mage::app()->getFrontController()->getRequest()->getParam('cat' . '-' . $side . '_is_open')) {
+            return false;
+        } elseif ('false' === Mage::app()->getFrontController()->getRequest()->getParam('cat' . '-' . $side . '_is_open')) {
+            return true;
+        }
+
+        return (bool)Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/show_minimized');
+    }
+
+    public function canShowPopup()
+    {
+        return (bool)Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/show_help');
+    }
+
+    public function getPopupText()
+    {
+        return trim(Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/popup_text'));
+    }
+
+    public function getPopupWidth()
+    {
+        return (int)Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/popup_width');
+    }
+
+    public function getPopupHeight()
+    {
+        return (int)Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/popup_height');
+    }
+
+    public function canShowCheckbox()
+    {
+        if (Mage::helper('gomage_navigation')->isGomageNavigation()
+            &&
+            Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/active')
+        ) {
+            return (bool)Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/show_checkbox');
+        }
+    }
+
+    public function canShowLabels()
+    {
+        return (bool)Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/show_image_name');
+    }
+
+    public function getImageWidth()
+    {
+        return (int)Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/image_width');
+    }
+
+    public function getImageHeight()
+    {
+        return (int)Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/image_height');
+    }
+
+    public function getImageAlign()
+    {
+        switch (Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/image_align')) {
+            default:
+                $image_align = 'default';
+                break;
+            case (1):
+                $image_align = 'horizontally';
+                break;
+            case (2):
+                $image_align = '2-columns';
+                break;
+        }
+
+        return $image_align;
+    }
+
+    public function canShowResetFirler()
+    {
+        return (bool)Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/filter_reset');
+    }
+
     public function isActiveFilter($label)
     {
         return false;
     }
-    
-    public function getFilterType(){
+
+    public function getFilterType()
+    {
         return Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/filter_type');
     }
-    
-    public function getInBlockHeight(){
+
+    public function getInBlockHeight()
+    {
         return Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/inblock_height');
     }
-    
-	public function getInblockType(){
+
+    public function getInblockType()
+    {
         return Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/inblock_type');
     }
-    
-    public function getMaxInBlockHeight(){
+
+    public function getMaxInBlockHeight()
+    {
         return Mage::getStoreConfig('gomage_navigation/' . $this->getConfigTab() . '/max_inblock_height');
     }
 
     public function addFacetCondition()
     {
-        if ( Mage::helper('gomage_navigation')->isEnterprise() )
-        {
+        if (Mage::helper('gomage_navigation')->isEnterprise()) {
             $this->_filter->addFacetCondition();
         }
         return $this;
     }
+
 }
