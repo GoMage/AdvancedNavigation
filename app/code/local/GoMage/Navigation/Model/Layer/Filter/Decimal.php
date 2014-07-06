@@ -1,5 +1,6 @@
 <?php
- /**
+
+/**
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
@@ -10,11 +11,10 @@
  * @version      Release: 4.3
  * @since        Class available since Release 2.0
  */
- 
 class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Model_Layer_Filter_Abstract
-{	
-	
-	const MIN_RANGE_POWER = 10;
+{
+
+    const MIN_RANGE_POWER = 10;
 
     /**
      * Resource instance
@@ -58,40 +58,107 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
      * @param Mage_Catalog_Block_Layer_Filter_Decimal $filterBlock
      * @return Mage_Catalog_Model_Layer_Filter_Decimal
      */
-    
+
     public function apply(Zend_Controller_Request_Abstract $request, $filterBlock)
     {
-		switch($this->getAttributeModel()->getFilterType()):
-    	
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
-            $_from = $request->getParam($this->getRequestVarValue().'_from', false);
-            $_to = $request->getParam($this->getRequestVarValue().'_to', false);
+        switch ($this->getAttributeModel()->getFilterType()):
 
-            if($_from || $_to){
+            case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
+                $_from = $request->getParam($this->getRequestVarValue() . '_from', false);
+                $_to   = $request->getParam($this->getRequestVarValue() . '_to', false);
 
-                $value = array('from'=>$_from, 'to'=>$_to);
+                if ($_from || $_to) {
 
-                $this->_getResource()->applyFilterToCollection($this, $value);
+                    $value = array('from' => $_from, 'to' => $_to);
 
-                $store      = Mage::app()->getStore();
-                $fromPrice  = $store->formatPrice($_from);
-                $toPrice    = $store->formatPrice($_to);
+                    $this->_getResource()->applyFilterToCollection($this, $value);
+
+                    $store     = Mage::app()->getStore();
+                    $fromPrice = $store->formatPrice($_from);
+                    $toPrice   = $store->formatPrice($_to);
 
 
-                $this->getLayer()->getState()->addFilter(
-                    $this->_createItem(Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice), $value)
-                );
+                    $this->getLayer()->getState()->addFilter(
+                        $this->_createItem(Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice), $value)
+                    );
 
-            }else{
-                return $this;
-            }
+                } else {
+                    return $this;
+                }
 
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
+            case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
+            case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
+            case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
 
-            if ( Mage::helper('gomage_navigation')->isMobileDevice() )
-            {
+                if (Mage::helper('gomage_navigation')->isMobileDevice()) {
+                    /**
+                     * Filter must be string: $index,$range
+                     */
+                    $filter = $request->getParam($this->getRequestVarValue());
+                    if (!$filter) {
+                        return $this;
+                    }
+
+                    $filter = explode(',', $filter);
+                    if (count($filter) < 2) {
+                        return $this;
+                    }
+
+                    $length = count($filter);
+
+                    $value = array();
+
+                    for ($i = 0; $i < $length; $i += 2) {
+
+                        $value[] = array(
+                            'index' => $filter[$i],
+                            'range' => $filter[$i + 1],
+                        );
+
+                    }
+                    if (!empty($value)) {
+
+                        $this->setRange((int)$value[0]['range']);
+
+                        $this->_getResource()->applyFilterToCollection($this, $value);
+
+                        foreach ($value as $_value) {
+
+                            $this->getLayer()->getState()->addFilter(
+                                $this->_createItem($this->_renderItemLabel($_value['range'], $_value['index']), $_value)
+                            );
+
+                        }
+
+                    }
+                } else {
+                    $_from = $request->getParam($this->getRequestVarValue() . '_from', false);
+                    $_to   = $request->getParam($this->getRequestVarValue() . '_to', false);
+
+                    if ($_from || $_to) {
+
+                        $value = array('from' => $_from, 'to' => $_to);
+
+                        $this->_getResource()->applyFilterToCollection($this, $value);
+
+                        $store     = Mage::app()->getStore();
+                        $fromPrice = $store->formatPrice($_from);
+                        $toPrice   = $store->formatPrice($_to);
+
+
+                        $this->getLayer()->getState()->addFilter(
+                            $this->_createItem(Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice), $value)
+                        );
+
+                    } else {
+                        return $this;
+                    }
+                }
+
+                break;
+
+            default:
+
                 /**
                  * Filter must be string: $index,$range
                  */
@@ -109,11 +176,11 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
 
                 $value = array();
 
-                for($i = 0; $i<$length; $i+=2){
+                for ($i = 0; $i < $length; $i += 2) {
 
                     $value[] = array(
-                        'index'=>$filter[$i],
-                        'range'=>$filter[$i+1],
+                        'index' => $filter[$i],
+                        'range' => $filter[$i + 1],
                     );
 
                 }
@@ -123,7 +190,7 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
 
                     $this->_getResource()->applyFilterToCollection($this, $value);
 
-                    foreach($value as $_value){
+                    foreach ($value as $_value) {
 
                         $this->getLayer()->getState()->addFilter(
                             $this->_createItem($this->_renderItemLabel($_value['range'], $_value['index']), $_value)
@@ -132,83 +199,14 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
                     }
 
                 }
-            }
-            else
-            {
-                $_from = $request->getParam($this->getRequestVarValue().'_from', false);
-                $_to = $request->getParam($this->getRequestVarValue().'_to', false);
+                break;
 
-                if($_from || $_to){
-
-                    $value = array('from'=>$_from, 'to'=>$_to);
-
-                    $this->_getResource()->applyFilterToCollection($this, $value);
-
-                    $store      = Mage::app()->getStore();
-                    $fromPrice  = $store->formatPrice($_from);
-                    $toPrice    = $store->formatPrice($_to);
-
-
-                    $this->getLayer()->getState()->addFilter(
-                        $this->_createItem(Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice), $value)
-                    );
-
-                }else{
-                    return $this;
-                }
-            }
-    		
-    	break;
-    		
-    	default:
-    	
-        /**
-         * Filter must be string: $index,$range
-         */
-        $filter = $request->getParam($this->getRequestVarValue());
-        if (!$filter) {
-            return $this;
-        }
-
-        $filter = explode(',', $filter);
-        if (count($filter) < 2) {
-            return $this;
-        }
-		
-		$length = count($filter);
-		
-		$value = array();
-		
-		for($i = 0; $i<$length; $i+=2){
-			
-			$value[] = array(
-				'index'=>$filter[$i],
-				'range'=>$filter[$i+1],
-			);
-			
-		}
-        if (!empty($value)) {
-        	
-            $this->setRange((int)$value[0]['range']);
-			
-            $this->_getResource()->applyFilterToCollection($this, $value);
-            
-            foreach($value as $_value){
-            
-	            $this->getLayer()->getState()->addFilter(
-	                $this->_createItem($this->_renderItemLabel($_value['range'], $_value['index']), $_value)
-	            );
-            
-            }
-            
-        }
-        break;
-        
         endswitch;
-        
+
         return $this;
-		
+
     }
+
     /**
      * Retrieve price aggreagation data cache key
      *
@@ -220,35 +218,33 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
             . '_ATTR_' . $this->getAttributeModel()->getAttributeCode();
         return $key;
     }
-     protected function _getSelectedOptions(){
-    	
-    	if(is_null($this->_selected_options)){
-    		
-    		$selected = array();
-        
-	        if($value = Mage::app()->getFrontController()->getRequest()->getParam($this->getRequestVarValue())){
-	        
-	        	$_selected = array_merge($selected, explode(',', $value));
-	        	
-	        	$length = count($_selected);
-			
-				for($i = 0; $i<$length; $i+=2){
-					
-					$selected[] = $_selected[$i].','.$_selected[$i+1];
-					
-				}
-	        	
-	        
-	        }
-	        
-	        $this->_selected_options = $selected;
-    		
-    	}
-    	
-    	return $this->_selected_options;
-    	
+
+    protected function _getSelectedOptions()
+    {
+
+        if (is_null($this->_selected_options)) {
+
+            $selected = array();
+
+            if ($value = Mage::helper('gomage_navigation')->getRequest()->getParam($this->getRequestVarValue())) {
+
+                $_selected = array_merge($selected, explode(',', $value));
+
+                $length = count($_selected);
+
+                for ($i = 0; $i < $length; $i += 2) {
+                    $selected[] = $_selected[$i] . ',' . $_selected[$i + 1];
+                }
+            }
+
+            $this->_selected_options = $selected;
+
+        }
+
+        return $this->_selected_options;
+
     }
-    
+
     /**
      * Retrieve data for build decimal filter items
      *
@@ -256,64 +252,63 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
      */
     protected function _getItemsData()
     {
-    	
-		$key = $this->_getCacheKey();
-		
-		$selected = $this->_getSelectedOptions();
-		
-		
+
+        $key = $this->_getCacheKey();
+
+        $selected = $this->_getSelectedOptions();
+
+
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
-        
+
         $filter_mode = Mage::helper('gomage_navigation')->isGomageNavigation();
-        
+
         if ($data === null) {
-            $range      = $this->getRange();
-            $dbRanges   = $this->getRangeItemCounts($range);
-            $data       = array();
-			
-			if($selected){
-				foreach($selected as $value){
-					$value = explode(',', $value);
-					
-					$dbRanges[$value[0]] = 0;
-				}
-				
-				ksort($dbRanges);
-			}
-			
-			
-            foreach ($dbRanges as $index=>$count) {
-            	
-            	$value = $index . ',' . $range;
-            	
-            	if(in_array($value, $selected) && !$filter_mode){
-            		continue;
-            	}
-            	
-            	if(in_array($value, $selected) && $filter_mode){
-            		
-            		$active = true;
-            		
-            	}else{
-					
-					$active = false;
-					
-					if(!empty($selected) && $this->getAttributeModel()->getFilterType() != GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN ){
-		                
-		        		$value = implode(',',array_merge($selected, (array)$value));
-		        		
-		        	
-		        	}
-	        	
-	        	}
-            	
+            $range    = $this->getRange();
+            $dbRanges = $this->getRangeItemCounts($range);
+            $data     = array();
+
+            if ($selected) {
+                foreach ($selected as $value) {
+                    $value = explode(',', $value);
+
+                    $dbRanges[$value[0]] = 0;
+                }
+
+                ksort($dbRanges);
+            }
+
+
+            foreach ($dbRanges as $index => $count) {
+
+                $value = $index . ',' . $range;
+
+                if (in_array($value, $selected) && !$filter_mode) {
+                    continue;
+                }
+
+                if (in_array($value, $selected) && $filter_mode) {
+
+                    $active = true;
+
+                } else {
+
+                    $active = false;
+
+                    if (!empty($selected) && $this->getAttributeModel()->getFilterType() != GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN) {
+
+                        $value = implode(',', array_merge($selected, (array)$value));
+
+                    }
+
+                }
+
                 $data[] = array(
-                    'label' 	=> $this->_renderItemLabel($range, $index),
-                    'value' 	=> $value,
-                    'count' 	=> $count,
-                    'active'	=> $active,
+                    'label'  => $this->_renderItemLabel($range, $index),
+                    'value'  => $value,
+                    'count'  => $count,
+                    'active' => $active,
                 );
-                
+
             }
 
             $tags = array(
@@ -322,52 +317,50 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
             $tags = $this->getLayer()->getStateTags($tags);
             $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
-        
+
         return $data;
     }
-    
+
     public function getResetValue($value_to_remove = null)
     {
-    	
-    	
-    	if($value_to_remove && ($current_value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar))){
-    		
-    		if(is_array($value_to_remove)){
-    			
-    			if(isset($value_to_remove['index']) && isset($value_to_remove['range'])){
-    		
-	    		$value_to_remove = $value_to_remove['index'].','.$value_to_remove['range'];
-	    		
-	    		}else{
-	    			
-	    			return null;
-	    			
-	    		}
-	    		
-	    	}
-	    	
-    		$current_value = $this->_getSelectedOptions();
-    		
-    		if(false !== ($position = array_search($value_to_remove, $current_value))){
-    			
-    			unset($current_value[$position]);
-    			
-    			if(!empty($current_value)){
-    				
-    				return implode(',', $current_value);
-    				
-    			}
-    			
-    		}
-    		
-    		
-    		
-    	}
-    	
+
+        if ($value_to_remove && ($current_value = Mage::helper('gomage_navigation')->getRequest()->getParam($this->_requestVar))) {
+
+            if (is_array($value_to_remove)) {
+
+                if (isset($value_to_remove['index']) && isset($value_to_remove['range'])) {
+
+                    $value_to_remove = $value_to_remove['index'] . ',' . $value_to_remove['range'];
+
+                } else {
+
+                    return null;
+
+                }
+
+            }
+
+            $current_value = $this->_getSelectedOptions();
+
+            if (false !== ($position = array_search($value_to_remove, $current_value))) {
+
+                unset($current_value[$position]);
+
+                if (!empty($current_value)) {
+
+                    return implode(',', $current_value);
+
+                }
+
+            }
+
+
+        }
+
         return null;
     }
-    
-    
+
+
     /**
      * Prepare text of item label
      *
@@ -377,8 +370,8 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
      */
     protected function _renderItemLabel($range, $value)
     {
-        $from   = Mage::app()->getStore()->formatPrice(($value - 1) * $range, false);
-        $to     = Mage::app()->getStore()->formatPrice($value * $range, false);
+        $from = Mage::app()->getStore()->formatPrice(($value - 1) * $range, false);
+        $to   = Mage::app()->getStore()->formatPrice($value * $range, false);
         return Mage::helper('catalog')->__('%s - %s', $from, $to);
     }
 
@@ -413,12 +406,12 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
         }
         return $min;
     }
-    
+
     public function getMinValueInt()
     {
         return floor($this->getMinValue());
     }
-    
+
     public function getMaxValueInt()
     {
         return ceil($this->getMaxValue());
@@ -433,14 +426,13 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
     {
         $range = $this->getData('range');
         if (is_null($range)) {
-            $max = $this->getMaxValue();
+            $max   = $this->getMaxValue();
             $index = 1;
             do {
                 $range = pow(10, (strlen(floor($max)) - $index));
                 $items = $this->getRangeItemCounts($range);
-                $index ++;
-            }
-            while($range > self::MIN_RANGE_POWER && count($items) < 2);
+                $index++;
+            } while ($range > self::MIN_RANGE_POWER && count($items) < 2);
 
             $this->setData('range', $range);
         }
@@ -456,7 +448,7 @@ class GoMage_Navigation_Model_Layer_Filter_Decimal extends GoMage_Navigation_Mod
     public function getRangeItemCounts($range)
     {
         $rangeKey = 'range_item_counts_' . $range;
-        $items = $this->getData($rangeKey);
+        $items    = $this->getData($rangeKey);
         if (is_null($items)) {
             $items = $this->_getResource()->getCount($this, $range);
             $this->setData($rangeKey, $items);

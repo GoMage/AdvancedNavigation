@@ -97,9 +97,11 @@ class GoMage_Navigation_Block_Layer_Filter_Decimal extends Mage_Catalog_Block_La
 
     public function canShowMinimized($side)
     {
-        if ('true' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')) {
+        $helper = Mage::helper('gomage_navigation');
+
+        if ('true' === $helper->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')) {
             return false;
-        } elseif ('false' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')) {
+        } elseif ('false' === $helper->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')) {
             return true;
         }
 

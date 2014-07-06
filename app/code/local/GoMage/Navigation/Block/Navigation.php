@@ -181,7 +181,9 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
         $params['_escape']        = false;
         $params['_query']['ajax'] = true;
 
-        $active_cats = Mage::app()->getFrontController()->getRequest()->getParam('cat');
+        $helper = Mage::helper('gomage_navigation');
+
+        $active_cats = $helper->getRequest()->getParam('cat');
 
         $active_cats = explode(',', $active_cats);
 
@@ -201,7 +203,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
             $params['_query']['cat'] = null;
         }
 
-        return urlencode(Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $params));
+        return urlencode($helper->getFilterUrl('*/*/*', $params));
     }
 
     protected function _checkCat($category)
@@ -235,7 +237,9 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
             return false;
         }
 
-        $active_cats = Mage::app()->getFrontController()->getRequest()->getParam('cat');
+        $helper = Mage::helper('gomage_navigation');
+
+        $active_cats = $helper->getRequest()->getParam('cat');
         $active_cats = explode(',', $active_cats);
 
         return in_array($category->getId(), $active_cats);
@@ -245,30 +249,32 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
     public function canShowMinimized()
     {
 
+        $helper = Mage::helper('gomage_navigation');
+
         switch ($this->_navigation_place) {
             case self::MENU_BAR :
                 return false;
                 break;
             case self::LEFT_COLUMN :
-                if ('true' === Mage::app()->getFrontController()->getRequest()->getParam('left-category_is_open')) {
+                if ('true' === $helper->getRequest()->getParam('left-category_is_open')) {
                     return false;
-                } elseif ('false' === Mage::app()->getFrontController()->getRequest()->getParam('left-category_is_open')) {
+                } elseif ('false' === $helper->getRequest()->getParam('left-category_is_open')) {
                     return true;
                 }
                 return (bool)Mage::getStoreConfigFlag('gomage_navigation/category/show_minimized');
                 break;
             case self::RIGTH_COLUMN :
-                if ('true' === Mage::app()->getFrontController()->getRequest()->getParam('right-category_is_open')) {
+                if ('true' === $helper->getRequest()->getParam('right-category_is_open')) {
                     return false;
-                } elseif ('false' === Mage::app()->getFrontController()->getRequest()->getParam('right-category_is_open')) {
+                } elseif ('false' === $helper->getRequest()->getParam('right-category_is_open')) {
                     return true;
                 }
                 return (bool)Mage::getStoreConfigFlag('gomage_navigation/rightcolumnsettings/show_minimized');
                 break;
             case self::CONTENT_COLUMN :
-                if ('true' === Mage::app()->getFrontController()->getRequest()->getParam('content-category_is_open')) {
+                if ('true' === $helper->getRequest()->getParam('content-category_is_open')) {
                     return false;
-                } elseif ('false' === Mage::app()->getFrontController()->getRequest()->getParam('content-category_is_open')) {
+                } elseif ('false' === $helper->getRequest()->getParam('content-category_is_open')) {
                     return true;
                 }
                 return (bool)Mage::getStoreConfigFlag('gomage_navigation/contentcolumnsettings/show_minimized');
@@ -565,6 +571,8 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
      */
     public function getCacheKeyInfo()
     {
+        $helper = Mage::helper('gomage_navigation');
+
         $shortCacheId = array(
             'CATALOG_NAVIGATION',
             $this->_navigation_place,
@@ -574,7 +582,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
             Mage::getSingleton('customer/session')->getCustomerGroupId(),
             'template' => $this->getTemplate(),
             'name'     => $this->getNameInLayout(),
-            'cats'     => Mage::app()->getFrontController()->getRequest()->getParam('cat')
+            'cats'     => $helper->getRequest()->getParam('cat')
         );
         $cacheId      = $shortCacheId;
 

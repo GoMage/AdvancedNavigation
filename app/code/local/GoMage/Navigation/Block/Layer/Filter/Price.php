@@ -28,7 +28,7 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
 
         if (Mage::helper('gomage_navigation')->isEnterprise()) {
             $isCatalog = true;
-            if (Mage::app()->getFrontController()->getRequest()->getParam('q') != null) {
+            if (Mage::helper('gomage_navigation')->getRequest()->getParam('q') != null) {
                 $isCatalog = false;
             }
 
@@ -119,9 +119,11 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
 
     public function canShowMinimized($side)
     {
-        if ('true' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')) {
+        $helper = Mage::helper('gomage_navigation');
+
+        if ('true' === $helper->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')) {
             return false;
-        } elseif ('false' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')) {
+        } elseif ('false' === $helper->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')) {
             return true;
         }
         return (bool)($this->getAttributeModel()->getShowMinimized() > 0);

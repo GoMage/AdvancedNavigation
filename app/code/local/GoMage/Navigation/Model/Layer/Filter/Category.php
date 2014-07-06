@@ -48,7 +48,7 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
 
     public function getResetValue($value_to_remove = null)
     {
-        if ($value_to_remove && ($current_value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar))) {
+        if ($value_to_remove && ($current_value = Mage::helper('gomage_navigation')->getRequest()->getParam($this->_requestVar))) {
 
             $current_value = explode(',', $current_value);
 
@@ -211,7 +211,7 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
 
             $selected = array();
 
-            if ($value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)) {
+            if ($value = Mage::helper('gomage_navigation')->getRequest()->getParam($this->_requestVar)) {
                 $selected = array_merge($selected, explode(',', $value));
             }
 
@@ -222,7 +222,7 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
             if (count($this->category_list) > 0) {
 
                 if (Mage::helper('gomage_navigation')->isEnterprise()) {
-                    $isCatalog = is_null(Mage::app()->getFrontController()->getRequest()->getParam('q'));
+                    $isCatalog = is_null(Mage::helper('gomage_navigation')->getRequest()->getParam('q'));
 
                     $helper = Mage::helper('enterprise_search');
                     if (!$isCatalog && $helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog) && Mage::helper('gomage_navigation')->isGomageNavigation()) {
@@ -371,10 +371,10 @@ class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Mo
             $cats_ids_str = '0';
 
             foreach ($cats_ids as $_id) {
-                $cats_ids_str .= ',' . $this->_addChildsCategory($_id, explode(',', Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)));
+                $cats_ids_str .= ',' . $this->_addChildsCategory($_id, explode(',', Mage::helper('gomage_navigation')->getRequest()->getParam($this->_requestVar)));
             }
 
-            foreach (explode(',', Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)) as $_id) {
+            foreach (explode(',', Mage::helper('gomage_navigation')->getRequest()->getParam($this->_requestVar)) as $_id) {
                 $_cat = Mage::getModel('catalog/category')->load($_id);
                 $cats_ids_str .= ',' . $_cat->getId();
                 if ($_cat->getChildren()) {

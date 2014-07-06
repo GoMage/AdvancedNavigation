@@ -170,7 +170,7 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
     {
         if (is_null($this->_selected_options)) {
             $selected = array();
-            if ($value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)) {
+            if ($value = Mage::helper('gomage_navigation')->getRequest()->getParam($this->_requestVar)) {
                 $value     = urldecode($value);
                 $_selected = array_merge($selected, explode(',', $value));
                 $length    = count($_selected);
@@ -397,13 +397,13 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
                                     $toPrice   = $store->formatPrice($index * $range);
                                     $label     = Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice);
 
-                                    $price_from = Mage::app()->getFrontController()->getRequest()->getParam('price_from', false);
+                                    $price_from = Mage::helper('gomage_navigation')->getRequest()->getParam('price_from', false);
                                     if ($price_from) {
                                         $price_from = explode(',', $price_from);
                                     } else {
                                         $price_from = array();
                                     }
-                                    $price_to = Mage::app()->getFrontController()->getRequest()->getParam('price_to', false);
+                                    $price_to = Mage::helper('gomage_navigation')->getRequest()->getParam('price_to', false);
                                     if ($price_to) {
                                         $price_to = explode(',', $price_to);
                                     } else {
@@ -741,7 +741,7 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
 
     public function getResetValue($value_to_remove = null)
     {
-        if ($value_to_remove && ($current_value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar))) {
+        if ($value_to_remove && ($current_value = Mage::helper('gomage_navigation')->getRequest()->getParam($this->_requestVar))) {
             if (is_array($value_to_remove)) {
                 if (isset($value_to_remove['index']) && isset($value_to_remove['range'])) {
                     $value_to_remove = $value_to_remove['index'] . ',' . $value_to_remove['range'];

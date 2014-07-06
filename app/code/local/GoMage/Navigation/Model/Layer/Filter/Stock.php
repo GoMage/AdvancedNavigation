@@ -1,5 +1,6 @@
 <?php
- /**
+
+/**
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
@@ -10,10 +11,9 @@
  * @version      Release: 4.3
  * @since        Class available since Release 3.2
  */
-
 class GoMage_Navigation_Model_Layer_Filter_Stock extends GoMage_Navigation_Model_Layer_Filter_Abstract
 {
-    const IN_STOCK = 1;
+    const IN_STOCK     = 1;
     const OUT_OF_STOCK = 2;
 
     /**
@@ -33,26 +33,24 @@ class GoMage_Navigation_Model_Layer_Filter_Stock extends GoMage_Navigation_Model
     /**
      * Get filter value for reset current filter state
      *
-     * @return mixed
+     * @param null $value_to_remove
+     * @return mixed|null|string
      */
     public function getResetValue($value_to_remove = null)
     {
-        
-        if($value_to_remove && ($current_value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)))
-        {    
+
+        if ($value_to_remove && ($current_value = Mage::helper('gomage_navigation')->getRequest()->getParam($this->_requestVar))) {
             $current_value = explode(',', $current_value);
-            
-            if(false !== ($position = array_search($value_to_remove, $current_value)))
-            {    
+
+            if (false !== ($position = array_search($value_to_remove, $current_value))) {
                 unset($current_value[$position]);
-                
-                if(!empty($current_value))
-                {    
-                    return implode(',', $current_value);   
-                }   
+
+                if (!empty($current_value)) {
+                    return implode(',', $current_value);
+                }
             }
         }
-        
+
         return null;
     }
 
@@ -66,24 +64,21 @@ class GoMage_Navigation_Model_Layer_Filter_Stock extends GoMage_Navigation_Model
     public function apply(Zend_Controller_Request_Abstract $request, $filterBlock)
     {
         $filter = $request->getParam($this->getRequestVarValue());
-        
+
         $filters = explode(',', $filter);
-        	
+
         $this->_getResource()->applyFilterToCollection($this, $filters);
-        
-        
+
+
         $collection = $this->getLayer()->getProductCollection();
-        if($filter == 1)
-        {
+        if ($filter == 1) {
             Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($collection);
             $this->getLayer()->getState()->addFilter(
-                    $this->_createItem(Mage::helper('gomage_navigation')->__("In Stock"), array("stock_status"=>$filter))
-                );
-        }
-        elseif($filter == 2)
-        {
+                $this->_createItem(Mage::helper('gomage_navigation')->__("In Stock"), array("stock_status" => $filter))
+            );
+        } elseif ($filter == 2) {
             $manageStock = Mage::getStoreConfig(Mage_CatalogInventory_Model_Stock_Item::XML_PATH_MANAGE_STOCK);
-            $cond = array(
+            $cond        = array(
                 '{{table}}.use_config_manage_stock = 0 AND {{table}}.manage_stock=1 AND {{table}}.is_in_stock=0',
                 '{{table}}.use_config_manage_stock = 0 AND {{table}}.manage_stock=0',
             );
@@ -100,16 +95,14 @@ class GoMage_Navigation_Model_Layer_Filter_Stock extends GoMage_Navigation_Model
                 'is_in_stock',
                 'product_id=entity_id',
                 '(' . join(') OR (', $cond) . ')'
-            );    
+            );
             $this->getLayer()->getState()->addFilter(
-                    $this->_createItem(Mage::helper('gomage_navigation')->__("Out of Stock"), array("stock_status"=>$filter))
-                );                  
+                $this->_createItem(Mage::helper('gomage_navigation')->__("Out of Stock"), array("stock_status" => $filter))
+            );
         }
-        	
+
         return $this;
     }
-    
-    
 
 
     /**
@@ -122,33 +115,32 @@ class GoMage_Navigation_Model_Layer_Filter_Stock extends GoMage_Navigation_Model
         return Mage::helper('gomage_navigation')->__('Stock');
     }
 
-    
-    
+
     protected function _getItemsData()
     {
-    	$optionsCount = $this->_getResource()->getCount($this);
-       
-        $value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar);
-                		
+        $optionsCount = $this->_getResource()->getCount($this);
+
+        $value = Mage::helper('gomage_navigation')->getRequest()->getParam($this->_requestVar);
+
         $data[] = array(
-            'label'     => Mage::helper('gomage_navigation')->__("In Stock"),
-            'value'     => "1",
-            'count'     => isset($optionsCount['instock']) ? $optionsCount['instock'] : 0,
-            'active'    => ($value==1)?true:false,
-            'image'        => "",
-            );        		        		        		        		
+            'label'  => Mage::helper('gomage_navigation')->__("In Stock"),
+            'value'  => "1",
+            'count'  => isset($optionsCount['instock']) ? $optionsCount['instock'] : 0,
+            'active' => ($value == 1) ? true : false,
+            'image'  => "",
+        );
         $data[] = array(
-            'label'     => Mage::helper('gomage_navigation')->__("Out of Stock"),
-            'value'     => "2",
-            'count'     => isset($optionsCount['outofstock']) ? $optionsCount['outofstock'] : 0,
-            'active'    => ($value==2)?true:false,
-            'image'        => "",
-            );                                                                
+            'label'  => Mage::helper('gomage_navigation')->__("Out of Stock"),
+            'value'  => "2",
+            'count'  => isset($optionsCount['outofstock']) ? $optionsCount['outofstock'] : 0,
+            'active' => ($value == 2) ? true : false,
+            'image'  => "",
+        );
 
 
         return $data;
     }
-    
+
     /**
      * Retrieve resource instance
      *
@@ -161,5 +153,5 @@ class GoMage_Navigation_Model_Layer_Filter_Stock extends GoMage_Navigation_Model
         }
         return $this->_resource;
     }
-    
+
 }

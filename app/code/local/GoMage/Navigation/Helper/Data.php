@@ -236,6 +236,17 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
         return $_modulesArray['GoMage_SeoBooster']->is('active');
     }
 
+    public function getRequest()
+    {
+        $request = Mage::app()->getFrontController()->getRequest();
+        if ($this->isGoMageSeoBoosterEnabled()) {
+            $helper  = Mage::helper('gomage_seobooster/layered');
+            $request = $helper->getSeparator() || $helper->canAddRewritePath() ? $helper->getRequest() : $request;
+        }
+
+        return $request;
+    }
+
     public function getFilterUrl($route = '', $params = array(), $filter = false)
     {
         if (!$this->isFrendlyUrl()) {
@@ -267,9 +278,8 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
             return $url;
         }
 
-        $model         = Mage::getModel('core/url');
-        $request_query = $model->getRequest()->getQuery();
-        $attr          = Mage::registry('gan_filter_attributes');
+        $model = Mage::getModel('core/url');
+        $attr  = Mage::registry('gan_filter_attributes');
 
         foreach ($model->getRequest()->getQuery() as $param => $value) {
 
@@ -434,10 +444,6 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
 
         if ($queryString) {
             $url .= $queryString;
-        }
-
-        foreach ($request_query as $param => $value) {
-            $model->getRequest()->setQuery($param, $value);
         }
 
         return $url;

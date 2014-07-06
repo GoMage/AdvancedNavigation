@@ -61,7 +61,7 @@ class GoMage_Navigation_Block_Layer_Searchview extends GoMage_Navigation_Block_L
 
         if (Mage::helper('gomage_navigation')->isEnterprise()) {
             $isCatalog = true;
-            if (Mage::app()->getFrontController()->getRequest()->getParam('q') != null) {
+            if (Mage::helper('gomage_navigation')->getRequest()->getParam('q') != null) {
                 $isCatalog = false;
             }
 

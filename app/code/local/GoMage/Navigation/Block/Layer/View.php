@@ -160,28 +160,21 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
 
         $base_select = array();
 
-        if ($this->getRequest()->getParam('price') || $this->getRequest()->getParam('price_from') || $this->getRequest()->getParam('price_to')) {
+        $request = Mage::helper('gomage_navigation')->getRequest();
 
+        if ($request->getParam('price') || $request->getParam('price_from') || $request->getParam('price_to')) {
             $base_select['price'] = clone $collection->getSelect();
-
         }
 
-        if ($this->getRequest()->getParam('cat')) {
-
+        if ($request->getParam('cat')) {
             $base_select['cat'] = clone $collection->getSelect();
-
         }
 
         foreach ($filterableAttributes as $attribute) {
-
             $code = $attribute->getAttributeCode();
-
-            if ($this->getRequest()->getParam($code, false)) {
-
+            if ($request->getParam($code, false)) {
                 $base_select[$code] = clone $collection->getSelect();
-
             }
-
         }
 
         $this->getLayer()->setBaseSelect($base_select);
@@ -455,7 +448,6 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
                 );
             } catch (Exception $e) {
                 $slider_item = false;
-
             }
 
             if ($item->getActive() || $slider_item) {
@@ -464,8 +456,8 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
                     switch ($item->getFilter()->getAttributeModel()->getFilterType()):
 
                         case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
-                            $_from = Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_from', $item->getFilter()->getMinValueInt());
-                            $_to   = Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_to', $item->getFilter()->getMaxValueInt());
+                            $_from = $helper->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_from', $item->getFilter()->getMinValueInt());
+                            $_to   = $helper->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_to', $item->getFilter()->getMaxValueInt());
 
                             if (($_from != $item->getFilter()->getMinValueInt()) || ($_to != $item->getFilter()->getMaxValueInt())) {
                                 if (!isset($filterState[$item->getFilter()->getRequestVarValue() . '_from'])) {
@@ -483,8 +475,8 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
                             if (Mage::helper('gomage_navigation')->isMobileDevice()) {
                                 $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
                             } else {
-                                $_from = Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_from');
-                                $_to   = Mage::app()->getFrontController()->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_to');
+                                $_from = $helper->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_from');
+                                $_to   = $helper->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_to');
 
                                 if ($_from && $_to) {
                                     $filterState[$item->getFilter()->getRequestVarValue() . '_from'] = null;

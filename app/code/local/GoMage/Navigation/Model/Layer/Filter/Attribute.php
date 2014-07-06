@@ -126,7 +126,7 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
 
         $selected = array();
 
-        if ($value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar)) {
+        if ($value = Mage::helper('gomage_navigation')->getRequest()->getParam($this->_requestVar)) {
             $selected = array_merge($selected, explode(',', $value));
         }
 
@@ -139,7 +139,7 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
             $options     = $attribute->getFrontend()->getSelectOptions();
 
             if (Mage::helper('gomage_navigation')->isEnterprise()) {
-                $isCatalog = is_null(Mage::app()->getFrontController()->getRequest()->getParam('q'));
+                $isCatalog = is_null(Mage::helper('gomage_navigation')->getRequest()->getParam('q'));
 
                 $helper = Mage::helper('enterprise_search');
                 if (!$isCatalog && $helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog) && Mage::helper('gomage_navigation')->isGomageNavigation()) {
@@ -220,24 +220,16 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
 
     public function getResetValue($value_to_remove = null)
     {
-
-        if ($value_to_remove && ($current_value = Mage::app()->getFrontController()->getRequest()->getParam($this->_requestVar))) {
+        if ($value_to_remove && ($current_value = Mage::helper('gomage_navigation')->getRequest()->getParam($this->_requestVar))) {
 
             $current_value = explode(',', $current_value);
 
             if (false !== ($position = array_search($value_to_remove, $current_value))) {
-
                 unset($current_value[$position]);
-
                 if (!empty($current_value)) {
-
                     return implode(',', $current_value);
-
                 }
-
             }
-
-
         }
 
         return null;

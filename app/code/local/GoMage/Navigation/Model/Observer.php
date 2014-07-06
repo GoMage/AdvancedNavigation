@@ -164,10 +164,9 @@ class GoMage_Navigation_Model_Observer
 
     public function checkAjax()
     {
-
         if ($layout = Mage::getSingleton('core/layout')) {
 
-            if (intval(Mage::app()->getFrontController()->getRequest()->getParam('ajax'))) {
+            if (intval(Mage::helper('gomage_navigation')->getRequest()->getParam('ajax'))) {
 
                 $layout->removeOutputBlock('root');
                 $layout->removeOutputBlock('core_profiler');

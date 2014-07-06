@@ -1,5 +1,6 @@
 <?php
- /**
+
+/**
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
@@ -10,7 +11,6 @@
  * @version      Release: 4.3
  * @since        Class available since Release 1.0
  */
-
 abstract class GoMage_Navigation_Model_Layer_Filter_Abstract extends Mage_Catalog_Model_Layer_Filter_Abstract
 {
     abstract public function getRequestVarValue();
@@ -22,8 +22,8 @@ abstract class GoMage_Navigation_Model_Layer_Filter_Abstract extends Mage_Catalo
      */
     protected function _initItems()
     {
-        $data = $this->_getItemsData();
-        $items=array();
+        $data  = $this->_getItemsData();
+        $items = array();
         foreach ($data as $itemData) {
             $items[] = $this->_createItem(
                 $itemData['label'],
@@ -40,26 +40,31 @@ abstract class GoMage_Navigation_Model_Layer_Filter_Abstract extends Mage_Catalo
         $this->_items = $items;
         return $this;
     }
-    
+
     /**
      * Create filter item object
      *
-     * @param   string $label
-     * @param   mixed $value
-     * @param   int $count
-     * @return  Mage_Catalog_Model_Layer_Filter_Item
+     * @param string $label
+     * @param mixed $value
+     * @param int $count
+     * @param bool $status
+     * @param string $image
+     * @param int $level
+     * @param string $haschild
+     * @param string $from_to
+     * @return Mage_Catalog_Model_Layer_Filter_Item
      */
-    protected function _createItem($label, $value, $count=0, $status = false, $image = '', $level = 0, $haschild = '', $from_to = '')
+    protected function _createItem($label, $value, $count = 0, $status = false, $image = '', $level = 0, $haschild = '', $from_to = '')
     {
         return Mage::getModel('catalog/layer_filter_item')
             ->setFilter($this)
             ->setLabel($label)
             ->setValue($value)
             ->setCount($count)
-        	->setActive($status)
-        	->setImage($image)
-        	->setLevel($level)
-        	->setHasChild($haschild)
+            ->setActive($status)
+            ->setImage($image)
+            ->setLevel($level)
+            ->setHasChild($haschild)
             ->setFromTo($from_to);
 
     }

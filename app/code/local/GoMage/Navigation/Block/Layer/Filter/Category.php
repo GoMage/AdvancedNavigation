@@ -169,9 +169,11 @@ class GoMage_Navigation_Block_Layer_Filter_Category extends Mage_Catalog_Block_L
 
     public function canShowMinimized($side)
     {
-        if ('true' === Mage::app()->getFrontController()->getRequest()->getParam('cat' . '-' . $side . '_is_open')) {
+        $helper = Mage::helper('gomage_navigation');
+
+        if ('true' === $helper->getRequest()->getParam('cat' . '-' . $side . '_is_open')) {
             return false;
-        } elseif ('false' === Mage::app()->getFrontController()->getRequest()->getParam('cat' . '-' . $side . '_is_open')) {
+        } elseif ('false' === $helper->getRequest()->getParam('cat' . '-' . $side . '_is_open')) {
             return true;
         }
 

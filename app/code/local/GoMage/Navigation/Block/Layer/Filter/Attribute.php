@@ -60,9 +60,11 @@ class GoMage_Navigation_Block_Layer_Filter_Attribute extends Mage_Catalog_Block_
 
     public function canShowMinimized($side)
     {
-        if ('true' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')) {
+        $helper = Mage::helper('gomage_navigation');
+
+        if ('true' === $helper->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')) {
             return false;
-        } elseif ('false' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')) {
+        } elseif ('false' === $helper->getRequest()->getParam($this->_filter->getRequestVar() . '-' . $side . '_is_open')) {
             return true;
         }
 
@@ -72,10 +74,11 @@ class GoMage_Navigation_Block_Layer_Filter_Attribute extends Mage_Catalog_Block_
 
     public function getShowAllOptions()
     {
+        $helper = Mage::helper('gomage_navigation');
 
-        if ('true' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar() . '_show_all')) {
+        if ('true' === $helper->getRequest()->getParam($this->_filter->getRequestVar() . '_show_all')) {
             return true;
-        } elseif ('false' === Mage::app()->getFrontController()->getRequest()->getParam($this->_filter->getRequestVar() . '_show_all')) {
+        } elseif ('false' === $helper->getRequest()->getParam($this->_filter->getRequestVar() . '_show_all')) {
             return false;
         }
 
