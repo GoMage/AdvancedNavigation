@@ -72,7 +72,6 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
      */
     public function apply(Zend_Controller_Request_Abstract $request, $filterBlock)
     {
-
         $filter = $request->getParam($this->_requestVar);
 
         if (is_array($filter)) {
@@ -80,18 +79,11 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
         }
 
         if ($filter) {
-
             $filters = explode(',', $filter);
-
             $this->_getResource()->applyFilterToCollection($this, $filters);
-
             foreach ($filters as $filter) {
-
                 $text = $this->_getOptionText($filter);
-
                 $this->getLayer()->getState()->addFilter($this->_createItem($text, $filter));
-
-
             }
 
         }
