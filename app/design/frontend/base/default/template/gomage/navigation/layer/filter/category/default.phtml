@@ -20,7 +20,7 @@
 			>
 <?php $_top_level = null; ?>
 <?php foreach ($this->getItems() as $_item): ?>
-    <?php if (!$_top_level) $_top_level = $_item->getLevel(); ?>      
+    <?php if (!$_top_level) $_top_level = $_item->getLevel(); ?>
     <li style="padding-left: <?php echo 10*($_item->getLevel() - $_top_level); ?>px; float: none !important;" >
         <?php if (($_item->getCount() > 0) || $_item->getHasChild() || $_item->getActive()): ?>
             <?php $data_param = urlencode($_item->getActive() ? $_item->getRemoveUrlParams() : $_item->getUrlParams(false)); ?>

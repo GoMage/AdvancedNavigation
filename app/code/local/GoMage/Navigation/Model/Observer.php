@@ -257,11 +257,12 @@ class GoMage_Navigation_Model_Observer
                         );
                     }
                 }
-
                 $gomage_ajax->setNameInLayout('gomage_ajax');
+
+                Mage::dispatchEvent('gomage_navigation_ajax_result', array('gomage_ajax' => $gomage_ajax));
+
                 $layout->setBlock('gomage_ajax', $gomage_ajax);
                 $layout->addOutputBlock($gomage_ajax->getNameInLayout(), 'toJson');
-
             }
 
         }

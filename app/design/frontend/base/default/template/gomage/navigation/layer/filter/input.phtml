@@ -15,7 +15,7 @@
 <?php	
 	$attribute 		= $this->getAttributeModel();
 	$attribute_code = $attribute->getAttributeCode();
-	$request		= $this->getRequest();
+	$request		= Mage::helper('gomage_navigation')->getRequest();
 	
 	$_from	= Mage::getSingleton('core/url')->escape($request->getParam($this->_filter->getRequestVar().'_from', ''));
    	$_to	= Mage::getSingleton('core/url')->escape($request->getParam($this->_filter->getRequestVar().'_to', ''));

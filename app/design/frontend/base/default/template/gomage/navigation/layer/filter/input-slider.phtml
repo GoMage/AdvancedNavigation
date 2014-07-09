@@ -16,7 +16,7 @@
 	$side           = $this->getSide();	
 	$attribute 		= $this->getAttributeModel();
 	$attribute_code = $attribute->getAttributeCode();
-	$request		= $this->getRequest();
+	$request		= Mage::helper('gomage_navigation')->getRequest();
 	
 	$step = (int)$attribute->getRoundTo();
 	$steps = array();

@@ -291,6 +291,9 @@ var GomageNavigation = new GomageNavigationClass({
             <?php endif; ?>
 
             scrolling_speed: '<?php echo Mage::getStoreConfig('gomage_navigation/general/scrolling_speed');?>',
+            <?php if (Mage::helper('gomage_navigation')->isGoMageSeoBoosterEnabled()): ?>
+                gomage_seobooster_enabled: true,
+            <?php endif; ?>
 		});
 //]]>	
 </script>
