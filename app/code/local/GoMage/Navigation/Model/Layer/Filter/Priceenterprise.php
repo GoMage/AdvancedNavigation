@@ -280,9 +280,8 @@ class GoMage_Navigation_Model_Layer_Filter_Priceenterprise extends Enterprise_Se
 
         if ($data === null) {
 
-            $data        = array();
-            $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product', 'price');
-            $attribute   = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
+            $data      = array();
+            $attribute = Mage::helper('gomage_navigation')->getProductAttribute('price');
 
             if ($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
                 &&
@@ -668,8 +667,7 @@ class GoMage_Navigation_Model_Layer_Filter_Priceenterprise extends Enterprise_Se
 
             default:
 
-                $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product', 'price');
-                $attribute   = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
+                $attribute = Mage::helper('gomage_navigation')->getProductAttribute('price');
 
                 if (($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
                         ||

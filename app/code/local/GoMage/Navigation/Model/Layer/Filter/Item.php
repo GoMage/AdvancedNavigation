@@ -34,8 +34,8 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
         $params = str_replace($clean_url, "", $url);
 
         if ($this->getFilter()->getRequestVarValue() == 'price') {
-            $attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product', 'price');
-            $attribute   = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
+
+            $attribute = Mage::helper('gomage_navigation')->getProductAttribute('price');
 
             if (($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
                     ||

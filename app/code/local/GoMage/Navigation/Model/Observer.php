@@ -121,37 +121,41 @@ class GoMage_Navigation_Model_Observer
             $attribute->isObjectNew(true);
         }
 
-        $attribute->addData(array('filter_type'         => $filter_type,
-                                  'inblock_type'        => $inblock_type,
-                                  'round_to'            => $round_to,
-                                  'show_currency'       => $show_currency,
-                                  'image_align'         => $image_align,
-                                  'image_width'         => $image_width,
-                                  'image_height'        => $image_height,
-                                  'show_minimized'      => $show_minimized,
-                                  'show_image_name'     => $show_image_name,
-                                  'show_checkbox'       => $show_checkbox,
-                                  'visible_options'     => $visible_options,
-                                  'show_help'           => $show_help,
-                                  'popup_width'         => $popup_width,
-                                  'popup_height'        => $popup_height,
-                                  'filter_reset'        => $filter_reset,
-                                  'is_ajax'             => $is_ajax,
-                                  'inblock_height'      => $inblock_height,
-                                  'max_inblock_height'  => $max_inblock_height,
-                                  'filter_button'       => $filter_button,
-                                  'category_ids_filter' => $category_ids_filter,
-                                  'range_options'       => $range_options,
-                                  'range_manual'        => $range_manual,
-                                  'range_auto'          => $range_auto,
-                                  'attribute_location'  => $attribute_location)
+        $attribute->addData(array(
+                'filter_type'         => $filter_type,
+                'inblock_type'        => $inblock_type,
+                'round_to'            => $round_to,
+                'show_currency'       => $show_currency,
+                'image_align'         => $image_align,
+                'image_width'         => $image_width,
+                'image_height'        => $image_height,
+                'show_minimized'      => $show_minimized,
+                'show_image_name'     => $show_image_name,
+                'show_checkbox'       => $show_checkbox,
+                'visible_options'     => $visible_options,
+                'show_help'           => $show_help,
+                'popup_width'         => $popup_width,
+                'popup_height'        => $popup_height,
+                'filter_reset'        => $filter_reset,
+                'is_ajax'             => $is_ajax,
+                'inblock_height'      => $inblock_height,
+                'max_inblock_height'  => $max_inblock_height,
+                'filter_button'       => $filter_button,
+                'category_ids_filter' => $category_ids_filter,
+                'range_options'       => $range_options,
+                'range_manual'        => $range_manual,
+                'range_auto'          => $range_auto,
+                'attribute_location'  => $attribute_location)
         );
 
         $attribute->save();
 
         foreach ($popup_text as $store_id => $text) {
-            $attribute_store = Mage::getModel('gomage_navigation/attribute_store')->getCollection()->addFieldToFilter('attribute_id', $attribute_id)->addFieldToFilter('store_id', $store_id)->getFirstItem();
-
+            $attribute_store = Mage::getModel('gomage_navigation/attribute_store')
+                ->getCollection()
+                ->addFieldToFilter('attribute_id', $attribute_id)
+                ->addFieldToFilter('store_id', $store_id
+                )->getFirstItem();
             if (!$attribute_store->getId()) {
                 $attribute_store->setData('attribute_id', $attribute_id);
                 $attribute_store->setData('store_id', $store_id);
