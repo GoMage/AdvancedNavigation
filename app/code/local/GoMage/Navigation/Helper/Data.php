@@ -248,41 +248,30 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
         return $request;
     }
 
-    public function getFilterUrl($route = '', $params = array(), $filter = false)
+    public function getFilterUrl($route = '*/*/*', $params = array())
     {
         if (!$this->isFrendlyUrl()) {
-            $url = Mage::getUrl($route, $params);
-
-            $arr = parse_url($url);
-
-            $queryString = false;
-            if (isset($arr['query'])) {
-                parse_str(htmlspecialchars_decode($arr['query']), $par);
-
-                if (isset($par['ajax'])) {
-                    unset($par['ajax']);
-                }
-
-                $queryString = http_build_query($par);
-            }
-
-            $port = '';
-            if (isset($arr['port']) && $arr['port'] !== '80') {
-                $port = ':' . $arr['port'];
-            }
-            $url = $arr['scheme'] . '://' . $arr['host'] . $port . $arr['path'] . '?';
-
-            if ($queryString) {
-                $url .= $queryString;
-            }
-
-            return $url;
+            $params['_query']['ajax'] = null;
+            return Mage::getUrl($route, $params);
         }
 
         $model = Mage::getModel('core/url');
         $attr  = Mage::registry('gan_filter_attributes');
 
-        foreach ($model->getRequest()->getQuery() as $param => $value) {
+        $query_params = is_array($model->getRequest()->getQuery()) ? $model->getRequest()->getQuery() : array();
+        $query        = array();
+
+        if (isset($params['_query']) && is_array($params['_query'])) {
+            $query_params = array_merge($query_params, $params['_query']);
+        }
+
+        foreach ($query_params as $param => $value) {
+
+            if (is_null($value)) {
+                $query[$param] = null;
+                continue;
+            }
+
             if ($param == 'cat') {
                 $values         = explode(',', $value);
                 $prepare_values = array();
@@ -298,7 +287,11 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                         }
                     }
                 }
-                $model->getRequest()->setQuery($param, implode(',', $prepare_values));
+                if (!empty($prepare_values)) {
+                    $query[$param] = implode(',', $prepare_values);
+                } else {
+                    $query[$param] = null;
+                }
             } elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))) {
                 $values         = explode(',', $value);
                 $prepare_values = array();
@@ -310,14 +303,18 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                         }
                     }
                 }
-                $model->getRequest()->setQuery($param, implode(',', $prepare_values));
+                if (!empty($prepare_values)) {
+                    $query[$param] = implode(',', $prepare_values);
+                } else {
+                    $query[$param] = null;
+                }
             } elseif (isset($attr[$param]) && in_array($attr[$param]['type'], array('price', 'decimal'))) {
                 if (is_array($value)) {
                     if (isset($value['from'])) {
-                        $params['_query'][$param . '_from'] = $value['from'];
+                        $query[$param . '_from'] = $value['from'];
                     }
                     if (isset($value['to'])) {
-                        $params['_query'][$param . '_to'] = $value['to'];
+                        $query[$param . '_to'] = $value['to'];
                     }
                 } elseif (($attribute = $this->getProductAttribute($param)) &&
                     in_array($attribute->getRangeOptions(), array(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY,
@@ -325,122 +322,22 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                     ) &&
                     $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
                 ) {
-                    $values                             = explode(',', $value);
-                    $params['_query'][$param . '_from'] = $values[0];
-                    $params['_query'][$param . '_to']   = $values[1];
-                    unset($params['_query'][$param]);
+                    $values                  = explode(',', $value);
+                    $query[$param . '_from'] = $values[0];
+                    $query[$param . '_to']   = $values[1];
+                    $query[$param]           = null;
                 } else {
-                    $values         = explode(',', $value);
-                    $prepare_values = array();
-                    foreach ($values as $_value) {
-                        foreach ($attr[$param]['options'] as $_k => $_v) {
-                            if ($_v == $_value) {
-                                $prepare_values[] = $_k;
-                                break;
-                            }
-                        }
-                    }
-                    if (!empty($prepare_values)) {
-                        $model->getRequest()->setQuery($param, implode(',', $prepare_values));
-                    }
+                    $query[$param] = $value;
                 }
+            } else {
+                $query[$param] = $value;
             }
         }
 
-        if (isset($params['_query'])) {
-            foreach ($params['_query'] as $param => $value) {
-                if ($value) {
-                    if ($param == 'cat') {
-                        $values         = explode(',', $value);
-                        $prepare_values = array();
-                        foreach ($values as $_value) {
-                            $category = Mage::getModel('catalog/category')->load($_value);
-                            if ($category && $category->getId()) {
-                                if (Mage::getStoreConfigFlag('gomage_navigation/filter_settings/expend_frendlyurl')) {
-                                    $parent_ids       = $category->getParentIds();
-                                    $parent_category  = Mage::getModel('catalog/category')->load(end($parent_ids));
-                                    $prepare_values[] = $parent_category->getData('url_key') . '|' . $category->getData('url_key');
-                                } else {
-                                    $prepare_values[] = $category->getData('url_key');
-                                }
-                            }
-                        }
-                        $params['_query'][$param] = implode(',', $prepare_values);
-                    } elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))) {
-                        $values         = explode(',', $value);
-                        $prepare_values = array();
-                        foreach ($values as $_value) {
-                            foreach ($attr[$param]['options'] as $_k => $_v) {
-                                if ($_v == $_value) {
-                                    $prepare_values[] = $_k;
-                                    break;
-                                }
-                            }
-                        }
-                        $params['_query'][$param] = implode(',', $prepare_values);
-                    } elseif (isset($attr[$param]) && in_array($attr[$param]['type'], array('price', 'decimal'))) {
-                        if (is_array($value)) {
-                            if (isset($value['from'])) {
-                                $params['_query'][$param . '_from'] = $value['from'];
-                            }
-                            if (isset($value['to'])) {
-                                $params['_query'][$param . '_to'] = $value['to'];
-                            }
-                        } elseif (($attribute = $this->getProductAttribute($param)) &&
-                            in_array($attribute->getRangeOptions(), array(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY,
-                                    GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
-                            ) &&
-                            $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
-                        ) {
-                            if (strpos($value, ';')) {
-                                $values = explode(';', $value);
-                            } else {
-                                $values = explode(',', $value);
-                            }
-                            $params['_query'][$param . '_from'] = $values[0];
-                            $params['_query'][$param . '_to']   = $values[1];
-                            unset($params['_query'][$param]);
-                        } else {
-                            $values         = explode(',', $value);
-                            $prepare_values = array();
-                            foreach ($values as $_value) {
-                                foreach ($attr[$param]['options'] as $_k => $_v) {
-                                    if ($_v == $_value) {
-                                        $prepare_values[] = $_k;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (!empty($prepare_values)) {
-                                $params['_query'][$param] = implode(',', $prepare_values);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        $params['_query']         = $query;
+        $params['_query']['ajax'] = null;
 
-        $url = $model->getUrl($route, $params);
-
-        $arr = parse_url($url);
-
-        $queryString = false;
-        if (isset($arr['query'])) {
-            parse_str(htmlspecialchars_decode($arr['query']), $par);
-            if (isset($par['ajax'])) {
-                unset($par['ajax']);
-            }
-
-            $queryString = http_build_query($par);
-        }
-
-        $url = $arr['scheme'] . '://' . $arr['host'] . $arr['path'] . '?';
-
-        if ($queryString) {
-            $url .= $queryString;
-        }
-
-        return $url;
+        return $model->getUrl($route, $params);
     }
 
     public function formatUrlValue($value, $default)

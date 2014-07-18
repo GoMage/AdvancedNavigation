@@ -25,12 +25,6 @@ class GoMage_Navigation_Block_Html_Pager extends Mage_Page_Block_Html_Pager
 
     public function getPagerUrl($params = array())
     {
-        if ($this->isAjaxPager()) {
-            $params['ajax'] = 1;
-        } else {
-            $params['ajax'] = null;
-        }
-
         $urlParams                 = array();
         $urlParams['_nosid']       = true;
         $urlParams['_current']     = true;

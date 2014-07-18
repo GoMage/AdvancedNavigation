@@ -72,12 +72,6 @@ class GoMage_Navigation_Block_Product_List_Toolbar extends Mage_Catalog_Block_Pr
 
     public function getPagerUrl($params = array())
     {
-        if (Mage::helper('gomage_navigation')->isGomageNavigationAjax()) {
-            $params['ajax'] = 1;
-        } else {
-            $params['ajax'] = null;
-        }
-
         $urlParams                 = array();
         $urlParams['_nosid']       = true;
         $urlParams['_current']     = true;

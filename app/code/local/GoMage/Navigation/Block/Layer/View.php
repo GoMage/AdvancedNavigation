@@ -453,7 +453,7 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
             if ($item->getActive() || $slider_item) {
                 try {
 
-                    switch ($item->getFilter()->getAttributeModel()->getFilterType()):
+                    switch ($item->getFilter()->getAttributeModel()->getFilterType()) {
 
                         case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
                             $_from = $helper->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_from', $item->getFilter()->getMinValueInt());
@@ -467,35 +467,29 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
                             }
                             break;
 
-
                         case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
                         case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
                         case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
-
                             if (Mage::helper('gomage_navigation')->isMobileDevice()) {
-                                $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
+                                $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getResetValue();
                             } else {
                                 $_from = $helper->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_from');
                                 $_to   = $helper->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_to');
-
                                 if ($_from && $_to) {
                                     $filterState[$item->getFilter()->getRequestVarValue() . '_from'] = null;
                                     $filterState[$item->getFilter()->getRequestVarValue() . '_to']   = null;
                                 }
                             }
-
                             break;
 
                         default:
-
-                            $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
-
+                            $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getResetValue();
                             break;
 
-                    endswitch;
+                    }
 
                 } catch (Exception $e) {
-                    $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
+                    $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getResetValue();
 
                 }
             }
@@ -514,12 +508,8 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
         $params['_query']['ajax'] = null;
 
         if ($ajax) {
-
             $params['_query']['ajax'] = true;
-
-
         }
-
 
         if ($helper->isFrendlyUrl()) {
             try {
@@ -562,55 +552,41 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
     public function getClearUrl($ajax = false)
     {
         $filterState = array();
+
         foreach ($this->getActiveFilters() as $item) {
-
             try {
-
-                switch ($item->getFilter()->getAttributeModel()->getFilterType()):
-
+                switch ($item->getFilter()->getAttributeModel()->getFilterType()) {
                     case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
                         $filterState[$item->getFilter()->getRequestVarValue() . '_from'] = null;
                         $filterState[$item->getFilter()->getRequestVarValue() . '_to']   = null;
-
                         break;
                     case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
                     case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
                     case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
-
                         if (Mage::helper('gomage_navigation')->isMobileDevice()) {
-                            $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
+                            $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getResetValue();
                         } else {
                             $filterState[$item->getFilter()->getRequestVarValue() . '_from'] = null;
                             $filterState[$item->getFilter()->getRequestVarValue() . '_to']   = null;
                         }
                         break;
-
                     case (GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT):
-
                         if ($item->getFilter()->getAttributeModel()->getRangeOptions() != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::NO) {
                             $filterState[$item->getFilter()->getRequestVarValue() . '_from'] = null;
                             $filterState[$item->getFilter()->getRequestVarValue() . '_to']   = null;
                         } else {
-                            $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
+                            $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getResetValue();
                         }
-
-
                         break;
-
                     default:
-
-                        $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
-
+                        $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getResetValue();
                         break;
-
-                endswitch;
-
+                }
             } catch (Exception $e) {
-
-                $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getCleanValue();
-
+                $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getResetValue();
             }
         }
+
         $params['_nosid']       = true;
         $params['_current']     = true;
         $params['_use_rewrite'] = true;
@@ -620,10 +596,7 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
         $params['_query']['ajax'] = null;
 
         if ($ajax) {
-
             $params['_query']['ajax'] = true;
-
-
         }
 
         return Mage::getUrl('*/*/*', $params);

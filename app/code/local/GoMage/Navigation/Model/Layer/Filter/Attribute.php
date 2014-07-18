@@ -110,7 +110,6 @@ class GoMage_Navigation_Model_Layer_Filter_Attribute extends GoMage_Navigation_M
 
     protected function _getItemsData()
     {
-
         $attribute         = $this->getAttributeModel();
         $this->_requestVar = $attribute->getAttributeCode();
 

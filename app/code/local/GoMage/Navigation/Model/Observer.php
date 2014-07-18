@@ -323,35 +323,36 @@ class GoMage_Navigation_Model_Observer
                         $prepare_values = array();
 
                         foreach ($values as $_value) {
-                            if (Mage::getStoreConfigFlag('gomage_navigation/filter_settings/expend_frendlyurl')) {
-                                $_value         = explode('|', $_value);
-                                $parentCategory = Mage::getModel('catalog/category')->loadByAttribute('url_key', $_value[0]);
+                            if ($_value) {
+                                if (Mage::getStoreConfigFlag('gomage_navigation/filter_settings/expend_frendlyurl')) {
+                                    $_value         = explode('|', $_value);
+                                    $parentCategory = Mage::getModel('catalog/category')->loadByAttribute('url_key', $_value[0]);
+                                    if ($parentCategory && $parentCategory->getId()) {
+                                        if (count($_value) > 1) {
+                                            $collectionCategory = Mage::getModel('catalog/category')->getCollection()
+                                                ->addAttributeToFilter('url_key', array('eq' => $_value[1]))
+                                                ->addAttributeToFilter('parent_id', array('eq' => $parentCategory->getId()));
 
-                                if ($_value[0] == Mage::registry('current_category')->getData('url_key')) {
-                                    $parentId = Mage::registry('current_category')->getId();
+                                            foreach ($collectionCategory as $category) {
+                                                if ($category && $category->getId()) {
+                                                    $prepare_values[] = $category->getId();
+                                                }
+                                            }
+                                        } else {
+                                            $prepare_values[] = $parentCategory->getId();
+                                        }
+                                    }
                                 } else {
-                                    $parentId = $parentCategory->getId();
-                                }
-
-                                $collectionCategory = Mage::getModel('catalog/category')->getCollection()
-                                    ->addAttributeToFilter('url_key', array('eq' => $_value[1]))
-                                    ->addAttributeToFilter('parent_id', array('eq' => $parentId));
-
-                                foreach ($collectionCategory as $category) {
+                                    $category = Mage::getModel('catalog/category')->loadByAttribute('url_key', $_value);
                                     if ($category && $category->getId()) {
                                         $prepare_values[] = $category->getId();
                                     }
                                 }
-                            } else {
-                                $category = Mage::getModel('catalog/category')->loadByAttribute('url_key', $_value);
-                                if ($category && $category->getId()) {
-                                    $prepare_values[] = $category->getId();
-                                }
                             }
                         }
-
-                        $request->setQuery($param, implode(',', $prepare_values));
-
+                        if (!empty($prepare_values)) {
+                            $request->setQuery($param, implode(',', $prepare_values));
+                        }
                     } elseif (isset($attr[$param]) && !in_array($attr[$param]['type'], array('price', 'decimal'))) {
                         $values         = explode(',', $value);
                         $prepare_values = array();
@@ -360,8 +361,9 @@ class GoMage_Navigation_Model_Observer
                                 $prepare_values[] = $attr[$param]['options'][$_value];
                             }
                         }
-
-                        $request->setQuery($param, implode(',', $prepare_values));
+                        if (!empty($prepare_values)) {
+                            $request->setQuery($param, implode(',', $prepare_values));
+                        }
                     }
                 }
             }
