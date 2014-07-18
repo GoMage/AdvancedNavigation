@@ -16,7 +16,6 @@ class GoMage_Navigation_Block_Navigation_Left extends Mage_Core_Block_Template
 
     protected function _prepareLayout()
     {
-
         $left = $this->getLayout()->getBlock('left_first');
         if (!$left) {
             $this->getLayout()->getBlock('left');
@@ -30,7 +29,9 @@ class GoMage_Navigation_Block_Navigation_Left extends Mage_Core_Block_Template
             if ($page->getData('page_id')) {
                 if ($page->getData('navigation_left_column')) {
                     $navigation_left = $this->getLayout()->createBlock('gomage_navigation/navigation', 'gomage.navigation.left')
-                        ->setTemplate('gomage/navigation/catalog/navigation/left.phtml');
+                        ->setTemplate('gomage/navigation/catalog/navigation/left.phtml')
+                        ->unsetData('cache_lifetime')
+                        ->unsetData('cache_tags');
                     $navigation_left->SetNavigationPlace(GoMage_Navigation_Block_Navigation::LEFT_COLUMN);
                     $left->insert($navigation_left);
                 }
@@ -38,15 +39,15 @@ class GoMage_Navigation_Block_Navigation_Left extends Mage_Core_Block_Template
                 if (in_array(Mage::app()->getFrontController()->getRequest()->getControllerName(), array('category', 'result'))) {
                     if (!Mage::getStoreConfig('gomage_navigation/category/show_shopby')) {
                         $navigation_left = $this->getLayout()->createBlock('gomage_navigation/navigation', 'gomage.navigation.left')
-                            ->setTemplate('gomage/navigation/catalog/navigation/left.phtml');
+                            ->setTemplate('gomage/navigation/catalog/navigation/left.phtml')
+                            ->unsetData('cache_lifetime')
+                            ->unsetData('cache_tags');
                         $navigation_left->SetNavigationPlace(GoMage_Navigation_Block_Navigation::LEFT_COLUMN);
                         $left->insert($navigation_left);
                     }
                 }
             }
         }
-
         parent::_prepareLayout();
-
     }
 }
