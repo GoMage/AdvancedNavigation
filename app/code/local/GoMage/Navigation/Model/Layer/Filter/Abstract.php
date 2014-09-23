@@ -8,7 +8,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.5
+ * @version      Release: 4.6
  * @since        Class available since Release 1.0
  */
 abstract class GoMage_Navigation_Model_Layer_Filter_Abstract extends Mage_Catalog_Model_Layer_Filter_Abstract
