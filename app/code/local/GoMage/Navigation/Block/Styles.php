@@ -11,44 +11,43 @@
  * @since        Class available since Release 3.0
  */
 
-class GoMage_Navigation_Block_Styles extends Mage_Core_Block_Template
-{    
+class GoMage_Navigation_Block_Styles extends Mage_Core_Block_Template {    
 	
-	public function getStoreCategories()
-    {                        
-        $root_category = Mage::app()->getStore()->getRootCategoryId();
-        
-        $tree = Mage::getResourceModel('catalog/category_tree');        
-        $nodes = $tree->loadNode($root_category)
+	public function getStoreCategories() {                        
+        $root_category	= Mage::app()->getStore()->getRootCategoryId();   
+        $tree			= Mage::getResourceModel('catalog/category_tree');        
+        $nodes			= $tree->loadNode($root_category)
             ->loadChildren(1)
             ->getChildren();
                     
         $collection = Mage::getResourceModel('catalog/category_collection');    
-        $collection->addAttributeToSelect('*');    
-                
+        $collection->addAttributeToSelect('*');            
         $tree->addCollectionData($collection, Mage::app()->getStore()->getId(), $root_category, true, true);
             
         return $nodes;    
     }
     
-    public function getRootCategory(){
+    public function getRootCategory() {
     	$root_category_id = Mage::app()->getStore()->getRootCategoryId();
+		
     	return Mage::getModel('catalog/category')->load($root_category_id);
     }
     
-    public function getNavigationCatigoryUrl(){
+	public function getNavigationCatigoryUrl() {
     	$page = Mage::getSingleton('cms/page');                                     
-        if ($page->getData('page_id')){
-        	$categoty_id = $page->getData('navigation_category_id');
-        	if ($categoty_id){
-	        	$categoty = Mage::getModel('catalog/category')->load($categoty_id);
-	        	if ($categoty && $categoty->getIsActive()){
-	        		return $categoty->getUrl() . '?ajax=1';  
+        
+		if ($page->getData('page_id')){
+        	$category_id = $page->getData('navigation_category_id');
+        	
+			if ($category_id){
+	        	$category = Mage::getModel('catalog/category')->load($category_id);
+	        	
+				if ($category && $category->getIsActive()) {
+	        		return Mage::helper('gomage_navigation/url')->categoryUrl($category) . '?ajax=1';
 	        	}
         	}
         }    
         
         return false;
-    }
-    
+    } 
 }

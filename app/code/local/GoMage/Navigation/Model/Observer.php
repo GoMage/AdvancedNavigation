@@ -1,5 +1,4 @@
 <?php
-
 /**
  * GoMage Advanced Navigation Extension
  *
@@ -11,6 +10,7 @@
  * @version      Release: 4.6
  * @since        Class available since Release 1.0
  */
+ 
 class GoMage_Navigation_Model_Observer
 {
 
@@ -171,7 +171,7 @@ class GoMage_Navigation_Model_Observer
         if ($layout = Mage::getSingleton('core/layout')) {
 
             if (intval(Mage::helper('gomage_navigation')->getRequest()->getParam('ajax'))) {
-
+				$navBlock = null;
                 $layout->removeOutputBlock('root');
                 $layout->removeOutputBlock('core_profiler');
 
@@ -264,7 +264,7 @@ class GoMage_Navigation_Model_Observer
 
                     )
                 );
-
+				
                 if (Mage::getStoreConfig('gomage_procart/general/enable')) {
                     if ($productsBlock) {
                         $gomage_ajax->addEvalJs("if (typeof(GomageProcartConfig) != 'undefined') {

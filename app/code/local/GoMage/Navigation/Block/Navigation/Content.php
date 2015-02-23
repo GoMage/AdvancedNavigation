@@ -1,5 +1,4 @@
 <?php
-
 /**
  * GoMage Advanced Navigation Extension
  *
@@ -11,43 +10,39 @@
  * @version      Release: 4.6
  * @since        Class available since Release 1.0
  */
-class GoMage_Navigation_Block_Navigation_Content extends Mage_Core_Block_Template
-{
 
-    protected function _prepareLayout()
-    {
-        $content = $this->getLayout()->getBlock('content');
-
-        if ($content && Mage::helper('gomage_navigation')->isGomageNavigation() &&
-            Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/active')
-        ) {
-            $content->unsetChild('gomage.navigation.content');
-            $page = Mage::getSingleton('cms/page');
-            if ($page->getData('page_id')) {
-                if ($page->getData('navigation_content_column')) {
-                    $navigation_content = $this->getLayout()->createBlock('gomage_navigation/navigation', 'gomage.navigation.content')
-                        ->setTemplate('gomage/navigation/catalog/navigation/content.phtml')
-                        ->unsetData('cache_lifetime')
-                        ->unsetData('cache_tags');
-                    $navigation_content->SetNavigationPlace(GoMage_Navigation_Block_Navigation::CONTENT_COLUMN);
-                    $content->insert($navigation_content, '', false);
-                }
-            } else {
-                if (in_array(Mage::app()->getFrontController()->getRequest()->getControllerName(), array('category', 'result'))) {
-
-                    if (!Mage::getStoreConfig('gomage_navigation/contentcolumnsettings/show_shopby')) {
-                        $navigation_content = $this->getLayout()->createBlock('gomage_navigation/navigation', 'gomage.navigation.content')
-                            ->setTemplate('gomage/navigation/catalog/navigation/content.phtml')
-                            ->unsetData('cache_lifetime')
-                            ->unsetData('cache_tags');
-                        $navigation_content->SetNavigationPlace(GoMage_Navigation_Block_Navigation::CONTENT_COLUMN);
-                        $content->insert($navigation_content, '', false);
-                    }
-                }
-            }
-        }
-
-        parent::_prepareLayout();
-
+class GoMage_Navigation_Block_Navigation_Content extends GoMage_Navigation_Block_Navigation_Abstract {
+	
+	const NAVIGATION_PLACE	= self::CONTENT_COLUMN;//replace to admin html const
+	const CONFIG_KEY		= 'gomage_navigation/contentcolumnsettings';
+	
+	public function canDisplay() {
+		if ($this->can_display === null) {
+			$shop_by = Mage::getStoreConfig('gomage_navigation/general/show_shopby');
+			
+			$this->can_display = (bool) (
+				$this->isActive() &&
+				(!$this->showInShopBy()) &&
+				(
+					$shop_by == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::CONTENT				|| 
+					$shop_by == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN_CONTENT	|| 
+					$shop_by == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN_CONTENT
+				)
+			);
+		}
+		
+        return $this->can_display;
     }
+	
+	protected function _prePrepareLayout() {
+		if ($this->isGMN() && $this->canDisplay()) {		
+			if (in_array(Mage::app()->getFrontController()->getRequest()->getControllerName(), array('category', 'result'))) {		
+				$this->setTemplate('gomage/navigation/catalog/navigation/content.phtml')
+					->unsetData('cache_lifetime')
+					->unsetData('cache_tags');
+			}     
+        } else if ($content = $this->getLayout()->getBlock('content')) {
+			$content->unsetChild('gomage.navigation.content');
+		}
+	}
 }

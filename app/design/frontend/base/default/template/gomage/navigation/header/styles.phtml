@@ -264,36 +264,37 @@
 ?>
 
 var GomageNavigation = new GomageNavigationClass({
-			<?php if($loadimage = Mage::getStoreConfig('gomage_navigation/ajaxloader/loadimage')):?>
-			loadimage: '<?php echo Mage::getBaseUrl("media")."gomage/config/".$loadimage;?>',
-			<?php else:?>
-			loadimage: '<?php echo $this->getSkinUrl("images/gomage/loadinfo.gif");?>',
-			<?php endif;?>
-			loadimagealign: '<?php echo Mage::getStoreConfig('gomage_navigation/ajaxloader/imagealign');?>',
-			back_to_top_action: '<?php echo Mage::getStoreConfig('gomage_navigation/general/back_to_top_action');?>',
-			gomage_navigation_loadinfo_text: "<?php echo $text?>",
-			
-			<?php if ($url = $this->getNavigationCatigoryUrl()): ?>
-				gan_static_navigation_url: '<?php echo $url; ?>',
-				gomage_navigation_urlhash: false,
-			<?php else:?>
-				gomage_navigation_urlhash: <?php if (Mage::getStoreConfig('gomage_navigation/filter_settings/urlhash')): ?>true<?php else: ?>false<?php endif; ?>,
-			<?php endif; ?>
-
-		    <?php if (Mage::getStoreConfig('gomage_navigation/general/autoscrolling') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Autoscrolling::AJAX): ?>	
-			    gan_more_type_ajax: true,	
-			<?php endif; ?>
-			gan_shop_by_area: <?php echo intval($position); ?>,
-            <?php if ( Mage::getStoreConfigFlag('gomage_navigation/filter/show_help') ): ?>
-            help_icon_open_type: 'click',
-            <?php else: ?>
-            help_icon_open_type: 'over',
-            <?php endif; ?>
-
-            scrolling_speed: '<?php echo Mage::getStoreConfig('gomage_navigation/general/scrolling_speed');?>',
-            <?php if (Mage::helper('gomage_navigation')->isGoMageSeoBoosterEnabled()): ?>
-                gomage_seobooster_enabled: true,
-            <?php endif; ?>
-		});
+	<?php if ($loadimage = Mage::getStoreConfig('gomage_navigation/ajaxloader/loadimage')) : ?>
+	loadimage: '<?php echo Mage::getBaseUrl("media") . "gomage/config/" . $loadimage; ?>',
+	<?php else : ?>
+	loadimage: '<?php echo $this->getSkinUrl("images/gomage/loadinfo.gif"); ?>',
+	<?php endif; ?>
+	loadimagealign: '<?php echo Mage::getStoreConfig('gomage_navigation/ajaxloader/imagealign'); ?>',
+	back_to_top_action: '<?php echo Mage::getStoreConfig('gomage_navigation/general/back_to_top_action'); ?>',
+	gomage_navigation_loadinfo_text: "<?php echo $text; ?>",
+	<?php if ($url = $this->getNavigationCatigoryUrl()) : ?>
+	gan_static_navigation_url: '<?php echo $url; ?>',
+	gomage_navigation_urlhash: false,
+	<?php else : ?>
+	gomage_navigation_urlhash: <?php if (Mage::getStoreConfig('gomage_navigation/filter_settings/urlhash')) : ?>true<?php else : ?>false<?php endif; ?>,
+	<?php endif; ?>
+	<?php if (Mage::getStoreConfig('gomage_navigation/general/autoscrolling') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Autoscrolling::AJAX) : ?>	
+	gan_more_type_ajax: true,	
+	<?php endif; ?>
+	gan_shop_by_area: <?php echo intval($position); ?>,
+	<?php if (Mage::getStoreConfigFlag('gomage_navigation/filter/show_help')) : ?>
+	help_icon_open_type: 'click',
+	<?php else : ?>
+	help_icon_open_type: 'over',
+	<?php endif; ?>
+	scrolling_speed: '<?php echo Mage::getStoreConfig('gomage_navigation/general/scrolling_speed'); ?>',
+	<?php if (Mage::helper('gomage_navigation')->isGoMageSeoBoosterEnabled()) : ?>
+	gomage_seobooster_enabled: true,
+	<?php endif; ?>
+	<?php if (Mage::helper('gomage_navigation/config')->isStatic()) : ?>
+	is_static: true,
+	static_active_blocks: <?php echo json_encode(Mage::helper('gomage_navigation/config')->staticActiveBlocks()); ?>,
+	<?php endif; ?>
+});
 //]]>	
 </script>
