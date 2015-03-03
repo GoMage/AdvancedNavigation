@@ -12,14 +12,6 @@
  */
 
 class GoMage_Navigation_Block_Navigation_CMS_Content extends GoMage_Navigation_Block_Navigation_Content {
-		
-	/*public function canDisplay() {
-		if ($this->can_display === null) {
-			$this->can_display = $this->isActive();
-		}
-		
-		return $this->can_display;
-    }*/
 	
 	public function isActive() {	
 		return (bool) Mage::getSingleton('cms/page')->getData('navigation_content_column');

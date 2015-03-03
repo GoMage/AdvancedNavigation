@@ -49,15 +49,19 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 	public $can_display		= null;
 	public $navigation_type	= null;
 	
-	protected $GMN			= null;
-	protected $root_level	= 0;
-	protected $columns		= 0;
+	protected $GMN					= null;
+	protected $config_helper		= null;
+	protected $url_helper			= null;
+	protected $root_level			= 0;
+	protected $columns				= 0;
     protected $current_column		= 0;
 	protected $childs_count			= 0;
 	protected $offer_block_html		= null;
 	protected $plain_root_cat		= null;
 	protected $categoryInstance		= null;
 	protected $itemLevelPositions	= array();
+	
+	abstract protected function _prePrepareLayout();
 	
 	protected function _construct() {
         $this->addData(array(
@@ -68,45 +72,17 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 				),
             )
         );
-    }
+    }	
 	
-	public function isGMN() {
-		if ($this->GMN === null) {
-			$this->GMN = Mage::helper('gomage_navigation')->isGomageNavigation();
-		} 
-        
-		return $this->GMN;
-    }
-	
-	public function navigationPlace() {
-        return static::NAVIGATION_PLACE;
-    }
-	
-	public function configKey() {
-        return static::CONFIG_KEY;
-    }
-	
-	public function isStatic() {
-		return Mage::helper('gomage_navigation/config')->isStatic();
-	}
-	
-	public function staticCategoryId() {
-		if ($this->isStatic()) {
-			$category_model   = Mage::getModel('catalog/category');
-			$category         = $category_model->load((int) Mage::getSingleton('cms/page')->getData('navigation_category_id'));	
-			
-			return $category->getId();
-		}
+	protected function _prepareLayout() {
+		$this->_prePrepareLayout();
+        parent::_prepareLayout();
 		
-		return false;
-	}
-	
-	public function canDisplay() {
-		if ($this->can_display === null) {
-			$this->can_display = $this->isActive();
-		}
-		
-        return $this->can_display;
+		if ($this->isGMN()) {
+            if ($head_block = $this->getLayout()->getBlock('head')) {
+                $head_block->addCss('css/gomage/advanced-navigation.css');
+            }
+        }
     }
 	
 	public function isActive() {	
@@ -225,15 +201,84 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 		return (bool) Mage::getStoreConfig($this->configKey() . '/filter_reset');
 	}
 	
-	protected function _prepareLayout() {
-		$this->_prePrepareLayout();
-        parent::_prepareLayout();
+	public function navigationPlace() {
+        return static::NAVIGATION_PLACE;
+    }
+	
+	public function configKey() {
+        return static::CONFIG_KEY;
+    }
+	
+	public function isGMN() {
+		if ($this->GMN === null) {
+			$this->GMN = Mage::helper('gomage_navigation')->isGomageNavigation();
+		} 
+        
+		return $this->GMN;
+    }
+	
+	public function configHelper() {
+		if ($this->config_helper === null) {
+			$this->config_helper = Mage::helper('gomage_navigation/config');
+		} 
+        
+		return $this->config_helper;
+    }
+	
+	public function urlHelper() {
+		if ($this->url_helper === null) {
+			$this->url_helper = Mage::helper('gomage_navigation/url');
+		} 
+        
+		return $this->url_helper;
+    }
+	
+	public function canDisplay() {
+		if ($this->can_display === null) {
+			$this->can_display = $this->isActive();
+		}
 		
-		if ($this->isGMN()) {
-            if ($head_block = $this->getLayout()->getBlock('head')) {
-                $head_block->addCss('css/gomage/advanced-navigation.css');
-            }
+        return $this->can_display;
+    }
+	
+	public function isStatic() {
+		return $this->configHelper()->isStatic();
+	}
+	
+	public function curentCategory() {		
+		return $this->configHelper()->curentCategory();
+	}
+
+	/**
+     * Get url for category data
+     *
+     * @param Mage_Catalog_Model_Category $category
+     * @return string
+     */
+    public function categoryUrl($category) {
+        return $this->urlHelper()->categoryUrl($category, array('_query' => array('ajax' => null)));
+    }
+	
+    public function categoryFilterUrl($category) {
+		return $this->urlHelper()->categoryFilterUrl($category, array('_query' => array('ajax' => null)));
+    }
+	
+    public function categoryFilterIsActive($category) {
+        return $this->urlHelper()->categoryFilterIsActive($category);
+    }
+	
+	/**
+     * Checkin activity of category
+     *
+     * @param   Varien_Object $category
+     * @return  bool
+     */
+    public function isCategoryActive($category) {
+        if ($this->curentCategory()) {
+            return in_array($category->getId(), $this->curentCategory()->getPathIds());
         }
+		
+        return false;
     }
 	
 	/**
@@ -245,21 +290,10 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
      * @return string
      */
 	public function renderCategoriesMenuHtml($level = 0, $outermostItemClass = '', $childrenWrapClass = '') {	  		
-		$root_category = Mage::app()->getStore()->getRootCategoryId();
-		
-		switch ($this->navigationPlace()) {
-            case self::LEFT_COLUMN :
-            case self::RIGTH_COLUMN :
-            case self::CONTENT_COLUMN :
-                if ($this->navigationType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_PRO) {
-                    $root_category = Mage::app()->getStore()->getRootCategoryId();
-                } elseif (Mage::registry('current_category')) {
-                    $root_category = Mage::registry('current_category')->getId();
-                } elseif ($this->staticCategoryId()) {
-					$root_category = $this->staticCategoryId();
-				}			
-        	break;
-        }
+		$root_category = 
+			($this->navigationPlace() == self::MENU_BAR || $this->navigationType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_PRO) ? 
+				Mage::app()->getStore()->getRootCategoryId() : 
+					$this->curentCategory()->getId();
         
         $this->root_level = Mage::getModel('catalog/category')->load($root_category)
 			->getLevel() + 1;
@@ -306,6 +340,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
             }
 
             $this->columns          = count($columns);
+			
             $this->current_column   = min($columns);
             $this->childs_count     = 0;
             $this->offer_block_html = null;
@@ -331,11 +366,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
      *
      * @return Varien_Data_Tree_Node_Collection
      */
-    public function getStoreCategories($root_category = null) {
-        if (is_null($root_category)) {
-            $root_category = Mage::app()->getStore()->getRootCategoryId();
-        }
-		
+    public function getStoreCategories($root_category = null) {		
         $tree  = Mage::getResourceModel('catalog/category_tree');
         $nodes = $tree->loadNode($root_category)
             ->loadChildren(max(0, (int) Mage::app()->getStore()->getConfig('catalog/navigation/max_depth')))
@@ -371,11 +402,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 		$outermostItemClass = '', 
 		$childrenWrapClass = '', 
 		$noEventAttributes = false
-    ) {
-        if (!$category->getIsActive()) {
-            return '';
-        }
-		
+    ) {		
         $html = array();
 
         // get all children        
@@ -457,14 +484,14 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
                     $htmlSel .= '>';
                     $html[] = $htmlSel;
 
-                    $option_value = ($this->isAjax() ? $this->getAjaxUrl($category) : $this->getCategoryUrl($category));
+                    $option_value = ($this->isAjax() ? $this->categoryFilterUrl($category) : $this->categoryUrl($category));
 
                     $html[] = '<option class="gan-dropdown-top" value="' . $option_value . '">' . (str_repeat('&nbsp;&nbsp;', $category->getLevel() - $this->root_level) . $category->getName()) . '</option>';
 
                 }
 
                 $option_selected = ($curent_id == $category->getId() ? 'selected="selected"' : '');
-                $option_value    = ($this->isAjax() ? $this->getAjaxUrl($category) : $this->getCategoryUrl($category));
+                $option_value    = ($this->isAjax() ? $this->categoryFilterUrl($category) : $this->categoryUrl($category));
                 $html[] = '<option ' . $option_selected . ' value="' . $option_value . '">' . (str_repeat('&nbsp;&nbsp;', $category->getLevel() - $this->root_level) . $category->getName()) . '</option>';
 
                 // render children
@@ -502,7 +529,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
                     $linkClass = $outermostItemClass;
                 }
 				
-                if ($this->getIsActiveAjaxCategory($category) || $this->isCategoryActive($category)) {
+                if ($this->categoryFilterIsActive($category) || $this->isCategoryActive($category)) {
                     $linkClass .= ' active';
                 }
 
@@ -571,10 +598,10 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 					
                     $htmlLi .= '>';
                     $html[] = $htmlLi;
-                    $htmlA = '<a href="' . $this->getCategoryUrl($category) . '"' . $linkClass;
+                    $htmlA = '<a href="' . $this->categoryUrl($category) . '"' . $linkClass;
                     
 					if ($this->isAjax()) {
-                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->categoryFilterUrl($category) . '\'); return false;" ';
                     }
 					
                     $htmlA .= '>';
@@ -740,10 +767,10 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
                     }
 
                     $html[] = '<li class="' . $li_class . '">';
-                    $htmlA = '<a style="padding-left:' . (10 * ($category->getLevel() - ($this->root_level + 1))) . 'px;" href="' . $this->getCategoryUrl($category) . '"' . $linkClass;
+                    $htmlA = '<a style="padding-left:' . (10 * ($category->getLevel() - ($this->root_level + 1))) . 'px;" href="' . $this->categoryUrl($category) . '"' . $linkClass;
                     
 					if ($this->isAjax()) {
-                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->categoryFilterUrl($category) . '\'); return false;" ';
                     }
 					
                     $htmlA .= '>';
@@ -813,14 +840,14 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 				
                 $htmlLi .= '>';
                 $html[] = $htmlLi;
-                $htmlA = '<a href="' . $this->getCategoryUrl($category) . '"';
+                $htmlA = '<a href="' . $this->categoryUrl($category) . '"';
                 $htmlA .= ' style="padding-left: ' . (10 * ($category->getLevel() - $this->root_level)) . 'px;" ';
 
                 if ($this->isAjax()) {
-                    $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                    $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->categoryFilterUrl($category) . '\'); return false;" ';
                 }
 
-                if ($this->getIsActiveAjaxCategory($category) || $this->isCategoryActive($category)) {
+                if ($this->categoryFilterIsActive($category) || $this->isCategoryActive($category)) {
                     $htmlA .= ' class="active" ';
                 }
 
@@ -863,13 +890,13 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 				
                 $htmlLi .= '>';
                 $html[] = $htmlLi;
-                $htmlA = '<a href="' . $this->getCategoryUrl($category) . '"';
+                $htmlA = '<a href="' . $this->categoryUrl($category) . '"';
 
                 if ($this->isAjax()) {
-                    $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                    $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->categoryFilterUrl($category) . '\'); return false;" ';
                 }
 				
-                if ($this->getIsActiveAjaxCategory($category) || $this->isCategoryActive($category)) {
+                if ($this->categoryFilterIsActive($category) || $this->isCategoryActive($category)) {
                     $htmlA .= ' class="active" ';
                 }
 
@@ -918,10 +945,10 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 				
                 $htmlLi .= '>';				
                 $html[] = $htmlLi;
-                $htmlA = '<a href="' . $this->getCategoryUrl($category) . '"';
+                $htmlA = '<a href="' . $this->categoryUrl($category) . '"';
 
                 if ($this->isAjax()) {
-                    $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                    $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->categoryFilterUrl($category) . '\'); return false;" ';
                 }
 				
                 if ($this->isCategoryActive($category)) {
@@ -975,7 +1002,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
                     $linkClass = $outermostItemClass;
                 }
 				
-                if ($this->getIsActiveAjaxCategory($category) || $this->isCategoryActive($category)) {
+                if ($this->categoryFilterIsActive($category) || $this->isCategoryActive($category)) {
                     $linkClass .= ' active';
                 }
 
@@ -990,7 +1017,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 					
                     $htmlLi .= '>';
                     $html[] = $htmlLi;
-                    $htmlA = '<a href="' . $this->getCategoryUrl($category) . '"' . $linkClass;
+                    $htmlA = '<a href="' . $this->categoryUrl($category) . '"' . $linkClass;
                     $htmlA .= ' onclick="ganShowAccordionItem(this);return false;" ';
                     $htmlA .= '>';
                     $html[] = $htmlA;
@@ -1006,10 +1033,10 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
                     }
 
                     $html[] = '<li>';
-                    $htmlA  = '<a href="' . $this->getCategoryUrl($category) . '"' . $linkClass;
+                    $htmlA  = '<a href="' . $this->categoryUrl($category) . '"' . $linkClass;
 
                     if ($this->isAjax()) {
-                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->categoryFilterUrl($category) . '\'); return false;" ';
                     }
 					
                     $htmlA .= '>';
@@ -1068,7 +1095,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 					
                     $htmlLi .= '>';
                     $html[] = $htmlLi;
-                    $html[] = '<a href="' . $this->getCategoryUrl($category) . '"' . $linkClass . '>';
+                    $html[] = '<a href="' . $this->categoryUrl($category) . '"' . $linkClass . '>';
                     $html[] = '<span>' . $this->escapeHtml($category->getName()) . '</span>';
                     $html[] = '</a>';
 
@@ -1114,14 +1141,14 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 
                     $htmlLi .= '>';
                     $html[] = $htmlLi;
-                    $htmlA = '<a href="' . $this->getCategoryUrl($category) . '"';
+                    $htmlA = '<a href="' . $this->categoryUrl($category) . '"';
                     $htmlA .= ' style="padding-left: ' . (10 * ($category->getLevel() - $this->root_level)) . 'px;" ';
 
                     if ($this->isAjax()) {
-                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->getAjaxUrl($category) . '\'); return false;" ';
+                        $htmlA .= ' onclick="GomageNavigation.setNavigationUrl(\'' . $this->categoryFilterUrl($category) . '\'); return false;" ';
                     }
 					
-                    if ($this->getIsActiveAjaxCategory($category) || $this->isCategoryActive($category)) {
+                    if ($this->categoryFilterIsActive($category) || $this->isCategoryActive($category)) {
                         $htmlA .= ' class="active" ';
                     }
 					
@@ -1134,7 +1161,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
                     $htmlChildren = '';
                     $j            = 0;
 
-                    if ($this->getIsActiveAjaxCategory($category) || $this->showAllSubcategories()) {
+                    if ($this->categoryFilterIsActive($category) || $this->showAllSubcategories()) {
                         foreach ($activeChildren as $child) {
                             $htmlChildren .= $this->_renderCategoryMenuItemHtml(
                                 $child,
@@ -1188,85 +1215,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 		
         return $html;
     }
-
-	/**
-     * Get url for category data
-     *
-     * @param Mage_Catalog_Model_Category $category
-     * @return string
-     */
-    public function getCategoryUrl($category) {
-        return Mage::helper('gomage_navigation/url')->categoryUrl($category);
-    }
 	
-    public function getAjaxUrl($category) {
-        $params                   = array();
-        $params['_current']       = true;
-        $params['_nosid']         = true;
-        $params['_use_rewrite']   = true;
-        $params['_query']         = array();
-        $params['_escape']        = false;
-        $params['_query']['ajax'] = true;
-		$params['_secure']		  = true;
-
-        $helper			= Mage::helper('gomage_navigation');
-        $active_cats	= $helper->getRequest()->getParam('cat');
-        $active_cats	= explode(',', $active_cats);
-
-        if ($this->getIsActiveAjaxCategory($category)) {
-            $active_cats = array_diff($active_cats, array($category->getId()));
-        } else {
-            $active_cats	= $this->_checkCat($category);
-            $active_cats[]	= $category->getId();
-        }
-
-        $active_cats = array_diff($active_cats, array(''));
-
-        if (count($active_cats) > 0) {
-            $params['_query']['cat'] = implode(',', $active_cats);
-        } else {
-            $params['_query']['cat'] = null;
-        }
-		
-        return urlencode($helper->getFilterUrl('*/*/*', $params));
-    }
-
-    protected function _checkCat($category) {
-        $category_model   = Mage::getModel('catalog/category');
-        $category         = $category_model->load($category->getId());
-        $parent           = $category->getParentCategory();
-        $child_categories = $category_model->getResource()->getAllChildren($parent);
-
-        if (in_array($parent->getId(), $child_categories)) {
-            $key = array_search($parent->getId(), $child_categories);
-            unset($child_categories[$key]);
-        }
-
-        $id_array = array();
-
-        foreach ($child_categories as $id) {
-            $child = $category_model->load($id);
-
-            if ($this->getIsActiveAjaxCategory($child)) {
-                $id_array[] = $child->getId();
-            }
-        }
-
-        return $id_array;
-    }
-
-    public function getIsActiveAjaxCategory($category) {
-        if (!$this->isAjax()) {
-            return false;
-        }
-
-        $helper			= Mage::helper('gomage_navigation');
-        $active_cats	= $helper->getRequest()->getParam('cat');
-        $active_cats	= explode(',', $active_cats);
-
-        return in_array($category->getId(), $active_cats);
-    }
-
     /**
      * Get Key pieces for caching block content
      *
@@ -1302,65 +1251,6 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
         } else {
             return Mage::app()->getStore()->getRootCategoryId();
         }
-    }
-	
-    /**
-     * Retrieve child categories of current category
-     *
-     * @return Varien_Data_Tree_Node_Collection
-     */
-    public function getCurrentChildCategories() {
-        $layer    = Mage::getSingleton('catalog/layer');
-        $category = $layer->getCurrentCategory();
-        /*@var $category Mage_Catalog_Model_Category */
-        $categories        = $category->getChildrenCategories();
-        $productCollection = Mage::getResourceModel('catalog/product_collection');
-        $layer->prepareProductCollection($productCollection);
-        $productCollection->addCountToCategories($categories);
-        
-		return $categories;
-    }
-
-    /**
-     * Checkin activity of category
-     *
-     * @param   Varien_Object $category
-     * @return  bool
-     */
-    public function isCategoryActive($category) {
-        if ($this->getCurrentCategory()) {
-            return in_array($category->getId(), $this->getCurrentCategory()->getPathIds());
-        }
-		
-        return false;
-    }
-
-    /**
-     * Return item position representation in menu tree
-     *
-     * @param int $level
-     * @return string
-     */
-    protected function _getItemPosition($level) {
-        if ($level == 0) {
-            $zeroLevelPosition                 = isset($this->itemLevelPositions[$level]) ? $this->itemLevelPositions[$level] + 1 : 1;
-            $this->itemLevelPositions         = array();
-            $this->itemLevelPositions[$level] = $zeroLevelPosition;
-        } elseif (isset($this->itemLevelPositions[$level])) {
-            $this->itemLevelPositions[$level]++;
-        } else {
-            $this->itemLevelPositions[$level] = 1;
-        }
-
-        $position = array();
-		
-        for ($i = 0; $i <= $level; $i++) {
-            if (isset($this->itemLevelPositions[$i])) {
-                $position[] = $this->itemLevelPositions[$i];
-            }
-        }
-		
-        return implode('-', $position);
     }
 
     public function getResizedImage($image, $width = null, $height = null, $quality = 100) {
@@ -1412,36 +1302,10 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
         foreach ($child_categories as $id) {
             $child = $category_model->load($id);
 
-            if ($this->getIsActiveAjaxCategory($child)) {
+            if ($this->categoryFilterIsActive($child)) {
                 return true;
             }
         }
-    }
-
-    /**
-     * Render category to html
-     *
-     * @deprecated deprecated after 1.4
-     * @param Mage_Catalog_Model_Category $category
-     * @param int Nesting level number
-     * @param boolean Whether ot not this item is last, affects list item class
-     * @return string
-     */
-    public function drawItem($category, $level = 0, $last = false) {
-        return $this->_renderCategoryMenuItemHtml($category, $level, $last);
-    }
-
-    /**
-     * Enter description here...
-     *
-     * @return Mage_Catalog_Model_Category
-     */
-    public function getCurrentCategory() {
-        if (Mage::getSingleton('catalog/layer')) {
-            return Mage::getSingleton('catalog/layer')->getCurrentCategory();
-        }
-		
-        return false;
     }
 
     /**
@@ -1450,8 +1314,8 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
      * @return string
      */
     public function getCurrentCategoryPath() {
-        if ($this->getCurrentCategory()) {
-            return explode(',', $this->getCurrentCategory()->getPathInStore());
+        if ($this->curentCategory()) {
+            return explode(',', $this->curentCategory()->getPathInStore());
         }
 		
         return array();
@@ -1477,7 +1341,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
         }
 
         $html .= '>' . "\n";
-        $html .= '<a href="' . $this->getCategoryUrl($category) . '"><span>' . $this->htmlEscape($category->getName()) . '</span></a>' . "\n";
+        $html .= '<a href="' . $this->categoryUrl($category) . '"><span>' . $this->htmlEscape($category->getName()) . '</span></a>' . "\n";
 
         if (in_array($category->getId(), $this->getCurrentCategoryPath())) {
             $children    = $category->getChildren();
@@ -1545,6 +1409,4 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 
         return $plain_image;
     }
-	
-	abstract protected function _prePrepareLayout();
 }

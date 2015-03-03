@@ -11,30 +11,31 @@
  * @since        Class available since Release 1.0
  */
 
-function gan_cat_sort($a, $b)
-{
-    $a_col = ($a->getData('navigation_pw_s_column') ? $a->getData('navigation_pw_s_column') : 1);
-    $b_col = ($b->getData('navigation_pw_s_column') ? $b->getData('navigation_pw_s_column') : 1);
-
-    if ($a_col == $b_col) {
-        return ($a->getData('position') < $b->getData('position')) ? -1 : 1;
-    } else {
-        return ($a_col < $b_col) ? -1 : 1;
-    }
+if (!function_exists('gan_cat_sort')) {
+	function gan_cat_sort($a, $b) {
+		$a_col = ($a->getData('navigation_pw_s_column') ? $a->getData('navigation_pw_s_column') : 1);
+		$b_col = ($b->getData('navigation_pw_s_column') ? $b->getData('navigation_pw_s_column') : 1);
+	
+		if ($a_col == $b_col) {
+			return ($a->getData('position') < $b->getData('position')) ? -1 : 1;
+		} else {
+			return ($a_col < $b_col) ? -1 : 1;
+		}
+	}
 }
 
-function gan_cat_slide_sort($a, $b)
-{
-    $a_col = ($a->getData('navigation_column_side') ? $a->getData('navigation_column_side') : 1);
-    $b_col = ($b->getData('navigation_column_side') ? $b->getData('navigation_column_side') : 1);
-
-    if ($a_col == $b_col) {
-        return ($a->getData('position') < $b->getData('position')) ? -1 : 1;
-    } else {
-        return ($a_col < $b_col) ? -1 : 1;
-    }
+if (!function_exists('gan_cat_slide_sort')) {
+	function gan_cat_slide_sort($a, $b) {
+		$a_col = ($a->getData('navigation_column_side') ? $a->getData('navigation_column_side') : 1);
+		$b_col = ($b->getData('navigation_column_side') ? $b->getData('navigation_column_side') : 1);
+	
+		if ($a_col == $b_col) {
+			return ($a->getData('position') < $b->getData('position')) ? -1 : 1;
+		} else {
+			return ($a_col < $b_col) ? -1 : 1;
+		}
+	}
 }
-
 
 class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
 {

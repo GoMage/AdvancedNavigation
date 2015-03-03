@@ -11,6 +11,7 @@
  * @version      Release: 4.6
  * @since        Class available since Release 1.0
  */
+ 
 class GoMage_Navigation_Model_Layer_Filter_Category extends GoMage_Navigation_Model_Layer_Filter_Abstract
 {
     /**

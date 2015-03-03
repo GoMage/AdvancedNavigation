@@ -12,11 +12,33 @@
  */
 
 class GoMage_Navigation_Helper_Config {
+	
+	protected $current_category = null;
+	
 	public function isStatic() {
 		return (bool) (Mage::getSingleton('cms/page')->getData('page_id'));
 	}
 	
-	public function staticActiveBlocks() {
+	public function curentCategory() {
+		if ($this->current_category === null) {
+			if (Mage::registry('current_category')) {
+				$this->current_category = Mage::registry('current_category');
+			} else {
+				if ($this->isStatic()) {		
+					$category_id = (int) Mage::getSingleton('cms/page')->getData('navigation_category_id');
+				} else {
+					$category_id = Mage::app()->getStore()->getRootCategoryId();
+				}
+				
+				$category_model			= Mage::getModel('catalog/category');
+				$this->current_category	= $category_model->load($category_id);
+			}
+		}
+		
+		return $this->current_category;
+	}
+		
+	public function staticActiveBlocks() { /*In GM-AN v. 5.0 this expression must be removed*/
 		$active_blocks = array(
 			'content'	=> false,
 			'left'		=> false,

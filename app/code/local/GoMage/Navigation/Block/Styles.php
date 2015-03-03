@@ -34,20 +34,13 @@ class GoMage_Navigation_Block_Styles extends Mage_Core_Block_Template {
     }
     
 	public function getNavigationCatigoryUrl() {
-    	$page = Mage::getSingleton('cms/page');                                     
-        
-		if ($page->getData('page_id')){
-        	$category_id = $page->getData('navigation_category_id');
-        	
-			if ($category_id){
-	        	$category = Mage::getModel('catalog/category')->load($category_id);
-	        	
-				if ($category && $category->getIsActive()) {
-	        		return Mage::helper('gomage_navigation/url')->categoryUrl($category) . '?ajax=1';
-	        	}
-        	}
-        }    
-        
-        return false;
+		if (Mage::helper('gomage_navigation/config')->isStatic()) {
+			return Mage::helper('gomage_navigation/url')->categoryUrl(
+				Mage::helper('gomage_navigation/config')->curentCategory(), 
+				array('_query' => array('ajax' => 1))
+			);
+		}
+		
+		return false;
     } 
 }
