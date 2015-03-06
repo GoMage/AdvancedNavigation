@@ -292,8 +292,7 @@ var GomageNavigation = new GomageNavigationClass({
 	gomage_seobooster_enabled: true,
 	<?php endif; ?>
 	<?php if (Mage::helper('gomage_navigation/config')->isStatic()) : ?>
-	is_static: true,
-	static_active_blocks: <?php echo json_encode(Mage::helper('gomage_navigation/config')->staticActiveBlocks()); ?>,
+	static_conten_block: <?php echo json_encode(Mage::helper('gomage_navigation/config')->staticContenBlock()); ?>,
 	<?php endif; ?>
 });
 //]]>	

@@ -361,26 +361,6 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
         return $detect->isMobile();
     }
 
-    public function isGooglebot()
-    {
-        if (preg_match("/Google/", Mage::helper('core/http')->getHttpUserAgent()) || preg_match("/bot/", Mage::helper('core/http')->getHttpUserAgent())) {
-            $ip   = Mage::helper('core/http')->getRemoteAddr();
-            $name = gethostbyaddr($ip);
-            if (preg_match("/Googlebot/", $name) || preg_match("/bot/", $name)) {
-                $hosts = gethostbynamel($name);
-                foreach ($hosts as $host) {
-                    if ($host == $ip) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            return true;
-        }
-
-        return false;
-    }
-
     public function getFilterItemCount($filter)
     {
         $count = 0;

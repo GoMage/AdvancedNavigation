@@ -31,8 +31,7 @@ GomageNavigationClass = Class.create({
     gomage_seobooster_enabled:			false,
 	
 	print_exceptions:					true,
-	is_static:							false,
-	static_active_blocks:				{"content": false, "left": false, "right": false},
+	static_conten_block:				true,
     
 	initialize: function (data) {
 		if (data) {
@@ -79,12 +78,8 @@ GomageNavigationClass = Class.create({
 				this.gomage_seobooster_enabled = data.gomage_seobooster_enabled;
 			}
 			
-			if (typeof data.is_static != 'undefined') {
-				this.is_static = data.is_static;
-			}
-			
-			if (typeof data.static_active_blocks != 'undefined') {
-				this.static_active_blocks = data.static_active_blocks;
+			if (typeof data.static_conten_block != 'undefined') {
+				this.static_conten_block = data.static_conten_block;
 			}			
 		}
 		
@@ -440,18 +435,10 @@ GomageNavigationClass = Class.create({
 
                         if ($('gan_tmp_shop_by')) {
                             $('gan_tmp_shop_by').remove();
-                        }
-
-                        if (response.navigation != '') {
-							if ($('block-layered-nav-content')) { /*In GM-AN v. 5.0 this expression must be removed*/
-								/*GomageNavigation.replaceNavigationBlock('block-layered-nav-content', response.navigation);*/
-							} else {
-								/*GomageNavigation.addNavigationBlock(response.navigation, 'content');*/
-							}
-						}						
+                        }				
 						
 						if (response.navigation_shop_left != '') {
-							if ($('block-layered-nav-left')) { /*In GM-AN v. 5.0 this expression must be removed*/
+							if ($('block-layered-nav-left')) {
 								GomageNavigation.replaceNavigationBlock('block-layered-nav-left', response.navigation_shop_left);
 							} else {
 								GomageNavigation.addNavigationBlock(response.navigation_shop_left, 'left');
@@ -459,7 +446,7 @@ GomageNavigationClass = Class.create({
 						}
 						
 						if (response.navigation_shop_right != '') {
-							if ($('block-layered-nav-right')) { /*In GM-AN v. 5.0 this expression must be removed*/
+							if ($('block-layered-nav-right')) {
 								GomageNavigation.replaceNavigationBlock('block-layered-nav-right', response.navigation_shop_right);
 							} else {
 								GomageNavigation.addNavigationBlock(response.navigation_shop_right, 'right');
@@ -547,27 +534,19 @@ GomageNavigationClass = Class.create({
 
                         if (more_products) {
                             GomageNavigation.ganAddMoreProducts(response);
-                        } else {
-							if (response.navigation != '') {
-								if ($('block-layered-nav-content')) { /*In GM-AN v. 5.0 this expression must be removed*/
-									/*/GomageNavigation.replaceNavigationBlock('block-layered-nav-content', response.navigation);*/
-								} else {
-									/*GomageNavigation.addNavigationBlock(response.navigation, 'content');*/
-								}
-							}						
-							
+                        } else {											
 							if (response.navigation_shop_left != '') {
-								if ($('block-layered-nav-left')) { /*In GM-AN v. 5.0 this expression must be removed*/
+								if ($('block-layered-nav-left')) {
 									GomageNavigation.replaceNavigationBlock('block-layered-nav-left', response.navigation_shop_left);
-								} else if (GomageNavigation.static_active_blocks['left']) {
+								} else {
 									GomageNavigation.addNavigationBlock(response.navigation_shop_left, 'left');
 								}
 							}
 							
 							if (response.navigation_shop_right != '') {
-								if ($('block-layered-nav-right')) { /*In GM-AN v. 5.0 this expression must be removed*/
+								if ($('block-layered-nav-right')) {
 									GomageNavigation.replaceNavigationBlock('block-layered-nav-right', response.navigation_shop_right);
-								} else if (GomageNavigation.static_active_blocks['right'])  {
+								} else {
 									GomageNavigation.addNavigationBlock(response.navigation_shop_right, 'right');
 								}
 							}
@@ -621,7 +600,7 @@ GomageNavigationClass = Class.create({
     replaceProductsBlock: function (response, need_scroll) {
         var content = response.product_list;
 		
-		if (GomageNavigation.is_static && !GomageNavigation.static_active_blocks['content']) { /*In GM-AN v. 5.0 this expression must be removed*/
+		if (!GomageNavigation.static_conten_block) { /*In GM-AN v. 5.0 this expression must be removed*/
 			try {		
 				var wrapper = document.createElement('div'); /*HTML to DOM*/
 				wrapper.innerHTML = content;
@@ -730,74 +709,28 @@ GomageNavigationClass = Class.create({
     },    
 
     addNavigationBlock: function (content, side) {
-		switch (side) {	
-			case 'content' : 
-				if ($$('div.col-main').length > 0) {
-					if ($('gan-content-nav-main-container')) {
-						var content = Object.toHTML(content);
-						content.evalScripts.bind(content).defer();
-						content = content.stripScripts();
-						var tempElement = document.createElement('div');
-						tempElement.innerHTML = content;
-						element = this.getElementsByClassName('block-layered-nav', tempElement);
-						
-						if (element.length > 0) {
-							element = element[0];
-							new Insertion.After($('gan-content-nav-main-container'), element);
-						}
-					} else {
-						var col_content = $$('div.col-main')[0];
-						col_content.innerHTML = content + col_content.innerHTML;
-					}
-				}
+		var block = (side == 'content') ? 'div.col-main' : 'div.col-' + side;
+		
+		if ($$(block).length > 0) {
+			if ($('gan-' + side + '-nav-main-container')) {			
+				var content = Object.toHTML(content);
+				content.evalScripts.bind(content).defer();
+				content = content.stripScripts();
+				var tempElement = document.createElement('div');
+				tempElement.innerHTML = content;
+				element = this.getElementsByClassName('block-layered-nav', tempElement);
 				
-				var element = $$('div.block-layered-nav-content')[0];
-			break;
-			
-			case 'left' :
-				if ($$('div.col-left').length > 0) {
-					if ($('gan-left-nav-main-container')) {
-						var content = Object.toHTML(content);
-						content.evalScripts.bind(content).defer();
-						content = content.stripScripts();
-						var tempElement = document.createElement('div');
-						tempElement.innerHTML = content;
-						element = this.getElementsByClassName('block-layered-nav', tempElement);
-						if (element.length > 0) {
-							element = element[0];
-							new Insertion.After($('gan-left-nav-main-container'), element);
-						}
-					} else {
-						var col_left = $$('div.col-left')[0];
-						col_left.innerHTML = content + col_left.innerHTML;
-					}
+				if (element.length > 0) {
+					element = element[0];
+					new Insertion.After($('gan-' + side + '-nav-main-container'), element);
 				}
-				
-				var element = $$('div.block-layered-nav-left')[0];
-			break;
-			
-			case 'right' :
-				if ($$('div.col-right').length > 0) {
-					if ($('gan-right-nav-main-container')) {
-						var content = Object.toHTML(content);
-						content.evalScripts.bind(content).defer();
-						content = content.stripScripts();
-						var tempElement = document.createElement('div');
-						tempElement.innerHTML = content;
-						element = this.getElementsByClassName('block-layered-nav', tempElement);
-						if (element.length > 0) {
-							element = element[0];
-							new Insertion.After($('gan-right-nav-main-container'), element);
-						}
-					} else {
-						var col_right = $$('div.col-right')[0];
-						col_right.innerHTML = content + col_right.innerHTML;
-					}
-				}
-				
-				var element = $$('div.block-layered-nav-right')[0];
-			break;
+			} else {
+				var col_content = $$(block)[0];
+				col_content.innerHTML = content + col_content.innerHTML;
+			}
 		}
+		
+		var element = $$('div.block-layered-nav-' + side)[0];
 
         if (typeof(element) == 'undefined') {
             return;
@@ -810,7 +743,7 @@ GomageNavigationClass = Class.create({
             var tempElement = document.createElement('div');
             content.evalScripts.bind(content).defer();
             tempElement.innerHTML = content;
-            content = tempElement.firstChild;
+            content = tempElement;
         }
 
         element.parentNode.replaceChild(content, element);
@@ -829,7 +762,7 @@ GomageNavigationClass = Class.create({
 				
                 content.evalScripts.bind(content).defer();
                 tempElement.innerHTML = content;
-                content = tempElement.firstChild;
+                content = tempElement;
             }
 			
             element.parentNode.replaceChild(content, element);

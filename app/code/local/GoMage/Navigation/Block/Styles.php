@@ -34,7 +34,10 @@ class GoMage_Navigation_Block_Styles extends Mage_Core_Block_Template {
     }
     
 	public function getNavigationCatigoryUrl() {
-		if (Mage::helper('gomage_navigation/config')->isStatic()) {
+		if (
+			Mage::helper('gomage_navigation/config')->isStatic() && 
+			((int) Mage::getSingleton('cms/page')->getData('navigation_category_id') !== 0)
+		) {
 			return Mage::helper('gomage_navigation/url')->categoryUrl(
 				Mage::helper('gomage_navigation/config')->curentCategory(), 
 				array('_query' => array('ajax' => 1))

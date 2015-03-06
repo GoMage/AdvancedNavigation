@@ -13,6 +13,13 @@
 
 class GoMage_Navigation_Helper_Url {
 	
+	public static $default_params = array(
+		'_current'		=> true,
+		'_use_rewrite'	=> true,
+		'_query'		=> array(),
+		'_secure'		=> true,
+	);
+	
 	public function wrapp($url) {		
 		return urldecode($url);
 	}
@@ -26,16 +33,14 @@ class GoMage_Navigation_Helper_Url {
 	}
 	
 	public function categoryUrl(Varien_Object $category, $params = array()) {
-        if(is_array($params) && !isset($params['_direct'])) {
-			$urlPath = $this->prepareCategory($category)->getUrlPath();
-		}
+        $urlPath = 
+			(is_array($params) && !isset($params['_direct'])) ? 
+				$this->prepareCategory($category)->getUrlPath() : 
+					$params['_direct'];
 		
 		$params = array_merge(
-			array(
-				'_direct'	=> $urlPath,
-				'_query'	=> array(),
-				'_secure'	=> true,		
-			),
+			self::$default_params,
+			array('_direct'	=> $urlPath),
 			$params
 		);
 		
@@ -54,12 +59,18 @@ class GoMage_Navigation_Helper_Url {
 	}
 	
 	public function categoryFilterUrl(Varien_Object $category, $params = array()) {
-        $helper			= Mage::helper('gomage_navigation');
-        $active_cats	= $helper->getRequest()->getParam('cat');
+        $active_cats	= Mage::helper('gomage_navigation')
+			->getRequest()
+			->getParam('cat');
+			
         $active_cats	= explode(',', $active_cats);
 		
+		if (empty($params['_direct']) && !Mage::helper('gomage_navigation/config')->isStatic()) {
+			$params['_direct'] = null;
+		}
+		
 		$params = array_merge(
-			array('_query' => array()),
+			self::$default_params,
 			$params
 		);
 		
@@ -67,9 +78,9 @@ class GoMage_Navigation_Helper_Url {
             $params['_query']['cat'] = $category->getId();
         } 
 		
-		$params['_query'] = $this->prepareUrlQuery($params['_query']);
+		$params['_query'] = $this->prepareUrlQuery($params['_query']);		
 		
-        return $this->categoryUrl(Mage::helper('gomage_navigation/config')->curentCategory(), $params);
+		return $this->categoryUrl(Mage::helper('gomage_navigation/config')->curentCategory(), $params);
 	}
 	
 	protected function prepareUrlQuery($query = array()) {			

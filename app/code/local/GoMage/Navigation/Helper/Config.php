@@ -13,10 +13,15 @@
 
 class GoMage_Navigation_Helper_Config {
 	
-	protected $current_category = null;
+	protected $store_root_category_id	= null;
+	protected $current_category			= null;
 	
-	public function isStatic() {
-		return (bool) (Mage::getSingleton('cms/page')->getData('page_id'));
+	public function storeRootCategoryId() {
+		if ($this->store_root_category_id === null) {
+			return $this->store_root_category_id = (int) Mage::app()->getStore()->getRootCategoryId();
+		}
+		
+		return $this->store_root_category_id;
 	}
 	
 	public function curentCategory() {
@@ -27,7 +32,7 @@ class GoMage_Navigation_Helper_Config {
 				if ($this->isStatic()) {		
 					$category_id = (int) Mage::getSingleton('cms/page')->getData('navigation_category_id');
 				} else {
-					$category_id = Mage::app()->getStore()->getRootCategoryId();
+					$category_id = $this->storeRootCategoryId();
 				}
 				
 				$category_model			= Mage::getModel('catalog/category');
@@ -37,22 +42,18 @@ class GoMage_Navigation_Helper_Config {
 		
 		return $this->current_category;
 	}
-		
-	public function staticActiveBlocks() { /*In GM-AN v. 5.0 this expression must be removed*/
-		$active_blocks = array(
-			'content'	=> false,
-			'left'		=> false,
-			'right'		=> false,		
-		);
+	
+	public function isStatic() {
+		return (bool) (Mage::getSingleton('cms/page')->getData('page_id'));
+	}
+	
+	public function staticContenBlock() { 
+		$static_conten_block = true;
 		
 		if ($this->isStatic()) {
-			$active_blocks = array(
-				'content'	=> (bool) Mage::getSingleton('cms/page')->getData('navigation_content_column'),
-				'left'		=> (bool) Mage::getSingleton('cms/page')->getData('navigation_left_column'),
-				'right'		=> (bool) Mage::getSingleton('cms/page')->getData('navigation_right_column'),		
-			);
+			$static_conten_block = (bool) Mage::getSingleton('cms/page')->getData('navigation_content_column');
 		}
 		
-		return $active_blocks;
+		return $static_conten_block;
 	}
 }
