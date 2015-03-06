@@ -12,7 +12,7 @@
  * @since        Class available since Release 1.0
  */
 
-require_once(Mage::getBaseDir('lib') . DS . 'GoMage' . DS . 'MobileDetect' . DS . 'Mobile_Detect.php');
+require_once(Mage::getBaseDir('lib') . DS . 'GoMage' . DS . 'MobileDetect' . DS . 'Navigation_Mobile_Detect.php');
 
 class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
 {
@@ -357,7 +357,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function isMobileDevice()
     {
-        $detect = new Mobile_Detect();
+        $detect = new Navigation_Mobile_Detect();
         return $detect->isMobile();
     }
 

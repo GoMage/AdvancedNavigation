@@ -31,7 +31,7 @@
  *              Google Code Old Page: http://code.google.com/p/php-mobile-detect/
  */
 
-class Mobile_Detect {
+class Navigation_Mobile_Detect {
 
     protected $scriptVersion = '2.5.7';
 
