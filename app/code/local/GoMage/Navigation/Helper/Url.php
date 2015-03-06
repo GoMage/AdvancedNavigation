@@ -32,8 +32,9 @@ class GoMage_Navigation_Helper_Url {
 		
 		$params = array_merge(
 			array(
-				'_direct'		=> $urlPath,
-				'_query'		=> array(),
+				'_direct'	=> $urlPath,
+				'_query'	=> array(),
+				'_secure'	=> true,		
 			),
 			$params
 		);
