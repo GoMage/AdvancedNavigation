@@ -76,7 +76,7 @@
     			<?php if(count($this->getActiveFilters()) > 0):?>
     				<?php if (Mage::helper('gomage_navigation')->isGomageNavigationClearAjax()): ?>
 
-    					<button class="button" onclick="GomageNavigation.setNavigationUrl('<?php echo urlencode($this->getClearUrl(true));?>'); return false;"><span><span><?php echo Mage::helper('gomage_navigation')->getClearAll(); ?></span></span></button>
+    					<button class="button" onclick="GomageNavigation.setNavigationUrl('<?php echo $this->getClearUrl(true); ?>'); return false;"><span><span><?php echo Mage::helper('gomage_navigation')->getClearAll(); ?></span></span></button>
     				<?php else: ?>
     					<button class="button" onclick="setLocation('<?php echo $this->getClearUrl();?>')"><span><span><?php echo Mage::helper('gomage_navigation')->getClearAll(); ?></span></span></button>
     				<?php endif; ?>	
@@ -156,7 +156,7 @@
 		                    <?php if ($_filter->canShowResetFirler()): ?>
 		                        <?php $_filter_reset =  $this->getResetFirlerUrl($_filter, $_filter->ajaxEnabled()); ?>
 		                        <?php if ($_filter_reset): ?>
-		                             <a href="<?php echo $_filter_reset; ?>" <?php if ($_filter->ajaxEnabled()): ?>onclick="GomageNavigation.setNavigationUrl('<?php echo urlencode($_filter_reset); ?>'); return false;"<?php endif; ?> >Reset</a>
+		                             <a href="<?php echo $_filter_reset; ?>" <?php if ($_filter->ajaxEnabled()): ?>onclick="GomageNavigation.setNavigationUrl('<?php echo $_filter_reset; ?>'); return false;"<?php endif; ?> >Reset</a>
 		                        <?php endif; ?>
 		                    <?php endif; ?>
 		                    

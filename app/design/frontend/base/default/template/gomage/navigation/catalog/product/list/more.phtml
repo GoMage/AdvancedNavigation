@@ -16,6 +16,6 @@
 ?>
 <?php if ($more_url): ?>
 <div class="gan-more-button" id="gan-more-button">
-	<button onclick="GomageNavigation.setNavigationUrl('<?php echo urlencode($more_url) ?>', true);" ><span><?php echo Mage::helper('gomage_navigation')->getShowmore();?></span></button>
+	<button onclick="GomageNavigation.setNavigationUrl('<?php echo $more_url; ?>', true);" ><span><?php echo Mage::helper('gomage_navigation')->getShowmore();?></span></button>
 </div>
 <?php endif; ?>

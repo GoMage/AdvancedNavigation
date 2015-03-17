@@ -124,7 +124,7 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
                             }
                             
 							if (count($_par)) {
-                                $newParArray[] = urlencode('price_from=' . implode(',', $_par));
+                                $newParArray[] = 'price_from=' . implode(',', $_par);
                             }
                         } else {
                             $newParArray[] = $par;
@@ -142,7 +142,7 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
                             }
                             
 							if (count($_par)) {
-                                $newParArray[] = urlencode('price_to=' . implode(',', $_par));
+                                $newParArray[] = 'price_to=' . implode(',', $_par);
                             }
                         } else {
                             $newParArray[] = $par;

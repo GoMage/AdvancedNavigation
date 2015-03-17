@@ -204,7 +204,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
             $params['_query']['cat'] = null;
         }
 
-        return urlencode($helper->getFilterUrl('*/*/*', $params));
+        return $helper->getFilterUrl('*/*/*', $params);
     }
 
     protected function _checkCat($category)

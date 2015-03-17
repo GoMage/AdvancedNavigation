@@ -33,7 +33,7 @@
                 $data_param = ($_item->getActive() || $this->isActiveFilter($_item->getLabel())) ? $_item->getRemoveUrlParams() : $_item->getUrlParams($stock);
 
                 if($this->ajaxEnabled()){
-                    $data_param = urlencode($data_param);
+                    $data_param = $data_param;
                 }
             ?>
             <a data-ajax="<?php echo ($this->ajaxEnabled()) ? 1 : 0 ;?>" data-param="<?php echo $data_param; ?>" data-url="<?php echo $_item->getCleanUrl(true); ?>" <?php if($_item->getActive() || $this->isActiveFilter($_item->getLabel())):?> class="active" <?php endif;?> onclick="GomageNavigation.click(this); return false;" href="<?php echo $_item->getCleanUrl(true) . $data_param; ?>">

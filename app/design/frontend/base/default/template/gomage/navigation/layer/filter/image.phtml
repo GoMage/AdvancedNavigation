@@ -64,7 +64,7 @@
             <?php
                     $data_param = $_item->getActive() ? $_item->getRemoveUrlParams() : $_item->getUrlParams(false);
                     if($this->ajaxEnabled()){
-                        $data_param = urlencode($data_param);
+                        $data_param = $data_param;
                     }
             ?>
 
