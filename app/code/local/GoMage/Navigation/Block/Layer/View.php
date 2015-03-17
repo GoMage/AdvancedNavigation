@@ -423,15 +423,6 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
         return $activeFilters;
     }
 
-    public function getOptionUrl($url)
-    {
-        if (strpos($url, "?") !== false) {
-            return $url . '&ajax=1';
-        } else {
-            return $url . '?ajax=1';
-        }
-    }
-
     public function getResetFirlerUrl($filter, $ajax = false)
     {
         $filterState = array();

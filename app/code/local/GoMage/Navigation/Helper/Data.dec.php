@@ -253,7 +253,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
         if (!$this->isFrendlyUrl()) {
             $params['_query']['ajax'] = null;
             
-			return Mage::getUrl($route, $params);
+			return Mage::helper('gomage_navigation/url')->wrapp(Mage::getUrl($route, $params));
         }
 
         $model = Mage::getModel('core/url');
@@ -338,7 +338,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
         $params['_query']         = $query;
         $params['_query']['ajax'] = null;
 
-        return $model->getUrl($route, $params);
+        return Mage::helper('gomage_navigation/url')->wrapp($model->getUrl($route, $params));
     }
 
     public function formatUrlValue($value, $default)
@@ -540,17 +540,9 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                     }
 
                     if ($newParArray) {
-                        if ($_filter->getAjaxEnabled()) {
-                            return $clean_url . '?' . implode("&", $newParArray) . '&ajax=1';
-                        } else {
-                            return $clean_url . '?' . implode("&", $newParArray);
-                        }
+                    	return $clean_url . '?' . implode("&", $newParArray);
                     } else {
-                        if ($_filter->getAjaxEnabled()) {
-                            return $clean_url . '?ajax=1';
-                        } else {
-                            return $clean_url;
-                        }
+						return $clean_url;
                     }
                 }
             } else {

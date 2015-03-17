@@ -52,14 +52,14 @@
 			<div class="currently">
 			    <p class="block-subtitle"><?php echo $this->__('Currently Shopping by:') ?></p>
 			    <ol>
-			    <?php foreach ($_filters as $_filter): ?>
+			    <?php foreach ($_filters as $_filter) : ?>
 			        <li>
-			            <span class="label"><?php echo $this->__($_filter->getName()) ?>:</span> <span class="value"><?php echo $this->stripTags($_filter->getLabel()) ?></span>
+			            <span class="label"><?php echo $this->__($_filter->getName()); ?>:</span> <span class="value"><?php echo $this->stripTags($_filter->getLabel()); ?></span>
 			            <?php $clearLinkUrl = Mage::helper('gomage_navigation')->getClearLinkUrl($_filter); ?>
-			            <?php if ($clearLinkUrl && !Mage::helper('gomage_navigation')->isGoMageSeoBoosterEnabled()): ?>
-			                <a <?php if ( $_filter->getAjaxEnabled() || ($_filter->getFilter()->getRequestVarValue() == 'cat') ): ?> onclick="GomageNavigation.setNavigationUrl('<?php echo $clearLinkUrl; ?>'); return false;" <?php endif; ?> class="btn-remove" title="<?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>" href="<?php echo urldecode($clearLinkUrl) ?>"><?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></a>
-			            <?php else: ?>
-			                <a <?php if ( $_filter->getAjaxEnabled() || ($_filter->getFilter()->getRequestVarValue() == 'cat') ): ?> onclick="GomageNavigation.setNavigationUrl('<?php echo $this->getOptionUrl($_filter->getRemoveUrl()); ?>'); return false;" <?php endif; ?> class="btn-remove" href="<?php echo urldecode($_filter->getRemoveUrl()) ?>" title="<?php echo $this->__('Remove This Item') ?>"><?php echo $this->__('Remove This Item') ?></a>
+			            <?php if ($clearLinkUrl && !Mage::helper('gomage_navigation')->isGoMageSeoBoosterEnabled()) : ?>
+			                <a <?php if ($_filter->getAjaxEnabled() || ($_filter->getFilter()->getRequestVarValue() == 'cat')): ?> onclick="GomageNavigation.setNavigationUrl('<?php echo $clearLinkUrl; ?>'); return false;" <?php endif; ?> class="btn-remove" title="<?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()); ?>" href="<?php echo $clearLinkUrl; ?>"><?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()); ?></a>
+			            <?php else : ?>
+			                <a <?php if ($_filter->getAjaxEnabled() || ($_filter->getFilter()->getRequestVarValue() == 'cat')) : ?> onclick="GomageNavigation.setNavigationUrl('<?php echo $_filter->getRemoveUrl(); ?>'); return false;" <?php endif; ?> class="btn-remove" href="<?php echo $_filter->getRemoveUrl(); ?>" title="<?php echo $this->__('Remove This Item'); ?>"><?php echo $this->__('Remove This Item'); ?></a>
 			            <?php endif; ?>
 			        </li>
 			    <?php endforeach; ?>
