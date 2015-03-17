@@ -13,12 +13,74 @@
  */
 class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer_Filter_Item
 {
+	/**
+     * Get filter item url
+     *
+     * @return string
+     */
+    public function getUrl($ajax = false, $stock = false)
+    {
+        if ($this->hasData('url') && !$stock) {
+            return $this->getData('url');
+        }
 
+        $query = array(
+            $this->getFilter()->getRequestVarValue()                     => $this->getValue(),
+            Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
+        );
+
+        $query['ajax'] = null;
+		
+        if ($ajax) {
+            $query['ajax'] = 1;
+        }
+
+        return Mage::helper('gomage_navigation')->getFilterUrl(
+			'*/*/*', 
+			array(
+				'_current'		=> true, 
+				'_nosid'		=> true, 
+				'_use_rewrite'	=> true, 
+				'_secure'		=> true,
+				'_query'		=> $query, 
+				'_escape'		=> false
+			)
+		);
+    }
+	
+	/**
+     * Get url for remove item from filter
+     *
+     * @return string
+     */
+    public function getRemoveUrl($ajax = false)
+    {
+        $query                  = array($this->getFilter()->getRequestVarValue() => $this->getFilter()->getResetValue($this->getValue()));
+        $params['_nosid']       = true;
+        $params['_current']     = true;
+        $params['_secure']		= true;
+		$params['_use_rewrite'] = true;
+        $params['_query']       = $query;
+        $params['_escape']      = false;
+
+        $params['_query']['ajax'] = null;
+
+        if ($ajax) {
+            $params['_query']['ajax'] = true;
+        }
+		
+        return Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $params);
+    }
+	
+	
+	
+	
     public function getRemoveUrlParams()
     {
         $query                  = array($this->getFilter()->getRequestVarValue() => $this->getFilter()->getResetValue($this->getValue()));
         $params['_nosid']       = true;
         $params['_current']     = true;
+		$params['_secure']		= true;
         $params['_use_rewrite'] = true;
         $params['_query']       = $query;
         $params['_escape']      = false;
@@ -34,31 +96,34 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
         $params = str_replace($clean_url, "", $url);
 
         if ($this->getFilter()->getRequestVarValue() == 'price') {
-
             $attribute = Mage::helper('gomage_navigation')->getProductAttribute('price');
 
-            if (($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
-                    ||
-                    $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
-                &&
+            if (
+				(
+					$attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY ||
+                    $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO
+				) &&
                 $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
             ) {
-                $params = str_replace("?", "", $params);
-
-                $parArray    = explode("&", $params);
-                $newParArray = array();
+                $params			= str_replace("?", "", $params);
+                $parArray		= explode("&", $params);
+                $newParArray	= array();
 
                 foreach ($parArray as $par) {
                     $expar = explode("=", $par);
+					
                     if ($expar[0] == 'price_from') {
                         $from_to = explode(',', $this->getFromTo());
-                        if (count($from_to) == 2) {
+                        
+						if (count($from_to) == 2) {
                             $_par = explode(',', urldecode($expar[1]));
                             $key  = array_search($from_to[0], $_par);
-                            if ($key !== false) {
+                            
+							if ($key !== false) {
                                 unset($_par[$key]);
                             }
-                            if (count($_par)) {
+                            
+							if (count($_par)) {
                                 $newParArray[] = urlencode('price_from=' . implode(',', $_par));
                             }
                         } else {
@@ -67,13 +132,16 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
 
                     } elseif ($expar[0] == 'price_to') {
                         $from_to = explode(',', $this->getFromTo());
-                        if (count($from_to) == 2) {
+                        
+						if (count($from_to) == 2) {
                             $_par = explode(',', urldecode($expar[1]));
                             $key  = array_search($from_to[1], $_par);
-                            if ($key !== false) {
+                            
+							if ($key !== false) {
                                 unset($_par[$key]);
                             }
-                            if (count($_par)) {
+                            
+							if (count($_par)) {
                                 $newParArray[] = urlencode('price_to=' . implode(',', $_par));
                             }
                         } else {
@@ -85,17 +153,25 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
                 }
 
                 return '?' . implode("&", $newParArray);
-
             }
         }
 
         return $params;
     }
-
-
+	
     public function getCleanUrl($type = false)
     {
-        $url = Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current' => true, '_nosid' => true, '_use_rewrite' => true, '_query' => array(), '_escape' => false));
+        $url = Mage::helper('gomage_navigation')->getFilterUrl(
+			'*/*/*', 
+			array(
+				'_current'		=> true, 
+				'_nosid'		=> true, 
+				'_secure'		=> true,
+				'_use_rewrite'	=> true, 
+				'_query'		=> array(), 
+				'_escape'		=> false
+			)
+		);
 
         if (strpos($url, "?") !== false) {
             return substr($url, 0, strpos($url, '?'));
@@ -111,8 +187,28 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
             Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
         );
 
-        $url       = Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current' => true, '_nosid' => true, '_use_rewrite' => true, '_query' => $query, '_escape' => false));
-        $clean_url = Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current' => true, '_nosid' => true, '_use_rewrite' => true, '_query' => array(), '_escape' => false));
+        $url       = Mage::helper('gomage_navigation')->getFilterUrl(
+			'*/*/*',
+			 array(
+			 	'_current'		=> true, 
+				'_nosid'		=> true,
+				'_secure'		=> true, 
+				'_use_rewrite'	=> true, 
+				'_query'		=> $query, 
+				'_escape'		=> false
+			)
+		);
+        $clean_url = Mage::helper('gomage_navigation')->getFilterUrl(
+			'*/*/*',
+			array(
+				'_current'		=> true, 
+				'_nosid'		=> true,
+				'_secure'		=> true, 
+				'_use_rewrite'	=> true, 
+				'_query'		=> array(), 
+				'_escape'		=> false
+			)
+		);
 
         if (strpos($clean_url, "?") !== false) {
             $clean_url = substr($clean_url, 0, strpos($clean_url, '?'));
@@ -120,43 +216,4 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
 
         return str_replace($clean_url, "", $url);
     }
-
-    public function getRemoveUrl($ajax = false)
-    {
-        $query                  = array($this->getFilter()->getRequestVarValue() => $this->getFilter()->getResetValue($this->getValue()));
-        $params['_nosid']       = true;
-        $params['_current']     = true;
-        $params['_use_rewrite'] = true;
-        $params['_query']       = $query;
-        $params['_escape']      = false;
-
-        $params['_query']['ajax'] = null;
-
-        if ($ajax) {
-            $params['_query']['ajax'] = true;
-        }
-
-        return Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $params);
-    }
-
-    public function getUrl($ajax = false, $stock = false)
-    {
-        if ($this->hasData('url') && !$stock) {
-            return $this->getData('url');
-        }
-
-        $query = array(
-            $this->getFilter()->getRequestVarValue()                     => $this->getValue(),
-            Mage::getBlockSingleton('page/html_pager')->getPageVarName() => null // exclude current page from urls
-        );
-
-        $query['ajax'] = null;
-        if ($ajax) {
-            $query['ajax'] = 1;
-        }
-
-        return Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current' => true, '_nosid' => true, '_use_rewrite' => true, '_query' => $query, '_escape' => false));
-
-    }
-
 }

@@ -589,6 +589,7 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
 
         $params['_nosid']       = true;
         $params['_current']     = true;
+		$params['_secure']      = true;
         $params['_use_rewrite'] = true;
         $params['_query']       = $filterState;
         $params['_escape']      = true;

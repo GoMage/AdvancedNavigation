@@ -91,7 +91,7 @@
     </div>
 
 <div class="filter-type-input">
-		<form id="<?php echo $attribute_code . '-' . $side;?>-filter-form" onsubmit="GomageNavigation.checkValue('<?php echo $attribute_code . '-' . $side;?>-filter-form', <?php echo $min; ?>, <?php echo $this->_filter->getMaxValueInt(); ?>);GomageNavigation.submitNavigationForm(this, '<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array('ajax'=>$this->ajaxEnabled())))?>', <?php echo $this->ajaxEnabled() ?>);return false;" action="<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array('ajax'=>$this->ajaxEnabled())))?>">
+		<form id="<?php echo $attribute_code . '-' . $side;?>-filter-form" onsubmit="GomageNavigation.checkValue('<?php echo $attribute_code . '-' . $side;?>-filter-form', <?php echo $min; ?>, <?php echo $this->_filter->getMaxValueInt(); ?>);GomageNavigation.submitNavigationForm(this, '<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_secure' => true, '_use_rewrite'=>true, '_query'=>array('ajax'=>$this->ajaxEnabled())))?>', <?php echo $this->ajaxEnabled() ?>);return false;" action="<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_secure' => true, '_use_rewrite'=>true, '_query'=>array('ajax'=>$this->ajaxEnabled())))?>">
 
     		<fieldset class="filter-fieldset">
     		
@@ -122,7 +122,7 @@
 
 <?php if($this->getRequest()->getParam('ajax')>0):?>
 	
-	<?php Mage::getBlockSingleton('gomage_navigation/ajax')->addEvalJs("GomageNavigation.initSlider('".$attribute_code . '-' . $side."', ".$min.", ".$this->_filter->getMaxValueInt().", ". $_from .", ". $_to.", '". Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array('ajax'=>$this->ajaxEnabled(), $this->_filter->getRequestVar().'_from'=>null, $this->_filter->getRequestVar().'_to'=>null, )))."', ".$this->ajaxEnabled().", ". $steps_inline .");");?>
+	<?php Mage::getBlockSingleton('gomage_navigation/ajax')->addEvalJs("GomageNavigation.initSlider('".$attribute_code . '-' . $side."', ".$min.", ".$this->_filter->getMaxValueInt().", ". $_from .", ". $_to.", '". Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_secure' => true, '_use_rewrite'=>true, '_query'=>array('ajax'=>$this->ajaxEnabled(), $this->_filter->getRequestVar().'_from'=>null, $this->_filter->getRequestVar().'_to'=>null, )))."', ".$this->ajaxEnabled().", ". $steps_inline .");");?>
 	
 <?php else:?>
 
@@ -131,7 +131,7 @@
 	
 	// <![CDATA[
 	
-GomageNavigation.initSlider('<?php echo $attribute_code . '-' . $side;?>', <?php echo $min;?>, <?php echo $this->_filter->getMaxValueInt();?>, <?php echo $_from;?>, <?php echo $_to;?>, '<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array('ajax'=>$this->ajaxEnabled())))?>', <?php echo $this->ajaxEnabled() ?>, <?php echo $steps_inline; ?>);
+GomageNavigation.initSlider('<?php echo $attribute_code . '-' . $side;?>', <?php echo $min;?>, <?php echo $this->_filter->getMaxValueInt();?>, <?php echo $_from;?>, <?php echo $_to;?>, '<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_secure' => true, '_use_rewrite'=>true, '_query'=>array('ajax'=>$this->ajaxEnabled())))?>', <?php echo $this->ajaxEnabled() ?>, <?php echo $steps_inline; ?>);
 	
 	// ]]>
 	

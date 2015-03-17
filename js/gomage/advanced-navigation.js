@@ -457,7 +457,7 @@ GomageNavigationClass = Class.create({
 						GomageNavigation.replaceNavigationBlock('gan-left-nav-main-container', response.navigation_left);
 						GomageNavigation.replaceNavigationBlock('gan-right-nav-main-container', response.navigation_right);
 						
-						GomageNavigation.replaceProductsBlock(response, need_scroll);
+						GomageNavigation.replaceProductsBlock(response);
 						GomageNavigation.ganReplaceMoreButton(response.navigation_more);
 
                         try {
@@ -600,19 +600,15 @@ GomageNavigationClass = Class.create({
     replaceProductsBlock: function (response, need_scroll) {
         var content = response.product_list;
 		
-		if (!GomageNavigation.static_conten_block) { /*In GM-AN v. 5.0 this expression must be removed*/
-			try {		
-				var wrapper = document.createElement('div'); /*HTML to DOM*/
-				wrapper.innerHTML = content;
-				
-				var nav_content = wrapper.getElementsByClassName('block-layered-nav-content')[0];
-				wrapper.firstChild.removeChild(nav_content);		
-				content = wrapper.innerHTML; /*DOM to HTML*/
-				
-				wrapper = nav_content = null;
-			} catch (e) {
-				GomageNavigation.printE(e.message);
-			}	
+		if (!GomageNavigation.static_conten_block) { /*In GM-AN v. 5.0 this expression must be removed*/	
+			var wrapper = document.createElement('div'); /*HTML to DOM*/
+			wrapper.innerHTML = content;
+			
+			var nav_content = wrapper.getElementsByClassName('block-layered-nav-content')[0];
+			wrapper.firstChild.removeChild(nav_content);		
+			content = wrapper.innerHTML; /*DOM to HTML*/
+			
+			wrapper = nav_content = null;
 		}
 		
         if (typeof(this.gan_static_navigation_url) != 'undefined' && this.gan_static_navigation_url) {

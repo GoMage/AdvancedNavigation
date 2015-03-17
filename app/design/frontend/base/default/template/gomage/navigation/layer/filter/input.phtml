@@ -22,7 +22,7 @@
 	
 ?>
 <div class="filter-type-input" style="padding:0;">
-	<form onsubmit="GomageNavigation.submitNavigationForm(this, '<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true, '_query'=>array('ajax'=>$this->ajaxEnabled())))?>', <?php echo $this->ajaxEnabled() ?>);return false;" action="'<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_use_rewrite'=>true))?>'">
+	<form onsubmit="GomageNavigation.submitNavigationForm(this, '<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_secure' => true, '_use_rewrite'=>true, '_query'=>array('ajax'=>$this->ajaxEnabled())))?>', <?php echo $this->ajaxEnabled() ?>);return false;" action="'<?php echo Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', array('_current'=>true, '_nosid'=>true, '_secure' => true, '_use_rewrite'=>true))?>'">
 		<fieldset class="filter-fieldset">
 		
 		<div class="fields">

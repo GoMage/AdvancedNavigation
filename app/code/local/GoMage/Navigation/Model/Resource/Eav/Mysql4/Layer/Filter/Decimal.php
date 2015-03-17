@@ -24,8 +24,8 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
         $this->_init('catalog/product_index_eav_decimal', 'entity_id');
     }
 	
-	public function prepareSelect($filter, $value, $select){
-		
+	public function prepareSelect($filter, $value, $select) 
+	{
         $attribute  = $filter->getAttributeModel();
         $connection = $this->_getReadAdapter();
         $tableAlias = $attribute->getAttributeCode() . '_idx';
@@ -41,57 +41,38 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
             array()
         );
 		
-		$priceExpr = "{$tableAlias}.value";
+		$priceExpr	= "{$tableAlias}.value";	
+		$where		= array();
 		
-		$where = array();
+		switch ($filter->getAttributeModel()->getFilterType()) {	
+			case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT) :
+				$from		= (isset($value['from']) && $value['from']) ? $value['from'] : 0;
+				$to			= isset($value['to']) ? $value['to'] : 0;
+				$where[]	= $tableAlias . ".value >= " . $from . ($to > 0 ? ' AND ' . sprintf("{$tableAlias}.value <= %d", $to) : '');
+			break;
+	
+			case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER) :
+			case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT) :
+			case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER) :
+				if ( Mage::helper('gomage_navigation')->isMobileDevice() ) {
+					foreach((array)$value as $_value){
+						$where[] = sprintf("{$tableAlias}.value >= %s", ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf("{$tableAlias}.value < %d", ($_value['range'] * $_value['index']));
+					}
+				} else {
+					$from		= isset($value['from']) ? $value['from'] : 0;
+					$to			= isset($value['to']) ? $value['to'] : 0;	
+					$where[]	= sprintf("{$tableAlias}.value >= %s", $from) . ($to > 0 ? ' AND ' . sprintf("{$tableAlias}.value <= %d", $to) : '');
+				}	
+			break;
+			
+			default :	
+				foreach ((array) $value as $_value) {				
+					$where[]	= sprintf("{$tableAlias}.value >= %s", ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf("{$tableAlias}.value < %d", ($_value['range'] * $_value['index']));				
+				}		
+			break;		
+		}
 		
-		switch($filter->getAttributeModel()->getFilterType()):
-		
-		case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
-            $from	= isset($value['from']) ? $value['from'] : 0;
-            $to		= isset($value['to']) ? $value['to'] : 0;
-
-            $where[] = sprintf("{$tableAlias}.value >= %s", $from) . ($to > 0 ? ' AND ' . sprintf("{$tableAlias}.value <= %d", $to) : '');
-        break;
-
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
-    	case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
-
-            if ( Mage::helper('gomage_navigation')->isMobileDevice() )
-            {
-                foreach((array)$value as $_value){
-
-                    $where[] = sprintf("{$tableAlias}.value >= %s", ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf("{$tableAlias}.value < %d", ($_value['range'] * $_value['index']));
-
-                }
-            }
-            else
-            {
-                $from	= isset($value['from']) ? $value['from'] : 0;
-                $to		= isset($value['to']) ? $value['to'] : 0;
-
-                $where[] = sprintf("{$tableAlias}.value >= %s", $from) . ($to > 0 ? ' AND ' . sprintf("{$tableAlias}.value <= %d", $to) : '');
-            }
-    		
-    	break;
-		
-		default:
-		
-			foreach((array)$value as $_value){
-				
-				$where[] = sprintf("{$tableAlias}.value >= %s", ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf("{$tableAlias}.value < %d", ($_value['range'] * $_value['index']));
-				
-			}
-		
-		break;
-		
-		endswitch;
-		
-        $select->where(implode(' OR ', $where));
-        
-        
-		
+        $select->where(implode(' OR ', $where));		
 	}
 	
     /**
@@ -104,29 +85,24 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
      */
     public function applyFilterToCollection($filter, $value)
     {
-    	
+    	$attribute  = $filter->getAttributeModel();
+        $connection = $this->_getReadAdapter();
+        $tableAlias = $attribute->getAttributeCode();	
     	$collection = $filter->getLayer()->getProductCollection();
         $select     = $collection->getSelect();
         
         $this->prepareSelect($filter, $value, $select);
         
-        $attribute_code = $filter->getRequestVar();;
+        $attribute_code	= $filter->getRequestVar();;   
+        $base_select	= $filter->getLayer()->getBaseSelect();
         
-        $base_select = $filter->getLayer()->getBaseSelect();
-        
-        foreach($base_select as $code=>$select){
-        	
-        	
-        	if($attribute_code != $code){
-        	
+        foreach($base_select as $code=>$select){      	
+        	if($attribute_code != $code){      	
         		$this->prepareSelect($filter, $value, $select);
-        	
-        	}
-        	
+        	}	
         }
         
-        return $this;
-    	
+        return $this;	
     }
 
     /**
@@ -134,12 +110,10 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
      *
      * @param Mage_Catalog_Model_Layer_Filter_Decimal $filter
      * @return array
-     */
-    
+     */  
     public function getMinMax($filter)
     {
-        if(!count($this->_min_max))
-        {
+        if (!count($this->_min_max)) {
             $select     = $this->_getSelect($filter);
             $adapter    = $this->_getReadAdapter();
     
@@ -152,10 +126,8 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
            
             return array($result['min_value'], $result['max_value']);
             
-        }else{
-            
-            return $this->_min_max;
-            
+        } else {    
+            return $this->_min_max;       
         }
     }
     
@@ -169,18 +141,14 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
      * @return Varien_Db_Select
      */
     protected function _getSelect($filter)
-    {
-    	
+    {  	
     	$base_select = $filter->getLayer()->getBaseSelect();
     	    	
-    	if(isset($base_select[$filter->getRequestVar()])){
-        	
+    	if (isset($base_select[$filter->getRequestVar()])) {      	
         	$select = $base_select[$filter->getRequestVar()];        	
-        
-        }else{
-    	
-        	$collection = $filter->getLayer()->getProductCollection();
-        	$select = clone $collection->getSelect();
+        } else {
+        	$collection	= $filter->getLayer()->getProductCollection();
+        	$select		= clone $collection->getSelect();
         }
         
         // reset columns, order and limitation conditions
@@ -201,9 +169,10 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
             array()
         );
         
-        $_collection = clone $filter->getLayer()->getProductCollection();
-    	$searched_entity_ids = $_collection->load()->getSearchedEntityIds();
-        if ($searched_entity_ids && is_array($searched_entity_ids) && count($searched_entity_ids)){
+        $_collection			= clone $filter->getLayer()->getProductCollection();
+    	$searched_entity_ids	= $_collection->load()->getSearchedEntityIds();
+        
+		if ($searched_entity_ids && is_array($searched_entity_ids) && count($searched_entity_ids)) {
         	$select->where('e.entity_id IN (?)', $searched_entity_ids);	
         } 
 
@@ -221,7 +190,6 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
     {
         $select     = $this->_getSelect($filter);
         $adapter    = $this->_getReadAdapter();
-
         $countExpr  = new Zend_Db_Expr("COUNT(*)");
         $rangeExpr  = new Zend_Db_Expr("FLOOR(decimal_index.value / {$range}) + 1");
 

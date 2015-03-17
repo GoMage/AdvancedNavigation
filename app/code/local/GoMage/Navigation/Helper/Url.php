@@ -13,13 +13,6 @@
 
 class GoMage_Navigation_Helper_Url {
 	
-	public static $default_params = array(
-		'_current'		=> true,
-		'_use_rewrite'	=> true,
-		'_query'		=> array(),
-		'_secure'		=> true,
-	);
-	
 	public function wrapp($url) {		
 		return urldecode($url);
 	}
@@ -39,8 +32,12 @@ class GoMage_Navigation_Helper_Url {
 					$params['_direct'];
 		
 		$params = array_merge(
-			self::$default_params,
-			array('_direct'	=> $urlPath),
+			array(
+				'_use_rewrite'	=> true,
+				'_query'		=> array(),
+				'_secure'		=> true,
+				'_direct'		=> $urlPath
+			),
 			$params
 		);
 		
@@ -58,32 +55,33 @@ class GoMage_Navigation_Helper_Url {
         return in_array($category->getId(), $active_cats);
 	}
 	
-	public function categoryFilterUrl(Varien_Object $category, $params = array()) {
-        $active_cats	= Mage::helper('gomage_navigation')
-			->getRequest()
-			->getParam('cat');
-			
-        $active_cats	= explode(',', $active_cats);
-		
+	public function categoryFilterUrl(Varien_Object $category, $params = array()) {		
 		if (empty($params['_direct']) && !Mage::helper('gomage_navigation/config')->isStatic()) {
 			$params['_direct'] = null;
 		}
 		
 		$params = array_merge(
-			self::$default_params,
+			array(
+				'_current'		=> true,
+				'_use_rewrite'	=> true,
+				'_query'		=> array(),
+				'_secure'		=> true,
+			),
 			$params
 		);
 		
-		if (!$this->categoryFilterIsActive($category)) { 
-            $params['_query']['cat'] = $category->getId();
-        } 
+		if ($this->categoryFilterIsActive($category)) { 
+            $params['_query']['cat'] = null;
+        } else {
+			$params['_query']['cat'] = $category->getId();
+		}
 		
 		$params['_query'] = $this->prepareUrlQuery($params['_query']);		
 		
 		return $this->categoryUrl(Mage::helper('gomage_navigation/config')->curentCategory(), $params);
 	}
 	
-	protected function prepareUrlQuery($query = array()) {			
+	public function prepareUrlQuery($query = array()) {			
 		$helper = Mage::helper('gomage_navigation');
 		
         if (!$helper->isFrendlyUrl()) {           

@@ -252,7 +252,8 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
     {
         if (!$this->isFrendlyUrl()) {
             $params['_query']['ajax'] = null;
-            return Mage::getUrl($route, $params);
+            
+			return Mage::getUrl($route, $params);
         }
 
         $model = Mage::getModel('core/url');
@@ -264,7 +265,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
         if (isset($params['_query']) && is_array($params['_query'])) {
             $query_params = array_merge($query_params, $params['_query']);
         }
-
+		
         foreach ($query_params as $param => $value) {
 
             if (is_null($value)) {
@@ -479,24 +480,44 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
             if ($_filter->getFilter()->getAttributeModel()->getFrontendInput()) {
                 $attribute = $_filter->getFilter()->getAttributeModel();
 
-                if ((in_array($attribute->getFilterType(), array(GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER,
-                                GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT,
-                                GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER)
-                        ) && !Mage::helper('gomage_navigation')->isMobileDevice())
-                    ||
-                    ($attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
-                        &&
-                        $attribute->getRangeOptions() != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::NO)
+                if (
+					(
+						in_array(
+							$attribute->getFilterType(), 
+							array(
+								GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT,
+								GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER,
+								GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT,
+								GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER
+							)
+						) && 
+						!Mage::helper('gomage_navigation')->isMobileDevice()
+					) ||
+                    (
+						$attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT &&
+                        $attribute->getRangeOptions() != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::NO
+					)
                 ) {
                     $params                 = array();
                     $params['_nosid']       = true;
                     $params['_current']     = true;
                     $params['_use_rewrite'] = true;
+					$params['_secure']      = true;
                     $params['_escape']      = false;
 
                     $url = $this->getFilterUrl('*/*/*', $params);
 
-                    $clean_url = $this->getFilterUrl('*/*/*', array('_current' => true, '_nosid' => true, '_use_rewrite' => true, '_query' => array(), '_escape' => false));
+                    $clean_url = $this->getFilterUrl(
+						'*/*/*', 
+						array(
+							'_current'		=> true, 
+							'_nosid'		=> true, 
+							'_use_rewrite'	=> true, 
+							'_secure'		=> true,
+							'_query'		=> array(), 
+							'_escape'		=> false
+						)
+					);
 
                     if (strpos($clean_url, "?") !== false) {
                         $clean_url = substr($clean_url, 0, strpos($clean_url, '?'));
@@ -507,8 +528,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
 
                     $parArray    = explode("&", $params);
                     $newParArray = array();
-
-
+					
                     foreach ($parArray as $par) {
                         $expar = explode("=", $par);
                         if ($expar[0] != $attribute->getAttributeCode() . '_from'

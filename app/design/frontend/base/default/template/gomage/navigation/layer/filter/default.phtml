@@ -16,7 +16,7 @@
 			&& $this->getInblockType()==GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Type_Inblock::TYPE_FIXED):?>style="height:<?php echo $this->getInBlockHeight(); ?>px;"<?php endif;?>
 			
 	<?php if($this->getFilterType()==GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK 
-			&& $this->getInblockType()==GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Type_Inblock::TYPE_AUTO):?>style="max-height:<?php echo $this->getMaxInBlockHeight(); ?>px;"<?php endif;?>
+			&& $this->getInblockType()==GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Type_Inblock::TYPE_AUTO):?>style="max-height:<?php echo $this->getMaxInBlockHeight(); ?>px;"<?php endif; ?>
 		>
 <?php 
 	$show_all = (bool)$this->getShowAllOptions();
