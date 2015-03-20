@@ -423,121 +423,59 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
         return $activeFilters;
     }
 
-    public function getResetFirlerUrl($filter, $ajax = false)
+    public function getResetFirlerUrl($block, $ajax = false)
     {
-        $filterState = array();
-        $helper      = Mage::helper('gomage_navigation');
-
-        foreach ($filter->getItems() as $item) {
-
-            try {
-                $slider_item = in_array($item->getFilter()->getAttributeModel()->getFilterType(),
-                    array(GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT,
-                        GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER,
-                        GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT,
-                        GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER)
-                );
-            } catch (Exception $e) {
-                $slider_item = false;
-            }
-
-            if ($item->getActive() || $slider_item) {
-                try {
-
-                    switch ($item->getFilter()->getAttributeModel()->getFilterType()) {
-
-                        case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT):
-                            $_from = $helper->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_from', $item->getFilter()->getMinValueInt());
-                            $_to   = $helper->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_to', $item->getFilter()->getMaxValueInt());
-
-                            if (($_from != $item->getFilter()->getMinValueInt()) || ($_to != $item->getFilter()->getMaxValueInt())) {
-                                if (!isset($filterState[$item->getFilter()->getRequestVarValue() . '_from'])) {
-                                    $filterState[$item->getFilter()->getRequestVarValue() . '_from'] = null;
-                                    $filterState[$item->getFilter()->getRequestVarValue() . '_to']   = null;
-                                }
-                            }
-                            break;
-
-                        case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER):
-                        case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT):
-                        case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER):
-                            if (Mage::helper('gomage_navigation')->isMobileDevice()) {
-                                $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getResetValue();
-                            } else {
-                                $_from = $helper->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_from');
-                                $_to   = $helper->getRequest()->getParam($item->getFilter()->getRequestVarValue() . '_to');
-                                if ($_from && $_to) {
-                                    $filterState[$item->getFilter()->getRequestVarValue() . '_from'] = null;
-                                    $filterState[$item->getFilter()->getRequestVarValue() . '_to']   = null;
-                                }
-                            }
-                            break;
-
-                        default:
-                            $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getResetValue();
-                            break;
-
-                    }
-
-                } catch (Exception $e) {
-                    $filterState[$item->getFilter()->getRequestVarValue()] = $item->getFilter()->getResetValue();
-
-                }
-            }
-        }
-
-        if (!count($filterState)) {
-            return false;
-        }
-
-        $params['_nosid']       = true;
-        $params['_current']     = true;
-        $params['_use_rewrite'] = true;
-        $params['_query']       = $filterState;
-        $params['_escape']      = true;
-
-        $params['_query']['ajax'] = null;
-
-        if ($ajax) {
-            $params['_query']['ajax'] = true;
-        }
-
-        if ($helper->isFrendlyUrl()) {
-            try {
-
-                $attr = array();
-
-                $attributes = Mage::getSingleton('catalog/layer')->getFilterableAttributes();
-
-                foreach ($attributes as $attribute) {
-                    $attr[$attribute->getAttributeCode()]['type'] = $attribute->getBackendType();
-                    $options                                      = $attribute->getSource()->getAllOptions();
-                    foreach ($options as $option) {
-                        $attr[$attribute->getAttributeCode()]['options'][$helper->formatUrlValue($option['label'], $option['value'])] = $option['value'];
-                    }
-                }
-                $url = Mage::getUrl('*/*/*', $params);
-
-                $query  = parse_url($url);
-                $_query = explode("&amp;", $query['query']);
-
-                foreach ($_query as $param) {
-                    $_param = explode("=", $param);
-                    foreach ($attr[$_param[0]]['options'] as $key => $val) {
-                        if ($val == $_param[1]) {
-                            $url = str_replace($param, $_param[0] . '=' . $key, $url);
-                            break;
-                        }
-                    }
-                }
-
-                return $url;
-            } catch (Exception $e) {
-                return Mage::getUrl('*/*/*', $params);
-            }
-        }
-
-        return Mage::getUrl('*/*/*', $params);
+		$filter_model		= $block->getFilter();
+		$filter_type		= $filter_model->getAttributeModel()->getFilterType();
+		$filter_request_var	= $filter_model->getRequestVarValue();
+		$active_filters		= array();
+		$filter_reset_val	= array();	
+		
+		foreach ($this->getActiveFilters() as $item) {
+			$active_filters[] = $item->getFilter()->getRequestVarValue();
+		}
+		
+		if (!in_array($filter_request_var, $active_filters)) {
+			return;
+		}
+		
+		if (
+			in_array(
+				$filter_type,
+				array(
+					GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT,
+					GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER,
+					GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT,
+					GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER
+				)
+			) && 
+			!Mage::helper('gomage_navigation')->isMobileDevice()
+		) {
+			$filter_reset_val = array(
+				$filter_request_var . "_from"	=> null, 
+				$filter_request_var . "_to"		=> null
+			);
+		} else {
+			$filter_reset_val = array(
+				$filter_request_var	=> null, 
+			);	
+		}
+		
+		$params = array(
+			'_nosid'		=> true,
+			'_current'		=> true,
+			'_secure'		=> true,
+			'_use_rewrite'	=> true,
+			'_query'		=> array(
+				'ajax'	=> ($ajax) ? $ajax : null,
+			),
+			'_escape'		=> false,
+			
+		);
+		
+		$params['_query'] = array_merge($params['_query'], $filter_reset_val);
+		
+        return Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $params);
     }
 
     public function getClearUrl($ajax = false)

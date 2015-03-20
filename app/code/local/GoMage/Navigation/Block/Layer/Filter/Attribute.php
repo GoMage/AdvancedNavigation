@@ -20,24 +20,6 @@ class GoMage_Navigation_Block_Layer_Filter_Attribute extends Mage_Catalog_Block_
         return $this->_filter;
     }
 
-    public function getRemoveUrl($ajax = false)
-    {
-        $query                  = array($this->_filter->getRequestVar() => null);
-        $params['_nosid']       = true;
-        $params['_current']     = true;
-        $params['_use_rewrite'] = true;
-        $params['_query']       = $query;
-        $params['_escape']      = false;
-
-        $params['_query']['ajax'] = null;
-
-        if ($ajax) {
-            $params['_query']['ajax'] = true;
-        }
-
-        return Mage::getUrl('*/*/*', $params);
-    }
-
     public function getPopupId()
     {
         return $this->getAttributeModel()->getAttributeCode();

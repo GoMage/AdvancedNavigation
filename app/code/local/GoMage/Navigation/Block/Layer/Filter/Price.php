@@ -39,24 +39,6 @@ class GoMage_Navigation_Block_Layer_Filter_Price extends Mage_Catalog_Block_Laye
         }
     }
 
-    public function getRemoveUrl($ajax = false)
-    {
-        $query                  = array($this->_filter->getRequestVar() => null);
-        $params['_nosid']       = true;
-        $params['_current']     = true;
-        $params['_use_rewrite'] = true;
-        $params['_query']       = $query;
-        $params['_escape']      = false;
-
-        $params['_query']['ajax'] = null;
-
-        if ($ajax) {
-            $params['_query']['ajax'] = true;
-        }
-
-        return Mage::getUrl('*/*/*', $params);
-    }
-
     public function canShowPopup()
     {
         return (bool)($this->getAttributeModel()->getShowHelp() > 0);
