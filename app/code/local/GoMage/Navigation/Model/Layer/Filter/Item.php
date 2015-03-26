@@ -72,6 +72,95 @@ class GoMage_Navigation_Model_Layer_Filter_Item extends Mage_Catalog_Model_Layer
         return Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $params);
     }
 	
+	/**
+     * Get url for "clear" link
+     *
+     * @return false|string
+     */
+	public function getClearLinkUrl()
+    {
+        if (
+			$this->getFilter()->getRequestVar() != 'cat' && 
+			$this->getFilter()->getRequestVar() != 'stock_status'
+		) {
+			
+            if ($this->getFilter()->getAttributeModel()->getFrontendInput()) {
+                $attribute = $this->getFilter()->getAttributeModel();
+				
+                if (
+					(
+						in_array(
+							$attribute->getFilterType(), 
+							array(
+								GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT,
+								GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER,
+								GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT,
+								GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER
+							)
+						) && 
+						!Mage::helper('gomage_navigation')->isMobileDevice()
+					) ||
+                    (
+						$attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT &&
+                        $attribute->getRangeOptions() != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::NO
+					)
+                ) {
+                    $params = array(
+						'_current'		=> true,
+						'_nosid'		=> true,
+                    	'_use_rewrite'	=> true,
+						'_secure'		=> true,
+                    	'_escape'		=> false,
+					);
+
+                    $url = Mage::helper('gomage_navigation')->getFilterUrl('*//*/*', $params);
+					
+                    $clean_url = Mage::helper('gomage_navigation')->getFilterUrl(
+						'*//*/*', 
+						array(
+							'_current'		=> true, 
+							'_nosid'		=> true, 
+							'_use_rewrite'	=> true, 
+							'_secure'		=> true,
+							'_query'		=> array(), 
+							'_escape'		=> false
+						)
+					);
+
+                    if (strpos($clean_url, "?") !== false) {
+                        $clean_url = substr($clean_url, 0, strpos($clean_url, '?'));
+                    }
+
+                    $params = str_replace($clean_url, "", $url);
+                    $params = str_replace("?", "", $params);
+
+                    $parArray    = explode("&", $params);
+                    $newParArray = array();
+					
+                    foreach ($parArray as $par) {
+                        $expar = explode("=", $par);
+                       
+					    if ($expar[0] != $attribute->getAttributeCode() . '_from'
+                            &&
+                            $expar[0] != $attribute->getAttributeCode() . '_to'
+                        ) {
+                            $newParArray[] = $par;
+                        }
+                    }
+
+                    if ($newParArray) {
+                    	return $clean_url . '?' . implode("&", $newParArray);
+                    } else {
+						return $clean_url;
+                    }
+                }
+            } else {
+                return parent::getClearLinkUrl();
+            }
+        } else {
+            return parent::getClearLinkUrl();
+        }
+    }
 	
 	
 	

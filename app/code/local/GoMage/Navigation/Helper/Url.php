@@ -7,11 +7,12 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.6
- * @since        Class available since Release 1.0
+ * @version      Release: 4.7
+ * @since        Class available since Release 4.7
  */
 
-class GoMage_Navigation_Helper_Url {
+class GoMage_Navigation_Helper_Url extends Mage_Core_Helper_Url
+{
 	
 	public function wrapp($url) {		
 		return urldecode($url);

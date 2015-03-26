@@ -426,6 +426,11 @@ class GoMage_Navigation_Block_Layer_View extends Mage_Catalog_Block_Layer_View
     public function getResetFirlerUrl($block, $ajax = false)
     {
 		$filter_model		= $block->getFilter();
+		
+		if (!$filter_model->hasAttributeModel()) {
+			return;
+		}
+		
 		$filter_type		= $filter_model->getAttributeModel()->getFilterType();
 		$filter_request_var	= $filter_model->getRequestVarValue();
 		$active_filters		= array();

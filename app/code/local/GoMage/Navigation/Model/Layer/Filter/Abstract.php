@@ -73,4 +73,9 @@ abstract class GoMage_Navigation_Model_Layer_Filter_Abstract extends Mage_Catalo
     {
         return $this;
     }
+	
+	public function hasAttributeModel()
+    {   
+		return $this->hasData('attribute_model');
+    }
 }
