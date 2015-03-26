@@ -10,9 +10,9 @@
  * @version      Release: 4.6
  * @since        Class available since Release 3.1
  */
+ 
 class GoMage_Navigation_Helper_Checkout_Cart extends Mage_Checkout_Helper_Cart
 {
-
     /**
      * Retrieve current url
      *
@@ -21,30 +21,11 @@ class GoMage_Navigation_Helper_Checkout_Cart extends Mage_Checkout_Helper_Cart
     public function getCurrentUrl()
     {          	  
         $url = parent::getCurrentUrl();
+		
         if (Mage::helper('gomage_navigation')->isGomageNavigationAjax()){
-        	$url = $this->removeRequestParam($url, 'ajax');
+        	$url = Mage::helper('gomage_navigation/url')->removeRequestParam($url, 'ajax');
         }
-        return $url;
-    }
-    
-    /**
-     * Remove request parameter from url
-     *
-     * @param string $url
-     * @param string $paramKey
-     * @return string
-     */
-    public function removeRequestParam($url, $paramKey, $caseSensitive = false)
-    {
-        $regExpression = '/\\?[^#]*?(' . preg_quote($paramKey, '/') . '\\=[^#&]*&?)/' . ($caseSensitive ? '' : 'i');
-        while (preg_match($regExpression, $url, $mathes) != 0) {
-            $paramString = $mathes[1];
-            if (preg_match('/&$/', $paramString) == 0) {
-                $url = preg_replace('/(&|\\?)?' . preg_quote($paramString, '/') . '/', '', $url);
-            } else {
-                $url = str_replace($paramString, '', $url);
-            }
-        }
+		
         return $url;
     }
 }

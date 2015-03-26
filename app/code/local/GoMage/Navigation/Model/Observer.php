@@ -304,7 +304,7 @@ class GoMage_Navigation_Model_Observer
     {
         $session = Mage::getSingleton('checkout/session');
         $url     = $session->getContinueShoppingUrl();
-        $url     = str_replace('ajax=1', '', $url);
+        $url     = Mage::helper('gomage_navigation/url')->removeRequestParam($url, 'ajax');
         $session->setContinueShoppingUrl($url);
     }
 

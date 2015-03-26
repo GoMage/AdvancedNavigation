@@ -11,17 +11,16 @@
  * @since        Class available since Release 1.0
  */
 
-class GoMage_Navigation_Helper_Compare extends Mage_Catalog_Helper_Product_Compare {
-	
-	public function getEncodedUrl($url = null) {
-		if (! $url) {
+class GoMage_Navigation_Helper_Compare extends Mage_Catalog_Helper_Product_Compare 
+{
+	public function getEncodedUrl($url = null)
+	{
+		if (!$url) {
 			$url = $this->getCurrentUrl();
 		}
 		
-		$url = str_replace('ajax=1&', '', $url);
-		$url = str_replace('ajax=1', '', $url);
+		$url = Mage::helper('gomage_navigation/url')->removeRequestParam($url, 'ajax');
 		
 		return $this->urlEncode($url);
 	}
-
 }

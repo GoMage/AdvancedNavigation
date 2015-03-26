@@ -13,12 +13,13 @@
 
 class GoMage_Navigation_Helper_Url extends Mage_Core_Helper_Url
 {
-	
-	public function wrapp($url) {		
+	public function wrapp($url)
+	{		
 		return urldecode($url);
 	}
 	
-	public function prepareCategory(Varien_Object $category) {	
+	public function prepareCategory(Varien_Object $category)
+	{	
 		if ($category instanceof Mage_Catalog_Model_Category) {
 			return $category;
 		} 
@@ -26,7 +27,8 @@ class GoMage_Navigation_Helper_Url extends Mage_Core_Helper_Url
 		return Mage::getModel('catalog/category')->load($category->getId());	
 	}
 	
-	public function categoryUrl(Varien_Object $category, $params = array()) {
+	public function categoryUrl(Varien_Object $category, $params = array())
+	{
         $urlPath = 
 			(is_array($params) && !isset($params['_direct'])) ? 
 				$this->prepareCategory($category)->getUrlPath() : 
@@ -48,7 +50,8 @@ class GoMage_Navigation_Helper_Url extends Mage_Core_Helper_Url
         return $this->wrapp($url);
     }
 	
-	public function categoryFilterIsActive(Varien_Object $category) {
+	public function categoryFilterIsActive(Varien_Object $category)
+	{
 		$helper			= Mage::helper('gomage_navigation');
         $active_cats	= $helper->getRequest()->getParam('cat');
         $active_cats	= explode(',', $active_cats);
@@ -56,7 +59,8 @@ class GoMage_Navigation_Helper_Url extends Mage_Core_Helper_Url
         return in_array($category->getId(), $active_cats);
 	}
 	
-	public function categoryFilterUrl(Varien_Object $category, $params = array()) {		
+	public function categoryFilterUrl(Varien_Object $category, $params = array())
+	{		
 		if (empty($params['_direct']) && !Mage::helper('gomage_navigation/config')->isStatic()) {
 			$params['_direct'] = null;
 		}
@@ -82,7 +86,8 @@ class GoMage_Navigation_Helper_Url extends Mage_Core_Helper_Url
 		return $this->categoryUrl(Mage::helper('gomage_navigation/config')->curentCategory(), $params);
 	}
 	
-	public function prepareUrlQuery($query = array()) {			
+	public function prepareUrlQuery($query = array())
+	{			
 		$helper = Mage::helper('gomage_navigation');
 		
         if (!$helper->isFrendlyUrl()) {           
