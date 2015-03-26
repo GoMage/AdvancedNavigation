@@ -27,8 +27,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
         $form = $this->getForm();
         
         $fieldset = $form->addFieldset('advanced_navigation_fieldset', array('legend'=>Mage::helper('catalog')->__('Advanced Navigation Properties')));
-        
-        
+             
         $field = $fieldset->addField('filter_type', 'select', array(
             'name' => 'filter_type',
             'label' => Mage::helper('catalog')->__('Filter Type'),
@@ -89,31 +88,174 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
             'title' => Mage::helper('catalog')->__('Ranges'),
         ));
         
+        $fieldset->addField('inblock_height', 'text', array(
+            'name' => 'inblock_height',
+            'label' => Mage::helper('catalog')->__('Block Height, px'),
+            'title' => Mage::helper('catalog')->__('Block Height, px'),
+            'class' => 'gomage-validate-number',
+        ));
+        
+        $fieldset->addField('max_inblock_height', 'text', array(
+            'name' => 'max_inblock_height',
+            'label' => Mage::helper('catalog')->__('Max. Block Height, px'),
+            'title' => Mage::helper('catalog')->__('Max. Block Height, px'),
+            'class' => 'gomage-validate-number',
+        ));
+        
+        $fieldset->addField('filter_button', 'select', array(
+            'name' => 'filter_button',
+            'label' => Mage::helper('catalog')->__('Show Filter Button '),
+            'title' => Mage::helper('catalog')->__('Show Filter Button '),
+            'values'=>array(
+                	0 => $this->__('No'),
+                	1 => $this->__('Yes'),
+                ),
+            
+        ));
+        
+        $field->setValue(0);
+        
+        $fieldset->addField('show_minimized', 'select', array(
+            'name' => 'show_minimized',
+            'label' => Mage::helper('catalog')->__('Show Collapsed'),
+            'title' => Mage::helper('catalog')->__('Show Collapsed'),
+            'values'=>array(
+            	0 => $this->__('No'),
+            	1 => $this->__('Yes'),
+            ),
+        ));
+        
+        $field = $fieldset->addField('show_checkbox', 'select', array(
+            'name' => 'show_checkbox',
+            'label' => Mage::helper('catalog')->__('Show Checkboxes'),
+            'title' => Mage::helper('catalog')->__('Show Checkboxes'),
+            'values'=>array(
+            	0 => $this->__('No'),
+            	1 => $this->__('Yes'),
+            ),
+        ));
+        
+        $field->setValue(0);
+        
+        $field = $fieldset->addField('show_image_name', 'select', array(
+            'name' => 'show_image_name',
+            'label' => Mage::helper('catalog')->__('Show Image Name'),
+            'title' => Mage::helper('catalog')->__('Show Image Name'),
+            'values'=>array(
+            	0 => $this->__('No'),
+            	1 => $this->__('Yes'),
+            ),
+        ));
+        
+        $field->setValue(0);
+        
+        $fieldset->addField('image_align', 'select', array(
+            'name' => 'image_align',
+            'label' => Mage::helper('catalog')->__('Options Alignment'),
+            'title' => Mage::helper('catalog')->__('Options Alignment'),
+            'values'=> Mage::getModel('gomage_navigation/adminhtml_system_config_source_filter_image_align')->toOptionArray(),
+        ));
+        
+        $fieldset->addField('image_width', 'text', array(
+            'name' => 'image_width',
+            'label' => Mage::helper('catalog')->__('Image Width, px'),
+            'title' => Mage::helper('catalog')->__('Image Width, px'),
+            'class' => 'gomage-validate-number',
+        ));
+        
+        $fieldset->addField('image_height', 'text', array(
+            'name' => 'image_height',
+            'label' => Mage::helper('catalog')->__('Image Height, px'),
+            'title' => Mage::helper('catalog')->__('Image Height, px'),
+            'class' => 'gomage-validate-number',
+        ));
+        
+        $fieldset->addField('visible_options', 'text', array(
+            'name' => 'visible_options',
+            'label' => Mage::helper('catalog')->__('Visible Options per Attribute'),
+            'title' => Mage::helper('catalog')->__('Visible Options per Attribute'),
+            'class' => 'gomage-validate-number',
+        ));
+        
+        $field= $fieldset->addField('show_help', 'select', array(
+            'name' => 'show_help',
+            'label' => Mage::helper('catalog')->__('Show Help Icon'),
+            'title' => Mage::helper('catalog')->__('Show Help Icon'),
+            'values'=>array(
+            	0 => $this->__('No'),
+            	1 => $this->__('Yes'),
+            ),
+        ));
+        
+        $field->setValue(0);
+        
+        $fieldset->addField('popup_width', 'text', array(
+            'name' => 'popup_width',
+            'label' => Mage::helper('catalog')->__('Popup Width, px'),
+            'title' => Mage::helper('catalog')->__('Popup Width, px'),
+            'class' => 'gomage-validate-number',
+        ));
+        $fieldset->addField('popup_height', 'text', array(
+            'name' => 'popup_height',
+            'label' => Mage::helper('catalog')->__('Popup Height, px'),
+            'title' => Mage::helper('catalog')->__('Popup Height, px'),
+            'class' => 'gomage-validate-number',
+        ));
+        
+        $field = $fieldset->addField('filter_reset', 'select', array(
+            'name' => 'filter_reset',
+            'label' => Mage::helper('catalog')->__('Show Reset Link'),
+            'title' => Mage::helper('catalog')->__('Show Reset Link'),
+            'values'=>array(
+            	0 => $this->__('No'),
+            	1 => $this->__('Yes'),
+            ),
+        ));
+        
+        $field = $fieldset->addField('category_ids_filter', 'text', array(
+            'name' => 'category_ids_filter',
+            'label' => Mage::helper('catalog')->__('Exclude Categories'),
+            'title' => Mage::helper('catalog')->__('Exclude Categories'),
+            'class' => 'gomage-validate-number',
+        ));
+        
+        $field = $fieldset->addField('attribute_location', 'select', array(
+            'name' => 'attribute_location',
+            'label' => Mage::helper('catalog')->__('Attribute Location'),
+            'title' => Mage::helper('catalog')->__('Attribute Location'),
+            'values'=> Mage::getModel('gomage_navigation/adminhtml_system_config_source_filter_attributelocation')->toOptionArray(),
+        ));
+        
+        $field->setValue(0);
+		
         $field->setData('after_element_html', '<script type="text/javascript">
         	
-        	is_price = false;
-        	
+        	is_price = false;  	
+			var options = $("filter_type").select("option");
+			
         	if($("frontend_input").value != "price"){
-        	
         		var id = "range_options"; 
+				
                 if ($(id)){
                   	$(id).up("td").up("tr").hide();	
-				}
-				
-				var options = $("filter_type").select("option");
+				}	
     			
-    			for(var i = 0; i < options.length; i++){
-    				
+    			for (var i = 0; i < options.length; i++) {
     				e = options[i];
     				
     				if(e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER.'){
-    					
     					e.parentNode.removeChild(e);
-    					
     				}
     			};
-			
-        	}else{
+        	} else {
+				for (var i = 0; i < options.length; i++) {
+    				e = options[i];
+    				
+					if(e.value == ' . GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE . '){
+    					e.parentNode.removeChild(e);
+    				}
+    			};
+				
         		is_price = true;
         	}
         	
@@ -720,149 +862,6 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
                 }
         	
         </script>');
-        
-        $fieldset->addField('inblock_height', 'text', array(
-            'name' => 'inblock_height',
-            'label' => Mage::helper('catalog')->__('Block Height, px'),
-            'title' => Mage::helper('catalog')->__('Block Height, px'),
-            'class' => 'gomage-validate-number',
-        ));
-        
-        $fieldset->addField('max_inblock_height', 'text', array(
-            'name' => 'max_inblock_height',
-            'label' => Mage::helper('catalog')->__('Max. Block Height, px'),
-            'title' => Mage::helper('catalog')->__('Max. Block Height, px'),
-            'class' => 'gomage-validate-number',
-        ));
-        
-        $fieldset->addField('filter_button', 'select', array(
-            'name' => 'filter_button',
-            'label' => Mage::helper('catalog')->__('Show Filter Button '),
-            'title' => Mage::helper('catalog')->__('Show Filter Button '),
-            'values'=>array(
-                	0 => $this->__('No'),
-                	1 => $this->__('Yes'),
-                ),
-            
-        ));
-        
-
-
-        $field->setValue(0);
-        
-        $fieldset->addField('show_minimized', 'select', array(
-            'name' => 'show_minimized',
-            'label' => Mage::helper('catalog')->__('Show Collapsed'),
-            'title' => Mage::helper('catalog')->__('Show Collapsed'),
-            'values'=>array(
-            	0 => $this->__('No'),
-            	1 => $this->__('Yes'),
-            ),
-        ));
-        
-        $field = $fieldset->addField('show_checkbox', 'select', array(
-            'name' => 'show_checkbox',
-            'label' => Mage::helper('catalog')->__('Show Checkboxes'),
-            'title' => Mage::helper('catalog')->__('Show Checkboxes'),
-            'values'=>array(
-            	0 => $this->__('No'),
-            	1 => $this->__('Yes'),
-            ),
-        ));
-        
-        $field->setValue(0);
-        
-        $field = $fieldset->addField('show_image_name', 'select', array(
-            'name' => 'show_image_name',
-            'label' => Mage::helper('catalog')->__('Show Image Name'),
-            'title' => Mage::helper('catalog')->__('Show Image Name'),
-            'values'=>array(
-            	0 => $this->__('No'),
-            	1 => $this->__('Yes'),
-            ),
-        ));
-        
-        $field->setValue(0);
-        
-        $fieldset->addField('image_align', 'select', array(
-            'name' => 'image_align',
-            'label' => Mage::helper('catalog')->__('Options Alignment'),
-            'title' => Mage::helper('catalog')->__('Options Alignment'),
-            'values'=> Mage::getModel('gomage_navigation/adminhtml_system_config_source_filter_image_align')->toOptionArray(),
-        ));
-        
-        $fieldset->addField('image_width', 'text', array(
-            'name' => 'image_width',
-            'label' => Mage::helper('catalog')->__('Image Width, px'),
-            'title' => Mage::helper('catalog')->__('Image Width, px'),
-            'class' => 'gomage-validate-number',
-        ));
-        
-        $fieldset->addField('image_height', 'text', array(
-            'name' => 'image_height',
-            'label' => Mage::helper('catalog')->__('Image Height, px'),
-            'title' => Mage::helper('catalog')->__('Image Height, px'),
-            'class' => 'gomage-validate-number',
-        ));
-        
-        $fieldset->addField('visible_options', 'text', array(
-            'name' => 'visible_options',
-            'label' => Mage::helper('catalog')->__('Visible Options per Attribute'),
-            'title' => Mage::helper('catalog')->__('Visible Options per Attribute'),
-            'class' => 'gomage-validate-number',
-        ));
-        
-        $field= $fieldset->addField('show_help', 'select', array(
-            'name' => 'show_help',
-            'label' => Mage::helper('catalog')->__('Show Help Icon'),
-            'title' => Mage::helper('catalog')->__('Show Help Icon'),
-            'values'=>array(
-            	0 => $this->__('No'),
-            	1 => $this->__('Yes'),
-            ),
-        ));
-        
-        $field->setValue(0);
-        
-        $fieldset->addField('popup_width', 'text', array(
-            'name' => 'popup_width',
-            'label' => Mage::helper('catalog')->__('Popup Width, px'),
-            'title' => Mage::helper('catalog')->__('Popup Width, px'),
-            'class' => 'gomage-validate-number',
-        ));
-        $fieldset->addField('popup_height', 'text', array(
-            'name' => 'popup_height',
-            'label' => Mage::helper('catalog')->__('Popup Height, px'),
-            'title' => Mage::helper('catalog')->__('Popup Height, px'),
-            'class' => 'gomage-validate-number',
-        ));
-        
-        $field = $fieldset->addField('filter_reset', 'select', array(
-            'name' => 'filter_reset',
-            'label' => Mage::helper('catalog')->__('Show Reset Link'),
-            'title' => Mage::helper('catalog')->__('Show Reset Link'),
-            'values'=>array(
-            	0 => $this->__('No'),
-            	1 => $this->__('Yes'),
-            ),
-        ));
-        
-        $field = $fieldset->addField('category_ids_filter', 'text', array(
-            'name' => 'category_ids_filter',
-            'label' => Mage::helper('catalog')->__('Exclude Categories'),
-            'title' => Mage::helper('catalog')->__('Exclude Categories'),
-            'class' => 'gomage-validate-number',
-        ));
-        
-        $field = $fieldset->addField('attribute_location', 'select', array(
-            'name' => 'attribute_location',
-            'label' => Mage::helper('catalog')->__('Attribute Location'),
-            'title' => Mage::helper('catalog')->__('Attribute Location'),
-            'values'=> Mage::getModel('gomage_navigation/adminhtml_system_config_source_filter_attributelocation')->toOptionArray(),
-        ));
-        
-        $field->setValue(0);
-        
 
         return $this;
     }

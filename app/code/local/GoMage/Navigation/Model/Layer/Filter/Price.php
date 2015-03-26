@@ -67,7 +67,17 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
         }
         return $this->_resource;
     }
-
+	
+	/**
+     * Get maximum number of intervals
+     *
+     * @return int
+     */
+    public function getMaxIntervalsNumber()
+    {
+        return (int) Mage::app()->getStore()->getConfig(self::XML_PATH_RANGE_MAX_INTERVALS);
+    }
+	
     /**
      * Get minimal price from layer products set
      *
@@ -194,16 +204,20 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
     {
         $rangeKey = 'range_item_counts_' . $range;
         $items    = $this->getData($rangeKey);
+		
         if (is_null($items)) {
             $items       = $this->_getResource()->getCount($this, $range);
             $calculation = Mage::app()->getStore()->getConfig(self::XML_PATH_RANGE_CALCULATION);
-            if ($calculation) {
+			
+			if ($calculation) {
                 $i                  = 0;
                 $lastIndex          = null;
                 $maxIntervalsNumber = $this->getMaxIntervalsNumber();
+				
                 foreach ($items as $k => $v) {
                     ++$i;
-                    if ($calculation == self::RANGE_CALCULATION_MANUAL && $i > 1 && $i > $maxIntervalsNumber) {
+                   
+				    if ($calculation == self::RANGE_CALCULATION_MANUAL && $i > 1 && $i > $maxIntervalsNumber) {
                         $items[$lastIndex] += $v;
                         unset($items[$k]);
                     } else {
@@ -211,8 +225,10 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
                     }
                 }
             }
+			
             $this->setData($rangeKey, $items);
         }
+		
         return $items;
     }
 
@@ -252,24 +268,18 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
      */
     protected function _getItemsData()
     {
-        $key = $this->_getCacheKey();
-
-        $selected = $this->_getSelectedOptions();
-
+        $key			= $this->_getCacheKey();
+        $selected		= $this->_getSelectedOptions();
         $data = $this->getLayer()->getAggregator()->getCacheData($key);
-
-        $filter_mode = Mage::helper('gomage_navigation')->isGomageNavigation();
+        $filter_mode	= Mage::helper('gomage_navigation')->isGomageNavigation();
 
         if ($data === null) {
+            $data		= array();
+            $attribute	= Mage::helper('gomage_navigation')->getProductAttribute('price');
 
-            $data = array();
-
-            $attribute = Mage::helper('gomage_navigation')->getProductAttribute('price');
-
-            if ($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
-                &&
-                $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
-                &&
+            if (
+				$attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY &&
+                $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT &&
                 $attribute->getRangeManual()
             ) {
                 $manual      = $attribute->getRangeManual();
@@ -330,12 +340,10 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
                     }
                 }
             } else {
-                if ($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO
-                    &&
-                    $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
-                    &&
-                    $attribute->getRangeAuto()
-                    &&
+                if (
+					$attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO &&
+                    $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT &&
+                    $attribute->getRangeAuto() &&
                     $attribute->getRangeAuto() != '=,'
                 ) {
                     $auto      = $attribute->getRangeAuto();
@@ -487,6 +495,7 @@ class GoMage_Navigation_Model_Layer_Filter_Price extends GoMage_Navigation_Model
             $tags = $this->getLayer()->getStateTags($tags);
             $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
+		
         return $data;
     }
 
