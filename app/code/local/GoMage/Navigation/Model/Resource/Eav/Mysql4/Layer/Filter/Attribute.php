@@ -51,33 +51,25 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute extends
      * @param int $value
      * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute
      */
-
-
     public function applyFilterToCollection($filter, $value)
     {
-
-        $attribute_code = $filter->getAttributeModel()->getAttributeCode();
-
-        $collection = $filter->getLayer()->getProductCollection();
-
+        $attribute_code	= $filter->getAttributeModel()->getAttributeCode();
+        $collection		= $filter->getLayer()->getProductCollection();
+		
         $this->prepareSelect($filter, $value, $collection->getSelect());
-
-        $base_select = $filter->getLayer()->getBaseSelect();
+		
+        $base_select	= $filter->getLayer()->getBaseSelect();
 
         foreach ($base_select as $code => $select) {
-
-
             if ($attribute_code != $code) {
-
                 $this->prepareSelect($filter, $value, $select);
-
             }
-
         }
-
+		
         if (Mage::helper('gomage_navigation')->isEnterprise()) {
-            if (empty($value) || (isset($value['from']) && empty($value['from']) && isset($value['to'])
-                    && empty($value['to']))
+            if (
+				empty($value) || 
+				(isset($value['from']) && empty($value['from']) && isset($value['to']) && empty($value['to']))
             ) {
                 $value = array();
             }
@@ -88,7 +80,8 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute extends
 
             $attribute = $filter->getAttributeModel();
             $options   = $attribute->getSource()->getAllOptions();
-            foreach ($value as &$valueText) {
+            
+			foreach ($value as &$valueText) {
                 foreach ($options as $option) {
                     if ($option['label'] == $valueText) {
                         $valueText = $option['value'];
@@ -101,10 +94,11 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute extends
 
             $helper    = Mage::helper('enterprise_search');
             $isCatalog = true;
-            if (Mage::helper('gomage_navigation')->getRequest()->getParam('q') != null) {
+            
+			if (Mage::helper('gomage_navigation')->getRequest()->getParam('q') != null) {
                 $isCatalog = false;
             }
-
+			
             if ($helper->isThirdPartSearchEngine() && $helper->getIsEngineAvailableForNavigation($isCatalog) && Mage::helper('gomage_navigation')->isGomageNavigation()) {
                 $filter->getLayer()->getProductCollection()->addFqFilter(array($fieldName => $value));
             }

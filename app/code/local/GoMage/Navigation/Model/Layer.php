@@ -28,7 +28,51 @@ class GoMage_Navigation_Model_Layer extends Mage_Catalog_Model_Layer
     const FILTER_TYPE_DEFAULT_INBLOCK = 9;
     const FILTER_TYPE_INPUT_SLIDER    = 10;
     const FILTER_TYPE_ACCORDION       = 11;
+	
+	/**
+     * Retrieve current layer product collection
+     *
+     * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection
+     */
+    public function getProductCollection()
+    {
+        if (isset($this->_productCollections[$this->getCurrentCategory()->getId()])) {
+            $collection = $this->_productCollections[$this->getCurrentCategory()->getId()];
+        } else {
+			if (Mage::helper('gomage_navigation')->isEnterprise()) {
+            	$engine = Mage::helper('catalogsearch')->getEngine();
+				$collection = $engine->getResultCollection();
+				$collection->setStoreId($this->getCurrentCategory()->getStoreId())
+					->addCategoryFilter($this->getCurrentCategory())
+					->setGeneralDefaultQuery();
+			} else {
+				$collection = $this->getCurrentCategory()->getProductCollection();
+			}
+			
+            $this->prepareProductCollection($collection);
+            $this->_productCollections[$this->getCurrentCategory()->getId()] = $collection;
+        }
 
+        return $collection;
+    }
+
+    /**
+     * Get default tags for current layer state
+     *
+     * @param   array $additionalTags
+     * @return  array
+     */
+    public function getStateTags(array $additionalTags = array())
+    {	
+		if (Mage::helper('gomage_navigation')->isEnterprise()) {
+			$additionalTags = array_merge($additionalTags, array(
+				Mage_Catalog_Model_Category::CACHE_TAG . $this->getCurrentCategory()->getId() . '_SEARCH'
+			));
+		}
+		
+        return parent::getStateTags($additionalTags);
+    }
+	
     public function prepareProductCollection($collection)
     {
         parent::prepareProductCollection($collection);

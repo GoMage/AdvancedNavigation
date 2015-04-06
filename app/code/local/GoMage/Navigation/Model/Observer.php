@@ -382,5 +382,4 @@ class GoMage_Navigation_Model_Observer
             }
         }
     }
-
 }
