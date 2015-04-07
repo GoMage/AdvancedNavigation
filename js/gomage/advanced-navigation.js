@@ -30,7 +30,7 @@ GomageNavigationClass = Class.create({
     scrolling_speed:					0,
     gomage_seobooster_enabled:			false,
 	
-	print_exceptions:					true,
+	print_exceptions:					false,
 	static_conten_block:				true,
     
 	initialize: function (data) {
