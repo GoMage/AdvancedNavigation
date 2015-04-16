@@ -123,6 +123,11 @@
             		<cart>GoMage_Navigation_Helper_Checkout_Cart</cart>
             	</rewrite>
             </checkout>
+			<configurableswatches>
+            	<rewrite>
+            		<productlist>GoMage_Navigation_Helper_Configurableswatches_Productlist</productlist>
+            	</rewrite>
+            </configurableswatches>
         </helpers>
         <resources>
             <gomage_navigation_setup>
