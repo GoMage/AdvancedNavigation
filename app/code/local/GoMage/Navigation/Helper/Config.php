@@ -29,7 +29,7 @@ class GoMage_Navigation_Helper_Config {
 			if (Mage::registry('current_category')) {
 				$this->current_category = Mage::registry('current_category');
 			} else {
-				if ($this->isStatic()) {		
+				if ($this->isCMSPage()) {		
 					$category_id = (int) Mage::getSingleton('cms/page')->getData('navigation_category_id');
 				} else {
 					$category_id = $this->storeRootCategoryId();
@@ -43,14 +43,14 @@ class GoMage_Navigation_Helper_Config {
 		return $this->current_category;
 	}
 	
-	public function isStatic() {
+	public function isCMSPage() {
 		return (bool) (Mage::getSingleton('cms/page')->getData('page_id'));
 	}
 	
 	public function staticContenBlock() { 
 		$static_conten_block = true;
 		
-		if ($this->isStatic()) {
+		if ($this->isCMSPage()) {
 			$static_conten_block = (bool) Mage::getSingleton('cms/page')->getData('navigation_content_column');
 		}
 		

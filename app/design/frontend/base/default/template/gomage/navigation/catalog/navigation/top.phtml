@@ -28,14 +28,14 @@
 ?>
 <?php if($_menu): ?>
     <?php switch ($menu_block->getTypeNavigation()):  
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN: ?>
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DROPDOWN: ?>
               <div class="gan-wrapper gan-top">
                   <ul class="gan-dropdown-list">                  
                       <?php echo $_menu ?>          
                   </ul>
               </div>           
            <?php break; ?>           
-           <?php case GoMage_Navigation_Model_Layer::FILTER_TYPE_PLAIN: ?>
+           <?php case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_PLAIN: ?>
               <div class="gan-wrapper gan-top">
                   <ul id="gan_nav_top" class="gan-plain-list">
                     <?php echo $_menu ?>

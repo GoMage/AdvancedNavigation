@@ -21,7 +21,7 @@ class GoMage_Navigation_Block_Navigation_CMS_Right extends GoMage_Navigation_Blo
 		if (
 			$this->isGMN() && 
 			$this->canDisplay() &&
-			$this->isStatic()
+			$this->isCMSPage()
 		) {			
 			$this->setTemplate('gomage/navigation/catalog/navigation/right.phtml')
 				->unsetData('cache_lifetime')

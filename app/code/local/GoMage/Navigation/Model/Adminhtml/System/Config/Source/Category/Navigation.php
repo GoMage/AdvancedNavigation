@@ -19,14 +19,14 @@ class GoMage_Navigation_Model_Adminhtml_System_Config_Source_Category_Navigation
     	$helper = Mage::helper('gomage_navigation');
     	
     	$options = array(
-            array('value'=>GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT, 'label' => $helper->__('Default')),
+            array('value'=>GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT, 'label' => $helper->__('Default')),
         ); 
         
         $websites = $helper->getAvailavelWebsites();
         
         if(!empty($websites)){
-        	$options[] = array('value'=>GoMage_Navigation_Model_Layer::FILTER_TYPE_PLAIN, 'label' => $helper->__('Plain'));
-        	$options[] = array('value'=>GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN, 'label' => $helper->__('Dropdown'));
+        	$options[] = array('value'=>GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_PLAIN, 'label' => $helper->__('Plain'));
+        	$options[] = array('value'=>GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DROPDOWN, 'label' => $helper->__('Dropdown'));
         }
     	
         return $options;
@@ -43,9 +43,9 @@ class GoMage_Navigation_Model_Adminhtml_System_Config_Source_Category_Navigation
     	$helper = Mage::helper('gomage_navigation');
     	
         return array(
-            GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT => $helper->__('Default'),
-            GoMage_Navigation_Model_Layer::FILTER_TYPE_PLAIN => $helper->__('Plain'),
-            GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN => $helper->__('Dropdown'),        	        	        	
+            GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT => $helper->__('Default'),
+            GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_PLAIN => $helper->__('Plain'),
+            GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DROPDOWN => $helper->__('Dropdown'),        	        	        	
         );
     }
 

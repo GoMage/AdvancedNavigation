@@ -110,7 +110,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
     }
 	
 	public function isAjax() {
-		if ($this->navigationType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_PRO) {
+		if ($this->navigationType() == GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_PRO) {
             return false;
         }
 		
@@ -241,8 +241,8 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
         return $this->can_display;
     }
 	
-	public function isStatic() {
-		return $this->configHelper()->isStatic();
+	public function isCMSPage() {
+		return $this->configHelper()->isCMSPage();
 	}
 	
 	public function curentCategory() {		
@@ -291,7 +291,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
      */
 	public function renderCategoriesMenuHtml($level = 0, $outermostItemClass = '', $childrenWrapClass = '') {	  		
 		$root_category = 
-			($this->navigationPlace() == self::MENU_BAR || $this->navigationType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_PRO) ? 
+			($this->navigationPlace() == self::MENU_BAR || $this->navigationType() == GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_PRO) ? 
 				Mage::app()->getStore()->getRootCategoryId() : 
 					$this->curentCategory()->getId();
         
@@ -450,7 +450,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
             $classes[] = 'parent';
         }
 
-        if ($isFirst && $this->navigationType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_ACCORDION) {
+        if ($isFirst && $this->navigationType() == GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_ACCORDION) {
             $classes[] = 'accordion-active';
         }
 
@@ -461,7 +461,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
         }
 
         switch ($this->navigationType()) {
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN :
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DROPDOWN :
                 if ($this->isAjax()) {
                     $attributes['onchange'] = "GomageNavigation.setNavigationUrl(this.value); return false;";
                 } else {
@@ -522,7 +522,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
 
             break;
 			
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_PLAIN :
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_PLAIN :
                 $linkClass = '';
 				
                 if ($isOutermost && $outermostItemClass) {
@@ -831,7 +831,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
                 }
 			break;
 
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_FOLDING :
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_FOLDING :
                 $htmlLi = '<li';
 				
                 foreach ($attributes as $attrName => $attrValue) {
@@ -881,7 +881,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
                 $html[] = '</li>';
 			break;
 			
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE :
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_IMAGE :
                 $htmlLi = '<li';
 				
                 foreach ($attributes as $attrName => $attrValue) {
@@ -931,7 +931,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
                 $html[] = '</li>';
 			break;
 
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_PRO :
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_PRO :
                 if ($hasActiveChildren && !$noEventAttributes) {
                     $attributes['onmouseover'] = 'toggleMenu(this,1)';
                     $attributes['onmouseout']  = 'toggleMenu(this,0)';
@@ -995,7 +995,7 @@ abstract class GoMage_Navigation_Block_Navigation_Abstract extends Mage_Core_Blo
                 $html[] = '</li>';
 			break;
 			
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_ACCORDION :
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_ACCORDION :
                 $linkClass = '';
 				
                 if ($isOutermost && $outermostItemClass) {

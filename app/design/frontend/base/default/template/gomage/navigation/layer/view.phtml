@@ -13,24 +13,21 @@
 ?>
 <?php if ($this->canShowBlock()) : ?>
 	<?php
-		if ($this->getCheck() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT) {
+		$check = $this->getPosition();
+		
+		if ($check == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT) {
 			$content_area = true;
 		} else {
 			$content_area = false;	 
 		}
 		
 		$gan_bcontent_hide = 'true' === $this->getRequest()->getParam('gan_bcontent_hide'); 
-		$check = $this->getCheck();
-		$this->setBlockSide($check);
     ?>
     <?php if ($this->canShowLayeredBlock($check)) : ?>
 		<?php
 			$enterprise_class = '';
 			
-			if (
-				$check == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT &&
-				Mage::helper('gomage_navigation')->isEnterprise()
-			) {
+			if ($check == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT && Mage::helper('gomage_navigation')->isEnterprise()) {
 				$enterprise_class = 'sidebar-enterprise-block-layered-nav';
 			}
         ?>
@@ -45,7 +42,7 @@
     </div>
     <div class="block-content<?php if ($content_area && $gan_bcontent_hide): ?> gan-hidden<?php endif; ?>" id="gan-block-content-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?>" <?php if ($content_area && $gan_bcontent_hide): ?>style="display:none;"<?php endif; ?> >
 	  	<?php 
-	  	if ( Mage::getStoreConfig('gomage_navigation/filter_settings/applied_values') != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Appliedvalues::NO ):
+	  	if (Mage::getStoreConfig('gomage_navigation/filter_settings/applied_values') != GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Appliedvalues::NO) :
 	  	?>
         	<?php $active_filters = $this->getActiveFilters(); ?>
 			<?php if (!empty($active_filters)) : ?>
@@ -55,9 +52,9 @@
 			    <?php foreach ($active_filters as $active_filter) : ?>
 			        <li>
 			            <span class="label"><?php echo $this->__($active_filter->getName()); ?>:</span> <span class="value"><?php echo $this->stripTags($active_filter->getLabel()); ?></span>
-			            <?php $clearLinkUrl = $active_filter->getClearLinkUrl(); ?>
-			            <?php if ($clearLinkUrl && !Mage::helper('gomage_navigation')->isGoMageSeoBoosterEnabled()) : ?>
-			                <a <?php if ($active_filter->getAjaxEnabled() || ($active_filter->getFilter()->getRequestVarValue() == 'cat')): ?> onclick="GomageNavigation.setNavigationUrl('<?php echo $clearLinkUrl; ?>'); return false;" <?php endif; ?> class="btn-remove" title="<?php echo $this->escapeHtml($active_filter->getFilter()->getClearLinkText()); ?>" href="<?php echo $clearLinkUrl; ?>"><?php echo $this->escapeHtml($active_filter->getFilter()->getClearLinkText()); ?></a>
+			            <?php $remove_url = $active_filter->getRemoveUrl(); ?>
+			            <?php if (!Mage::helper('gomage_navigation')->isGoMageSeoBoosterEnabled()) : ?>
+			                <a <?php if ($active_filter->getAjaxEnabled()): ?> onclick="GomageNavigation.setNavigationUrl('<?php echo $remove_url; ?>'); return false;" <?php endif; ?> class="btn-remove" title="<?php echo $this->escapeHtml($active_filter->getFilter()->getClearLinkText()); ?>" href="<?php echo $remove_url; ?>"><?php echo $this->escapeHtml($active_filter->getFilter()->getClearLinkText()); ?></a>
 			            <?php else : ?>
 			                <a <?php if ($active_filter->getAjaxEnabled() || ($active_filter->getFilter()->getRequestVarValue() == 'cat')) : ?> onclick="GomageNavigation.setNavigationUrl('<?php echo $active_filter->getRemoveUrl(); ?>'); return false;" <?php endif; ?> class="btn-remove" href="<?php echo $active_filter->getRemoveUrl(); ?>" title="<?php echo $this->__('Remove This Item'); ?>"><?php echo $this->__('Remove This Item'); ?></a>
 			            <?php endif; ?>
@@ -65,10 +62,8 @@
 			    <?php endforeach; ?>
 			    </ol>
 			</div>
-			<?php endif; ?>
-			
-		<?php endif; ?>
-		
+			<?php endif; ?>		
+		<?php endif; ?>		
   		
         <?php if($this->canShowOptions()): ?>
             <p class="block-subtitle">
@@ -99,12 +94,8 @@
 						$filter_id = 'advancednavigation-filter-content-' . $filter_block->_filter->getRequestVar();                	
                     ?>			
 					<?php 
-					if (
-						$filter_block->getItemsCount() &&
-						(
-							$filter_block->getAttributeLocation() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::USE_GLOBAL ||
-							$filter_block->getAttributeLocation() == $check
-						)
+					if ($filter_block->getItemsCount() 
+						&& ($filter_block->getAttributeLocation() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::USE_GLOBAL || $filter_block->getAttributeLocation() == $check)
 					) :
 					?>
 						<?php if (Mage::helper('gomage_navigation')->getFilterItemCount($filter_block)) : ?>
@@ -154,7 +145,7 @@
                                 <dd id="<?php echo $filter_id; ?>-<?php echo Mage::helper('gomage_navigation')->getSide($check); ?>" <?php if($filter_block->canShowMinimized(Mage::helper('gomage_navigation')->getSide($check))) : ?> style="display:none;" <?php endif; ?>>
                                     <?php if ($filter_block->canShowResetFirler()) : ?>
                                         <?php 
-                                            $reset = $this->getResetFirlerUrl($filter_block, $filter_block->ajaxEnabled());
+                                            $reset = $this->getClearLinkUrl($filter_block);
                                         ?>
                                         <?php if ($reset) : ?>
                                             <a href="<?php echo $reset; ?>" <?php if ($filter_block->ajaxEnabled()) : ?>onclick="GomageNavigation.setNavigationUrl('<?php echo $reset; ?>'); return false;"<?php endif; ?>>Reset</a>

@@ -321,7 +321,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
                     in_array($attribute->getRangeOptions(), array(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY,
                             GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
                     ) &&
-                    $attribute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
+                    $attribute->getFilterType() == GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT
                 ) {
                     $values                  = explode(',', $value);
                     $query[$param . '_from'] = $values[0];

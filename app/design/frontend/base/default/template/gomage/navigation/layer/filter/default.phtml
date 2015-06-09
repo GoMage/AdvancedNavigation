@@ -11,11 +11,11 @@
  * @since        Class available since Release 2.0
  */
 ?>
-<ol class="image-align-<?php echo $this->getImageAlign();?> <?php if($this->canShowCheckbox()):?>gan-list-checkbox<?php endif;?> <?php if($this->getFilterType()==GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK):?>gan-inblock-list<?php endif;?>" 
-	<?php if($this->getFilterType()==GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK 
+<ol class="image-align-<?php echo $this->getImageAlign();?> <?php if($this->canShowCheckbox()):?>gan-list-checkbox<?php endif;?> <?php if($this->getFilterType()==GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_INBLOCK):?>gan-inblock-list<?php endif;?>" 
+	<?php if($this->getFilterType()==GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_INBLOCK 
 			&& $this->getInblockType()==GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Type_Inblock::TYPE_FIXED):?>style="height:<?php echo $this->getInBlockHeight(); ?>px;"<?php endif;?>
 			
-	<?php if($this->getFilterType()==GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK 
+	<?php if($this->getFilterType()==GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_INBLOCK 
 			&& $this->getInblockType()==GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Type_Inblock::TYPE_AUTO):?>style="max-height:<?php echo $this->getMaxInBlockHeight(); ?>px;"<?php endif; ?>
 		>
 <?php 

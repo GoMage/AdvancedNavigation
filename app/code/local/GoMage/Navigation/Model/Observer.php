@@ -167,9 +167,8 @@ class GoMage_Navigation_Model_Observer
     }
 
     public function checkAjax()
-    {
+    {			
         if ($layout = Mage::getSingleton('core/layout')) {
-
             if (intval(Mage::helper('gomage_navigation')->getRequest()->getParam('ajax'))) {
 				$navBlock = null;
                 $layout->removeOutputBlock('root');
@@ -178,18 +177,19 @@ class GoMage_Navigation_Model_Observer
                 if (!($productsBlock = $layout->getBlock('search_result_list'))) {
                     $productsBlock = $layout->getBlock('product_list');
                 }
+				
                 $product_list_html = ($productsBlock ? Mage::getModel('core/url')->sessionUrlVar($productsBlock->toHtml()) : '');
-
+				
                 if ($layout->getBlock('gomage.catalog.rightnav')) {
                     $navBlock = $layout->getBlock('gomage.catalog.rightnav');
                 } elseif ($layout->getBlock('catalogsearch.leftnav')) {
                     $navBlock = $layout->getBlock('catalogsearch.leftnav');
                 } elseif ($layout->getBlock('catalog.leftnav')) {
                     $navBlock = $layout->getBlock('catalog.leftnav');
-                } elseif ($layout->getBlock('gomage.enterprise.catalogsearch.leftnav')) {
-                    $navBlock = $layout->getBlock('gomage.enterprise.catalogsearch.leftnav');
-                } elseif ($layout->getBlock('gomage.enterprise.catalog.leftnav')) {
-                    $navBlock = $layout->getBlock('gomage.enterprise.catalog.leftnav');
+                } elseif ($layout->getBlock('gomage.enterprisesearch.leftnav')) {
+                    $navBlock = $layout->getBlock('gomage.enterprisesearch.leftnav');
+                } elseif ($layout->getBlock('gomage.enterprisecatalog.leftnav')) {
+                    $navBlock = $layout->getBlock('gomage.enterprisecatalog.leftnav');
                 }
 
                 $LeftnavBlock    = $layout->getBlock('gomage.navigation.left');

@@ -107,7 +107,7 @@
 		<?php endif;?>
 	}
 	<?php if ((Mage::helper('gomage_navigation')->isGomageNavigation() || Mage::helper('gomage_navigation')->isGomageNavigationMenu()) &&
-			  Mage::getStoreConfig('gomage_navigation/menubarsettings/navigation') == GoMage_Navigation_Model_Layer::FILTER_TYPE_PLAIN): ?>
+			  Mage::getStoreConfig('gomage_navigation/menubarsettings/navigation') == GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_PLAIN): ?>
 		<?php $categories = $this->getStoreCategories(); ?>
 		<?php $_size = intval($this->getRootCategory()->getData('navigation_pw_m_bsize')); ?>		
 		<?php if ($_size === 0 && $this->getRootCategory()->getData('navigation_pw_m_bsize') != ''): ?>
@@ -291,7 +291,7 @@ var GomageNavigation = new GomageNavigationClass({
 	<?php if (Mage::helper('gomage_navigation')->isGoMageSeoBoosterEnabled()) : ?>
 	gomage_seobooster_enabled: true,
 	<?php endif; ?>
-	<?php if (Mage::helper('gomage_navigation/config')->isStatic()) : ?>
+	<?php if (Mage::helper('gomage_navigation/config')->isCMSPage()) : ?>
 	static_conten_block: <?php echo json_encode(Mage::helper('gomage_navigation/config')->staticContenBlock()); ?>,
 	<?php endif; ?>
 });

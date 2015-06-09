@@ -21,7 +21,7 @@ class GoMage_Navigation_Block_Navigation_CMS_Content extends GoMage_Navigation_B
 		if (
 			$this->isGMN() && 
 			$this->canDisplay() &&
-			$this->isStatic()
+			$this->isCMSPage()
 		) {			
 			$this->setTemplate('gomage/navigation/catalog/navigation/content.phtml')
 				->unsetData('cache_lifetime')

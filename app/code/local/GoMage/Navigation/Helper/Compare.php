@@ -2,6 +2,8 @@
 /**
  * GoMage Advanced Navigation Extension
  *
+ * @deprecated
+ *
  * @category     Extension
  * @copyright    Copyright (c) 2010-2014 GoMage (http://www.gomage.com)
  * @author       GoMage

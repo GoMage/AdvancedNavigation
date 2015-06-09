@@ -45,15 +45,15 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
 		$where		= array();
 		
 		switch ($filter->getAttributeModel()->getFilterType()) {	
-			case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT) :
+			case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT) :
 				$from		= (isset($value['from']) && $value['from']) ? $value['from'] : 0;
 				$to			= isset($value['to']) ? $value['to'] : 0;
 				$where[]	= $tableAlias . ".value >= " . $from . ($to > 0 ? ' AND ' . sprintf("{$tableAlias}.value <= %d", $to) : '');
 			break;
 	
-			case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER) :
-			case (GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT) :
-			case (GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER) :
+			case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER) :
+			case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER_INPUT) :
+			case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT_SLIDER) :
 				if ( Mage::helper('gomage_navigation')->isMobileDevice() ) {
 					foreach((array)$value as $_value){
 						$where[] = sprintf("{$tableAlias}.value >= %s", ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf("{$tableAlias}.value < %d", ($_value['range'] * $_value['index']));

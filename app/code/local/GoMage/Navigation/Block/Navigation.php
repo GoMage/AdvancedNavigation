@@ -81,7 +81,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 if (Mage::helper('gomage_navigation')->isGomageNavigationMenu()) {
                     $this->_type_navigation = Mage::getStoreConfig('gomage_navigation/menubarsettings/navigation');
                 } else {
-                    $this->_type_navigation = GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT;
+                    $this->_type_navigation = GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT;
                 }
                 break;
             case self::LEFT_COLUMN :
@@ -131,7 +131,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
 
     public function getIsAjax()
     {
-        if ($this->getTypeNavigation() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_PRO) {
+        if ($this->getTypeNavigation() == GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_PRO) {
             return false;
         }
 
@@ -815,7 +815,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
             $classes[] = 'parent';
         }
 
-        if ($isFirst && $this->getTypeNavigation() == GoMage_Navigation_Model_Layer::FILTER_TYPE_ACCORDION) {
+        if ($isFirst && $this->getTypeNavigation() == GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_ACCORDION) {
             $classes[] = 'accordion-active';
         }
 
@@ -826,7 +826,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
         }
 
         switch ($this->getTypeNavigation()) {
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN:
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DROPDOWN:
 
                 if ($this->getIsAjax()) {
                     $attributes['onchange'] = "GomageNavigation.setNavigationUrl(this.value); return false;";
@@ -884,7 +884,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 }
 
                 break;
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_PLAIN:
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_PLAIN:
 
                 $linkClass = '';
                 if ($isOutermost && $outermostItemClass) {
@@ -1170,7 +1170,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
 
                 break;
 
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_FOLDING:
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_FOLDING:
 
                 $htmlLi = '<li';
                 foreach ($attributes as $attrName => $attrValue) {
@@ -1219,7 +1219,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 }
                 $html[] = '</li>';
                 break;
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE:
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_IMAGE:
 
                 $htmlLi = '<li';
                 foreach ($attributes as $attrName => $attrValue) {
@@ -1268,7 +1268,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 $html[] = '</li>';
                 break;
 
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_PRO:
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_PRO:
 
 
                 if ($hasActiveChildren && !$noEventAttributes) {
@@ -1327,7 +1327,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
                 }
                 $html[] = '</li>';
                 break;
-            case GoMage_Navigation_Model_Layer::FILTER_TYPE_ACCORDION:
+            case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_ACCORDION:
                 $linkClass = '';
                 if ($isOutermost && $outermostItemClass) {
                     $linkClass = $outermostItemClass;
@@ -1661,7 +1661,7 @@ class GoMage_Navigation_Block_Navigation extends Mage_Core_Block_Template
             case self::LEFT_COLUMN :
             case self::RIGTH_COLUMN :
             case self::CONTENT_COLUMN :
-                if ($this->getTypeNavigation() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_PRO) {
+                if ($this->getTypeNavigation() == GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_PRO) {
                     $_root_category = Mage::app()->getStore()->getRootCategoryId();
                 } elseif (Mage::registry('current_category')) {
                     $_root_category = Mage::registry('current_category')->getId();

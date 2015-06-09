@@ -243,7 +243,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
     			for (var i = 0; i < options.length; i++) {
     				e = options[i];
     				
-    				if(e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER.'){
+    				if(e.value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT.' || e.value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER.' || e.value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER_INPUT.' || e.value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT_SLIDER.'){
     					e.parentNode.removeChild(e);
     				}
     			};
@@ -251,7 +251,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
 				for (var i = 0; i < options.length; i++) {
     				e = options[i];
     				
-					if(e.value == ' . GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE . '){
+					if(e.value == ' . GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_IMAGE . '){
     					e.parentNode.removeChild(e);
     				}
     			};
@@ -266,25 +266,25 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
         			if(!is_price){
 	        			
 	        			var option = document.createElement("option");
-						option.value = "'.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT.'";
+						option.value = "'.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT.'";
 						option.innerHTML = "'.$helper->__('Input').'";
 						
 						$("filter_type").appendChild(option);
 						
 						var option = document.createElement("option");
-						option.value = "'.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER.'";
+						option.value = "'.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER.'";
 						option.innerHTML = "'.$helper->__('Slider').'";
 						
 						$("filter_type").appendChild(option);
 						
 						var option = document.createElement("option");
-						option.value = "'.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT.'";
+						option.value = "'.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER_INPUT.'";
 						option.innerHTML = "'.$helper->__('Slider and Input').'";
 						
 						$("filter_type").appendChild(option);
 												
 						var option = document.createElement("option");
-						option.value = "'.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER.'";
+						option.value = "'.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT_SLIDER.'";
 						option.innerHTML = "'.$helper->__('Input and Slider').'";
 						
 						$("filter_type").appendChild(option);
@@ -303,7 +303,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
         				
         				e = options[i];
         				
-        				if(e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT.' || e.value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER. '){
+        				if(e.value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT.' || e.value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER.' || e.value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER_INPUT.' || e.value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT_SLIDER. '){
         					
         					e.parentNode.removeChild(e);
         					
@@ -317,7 +317,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
         	Event.observe("filter_type", "change", function(){
                     var value = $("filter_type").value;                    
                     var elements = eval('.$this->_getAssociatedElements().');
-                    if (value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE.'){
+                    if (value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_IMAGE.'){
                     	for (var i = 0; i < elements.length; i++) {
                     		var id = elements[i]; 
                             if ($(id)){
@@ -366,7 +366,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
                         if ($(id)){
                         	$(id).up("td").up("tr").hide();	
 						}
-    				}else if (value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK.'){
+    				}else if (value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_INBLOCK.'){
     					for (var i = 0; i < elements.length; i++) {
                     		var id = elements[i]; 
                             if ($(id)){
@@ -438,7 +438,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
                         	$(id).up("td").up("tr").hide();	
 						}
     				}
-    				else if (value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER_INPUT.' || value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_INPUT_SLIDER.'){
+    				else if (value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER_INPUT.' || value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT_SLIDER.'){
     					for (var i = 0; i < elements.length; i++) {
                     		var id = elements[i]; 
                             if ($(id)){
@@ -489,7 +489,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
 						}
 						
     				}
-    				else if (value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_SLIDER.'){
+    				else if (value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER.'){
     					for (var i = 0; i < elements.length; i++) {
                     		var id = elements[i]; 
                             if ($(id)){
@@ -539,7 +539,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Main 
                         	$(id).up("td").up("tr").show();	
 						}
     				}
-    				else if (value == '.GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT.'){
+    				else if (value == '.GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT.'){
     					for (var i = 0; i < elements.length; i++) {
                     		var id = elements[i]; 
                             if ($(id)){

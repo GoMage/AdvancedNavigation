@@ -21,7 +21,7 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Stock extends Mag
         $table = Mage::getSingleton('core/resource')->getTableName('cataloginventory/stock_status');
 
         $manageStock = Mage::getStoreConfig(Mage_CatalogInventory_Model_Stock_Item::XML_PATH_MANAGE_STOCK);  
-        if($val == GoMage_Navigation_Model_Layer_Filter_Stock::IN_STOCK)
+        if($val == GoMage_Navigation_Model_Catalog_Layer_Filter_Stock::IN_STOCK)
         {
             $cond = array( 
                 "{$table}.use_config_manage_stock = 0 AND {$table}.manage_stock=1 AND {$table}.is_in_stock=1",
@@ -41,7 +41,7 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Stock extends Mag
             );
                 
         }
-        elseif($val == GoMage_Navigation_Model_Layer_Filter_Stock::OUT_OF_STOCK)
+        elseif($val == GoMage_Navigation_Model_Catalog_Layer_Filter_Stock::OUT_OF_STOCK)
         {
             $cond = array(
                 "{$table}.use_config_manage_stock = 0 AND {$table}.manage_stock=1 AND {$table}.is_in_stock=0",

@@ -22,7 +22,7 @@ class GoMage_Navigation_Block_Adminhtml_Config_Form_Renderer_Navigationtype exte
                 Event.observe('{$element->getHtmlId()}', 'change', function(){
                     var value = $('{$element->getHtmlId()}').value;                    
                     var elements = eval({$this->_getAssociatedElements()});
-                    if (value == ".GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE."){
+                    if (value == ".GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_IMAGE."){
                     	for (var i = 0; i < elements.length; i++) {
                     		var id = '{$this->_getBasePartName($element)}' + elements[i]; 
                             if ($(id)){
@@ -43,7 +43,7 @@ class GoMage_Navigation_Block_Adminhtml_Config_Form_Renderer_Navigationtype exte
                         if ($(id)){
                         	$(id).up('td').up('tr').hide();	
 						}
-    				}else if (value == ".GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK."){
+    				}else if (value == ".GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_INBLOCK."){
     					for (var i = 0; i < elements.length; i++) {
                     		var id = '{$this->_getBasePartName($element)}' + elements[i]; 
                             if ($(id)){

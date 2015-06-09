@@ -39,7 +39,7 @@ class GoMage_Navigation_Helper_Url extends Mage_Core_Helper_Url
 				'_use_rewrite'	=> true,
 				'_query'		=> array(),
 				'_secure'		=> true,
-				'_direct'		=> $urlPath
+				'_direct'		=> ltrim($urlPath, '/')
 			),
 			$params
 		);
@@ -61,7 +61,7 @@ class GoMage_Navigation_Helper_Url extends Mage_Core_Helper_Url
 	
 	public function categoryFilterUrl(Varien_Object $category, $params = array())
 	{		
-		if (empty($params['_direct']) && !Mage::helper('gomage_navigation/config')->isStatic()) {
+		if (empty($params['_direct']) && !Mage::helper('gomage_navigation/config')->isCMSPage()) {
 			$params['_direct'] = null;
 		}
 		
@@ -166,7 +166,7 @@ class GoMage_Navigation_Helper_Url extends Mage_Core_Helper_Url
                             GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO
 						)
                     ) &&
-                    $filter_attributesibute->getFilterType() == GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT
+                    $filter_attributesibute->getFilterType() == GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT
                 ) {
                     $values						= explode(',', $value);
                     $_query[$param . '_from']	= $values[0];

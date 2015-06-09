@@ -21,7 +21,7 @@ class GoMage_Navigation_Block_Navigation_CMS_Left extends GoMage_Navigation_Bloc
 		if (
 			$this->isGMN() && 
 			$this->canDisplay() &&
-			$this->isStatic()
+			$this->isCMSPage()
 		) {			
 			$this->setTemplate('gomage/navigation/catalog/navigation/left.phtml')
 				->unsetData('cache_lifetime')

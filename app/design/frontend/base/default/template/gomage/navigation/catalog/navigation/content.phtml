@@ -72,12 +72,12 @@ $_menu = $this->renderCategoriesMenuHtml(0, 'level-top');
     <div class="block-content" id="advancednavigation-filter-content-content-category" <?php if ($this->canShowMinimized()) : ?>style="display: none;"<?php endif; ?>>
         <div class="gan-wrapper gan-content" style="background-color: <?php echo $this->columnColor(); ?>;" >
             <?php switch ($this->navigationType()) :
-                	case GoMage_Navigation_Model_Layer::FILTER_TYPE_DROPDOWN : ?>
+                	case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DROPDOWN : ?>
                         <ul id="gan_nav_content_dropdown" class="gan-dropdown-list">
                             <?php echo $_menu; ?>
                         </ul>
                 <?php break; ?>
-                <?php case GoMage_Navigation_Model_Layer::FILTER_TYPE_PLAIN : ?>
+                <?php case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_PLAIN : ?>
                         <ul id="gan_nav_content" class="gan-plain-list">
                             <?php echo $_menu; ?>
                         </ul>
@@ -85,17 +85,17 @@ $_menu = $this->renderCategoriesMenuHtml(0, 'level-top');
                             <?php Mage::getBlockSingleton('gomage_navigation/ajax')->addEvalJs("mainNav('gan_nav_content', {'show_delay':'100','hide_delay':'100'});"); ?>
                         <?php endif; ?>
                 <?php break; ?>
-                <?php case GoMage_Navigation_Model_Layer::FILTER_TYPE_FOLDING : ?>
+                <?php case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_FOLDING : ?>
                         <ul id="gan_nav_content" class="gan-folding-list <?php if($this->canShowCheckbox() && $this->isAjax()) : ?>gan-list-checkbox<?php endif; ?>">
                             <?php echo $_menu; ?>
                         </ul>
                 <?php break; ?>
-                <?php case GoMage_Navigation_Model_Layer::FILTER_TYPE_IMAGE : ?>
+                <?php case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_IMAGE : ?>
                         <ul id="gan_nav_content" class="gan-image-list <?php if ($this->imageAlign()) : ?>image-align-<?php echo $this->imageAlign(); ?><?php endif; ?> <?php if ($this->canShowCheckbox() && $this->isAjax()) : ?>gan-list-checkbox<?php endif; ?> <?php if (!$this->canShowImageName()) : ?>no-titles<?php endif; ?>">
 							<?php echo $_menu; ?>
                         </ul>
                 <?php break; ?>
-                <?php case GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_PRO : ?>
+                <?php case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_PRO : ?>
                         <ul id="gan_nav_content" class="gan-defaultpro-list">
 							<?php echo $_menu; ?>
                         </ul>
@@ -103,7 +103,7 @@ $_menu = $this->renderCategoriesMenuHtml(0, 'level-top');
                             <?php Mage::getBlockSingleton('gomage_navigation/ajax')->addEvalJs("mainNav('gan_nav_content', {'show_delay':'100','hide_delay':'100'});"); ?>
                         <?php endif; ?>
                 <?php break; ?>
-                <?php case GoMage_Navigation_Model_Layer::FILTER_TYPE_DEFAULT_INBLOCK : ?>
+                <?php case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT_INBLOCK : ?>
                         <ul id="gan_nav_content" class="gan-inblock-list gan-default-list <?php if ($this->canShowCheckbox() && $this->isAjax()) : ?>gan-list-checkbox<?php endif; ?>" style="
 							<?php 
                             if (
@@ -115,7 +115,7 @@ $_menu = $this->renderCategoriesMenuHtml(0, 'level-top');
                             <?php echo $_menu; ?>
                         </ul>
                 <?php break; ?>
-                <?php case GoMage_Navigation_Model_Layer::FILTER_TYPE_ACCORDION : ?>
+                <?php case GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_ACCORDION : ?>
                         <ul id="gan_nav_content" class="gan-accordion-list <?php if ($this->canShowCheckbox() && $this->isAjax()) : ?>gan-list-checkbox<?php endif; ?>">
                             <?php echo $_menu; ?>
                         </ul>
