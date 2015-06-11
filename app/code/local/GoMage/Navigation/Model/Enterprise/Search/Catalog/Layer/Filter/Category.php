@@ -12,6 +12,8 @@
  */
 class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Category extends Enterprise_Search_Model_Catalog_Layer_Filter_Category
 {
+	protected $_resource;
+	
     /**
      * @var array
      */
@@ -224,6 +226,20 @@ class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Category ex
 	public function getRequestVarValue()
     {
         return $this->_requestVar;
+    }
+	
+	/**
+     * Retrieve resource instance
+     *
+     * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Layer_Filter_Category
+     */
+    protected function _getResource()
+    {
+        if (is_null($this->_resource)) {
+            $this->_resource = Mage::getModel('gomage_navigation/resource_eav_mysql4_layer_filter_category');
+        }
+		
+        return $this->_resource;
     }
 	
 	private function getChildrenCategories(array $selected = array())

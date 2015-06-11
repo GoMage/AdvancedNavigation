@@ -12,6 +12,8 @@
  */
 class GoMage_Navigation_Model_Catalog_Layer_Filter_Stock extends Mage_Catalog_Model_Layer_Filter_Abstract
 {
+	protected $_resource;
+   
     const IN_STOCK     = 1;
     const OUT_OF_STOCK = 2;
 
@@ -194,7 +196,7 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Stock extends Mage_Catalog_Mo
     /**
      * Retrieve resource instance
      *
-     * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute
+     * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Layer_Filter_Stock
      */
     protected function _getResource()
     {

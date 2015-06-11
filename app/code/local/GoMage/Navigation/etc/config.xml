@@ -124,10 +124,13 @@
             	<rewrite>
             		<attribute>GoMage_Navigation_Model_Resource_Eav_Mysql4_Entity_Attribute</attribute>
 	            	<product_collection>GoMage_Navigation_Model_Resource_Eav_Mysql4_Product_Collection</product_collection>
-	            	<layer_filter_attribute>GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute</layer_filter_attribute>
+	            	
+					<!--
+					<layer_filter_attribute>GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute</layer_filter_attribute>
 	            	<layer_filter_price>GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price</layer_filter_price>
 	            	<layer_filter_decimal>GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal</layer_filter_decimal>
 	            	<layer_filter_category>GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Category</layer_filter_category>
+					-->
 	            </rewrite>
             </catalog_resource_eav_mysql4>
             <catalogsearch>

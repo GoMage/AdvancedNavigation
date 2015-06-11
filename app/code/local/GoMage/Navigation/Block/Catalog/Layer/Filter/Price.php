@@ -89,7 +89,7 @@ class GoMage_Navigation_Block_Catalog_Layer_Filter_Price extends Mage_Catalog_Bl
 
     public function ajaxEnabled()
     {
-        return (bool) $this->getAttributeModel()->getIsAjax();
+        return (int) $this->getAttributeModel()->getIsAjax();
     }
 
     public function getPopupText()

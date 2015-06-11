@@ -79,7 +79,7 @@ class GoMage_Navigation_Block_Enterprise_Search_Catalog_Layer_Filter_Decimal ext
 	
 	public function ajaxEnabled()
     {
-        return (bool) $this->getAttributeModel()->getIsAjax();
+        return (int) $this->getAttributeModel()->getIsAjax();
     }
 	
 	public function canShowMinimized($side)

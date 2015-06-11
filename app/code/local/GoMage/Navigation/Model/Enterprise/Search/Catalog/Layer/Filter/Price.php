@@ -12,7 +12,15 @@
  */
 class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Price extends Enterprise_Search_Model_Catalog_Layer_Filter_Price
 {
+	protected $_resource;
+	
     protected $_selected_options;
+	
+	public function __construct()
+    {
+        parent::__construct();
+    	echo '<h1>'.__CLASS__.'</h1>';
+    }
 	
 	/**
      * Initialize filter items
@@ -345,6 +353,20 @@ class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Price exten
             $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
         return $data;
+    }
+	
+	/**
+     * Retrieve resource instance
+     *
+     * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Layer_Filter_Price
+     */
+    protected function _getResource()
+    {
+        if (is_null($this->_resource)) {
+            $this->_resource = Mage::getModel('gomage_navigation/resource_eav_mysql4_layer_filter_price');
+        }
+		
+        return $this->_resource;
     }
 	
     /**

@@ -117,7 +117,7 @@ class GoMage_Navigation_Block_Catalog_Layer_Filter_Category extends Mage_Catalog
 
     public function ajaxEnabled()
     {
-        return (bool) Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/ajax_enabled');
+        return (int) Mage::getStoreConfigFlag('gomage_navigation/' . $this->getConfigTab() . '/ajax_enabled');
     }
 
     public function canShowMinimized($side)

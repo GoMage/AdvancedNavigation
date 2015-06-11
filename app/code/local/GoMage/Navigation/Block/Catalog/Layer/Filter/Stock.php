@@ -74,7 +74,7 @@ class GoMage_Navigation_Block_Catalog_Layer_Filter_Stock extends Mage_Catalog_Bl
 
     public function ajaxEnabled()
     {
-        return (bool) Mage::getStoreConfigFlag('gomage_navigation/stock/ajax_enabled');
+        return (int) Mage::getStoreConfigFlag('gomage_navigation/stock/ajax_enabled');
     }
 
     public function canShowMinimized($side)

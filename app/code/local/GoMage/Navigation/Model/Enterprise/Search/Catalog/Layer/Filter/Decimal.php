@@ -12,6 +12,8 @@
  */
 class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Decimal extends Enterprise_Search_Model_Catalog_Layer_Filter_Decimal
 {
+	protected $_resource;
+	
 	/**
      * Initialize filter items
      *
@@ -231,6 +233,20 @@ class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Decimal ext
         }
 
         return $data;
+    }
+	
+	/**
+     * Retrieve resource instance
+     *
+     * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal
+     */
+    protected function _getResource()
+    {
+        if (is_null($this->_resource)) {
+            $this->_resource = Mage::getModel('gomage_navigation/resource_eav_mysql4_layer_filter_decimal');
+        }
+		
+        return $this->_resource;
     }
 		
 	/**

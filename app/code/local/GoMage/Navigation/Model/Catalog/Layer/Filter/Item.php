@@ -1,5 +1,4 @@
 <?php
-
 /**
  * GoMage Advanced Navigation Extension
  *
@@ -55,19 +54,48 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Item extends Mage_Catalog_Mod
      */
     public function getRemoveUrl($ajax = false)
     {
-        $query                  = array($this->getFilter()->getRequestVarValue() => $this->getFilter()->getResetValue($this->getValue()));
-        $params['_nosid']       = true;
-        $params['_current']     = true;
-        $params['_secure']		= true;
-		$params['_use_rewrite'] = true;
-        $params['_query']       = $query;
-        $params['_escape']      = false;
-
-        $params['_query']['ajax'] = null;
-
-        if ($ajax) {
-            $params['_query']['ajax'] = true;
-        }
+		$filter_model		= $this->getFilter();			
+		$filter_request_var	= $filter_model->getRequestVarValue();
+		
+		$filter_reset_val	= array(
+			$filter_request_var	=> $this->getFilter()->getResetValue($this->getValue()),
+		);
+		
+		if ($filter_model->hasAttributeModel()) {
+			$filter_type = $filter_model->getAttributeModel()->getFilterType();
+			
+			if (
+				in_array(
+					$filter_type,
+					array(
+						GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT,
+						GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER,
+						GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER_INPUT,
+						GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT_SLIDER
+					)
+				) &&
+				!Mage::helper('gomage_navigation')->isMobileDevice()
+			) {
+				$filter_reset_val = array(
+					$filter_request_var . '_from'	=> null, 
+					$filter_request_var . '_to'		=> null
+				);
+			}
+		}
+		
+		$params = array(
+			'_nosid'		=> true,
+			'_current'		=> true,
+			'_secure'		=> true,
+			'_use_rewrite'	=> true,
+			'_query'		=> array(
+				'ajax'	=> ($ajax) ? $ajax : null,
+			),
+			'_escape'		=> false,
+			
+		);
+		
+		$params['_query'] = array_merge($params['_query'], $filter_reset_val);
 		
         return Mage::helper('gomage_navigation')->getFilterUrl('*/*/*', $params);
     }
@@ -77,6 +105,7 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Item extends Mage_Catalog_Mod
      *
      * @return false|string
      */
+	/*todo*/
 	public function getClearLinkUrl()
     {
         if (
@@ -162,11 +191,9 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Item extends Mage_Catalog_Mod
         }
     }
 	
+	/*****/
 	
-	
-	
-	
-	
+	/*todo*/
     public function getRemoveUrlParams()
     {
         $query                  = array($this->getFilter()->getRequestVarValue() => $this->getFilter()->getResetValue($this->getValue()));
@@ -251,6 +278,7 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Item extends Mage_Catalog_Mod
         return $params;
     }
 	
+	/*todo*/
     public function getCleanUrl($type = false)
     {
         $url = Mage::helper('gomage_navigation')->getFilterUrl(
@@ -271,7 +299,8 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Item extends Mage_Catalog_Mod
 
         return $url;
     }
-
+	
+	/*todo*/
     public function getUrlParams($stock = false)
     {
         $query = array(

@@ -74,7 +74,7 @@ class GoMage_Navigation_Block_Enterprise_Search_Catalog_Layer_Filter_Stock exten
 
     public function ajaxEnabled()
     {
-        return (bool) Mage::getStoreConfigFlag('gomage_navigation/stock/ajax_enabled');
+        return (int) Mage::getStoreConfigFlag('gomage_navigation/stock/ajax_enabled');
     }
 
     public function canShowMinimized($side)

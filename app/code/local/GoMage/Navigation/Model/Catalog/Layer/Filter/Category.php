@@ -10,8 +10,10 @@
  * @version      Release: 4.6
  * @since        Class available since Release 1.0
  */
- class GoMage_Navigation_Model_Catalog_Layer_Filter_Category extends Mage_Catalog_Model_Layer_Filter_Category
+class GoMage_Navigation_Model_Catalog_Layer_Filter_Category extends Mage_Catalog_Model_Layer_Filter_Category
 {
+	protected $_resource;
+	
     /**
      * @var array
      */
@@ -243,6 +245,20 @@
         return $this->_requestVar;
     }
 	
+	/**
+     * Retrieve resource instance
+     *
+     * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Layer_Filter_Category
+     */
+    protected function _getResource()
+    {
+        if (is_null($this->_resource)) {
+            $this->_resource = Mage::getModel('gomage_navigation/resource_eav_mysql4_layer_filter_category');
+        }
+		
+        return $this->_resource;
+    }
+	
 	protected function _addChildsCategory($cat_id, $request)
     {
         $cats   = array();
@@ -264,19 +280,6 @@
         }
 		
         return implode(',', $cats);
-    }
-	
-	/**
-     * Retrieve resource instance
-     *
-     * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute
-     */
-    protected function _getResource()
-    {
-        if (is_null($this->_resource)) {
-            $this->_resource = Mage::getResourceModel('catalog/layer_filter_category');
-        }
-        return $this->_resource;
     }
 	
 	protected function _renderCategoryList($category, $category_list_ids)
