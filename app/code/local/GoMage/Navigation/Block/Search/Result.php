@@ -10,7 +10,7 @@
  * @version      Release: 4.6
  * @since        Class available since Release 1.0
  */
-
+/*todo*/
 class GoMage_Navigation_Block_Search_Result extends Mage_CatalogSearch_Block_Result
 {
     public function setListCollection() {
@@ -23,18 +23,15 @@ class GoMage_Navigation_Block_Search_Result extends Mage_CatalogSearch_Block_Res
     protected function _getProductCollection()
     {
         if (is_null($this->_productCollection)) {
-        	
-        	if ( Mage::helper('gomage_navigation')->isEnterprise() )
-        	{
-        		$this->_productCollection = Mage::getSingleton('enterprise_search/search_layer')->getProductCollection();	
-        	}
-        	else 
-        	{
-        		$this->_productCollection = Mage::getSingleton('catalogsearch/layer')->getProductCollection();
+			$helper = Mage::helper('enterprise_search');
+			
+        	if ($helper->isThirdPartSearchEngine() && $helper->isActiveEngine()){
+        		$this->_productCollection = Mage::getSingleton('gomage_navigation/enterprise_search_search_layer')->getProductCollection();	
+        	} else {
+        		$this->_productCollection = Mage::getSingleton('gomage_navigation/catalogsearch_layer')->getProductCollection();
         	}
         }
 
         return $this->_productCollection;
-    }
-        
+    }      
 }

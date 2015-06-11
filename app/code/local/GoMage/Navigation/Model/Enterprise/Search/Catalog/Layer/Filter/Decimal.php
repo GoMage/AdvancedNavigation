@@ -27,8 +27,7 @@ class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Decimal ext
                 $itemData['label'],
                 $itemData['value'],
                 $itemData['count'],
-                $itemData['active'], 
-                isset($itemData['from_to']) ? $itemData['from_to'] : ''
+                $itemData['active']
             );
         }
         
@@ -45,15 +44,14 @@ class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Decimal ext
      * @param   int $count
      * @return  Mage_Catalog_Model_Layer_Filter_Item
      */
-    protected function _createItem($label, $value, $count = 0, $status = false, $from_to = '')
+    protected function _createItem($label, $value, $count = 0, $status = false)
     {
         return Mage::getModel('gomage_navigation/catalog_layer_filter_item')
             ->setFilter($this)
             ->setLabel($label)
             ->setValue($value)
             ->setCount($count)
-            ->setActive($status)
-            ->setFromTo($from_to);
+            ->setActive($status);
     }
 
     /**
@@ -117,7 +115,7 @@ class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Decimal ext
                     }
 					
                     if (!empty($value)) {
-                        $this->setRange((int)$value[0]['range']);
+                        $this->setRange((int) $value[0]['range']);
                         $this->_getResource()->applyFilterToCollection($this, $value);
 
                         foreach ($value as $_value) {
@@ -197,61 +195,44 @@ class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Decimal ext
      */
     protected function _getItemsData()
     {
-        $key			= $this->_getCacheKey();
-        $selected		= $this->_getSelectedOptions();
-        $data			= $this->getLayer()->getAggregator()->getCacheData($key);
-        $filter_mode	= Mage::helper('gomage_navigation')->isGomageNavigation();
-
-        if ($data === null) {
-            $range    = $this->getRange();
-            $dbRanges = $this->getRangeItemCounts($range);
-            $data     = array();
-
-            if ($selected) {
-                foreach ($selected as $value) {
-                    $value = explode(',', $value);
-
-                    $dbRanges[$value[0]] = 0;
-                }
+		$selected		= $this->_getSelectedOptions();
+		$range			= $this->getRange();
+        $attribute_code	= $this->getAttributeModel()->getAttributeCode();
+        $facets			= $this->getLayer()->getProductCollection()->getFacetedData('attr_decimal_' . $attribute_code);
+        $data			= array();
+		
+        if (!empty($facets)) {
+            foreach ($facets as $key => $count) {
+                preg_match('/TO ([\d\.]+)\]$/', $key, $rangeKey);
+                $rangeKey	= $rangeKey[1] / $range;
+				$rangeKey	= round($rangeKey);
+				$active		= false;
+                $value		= $rangeKey . ',' . $range;
 				
-                ksort($dbRanges);
-            }
-
-            foreach ($dbRanges as $index => $count) {
-                $value = $index . ',' . $range;
-
-                if (in_array($value, $selected) && !$filter_mode) {
-                    continue;
-                }
-
-                if (in_array($value, $selected) && $filter_mode) {
+				if (in_array($value, $selected)) {
                     $active = true;
                 } else {
                     $active = false;
 
                     if (!empty($selected) && $this->getAttributeModel()->getFilterType() != GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DROPDOWN) {
-                        $value = implode(',', array_merge($selected, (array)$value));
+                        $value = implode(',', array_merge($selected, (array) $value));
                     }
                 }
-
-                $data[] = array(
-                    'label'  => $this->_renderItemLabel($range, $index),
-                    'value'  => $value,
-                    'count'  => $count,
-                    'active' => $active,
-                );
+				
+				if ($count > 0) {                 
+                    $data[] = array(
+                        'label'		=> $this->_renderItemLabel($range, $rangeKey),
+                        'value'		=> $value,
+                        'count'		=> $count,
+						'active'	=> $active,
+                    );
+                }
             }
-
-            $tags = array(
-                Mage_Catalog_Model_Product_Type_Price::CACHE_TAG,
-            );
-            $tags = $this->getLayer()->getStateTags($tags);
-            $this->getLayer()->getAggregator()->saveCacheData($data, $key, $tags);
         }
 
         return $data;
     }
-	
+		
 	/**
      * Get filter value for reset current filter state
      *
@@ -280,6 +261,41 @@ class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Decimal ext
         }
 
         return null;
+    }
+	
+	/**
+     * Add params to faceted search
+     *
+     * @return Enterprise_Search_Model_Catalog_Layer_Filter_Decimal
+     */
+    public function addFacetCondition()
+    {
+        $range    = $this->getRange();
+        $maxValue = $this->getMaxValue();
+        
+		if ($maxValue > 0) {
+            $facets = array();
+			
+			if (!($maxValue % $range)) {
+				$maxValue = $maxValue + 0.001;
+			}
+			
+            $facetCount = ceil($maxValue / $range);
+            
+			for ($i = 0; $i < $facetCount; $i++) {
+                $facets[] = array(
+                    'from' => $i * $range,
+                    'to'   => ($i + 1) * $range - 0.001
+                );
+            }
+
+            $attributeCode = $this->getAttributeModel()->getAttributeCode();
+            $field         = 'attr_decimal_' . $attributeCode;
+
+            $this->getLayer()->getProductCollection()->setFacetCondition($field, $facets);
+        }
+
+        return $this;
     }
 	
 	/*****/

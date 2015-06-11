@@ -1,5 +1,4 @@
 <?php
-
 /**
  * GoMage Advanced Navigation Extension
  *
@@ -13,7 +12,6 @@
  */
 class GoMage_Navigation_Model_Resource_Eav_Mysql4_Collection extends Mage_CatalogSearch_Model_Mysql4_Fulltext_Collection
 {
-
     public function getSelectCountSql()
     {
         $select = parent::getSelectCountSql();

@@ -12,24 +12,17 @@
  */
 class GoMage_Navigation_Model_Enterprise_Search_Resource_Collection extends Enterprise_Search_Model_Resource_Collection
 {
-
-    public function getSearchedEntityIds()
-    {
-        return $this->_searchedEntityIds;
-    }
-
-    protected function _beforeLoad()
-    {
-        $this->getSelect()->group('e.entity_id');
-        return parent::_beforeLoad();
-    }
-	
 	public function getSelectCountSql()
     {
         $select = parent::getSelectCountSql();
         $select->reset(Zend_Db_Select::GROUP);
 
         return $select;
+    }
+
+    public function getSearchedEntityIds()
+    {
+        return $this->_searchedEntityIds;
     }
 
     public function addCategoriesFilter(array $category_ids)
@@ -130,5 +123,11 @@ class GoMage_Navigation_Model_Enterprise_Search_Resource_Collection extends Ente
         }
 
         return $this;
+    }
+	
+	protected function _beforeLoad()
+    {
+        $this->getSelect()->group('e.entity_id');
+        return parent::_beforeLoad();
     }
 }

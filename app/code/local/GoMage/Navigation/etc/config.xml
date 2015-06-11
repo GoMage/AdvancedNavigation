@@ -58,7 +58,10 @@
 	       			<layer>GoMage_Navigation_Block_Catalogsearch_Layer</layer>
 					-->
 					
-	       			<result>GoMage_Navigation_Block_Search_Result</result>
+					<!--todo-->
+	       			<!--
+					<result>GoMage_Navigation_Block_Search_Result</result>
+					-->
 	       		</rewrite>
 	       	</catalogsearch>
 			<enterprise_search>
