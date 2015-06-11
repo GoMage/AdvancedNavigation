@@ -16,12 +16,6 @@ class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Price exten
 	
     protected $_selected_options;
 	
-	public function __construct()
-    {
-        parent::__construct();
-    	echo '<h1>'.__CLASS__.'</h1>';
-    }
-	
 	/**
      * Initialize filter items
      *
