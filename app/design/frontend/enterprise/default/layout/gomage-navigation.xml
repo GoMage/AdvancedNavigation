@@ -22,7 +22,7 @@
 	<catalogsearch_result_index>
         <reference name="left">
             <remove name="enterprisesearch.leftnav"/>
-            <block type="gomage_navigation/enterprise_search_catalogsearch_layer" name="gomage.enterprisesearch.leftnav" before="-" />
+            <block type="gomage_navigation/enterprise_search_catalogsearch_layer" name="gomage.enterprisecatalog.leftnav" before="-" />
         </reference>
     </catalogsearch_result_index>
 	<catalog_product_view>
@@ -42,11 +42,11 @@
 			<block type="gomage_navigation/Navigation_CMS_Left" name="gomage.navigation.cms.left" before="-"></block>
 		</reference>	
         <reference name="content">
-            <block type="gomage_navigation/navigation_content" name="gomage.navigation.content" before="-"></block>
+            <block type="gomage_navigation/navigation_content" name="gomage.navigation.content" before="gomage.enterprisecatalog.content"></block>
 			<block type="gomage_navigation/Navigation_CMS_Content" name="gomage.navigation.cms.content" before="-"></block>
         </reference>
 		<reference name="right">
-			<block type="gomage_navigation/navigation_right" name="gomage.navigation.right" before="-"></block>
+			<block type="gomage_navigation/navigation_right" name="gomage.navigation.right" before="gomage.enterprisecatalog.right"></block>
 			<block type="gomage_navigation/Navigation_CMS_Right" name="gomage.navigation.cms.right" before="-"></block>
 		</reference>
 		<reference name="before_body_end">

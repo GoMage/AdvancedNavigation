@@ -123,7 +123,6 @@ class GoMage_Navigation_Block_Catalog_Layer_View extends Mage_Catalog_Block_Laye
 					break;
 					
 					case 'gomage.catalog.content' :
-
 						$nav_block->setData('position', GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Attributelocation::CONTENT);
 					break;
 				}

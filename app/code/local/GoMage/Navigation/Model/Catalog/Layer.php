@@ -87,8 +87,7 @@ class GoMage_Navigation_Model_Catalog_Layer extends Mage_Catalog_Model_Layer
 
         return $collection;
     }
-
-
+	
     public function getAttributeOptionsImages($attribute_id)
     {
         if (is_null($this->attribute_options_images)) {

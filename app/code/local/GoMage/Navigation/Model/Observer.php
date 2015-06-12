@@ -10,13 +10,10 @@
  * @version      Release: 4.6
  * @since        Class available since Release 1.0
  */
- 
 class GoMage_Navigation_Model_Observer
 {
-
     public function loadAttribute($event)
     {
-
         $attribute    = $event->getAttribute();
         $attribute_id = ( int )$attribute->getAttributeId();
 
@@ -170,7 +167,6 @@ class GoMage_Navigation_Model_Observer
     {			
         if ($layout = Mage::getSingleton('core/layout')) {
             if (intval(Mage::helper('gomage_navigation')->getRequest()->getParam('ajax'))) {
-				$navBlock = null;
                 $layout->removeOutputBlock('root');
                 $layout->removeOutputBlock('core_profiler');
 
@@ -180,75 +176,42 @@ class GoMage_Navigation_Model_Observer
 				
                 $product_list_html = ($productsBlock ? Mage::getModel('core/url')->sessionUrlVar($productsBlock->toHtml()) : '');
 				
-                if ($layout->getBlock('gomage.catalog.rightnav')) {
-                    $navBlock = $layout->getBlock('gomage.catalog.rightnav');
-                } elseif ($layout->getBlock('catalogsearch.leftnav')) {
-                    $navBlock = $layout->getBlock('catalogsearch.leftnav');
-                } elseif ($layout->getBlock('catalog.leftnav')) {
-                    $navBlock = $layout->getBlock('catalog.leftnav');
-                } elseif ($layout->getBlock('gomage.enterprisesearch.leftnav')) {
-                    $navBlock = $layout->getBlock('gomage.enterprisesearch.leftnav');
-                } elseif ($layout->getBlock('gomage.enterprisecatalog.leftnav')) {
-                    $navBlock = $layout->getBlock('gomage.enterprisecatalog.leftnav');
-                }
-
                 $LeftnavBlock    = $layout->getBlock('gomage.navigation.left');
                 $RightnavBlock   = $layout->getBlock('gomage.navigation.right');
                 $ContentnavBlock = $layout->getBlock('gomage.navigation.content');
 
                 $navigation_more_button = $layout->getBlock('gomage.navigation.more.button');
-
-                $currentCategory = Mage::registry('current_category');
-
-                if (($currentCategory && $currentCategory->getData('navigation_pw_gn_shopby') == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::USE_GLOBAL)
-                    ||
-                    !$currentCategory
-                ) {
-                    $position = Mage::getStoreConfig('gomage_navigation/general/show_shopby');
-                } else {
-                    if ($currentCategory) {
-                        $position = $currentCategory->getData('navigation_pw_gn_shopby');
-                    }
+				
+				$navigation_html_left  = '';
+				$navigation_html       = '';
+                $navigation_html_right = '';    
+				
+				$is_enterprise		= Mage::helper('gomage_navigation')->isEnterprise();	
+				$catalogConfigKey	= ($is_enterprise)	? 'enterprisecatalog'	: 'catalog';
+				
+				if ($layout->getBlock('gomage.' . $catalogConfigKey . '.leftnav')) {
+                    $navigation_html_left = $layout->getBlock('gomage.' . $catalogConfigKey . '.leftnav');
                 }
-
-                $navigation_html       = '';
-                $navigation_html_right = '';
-                $navigation_html_left  = '';
-
-                if ($navBlock) {
-
-                    if ($position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN_CONTENT) {
-                        $navigation_html_left = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
-                        $navBlock->setShopByInContent(true);
-
-                        $navigation_html = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
-                        $navBlock->setShopByInContent(false);
-                    } else {
-                        if ($position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN_CONTENT) {
-                            $navigation_html_right = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
-                            $navBlock->setShopByInContent(true);
-
-                            $navigation_html = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
-                            $navBlock->setShopByInContent(false);
-                        } else {
-                            if ($position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::CONTENT) {
-                                $navBlock->setShopByInContent(true);
-
-                                $navigation_html = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
-                                $navBlock->setShopByInContent(false);
-                            } else {
-                                if ($position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN) {
-                                    $navigation_html_left = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
-                                } else {
-                                    if ($position == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN) {
-                                        $navigation_html_right = Mage::getModel('core/url')->sessionUrlVar($navBlock->toHtml());
-                                    }
-                                }
-                            }
-                        }
-                    }
-
+				
+				if ($navigation_html_left) {
+					$navigation_html_left = Mage::getModel('core/url')->sessionUrlVar($navigation_html_left->toHtml());
+				}
+				
+				if ($layout->getBlock('gomage.' . $catalogConfigKey . '.content')) {
+                    $navigation_html = $layout->getBlock('gomage.' . $catalogConfigKey . '.content');
                 }
+				
+				if ($navigation_html) {
+					$navigation_html = Mage::getModel('core/url')->sessionUrlVar($navigation_html->toHtml());
+				}
+				
+				if ($layout->getBlock('gomage.' . $catalogConfigKey . '.right')) {
+                    $navigation_html_right = $layout->getBlock('gomage.' . $catalogConfigKey . '.right');
+                }
+				
+				if ($navigation_html_right) {
+					$navigation_html_right = Mage::getModel('core/url')->sessionUrlVar($navigation_html_right->toHtml());
+				}
 
                 $gomage_ajax = Mage::getBlockSingleton('gomage_navigation/ajax');
 
@@ -274,6 +237,7 @@ class GoMage_Navigation_Model_Observer
                         );
                     }
                 }
+				
                 $gomage_ajax->setNameInLayout('gomage_ajax');
 
                 Mage::dispatchEvent('gomage_navigation_ajax_result', array('gomage_ajax' => $gomage_ajax));

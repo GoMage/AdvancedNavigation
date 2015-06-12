@@ -194,7 +194,7 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Category extends Mage_Catalog
                             continue;
                         }
 
-                        if (Mage::getStoreConfig('gomage_navigation/category/hide_empty') && !isset($category_count[$category->getId()])) {
+                        if (Mage::getStoreConfig('gomage_navigation/' . $this->getData('config_tab') . '/hide_empty') && !isset($category_count[$category->getId()])) {
                             continue;
                         }
 
@@ -329,7 +329,7 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Category extends Mage_Catalog
     {
         $category = $this->getLayer()->getCurrentCategory();
 
-        if (Mage::getStoreConfigFlag('gomage_navigation/category/show_allsubcats')) {
+        if (Mage::getStoreConfigFlag('gomage_navigation/' . $this->getData('config_tab') . '/show_allsubcats')) {
             $cats_ids = array_diff($category->getAllChildren(true), array($category->getId()));
 
             if (count($cats_ids)) {
