@@ -378,7 +378,7 @@
     			<active>0</active>
     			<filter_type>0</filter_type>
     			<inblock_height>150</inblock_height>
-    			<show_shopby>1</show_shopby>
+    			<show_shopby>5</show_shopby>
     			<column_color>ECF3F6</column_color>
     			<ajax_enabled>0</ajax_enabled>
     			<show_checkbox>0</show_checkbox>
