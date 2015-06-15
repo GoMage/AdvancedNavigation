@@ -803,7 +803,17 @@ ul.image-align-2-columns li{
 .block-layered-nav #advancednavigation-filter-content-cat .gan-list-checkbox a.active{
   font-weight:normal;
   }
-  
+.block-layered-nav .configurable-swatch-list .swatch-link{
+  padding: 1px 0 0;
+  text-align: center;
+  }
+  .block-layered-nav .configurable-swatch-list .swatch-link.active{
+    border-color: #3399cc;
+    }
+  .block-layered-nav .configurable-swatch-list .swatch-link img{
+    position: static;
+    display: inline-block;
+    }
   
 /* Product Navgation
 -------------------------------------------------- */
