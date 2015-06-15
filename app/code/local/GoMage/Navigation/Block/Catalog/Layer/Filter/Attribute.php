@@ -1,4 +1,5 @@
 <?php
+
 /**
  * GoMage Advanced Navigation Extension
  *
@@ -16,33 +17,35 @@ class GoMage_Navigation_Block_Catalog_Layer_Filter_Attribute extends Mage_Catalo
      * Set model name
      */
     public function __construct()
-    {		
+    {
         parent::__construct();
-		
+
         $this->_filterModelName = 'gomage_navigation/catalog_layer_filter_attribute';
     }
 
-	protected function _prepareFilter()
+    protected function _prepareFilter()
     {
         parent::_prepareFilter();
-		
-		switch ($this->getFilterType()) {
-			case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_IMAGE) :
-				$this->_template = 'gomage/navigation/layer/filter/image.phtml';
-			break;
 
-			case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DROPDOWN) :
-				$this->_template = 'gomage/navigation/layer/filter/dropdown.phtml';
-			break;
-			
-			default :
-				$this->_template = 'gomage/navigation/layer/filter/default.phtml';
-			break;
-		}    
+        switch ($this->getFilterType()) {
+            case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_IMAGE) :
+                $this->_template = 'gomage/navigation/layer/filter/image.phtml';
+                break;
+
+            case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DROPDOWN) :
+                $this->_template = 'gomage/navigation/layer/filter/dropdown.phtml';
+                break;
+
+            default :
+                if (Mage::helper('gomage_navigation/configurableswatches')->isSwatchAttribute($this->getAttributeModel()->getId())) {
+                    $this->_template = 'gomage/navigation/layer/filter/swatches.phtml';
+                } else {
+                    $this->_template = 'gomage/navigation/layer/filter/default.phtml';
+                }
+                break;
+        }
     }
-	
-	/*****/
-	
+
     public function getFilter()
     {
         return $this->_filter;
@@ -55,7 +58,7 @@ class GoMage_Navigation_Block_Catalog_Layer_Filter_Attribute extends Mage_Catalo
 
     public function ajaxEnabled()
     {
-        return (int) $this->getAttributeModel()->getIsAjax();
+        return (int)$this->getAttributeModel()->getIsAjax();
     }
 
     public function canShowMinimized($side)
@@ -87,12 +90,12 @@ class GoMage_Navigation_Block_Catalog_Layer_Filter_Attribute extends Mage_Catalo
 
     public function getVisibleOptions()
     {
-        return (int) $this->getAttributeModel()->getVisibleOptions();
+        return (int)$this->getAttributeModel()->getVisibleOptions();
     }
 
     public function canShowPopup()
     {
-        return (bool) ($this->getAttributeModel()->getShowHelp() > 0);
+        return (bool)($this->getAttributeModel()->getShowHelp() > 0);
     }
 
     public function getPopupText()
@@ -127,17 +130,17 @@ class GoMage_Navigation_Block_Catalog_Layer_Filter_Attribute extends Mage_Catalo
 
     public function canShowLabels()
     {
-        return (bool) $this->getAttributeModel()->getShowImageName();
+        return (bool)$this->getAttributeModel()->getShowImageName();
     }
 
     public function getImageWidth()
     {
-        return (int) $this->getAttributeModel()->getImageWidth();
+        return (int)$this->getAttributeModel()->getImageWidth();
     }
 
     public function getImageHeight()
     {
-        return (int) $this->getAttributeModel()->getImageHeight();
+        return (int)$this->getAttributeModel()->getImageHeight();
     }
 
     public function getImageAlign()
@@ -145,15 +148,15 @@ class GoMage_Navigation_Block_Catalog_Layer_Filter_Attribute extends Mage_Catalo
         switch ($this->getAttributeModel()->getImageAlign()) {
             case (1) :
                 $image_align = 'horizontally';
-            break;
-			
+                break;
+
             case (2):
                 $image_align = '2-columns';
-            break;
-			
-			default :
+                break;
+
+            default :
                 $image_align = 'default';
-            break;
+                break;
         }
 
         return $image_align;
@@ -161,7 +164,7 @@ class GoMage_Navigation_Block_Catalog_Layer_Filter_Attribute extends Mage_Catalo
 
     public function canShowResetFirler()
     {
-        return (bool) ($this->getAttributeModel()->getFilterReset() > 0);
+        return (bool)($this->getAttributeModel()->getFilterReset() > 0);
     }
 
     public function getFilterType()
@@ -183,8 +186,8 @@ class GoMage_Navigation_Block_Catalog_Layer_Filter_Attribute extends Mage_Catalo
     {
         return $this->getAttributeModel()->getMaxInblockHeight();
     }
-	
-	public function isActiveFilter($label)
+
+    public function isActiveFilter($label)
     {
         return false;
     }
