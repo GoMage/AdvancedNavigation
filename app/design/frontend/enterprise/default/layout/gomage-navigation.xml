@@ -16,13 +16,17 @@
 	<catalog_category_layered>
         <reference name="left">
             <remove name="enterprisecatalog.leftnav"/>
-            <block type="gomage_navigation/enterprise_search_catalog_layer_view" name="gomage.enterprisecatalog.leftnav" before="-" />
+            <block type="gomage_navigation/enterprise_search_catalog_layer_view" name="gomage.enterprisecatalog.leftnav" before="-">
+                <block type="core/text_list" name="gomage.catalog.leftnav.state.renderers" as="state_renderers" />
+            </block>
         </reference>
     </catalog_category_layered>
 	<catalogsearch_result_index>
         <reference name="left">
             <remove name="enterprisesearch.leftnav"/>
-            <block type="gomage_navigation/enterprise_search_catalogsearch_layer" name="gomage.enterprisecatalog.leftnav" before="-" />
+            <block type="gomage_navigation/enterprise_search_catalogsearch_layer" name="gomage.enterprisecatalog.leftnav" before="-">
+                <block type="core/text_list" name="gomage.catalog.leftnav.state.renderers" as="state_renderers" />
+            </block>
         </reference>
     </catalogsearch_result_index>
 	<catalog_product_view>
