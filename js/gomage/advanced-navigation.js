@@ -620,14 +620,13 @@ GomageNavigationClass = Class.create({
         if (!GomageNavigation.static_conten_block) {
             /*In GM-AN v. 5.0 this expression must be removed*/
             var wrapper = document.createElement('div');
-            /*HTML to DOM*/
             wrapper.innerHTML = content;
 
             var nav_content = wrapper.getElementsByClassName('block-layered-nav-content')[0];
-            wrapper.firstChild.removeChild(nav_content);
-            content = wrapper.innerHTML;
-            /*DOM to HTML*/
-
+            if (nav_content) {
+                wrapper.firstChild.removeChild(nav_content);
+                content = wrapper.innerHTML;
+            }
             wrapper = nav_content = null;
         }
 
@@ -635,8 +634,8 @@ GomageNavigationClass = Class.create({
             if ($$('div.col-main').length > 0) {
                 var col_main = $$('div.col-main')[0];
                 col_main.innerHTML += '<div class="category-view">' + content + '</div>';
+                this.runContentScripts(content);
             }
-
             return;
         }
 
@@ -704,7 +703,12 @@ GomageNavigationClass = Class.create({
             }
         }
 
-        var js_scripts = response.product_list.extractScripts();
+        this.runContentScripts(response.product_list);
+
+    },
+
+    runContentScripts: function (content) {
+        var js_scripts = content.extractScripts();
         for (var i = 0; i < js_scripts.length; i++) {
             if (typeof(js_scripts[i]) != 'undefined') {
                 globalEval(js_scripts[i]);
@@ -713,7 +717,6 @@ GomageNavigationClass = Class.create({
         if (typeof(ProductMediaManager) != 'undefined') {
             ProductMediaManager.init();
         }
-
     },
 
     replaceToolbal: function (content) {

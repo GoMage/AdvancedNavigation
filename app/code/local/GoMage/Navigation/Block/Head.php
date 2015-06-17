@@ -26,6 +26,10 @@ class GoMage_Navigation_Block_Head extends Mage_Core_Block_Template
                 $head_block->addjs('gomage/advanced-navigation.js');
                 $head_block->setChild('advancednavigation_styles', $styles_block);
                 $head_block->addCss('css/gomage/advanced-navigation.css');
+                if (Mage::getStoreConfig('configswatches/general/product_list_attribute')) {
+                    $head_block->addItem('skin_js', 'js/configurableswatches/product-media.js');
+                    $head_block->addItem('skin_js', 'js/configurableswatches/swatches-list.js');
+                }
             }
         }
     }
