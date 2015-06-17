@@ -176,7 +176,7 @@ class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Category ex
                 if (isset($facets[$categoryId])) {
                     $category->setProductCount($facets[$categoryId]);
                 } else {
-                    $category->setProductCount(0);/*To do*/
+                    $category->setProductCount(0);
                 }
 				
 				if (in_array($categoryId, $selected)) {

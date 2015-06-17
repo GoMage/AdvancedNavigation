@@ -102,10 +102,9 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Item extends Mage_Catalog_Mod
 	
 	/**
      * Get url for "clear" link
-     *
+     * @deprecated
      * @return false|string
      */
-	/*todo*/
 	public function getClearLinkUrl()
     {
         if (
@@ -193,7 +192,9 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Item extends Mage_Catalog_Mod
 	
 	/*****/
 	
-	/*todo*/
+	/*
+	 * @deprecated
+	 */
     public function getRemoveUrlParams()
     {
         $query                  = array($this->getFilter()->getRequestVarValue() => $this->getFilter()->getResetValue($this->getValue()));
@@ -278,7 +279,9 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Item extends Mage_Catalog_Mod
         return $params;
     }
 	
-	/*todo*/
+	/*
+	 * @deprecated
+	 */
     public function getCleanUrl($type = false)
     {
         $url = Mage::helper('gomage_navigation')->getFilterUrl(
@@ -300,7 +303,9 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Item extends Mage_Catalog_Mod
         return $url;
     }
 	
-	/*todo*/
+	/*
+	 * @deprecated
+	 */
     public function getUrlParams($stock = false)
     {
         $query = array(

@@ -56,7 +56,6 @@ class GoMage_Navigation_Block_Enterprise_Search_Catalog_Layer_View extends Enter
 			return parent::_prepareLayout(); 
 		}
 		
-		/*to do*/
 		$filterableAttributes	= $this->_getFilterableAttributes();
         $collection				= $this->getLayer()->getProductCollection();
         $base_select			= array();
@@ -78,7 +77,6 @@ class GoMage_Navigation_Block_Enterprise_Search_Catalog_Layer_View extends Enter
         }
 
         $this->getLayer()->setBaseSelect($base_select);
-		/******/
 		
 		if (Mage::getStoreConfigFlag('gomage_navigation/stock/active')) {
 			$stockBlock = $this->getLayout()->createBlock($this->_stockFilterBlockName)

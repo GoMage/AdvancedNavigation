@@ -30,17 +30,6 @@
 	        </adminhtml>
 	        <catalog>
 	        	<rewrite>
-	        		<!--
-					<layer_view>GoMage_Navigation_Block_Layer_View</layer_view>
-					-->
-					
-	        		<!--
-					<layer_filter_attribute>GoMage_Navigation_Block_Layer_Filter_Attribute</layer_filter_attribute>
-	        		<layer_filter_price>GoMage_Navigation_Block_Layer_Filter_Price</layer_filter_price>
-	        		<layer_filter_category>GoMage_Navigation_Block_Layer_Filter_Category</layer_filter_category>
-	        		<layer_filter_decimal>GoMage_Navigation_Block_Layer_Filter_Decimal</layer_filter_decimal>
-					-->
-					
 	        		<product_list_toolbar>GoMage_Navigation_Block_Product_List_Toolbar</product_list_toolbar>
 	        		<product_list_toolbar_pager>GoMage_Navigation_Block_Product_List_Toolbar_Pager</product_list_toolbar_pager>
 	        		<product_list>GoMage_Navigation_Block_Catalog_Product_List</product_list>
@@ -52,36 +41,6 @@
 	       			<html_pager>GoMage_Navigation_Block_Html_Pager</html_pager>
 	       		</rewrite>
 	       	</page>
-	        <catalogsearch>
-	       		<rewrite>
-					<!--
-	       			<layer>GoMage_Navigation_Block_Catalogsearch_Layer</layer>
-					-->
-					
-					<!--todo-->
-	       			<!--
-					<result>GoMage_Navigation_Block_Search_Result</result>
-					-->
-	       		</rewrite>
-	       	</catalogsearch>
-			<enterprise_search>
-	       		<rewrite>
-	       			<!--
-					<catalog_layer_view>GoMage_Navigation_Block_Enterprise_Search_Catalog_Layer_View</catalog_layer_view>
-					-->
-					
-					<!--
-					<catalog_layer_filter_attribute>GoMage_Navigation_Block_Enterprise_Search_Catalog_Layer_Filter_Attribute</catalog_layer_filter_attribute>
-					<catalog_layer_filter_category>GoMage_Navigation_Block_Enterprise_Search_Catalog_Layer_Filter_Category</catalog_layer_filter_category>
-					<catalog_layer_filter_price>GoMage_Navigation_Block_Enterprise_Search_Catalog_Layer_Filter_Price</catalog_layer_filter_price>
-					<catalog_layer_filter_decimal>GoMage_Navigation_Block_Enterprise_Search_Catalog_Layer_Filter_Decimal</catalog_layer_filter_decimal>
-					-->
-					
-					<!--
-					<catalogsearch_layer>GoMage_Navigation_Block_Enterprise_Search_Catalogsearch_Layer</catalogsearch_layer>
-					-->
-	       		</rewrite>
-	       	</enterprise_search>
 	    </blocks>
 	    <models>
             <gomage_navigation>
@@ -102,61 +61,14 @@
                     </attribute_option>
             	</entities>
             </gomage_navigation_mysql4>
-            <catalog>
-            	<rewrite>
-					<!--
-	            	<layer>GoMage_Navigation_Model_Catalog_Layer</layer>
-					-->
-					
-	            	<!--
-					<layer_filter_attribute>GoMage_Navigation_Model_Catalog_Layer_Filter_Attribute</layer_filter_attribute>
-	            	<layer_filter_price>GoMage_Navigation_Model_Catalog_Layer_Filter_Price</layer_filter_price>
-	            	<layer_filter_category>GoMage_Navigation_Model_Catalog_Layer_Filter_Category</layer_filter_category>
-	            	<layer_filter_decimal>GoMage_Navigation_Model_Catalog_Layer_Filter_Decimal</layer_filter_decimal>
-					-->
-					
-	            	<!--
-					<layer_filter_item>GoMage_Navigation_Model_Catalog_Layer_Filter_Item</layer_filter_item>
-					-->
-	            </rewrite>
-            </catalog>
             <catalog_resource_eav_mysql4>
             	<rewrite>
             		<attribute>GoMage_Navigation_Model_Resource_Eav_Mysql4_Entity_Attribute</attribute>
 	            	<product_collection>GoMage_Navigation_Model_Resource_Eav_Mysql4_Product_Collection</product_collection>
-	            	
-					<!--
-					<layer_filter_attribute>GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Attribute</layer_filter_attribute>
-	            	<layer_filter_price>GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Price</layer_filter_price>
-	            	<layer_filter_decimal>GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal</layer_filter_decimal>
-	            	<layer_filter_category>GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Category</layer_filter_category>
-					-->
 	            </rewrite>
             </catalog_resource_eav_mysql4>
-            <catalogsearch>
-	       		<rewrite>
-	       			<!--
-					<layer>GoMage_Navigation_Model_Catalogsearch_Layer</layer>
-					-->
-	       		</rewrite>
-	       	</catalogsearch>
 	       	<enterprise_search>
-	       		<rewrite>
-					<!--
-					<catalog_layer>GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer</catalog_layer>
-					-->
-					
-					<!--
-					<catalog_layer_filter_attribute>GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Attribute</catalog_layer_filter_attribute>
-					<catalog_layer_filter_category>GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Category</catalog_layer_filter_category>
-					<catalog_layer_filter_price>GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Price</catalog_layer_filter_price>
-					<catalog_layer_filter_decimal>GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Decimal</catalog_layer_filter_decimal>
-					-->
-					
-	       			<!--				
-					<search_layer>GoMage_Navigation_Model_Enterprise_Search_Search_Layer</search_layer>	
-					-->	
-							
+	       		<rewrite>		
 					<observer>GoMage_Navigation_Model_Enterprise_Search_Observer</observer>
 	       		</rewrite>
 	       	</enterprise_search>

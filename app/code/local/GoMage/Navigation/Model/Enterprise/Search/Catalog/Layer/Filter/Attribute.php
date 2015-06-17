@@ -168,7 +168,7 @@ class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Attribute e
                 $data[] = array(
                     'label'		=> $option['label'],
                     'value'		=> $value,
-                    'count'		=> ($optionsFacetedData[$optionId]) ? $optionsFacetedData[$optionId] : 0,/*To do*/
+                    'count'		=> ($optionsFacetedData[$optionId]) ? $optionsFacetedData[$optionId] : 0,
 					'active'	=> $active,
                     'image'		=> $image,
                 );
