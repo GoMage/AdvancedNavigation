@@ -291,9 +291,6 @@ var GomageNavigation = new GomageNavigationClass({
 	<?php if (Mage::helper('gomage_navigation')->isGoMageSeoBoosterEnabled()) : ?>
 	gomage_seobooster_enabled: true,
 	<?php endif; ?>
-	<?php if (Mage::helper('gomage_navigation/config')->isCMSPage()) : ?>
-	static_conten_block: <?php echo json_encode(Mage::helper('gomage_navigation/config')->staticContenBlock()); ?>,
-	<?php endif; ?>
 });
 //]]>	
 </script>

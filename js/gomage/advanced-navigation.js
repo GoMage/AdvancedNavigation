@@ -31,7 +31,6 @@ GomageNavigationClass = Class.create({
     gomage_seobooster_enabled: false,
 
     print_exceptions: false,
-    static_conten_block: true,
 
     initialize: function (data) {
         if (data) {
@@ -76,10 +75,6 @@ GomageNavigationClass = Class.create({
 
             if (typeof data.gomage_seobooster_enabled != 'undefined') {
                 this.gomage_seobooster_enabled = data.gomage_seobooster_enabled;
-            }
-
-            if (typeof data.static_conten_block != 'undefined') {
-                this.static_conten_block = data.static_conten_block;
             }
         }
 
@@ -616,19 +611,6 @@ GomageNavigationClass = Class.create({
 
     replaceProductsBlock: function (response, need_scroll) {
         var content = response.product_list;
-
-        if (!GomageNavigation.static_conten_block) {
-            /*In GM-AN v. 5.0 this expression must be removed*/
-            var wrapper = document.createElement('div');
-            wrapper.innerHTML = content;
-
-            var nav_content = wrapper.getElementsByClassName('block-layered-nav-content')[0];
-            if (nav_content) {
-                wrapper.firstChild.removeChild(nav_content);
-                content = wrapper.innerHTML;
-            }
-            wrapper = nav_content = null;
-        }
 
         if (typeof(this.gan_static_navigation_url) != 'undefined' && this.gan_static_navigation_url) {
             if ($$('div.col-main').length > 0) {
