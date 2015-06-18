@@ -112,7 +112,7 @@ class GoMage_Navigation_Block_Adminhtml_Catalog_Category_Tab_Attributes extends 
 	        
     		if (count($attributes_pw_gn)){
 	        	$fieldset = $form->addFieldset('fieldset_group_' . $group->getId() . '_pw_gn', array(
-		            'legend'    => Mage::helper('gomage_navigation')->__('Stock Settings'),
+		            'legend'    => Mage::helper('gomage_navigation')->__('General Settings'),
 		            'class'     => 'fieldset-wide',
 		        ));
 		        $attributes = $this->getNeededAttributes($attributes_pw_gn);

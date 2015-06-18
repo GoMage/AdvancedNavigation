@@ -1,4 +1,5 @@
 <?php
+
 /**
  * GoMage Advanced Navigation Extension
  *
@@ -10,24 +11,36 @@
  * @version      Release: 4.6
  * @since        Class available since Release 1.0
  */
+class GoMage_Navigation_Block_Navigation_CMS_Right extends GoMage_Navigation_Block_Navigation_Right
+{
 
-class GoMage_Navigation_Block_Navigation_CMS_Right extends GoMage_Navigation_Block_Navigation_Right {
-	
-	public function isActive() {	
-		return (bool) Mage::getSingleton('cms/page')->getData('navigation_right_column');
-	}
-	
-    protected function _prePrepareLayout() {
-		if (
-			$this->isGMN() && 
-			$this->canDisplay() &&
-			$this->isCMSPage()
-		) {			
-			$this->setTemplate('gomage/navigation/catalog/navigation/right.phtml')
-				->unsetData('cache_lifetime')
-				->unsetData('cache_tags');
-		} else if ($content = $this->getLayout()->getBlock('content')) {
-			$content->unsetChild('gomage.navigation.cms.right');
-		}
-	}
+    public function canDisplay()
+    {
+        if ($this->can_display === null) {
+            $navigation = intval(Mage::getSingleton('cms/page')->getData('navigation'));
+
+            $this->can_display = in_array($navigation,
+                array(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN_CONTENT,
+                    GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN)
+            );
+        }
+        return $this->can_display;
+    }
+
+    protected function _prePrepareLayout()
+    {
+        if (
+            $this->isGMN() &&
+            $this->canDisplay() &&
+            $this->isCMSPage()
+        ) {
+            $this->setTemplate('gomage/navigation/catalog/navigation/right.phtml')
+                ->unsetData('cache_lifetime')
+                ->unsetData('cache_tags');
+        } else {
+            if ($content = $this->getLayout()->getBlock('content')) {
+                $content->unsetChild('gomage.navigation.cms.right');
+            }
+        }
+    }
 }

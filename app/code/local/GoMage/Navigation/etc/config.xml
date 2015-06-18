@@ -15,7 +15,7 @@
 <config>
     <modules>
         <GoMage_Navigation>
-            <version>4.6</version>
+            <version>4.7</version>
         </GoMage_Navigation>
     </modules>
     <global>

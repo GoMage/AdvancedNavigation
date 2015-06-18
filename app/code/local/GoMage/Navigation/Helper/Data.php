@@ -182,7 +182,6 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function isGomageNavigation()
     {
-		//return false;
         if ($this->isMobileDevice() && Mage::getStoreConfigFlag('gomage_navigation/general/disable_mobile')) {
             return false;
         }
