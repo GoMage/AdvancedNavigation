@@ -20,9 +20,9 @@ class GoMage_Navigation_Block_Navigation_CMS_Left extends GoMage_Navigation_Bloc
             $navigation = intval(Mage::getSingleton('cms/page')->getData('navigation'));
 
             $this->can_display = in_array($navigation,
-                array(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN_CONTENT,
-                    GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN)
-            );
+                    array(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN_CONTENT,
+                        GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN)
+                ) && (!$this->showInShopBy());
         }
         return $this->can_display;
     }
