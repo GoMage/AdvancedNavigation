@@ -17,7 +17,7 @@ class GoMage_Navigation_Block_Navigation_CMS_Content extends GoMage_Navigation_B
     public function canDisplay()
     {
         if ($this->can_display === null) {
-            $navigation = intval(Mage::getSingleton('cms/page')->getData('navigation'));
+            $navigation = intval(Mage::helper('gomage_navigation/config')->getCMSPage()->getData('navigation'));
 
             $this->can_display = in_array($navigation,
                     array(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::RIGHT_COLUMN_CONTENT,
@@ -30,8 +30,7 @@ class GoMage_Navigation_Block_Navigation_CMS_Content extends GoMage_Navigation_B
 
     protected function _prePrepareLayout()
     {
-        if (
-            $this->isGMN() &&
+        if ($this->isGMN() &&
             $this->canDisplay() &&
             $this->isCMSPage()
         ) {

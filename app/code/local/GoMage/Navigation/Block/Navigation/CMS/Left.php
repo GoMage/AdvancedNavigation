@@ -17,7 +17,7 @@ class GoMage_Navigation_Block_Navigation_CMS_Left extends GoMage_Navigation_Bloc
     public function canDisplay()
     {
         if ($this->can_display === null) {
-            $navigation = intval(Mage::getSingleton('cms/page')->getData('navigation'));
+            $navigation = intval(Mage::helper('gomage_navigation/config')->getCMSPage()->getData('navigation'));
 
             $this->can_display = in_array($navigation,
                     array(GoMage_Navigation_Model_Adminhtml_System_Config_Source_Shopby::LEFT_COLUMN_CONTENT,

@@ -16,6 +16,7 @@ GomageNavigationClass = Class.create({
     back_to_top_action: null,
     gomage_navigation_loadinfo_text: null,
     gomage_navigation_urlhash: null,
+    gan_page_id: 0,
     gan_static_navigation_url: null,
     gan_more_type_ajax: false,
     gan_shop_by_area: null,
@@ -52,6 +53,10 @@ GomageNavigationClass = Class.create({
 
             if (typeof data.gomage_navigation_urlhash != 'undefined') {
                 this.gomage_navigation_urlhash = data.gomage_navigation_urlhash;
+            }
+
+            if (typeof data.gan_page_id != 'undefined') {
+                this.gan_page_id = data.gan_page_id;
             }
 
             if (typeof data.gan_static_navigation_url != 'undefined') {
@@ -515,11 +520,16 @@ GomageNavigationClass = Class.create({
             this.setHashUrl(url);
         }
 
+        var params = this.navigationOpenFilters;
+        if (this.gan_page_id > 0) {
+            this.navigationOpenFilters['gan_page_id'] = this.gan_page_id;
+        }
+
         if (this.startLoadNavigationData(more_products)) {
             var request = new Ajax.Request(url,
                 {
                     method: 'GET',
-                    parameters: this.navigationOpenFilters,
+                    parameters: params,
                     onSuccess: function (transport) {
                         try {
                             var response = eval('(' + (transport.responseText || false) + ')');

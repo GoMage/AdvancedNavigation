@@ -272,6 +272,7 @@ var GomageNavigation = new GomageNavigationClass({
 	loadimagealign: '<?php echo Mage::getStoreConfig('gomage_navigation/ajaxloader/imagealign'); ?>',
 	back_to_top_action: '<?php echo Mage::getStoreConfig('gomage_navigation/general/back_to_top_action'); ?>',
 	gomage_navigation_loadinfo_text: "<?php echo $text; ?>",
+    gan_page_id: <?php echo $this->getGanPageId() ?>,
 	<?php if ($url = $this->getNavigationCatigoryUrl()) : ?>
 	gan_static_navigation_url: '<?php echo $url; ?>',
 	gomage_navigation_urlhash: false,

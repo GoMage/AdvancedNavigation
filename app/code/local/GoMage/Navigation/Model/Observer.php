@@ -1,4 +1,5 @@
 <?php
+
 /**
  * GoMage Advanced Navigation Extension
  *
@@ -164,7 +165,7 @@ class GoMage_Navigation_Model_Observer
     }
 
     public function checkAjax()
-    {			
+    {
         if ($layout = Mage::getSingleton('core/layout')) {
             if (intval(Mage::helper('gomage_navigation')->getRequest()->getParam('ajax'))) {
                 $layout->removeOutputBlock('root');
@@ -173,45 +174,51 @@ class GoMage_Navigation_Model_Observer
                 if (!($productsBlock = $layout->getBlock('search_result_list'))) {
                     $productsBlock = $layout->getBlock('product_list');
                 }
-				
+
                 $product_list_html = ($productsBlock ? Mage::getModel('core/url')->sessionUrlVar($productsBlock->toHtml()) : '');
-				
-                $LeftnavBlock    = $layout->getBlock('gomage.navigation.left');
-                $RightnavBlock   = $layout->getBlock('gomage.navigation.right');
-                $ContentnavBlock = $layout->getBlock('gomage.navigation.content');
+
+                if (Mage::helper('gomage_navigation/config')->isCMSPage()) {
+                    $leftnav_block    = $layout->getBlock('gomage.navigation.cms.left');
+                    $rightnav_block   = $layout->getBlock('gomage.navigation.cms.right');
+                    $contentnav_block = $layout->getBlock('gomage.navigation.cms.content');
+                } else {
+                    $leftnav_block    = $layout->getBlock('gomage.navigation.left');
+                    $rightnav_block   = $layout->getBlock('gomage.navigation.right');
+                    $contentnav_block = $layout->getBlock('gomage.navigation.content');
+                }
 
                 $navigation_more_button = $layout->getBlock('gomage.navigation.more.button');
-				
-				$navigation_html_left  = '';
-				$navigation_html       = '';
-                $navigation_html_right = '';    
-				
-				$is_enterprise		= Mage::helper('gomage_navigation')->isEnterprise();	
-				$catalogConfigKey	= ($is_enterprise)	? 'enterprisecatalog'	: 'catalog';
-				
-				if ($layout->getBlock('gomage.' . $catalogConfigKey . '.leftnav')) {
+
+                $navigation_html_left  = '';
+                $navigation_html       = '';
+                $navigation_html_right = '';
+
+                $is_enterprise    = Mage::helper('gomage_navigation')->isEnterprise();
+                $catalogConfigKey = ($is_enterprise) ? 'enterprisecatalog' : 'catalog';
+
+                if ($layout->getBlock('gomage.' . $catalogConfigKey . '.leftnav')) {
                     $navigation_html_left = $layout->getBlock('gomage.' . $catalogConfigKey . '.leftnav');
                 }
-				
-				if ($navigation_html_left) {
-					$navigation_html_left = Mage::getModel('core/url')->sessionUrlVar($navigation_html_left->toHtml());
-				}
-				
-				if ($layout->getBlock('gomage.' . $catalogConfigKey . '.content')) {
+
+                if ($navigation_html_left) {
+                    $navigation_html_left = Mage::getModel('core/url')->sessionUrlVar($navigation_html_left->toHtml());
+                }
+
+                if ($layout->getBlock('gomage.' . $catalogConfigKey . '.content')) {
                     $navigation_html = $layout->getBlock('gomage.' . $catalogConfigKey . '.content');
                 }
-				
-				if ($navigation_html) {
-					$navigation_html = Mage::getModel('core/url')->sessionUrlVar($navigation_html->toHtml());
-				}
-				
-				if ($layout->getBlock('gomage.' . $catalogConfigKey . '.right')) {
+
+                if ($navigation_html) {
+                    $navigation_html = Mage::getModel('core/url')->sessionUrlVar($navigation_html->toHtml());
+                }
+
+                if ($layout->getBlock('gomage.' . $catalogConfigKey . '.right')) {
                     $navigation_html_right = $layout->getBlock('gomage.' . $catalogConfigKey . '.right');
                 }
-				
-				if ($navigation_html_right) {
-					$navigation_html_right = Mage::getModel('core/url')->sessionUrlVar($navigation_html_right->toHtml());
-				}
+
+                if ($navigation_html_right) {
+                    $navigation_html_right = Mage::getModel('core/url')->sessionUrlVar($navigation_html_right->toHtml());
+                }
 
                 $gomage_ajax = Mage::getBlockSingleton('gomage_navigation/ajax');
 
@@ -220,14 +227,14 @@ class GoMage_Navigation_Model_Observer
                         'navigation_shop_right' => ($navigation_html_right ? $navigation_html_right : ''),
                         'navigation'            => $navigation_html,
                         'product_list'          => $product_list_html,
-                        'navigation_left'       => ($LeftnavBlock ? Mage::getModel('core/url')->sessionUrlVar($LeftnavBlock->toHtml()) : ''),
-                        'navigation_right'      => ($RightnavBlock ? Mage::getModel('core/url')->sessionUrlVar($RightnavBlock->toHtml()) : ''),
-                        'navigation_content'    => ($ContentnavBlock ? Mage::getModel('core/url')->sessionUrlVar($ContentnavBlock->toHtml()) : ''),
+                        'navigation_left'       => ($leftnav_block ? Mage::getModel('core/url')->sessionUrlVar($leftnav_block->toHtml()) : ''),
+                        'navigation_right'      => ($rightnav_block ? Mage::getModel('core/url')->sessionUrlVar($rightnav_block->toHtml()) : ''),
+                        'navigation_content'    => ($contentnav_block ? Mage::getModel('core/url')->sessionUrlVar($contentnav_block->toHtml()) : ''),
                         'navigation_more'       => ($navigation_more_button ? Mage::getModel('core/url')->sessionUrlVar($navigation_more_button->toHtml()) : ''),
 
                     )
                 );
-				
+
                 if (Mage::getStoreConfig('gomage_procart/general/enable')) {
                     if ($productsBlock) {
                         $gomage_ajax->addEvalJs("if (typeof(GomageProcartConfig) != 'undefined') {
@@ -237,7 +244,7 @@ class GoMage_Navigation_Model_Observer
                         );
                     }
                 }
-				
+
                 $gomage_ajax->setNameInLayout('gomage_ajax');
 
                 Mage::dispatchEvent('gomage_navigation_ajax_result', array('gomage_ajax' => $gomage_ajax));

@@ -33,7 +33,7 @@ class GoMage_Navigation_Helper_Config
                 $this->current_category = Mage::registry('current_category');
             } else {
                 if ($this->isCMSPage()) {
-                    $category_id = (int)Mage::getSingleton('cms/page')->getData('navigation_category_id');
+                    $category_id = (int)$this->getCMSPage()->getData('navigation_category_id');
                     if (!$category_id) {
                         $category_id = $this->storeRootCategoryId();
                     }
@@ -51,7 +51,16 @@ class GoMage_Navigation_Helper_Config
 
     public function isCMSPage()
     {
-        return (bool)(Mage::getSingleton('cms/page')->getData('page_id'));
+        return (bool)$this->getCMSPage()->getData('page_id');
+    }
+
+    public function getCMSPage()
+    {
+        if ($gan_page_id = Mage::helper('gomage_navigation')->getRequest()->getParam('gan_page_id', 0)) {
+            Mage::getSingleton('cms/page')->load($gan_page_id);
+        }
+
+        return Mage::getSingleton('cms/page');
     }
 
 }
