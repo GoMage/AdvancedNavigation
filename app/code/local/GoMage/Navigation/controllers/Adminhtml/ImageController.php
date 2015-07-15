@@ -1,5 +1,6 @@
 <?php
- /**
+
+/**
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
@@ -10,24 +11,28 @@
  * @version      Release: 4.8
  * @since        Class available since Release 1.0
  */
+class GoMage_Navigation_Adminhtml_ImageController extends Mage_Adminhtml_Controller_Action
+{
 
-class GoMage_Navigation_Adminhtml_ImageController extends Mage_Adminhtml_Controller_Action{
-	
-	public function uploadAction()
+    protected function _isAllowed()
+    {
+        return true;
+    }
+    
+    public function uploadAction()
     {
         $result = array();
         try {
             $uploader = new Varien_File_Uploader('option_image');
-            $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png'));
-            //$uploader->addValidateCallback('catalog_product_image', Mage::helper('catalog/image'), 'validateUploadFile');
+            $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png'));
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
             $result = $uploader->save(
                 Mage::getSingleton('catalog/product_media_config')->getBaseTmpMediaPath()
             );
 
-            $result['url'] = Mage::getSingleton('catalog/product_media_config')->getTmpMediaUrl($result['file']);
-            $result['file'] = $result['file'] . '.tmp';
+            $result['url']    = Mage::getSingleton('catalog/product_media_config')->getTmpMediaUrl($result['file']);
+            $result['file']   = $result['file'] . '.tmp';
             $result['cookie'] = array(
                 'name'     => session_name(),
                 'value'    => $this->_getSession()->getSessionId(),
@@ -36,9 +41,9 @@ class GoMage_Navigation_Adminhtml_ImageController extends Mage_Adminhtml_Control
                 'domain'   => $this->_getSession()->getCookieDomain()
             );
         } catch (Exception $e) {
-            $result = array('error'=>$e->getMessage(), 'errorcode'=>$e->getCode());
+            $result = array('error' => $e->getMessage(), 'errorcode' => $e->getCode());
         }
-		
+
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
     }
 
