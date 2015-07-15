@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.7
+ * @version      Release: 4.8
  * @since        Class available since Release 1.0
  */
 class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer extends Enterprise_Search_Model_Catalog_Layer

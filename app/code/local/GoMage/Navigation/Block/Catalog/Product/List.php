@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.7
+ * @version      Release: 4.8
  * @since        Class available since Release 1.0
  */
 class GoMage_Navigation_Block_Catalog_Product_List extends Mage_Catalog_Block_Product_List

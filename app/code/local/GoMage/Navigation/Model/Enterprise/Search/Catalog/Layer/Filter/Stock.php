@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.7
+ * @version      Release: 4.8
  * @since        Class available since Release 3.2
  */
 class GoMage_Navigation_Model_Enterprise_Search_Catalog_Layer_Filter_Stock extends Mage_Catalog_Model_Layer_Filter_Abstract
