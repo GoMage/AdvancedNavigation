@@ -15,7 +15,8 @@ class GoMage_Navigation_Helper_Url extends Mage_Core_Helper_Url
 {
     public function wrapp($url)
     {
-        return urldecode($url);
+        //can't decode url gomage-8956
+        return $url;
     }
 
     public function prepareCategory(Varien_Object $category)
