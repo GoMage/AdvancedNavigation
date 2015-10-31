@@ -14,7 +14,7 @@
 $config = new Varien_Object();
 $type = 'option_image';
 
-$config->setUrl(Mage::getModel('adminhtml/url')->addSessionParam()->getUrl('gomage_navigation/adminhtml_image/upload', array('type' => $type, '_secure' => true)));
+$config->setUrl(Mage::getModel('adminhtml/url')->addSessionParam()->getUrl('adminhtml/gomage_navigation_image/upload', array('type' => $type, '_secure' => true)));
 $config->setParams(array('form_key' => $this->getFormKey()));
 $config->setFileField($type);
 $config->setFilters(array(

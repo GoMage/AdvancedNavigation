@@ -9,9 +9,9 @@
  * @license      http://www.gomage.com/license-agreement/  Single domain license
  * @terms of use http://www.gomage.com/terms-of-use
  * @version      Release: 4.8
- * @since        Class available since Release 1.0
+ * @since        Class available since Release 4.9
  */
-class GoMage_Navigation_Adminhtml_ImageController extends Mage_Adminhtml_Controller_Action
+class GoMage_Navigation_Adminhtml_Gomage_Navigation_ImageController extends Mage_Adminhtml_Controller_Action
 {
 
     protected function _isAllowed()

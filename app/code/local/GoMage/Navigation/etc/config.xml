@@ -188,17 +188,17 @@
             </updates>
         </layout>
     </frontend>
-    <admin>
-        <routers>
-			<gomage_navigation>
-				<use>admin</use>
+	<admin>
+		<routers>
+			<adminhtml>
 				<args>
-					<module>GoMage_Navigation</module>
-					<frontName>gomage_navigation</frontName>
+					<modules>
+						<gomage_navigation before="Mage_Adminhtml">GoMage_Navigation_Adminhtml</gomage_navigation>
+					</modules>
 				</args>
-			</gomage_navigation>
-        </routers>
-    </admin>
+			</adminhtml>
+		</routers>
+	</admin>
     <adminhtml>
     	<events>
 			<admin_system_config_changed_section_gomage_activation>
