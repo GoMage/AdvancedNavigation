@@ -148,7 +148,7 @@
                                             $reset = $this->getClearLinkUrl($filter_block);
                                         ?>
                                         <?php if ($reset) : ?>
-                                            <a href="<?php echo $reset; ?>" <?php if ($filter_block->ajaxEnabled()) : ?>onclick="GomageNavigation.setNavigationUrl('<?php echo $reset; ?>'); return false;"<?php endif; ?>>Reset</a>
+                                            <a href="<?php echo $reset; ?>" <?php if ($filter_block->ajaxEnabled()) : ?>onclick="GomageNavigation.setNavigationUrl('<?php echo $reset; ?>'); return false;"<?php endif; ?>><?php echo $this->__('Reset'); ?></a>
                                         <?php endif; ?>
                                     <?php endif; ?>			
                                     <?php 
