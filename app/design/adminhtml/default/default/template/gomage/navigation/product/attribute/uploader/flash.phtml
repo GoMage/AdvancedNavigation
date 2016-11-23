@@ -211,7 +211,7 @@ var templateText =
 <?php foreach ($this->getParentBlock()->getStores() as $_store): ?>
             '<td><input name="option[value][{{id}}][<?php echo $_store->getId() ?>]" value="{{store<?php echo $_store->getId() ?>}}" class="input-text<?php if($_store->getId()==0): ?> required-option<?php endif; ?>" type="text" <?php if ($this->getParentBlock()->getReadOnly()):?> disabled="disabled"<?php endif;?>/><\/td>'+
 <?php endforeach; ?>
-			'<td onmouseover="addButton(this);"><input id="option_image_{{id}}_save" class="hidden" type="hidden" name="option[image][{{id}}]]" value=""/>'+
+			'<td><input id="option_image_{{id}}_save" class="hidden" type="hidden" name="option[image][{{id}}]]" value=""/>'+
 				'<div id="option_image_{{id}}" class="uploader" >'+
 					'<div id="option_image_{{id}}-old" class="file-row-info"></div>'+
                     '<div id="option_image_{{id}}-new" class="file-row-info new-file"></div>'+
