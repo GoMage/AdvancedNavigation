@@ -4,11 +4,11 @@
  * GoMage Advanced Navigation Extension
  *
  * @category     Extension
- * @copyright    Copyright (c) 2010-2015 GoMage (http://www.gomage.com)
+ * @copyright    Copyright (c) 2010-2016 GoMage (https://www.gomage.com)
  * @author       GoMage
- * @license      http://www.gomage.com/license-agreement/  Single domain license
- * @terms of use http://www.gomage.com/terms-of-use
- * @version      Release: 4.9
+ * @license      https://www.gomage.com/license-agreement/  Single domain license
+ * @terms of use https://www.gomage.com/terms-of-use
+ * @version      Release: 4.9.1
  * @since        Class available since Release 1.0
  */
  -->
@@ -31,7 +31,7 @@
             <show_in_store>1</show_in_store>
             <groups>
 				<advancednavigation translate="label">
-					<label>GoMage Advanced Navigation v.4.9</label>
+					<label>GoMage Advanced Navigation v.4.9.1</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>20</sort_order>
 					<show_in_default>1</show_in_default>
