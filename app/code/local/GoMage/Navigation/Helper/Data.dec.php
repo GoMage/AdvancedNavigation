@@ -175,9 +175,20 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
 
     }
 
+    /**
+     * @return array
+     */
     public function ga()
     {
-        return Zend_Json::decode(base64_decode(Mage::helper('core')->decrypt(Mage::getStoreConfig('gomage_activation/advancednavigation/ar'))));
+        $gaResult = [];
+        $decrypted = Mage::helper('core')->decrypt(Mage::getStoreConfig('gomage_activation/advancednavigation/ar'));
+        $decodedBase64 = base64_decode($decrypted);
+
+        if ($decodedBase64) {
+            $gaResult = Zend_Json::decode($decodedBase64);
+        }
+
+        return $gaResult;
     }
 
     public function isGomageNavigation()
