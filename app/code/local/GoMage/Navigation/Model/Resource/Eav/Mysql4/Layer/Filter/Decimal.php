@@ -41,7 +41,6 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
             array()
         );
 		
-		$priceExpr	= "{$tableAlias}.value";	
 		$where		= array();
 		
 		switch ($filter->getAttributeModel()->getFilterType()) {	
@@ -64,12 +63,27 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
 					$where[]	= sprintf("{$tableAlias}.value >= %s", $from) . ($to > 0 ? ' AND ' . sprintf("{$tableAlias}.value <= %d", $to) : '');
 				}	
 			break;
-			
-			default :	
-				foreach ((array) $value as $_value) {				
-					$where[]	= sprintf("{$tableAlias}.value >= %s", ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf("{$tableAlias}.value < %d", ($_value['range'] * $_value['index']));				
-				}		
-			break;		
+
+            default :
+                $attribute = $filter->getAttributeModel();
+                if ($attribute->getFrontendInput() === 'price'
+                    && ($attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::MANUALLY
+                        || $attribute->getRangeOptions() == GoMage_Navigation_Model_Adminhtml_System_Config_Source_Filter_Optionsrange::AUTO)
+                    && $attribute->getFilterType() == GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT
+                    && (isset($value['from']) || isset($value['to']))
+                ) {
+                    $from = isset($value['from']) ? intval($value['from']) : 0;
+                    $to = isset($value['to']) ? intval($value['to']) : 0;
+                    $where[] = $tableAlias . ".value >= " . $from
+                        . ($to > 0 ? ' AND ' . sprintf("{$tableAlias}.value <= %d", $to) : '');
+                } else {
+                    foreach ((array)$value as $_value) {
+                        $where[] = sprintf("{$tableAlias}.value >= %s",
+                                ($_value['range'] * ($_value['index'] - 1))) . ' AND ' . sprintf("{$tableAlias}.value < %d",
+                                ($_value['range'] * $_value['index']));
+                    }
+                }
+                break;
 		}
 		
         $select->where(implode(' OR ', $where));		
@@ -85,9 +99,6 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
      */
     public function applyFilterToCollection($filter, $value)
     {
-    	$attribute  = $filter->getAttributeModel();
-        $connection = $this->_getReadAdapter();
-        $tableAlias = $attribute->getAttributeCode();	
     	$collection = $filter->getLayer()->getProductCollection();
         $select     = $collection->getSelect();
         
