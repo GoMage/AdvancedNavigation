@@ -497,6 +497,15 @@ GomageNavigationClass = Class.create({
         }
     },
 
+    clearUrlAjax: function (url, more_products, need_scroll) {
+        this.setNavigationUrl(url, more_products, need_scroll);
+        if (url.indexOf('?') > 0) {
+            url = url.substr(0, url.indexOf('?'));
+        }
+
+        window.history.pushState({}, document.title, url);
+    },
+
     setNavigationUrl: function (url, more_products, need_scroll) {
         url = this.decode(url);
         var last = url.charAt(url.length - 1);

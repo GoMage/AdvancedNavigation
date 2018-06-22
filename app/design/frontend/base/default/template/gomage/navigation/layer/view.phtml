@@ -71,7 +71,7 @@
     			<?php if(count($this->getActiveFilters()) > 0):?>
     				<?php if (Mage::helper('gomage_navigation')->isGomageNavigationClearAjax()): ?>
 
-    					<button class="button" onclick="GomageNavigation.setNavigationUrl('<?php echo $this->getClearUrl(true); ?>'); return false;"><span><span><?php echo Mage::helper('gomage_navigation')->getClearAll(); ?></span></span></button>
+    					<button class="button" onclick="GomageNavigation.clearUrlAjax('<?php echo $this->getClearUrl(true); ?>'); return false;"><span><span><?php echo Mage::helper('gomage_navigation')->getClearAll(); ?></span></span></button>
     				<?php else: ?>
     					<button class="button" onclick="setLocation('<?php echo $this->getClearUrl();?>')"><span><span><?php echo Mage::helper('gomage_navigation')->getClearAll(); ?></span></span></button>
     				<?php endif; ?>	
