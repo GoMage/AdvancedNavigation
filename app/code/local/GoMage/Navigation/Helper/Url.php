@@ -194,4 +194,28 @@ class GoMage_Navigation_Helper_Url extends Mage_Core_Helper_Url
 
         return $_query;
     }
+
+    /**
+     * This method is copied from core as it appears only from M1.6, but we should support all Magetno 1 version.
+     *
+     * Remove request parameter from url.
+     *
+     * @param string $url
+     * @param string $paramKey
+     * @param boolean $caseSensitive
+     * @return string
+     */
+    public function removeRequestParam($url, $paramKey, $caseSensitive = false)
+    {
+        $regExpression = '/\\?[^#]*?(' . preg_quote($paramKey, '/') . '\\=[^#&]*&?)/' . ($caseSensitive ? '' : 'i');
+        while (preg_match($regExpression, $url, $mathes) != 0) {
+            $paramString = $mathes[1];
+            if (preg_match('/&$/', $paramString) == 0) {
+                $url = preg_replace('/(&|\\?)?' . preg_quote($paramString, '/') . '/', '', $url);
+            } else {
+                $url = str_replace($paramString, '', $url);
+            }
+        }
+        return $url;
+    }
 }
