@@ -24,6 +24,7 @@ class GoMage_Navigation_Block_Head extends Mage_Core_Block_Template
                 $head_block->addjs('varien/menu.js');
                 $head_block->addjs('gomage/navigation/effects.js');
                 $head_block->addjs('gomage/advanced-navigation.js');
+                $head_block->addjs('gomage/advanced-navigation-slider.js');
                 $head_block->setChild('advancednavigation_styles', $styles_block);
                 $head_block->addCss('css/gomage/advanced-navigation.css');
                 if (Mage::getStoreConfig('configswatches/general/product_list_attribute')) {

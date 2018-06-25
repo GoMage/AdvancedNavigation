@@ -26,43 +26,26 @@ class GoMage_Navigation_Block_Catalog_Layer_Filter_Decimal extends Mage_Catalog_
     {
         parent::_prepareFilter();
 
-		switch ($this->getFilterType()) {
-			case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT) :
-				$this->_template = 'gomage/navigation/layer/filter/input.phtml';
-			break;
-
-			case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER) :
-				if (Mage::helper('gomage_navigation')->isMobileDevice()) {
-					$this->_template = 'gomage/navigation/layer/filter/default.phtml';
-				} else {
-					$this->_template = 'gomage/navigation/layer/filter/slider.phtml';
-				}
-			break;
-
-			case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER_INPUT) :
-				if (Mage::helper('gomage_navigation')->isMobileDevice()) {
-					$this->_template = 'gomage/navigation/layer/filter/default.phtml';
-				} else {
-					$this->_template = 'gomage/navigation/layer/filter/slider-input.phtml';
-				}
-			break;
-
-			case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT_SLIDER) :
-				if (Mage::helper('gomage_navigation')->isMobileDevice()) {
-					$this->_template = 'gomage/navigation/layer/filter/default.phtml';
-				} else {
-					$this->_template = 'gomage/navigation/layer/filter/input-slider.phtml';
-				}
-			break;
-
-			case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DROPDOWN) :
-				$this->_template = 'gomage/navigation/layer/filter/dropdown.phtml';
-			break;
-				
-			default :
-				$this->_template = 'gomage/navigation/layer/filter/default.phtml';
-			break;
-		}
+        switch ($this->getFilterType()) {
+            case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT):
+                $this->_template = 'gomage/navigation/layer/filter/input.phtml';
+                break;
+            case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER):
+                $this->_template = 'gomage/navigation/layer/filter/slider.phtml';
+                break;
+            case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_SLIDER_INPUT):
+                $this->_template = 'gomage/navigation/layer/filter/slider-input.phtml';
+                break;
+            case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_INPUT_SLIDER):
+                $this->_template = 'gomage/navigation/layer/filter/input-slider.phtml';
+                break;
+            case (GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DROPDOWN):
+                $this->_template = 'gomage/navigation/layer/filter/dropdown.phtml';
+                break;
+            default :
+                $this->_template = 'gomage/navigation/layer/filter/default.phtml';
+                break;
+        }
     }
 	
 	/*****/

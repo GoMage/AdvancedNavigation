@@ -840,7 +840,7 @@ GomageNavigationClass = Class.create({
             };
         }
 
-        var s1 = new Control.Slider(handles, code + '-track', params);
+        var s1 = new Control.AdvancedNavigationSlider(handles, code + '-track', params);
         if (init_hidden) {
             $('advancednavigation-filter-content-' + code).hide();
         }
@@ -906,7 +906,7 @@ GomageNavigationClass = Class.create({
         };
 
         s1.draw = function (event) {
-            var pointer = [Event.pointerX(event), Event.pointerY(event)];
+            var pointer = (event.touches ? [event.touches[0].clientX, event.touches[0].clientY] : [Event.pointerX(event), Event.pointerY(event)]);
             var offsets = Position.cumulativeOffset(this.track);
             pointer[0] -= this.offsetX + offsets[0];
             pointer[1] -= this.offsetY + offsets[1];
