@@ -348,6 +348,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
 
         $params['_query']         = $query;
         $params['_query']['ajax'] = null;
+        $params['_secure'] =  Mage::app()->getFrontController()->getRequest()->isSecure();
 
         return Mage::helper('gomage_navigation/url')->wrapp($model->getUrl($route, $params));
     }
