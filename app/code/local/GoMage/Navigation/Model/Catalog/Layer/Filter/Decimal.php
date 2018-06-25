@@ -72,6 +72,10 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Decimal extends Mage_Catalog_
                 $from = $request->getParam($this->getRequestVarValue() . '_from', false);
                 $to = $request->getParam($this->getRequestVarValue() . '_to', false);
 
+                if ($to !== false) {
+                    $to += 0.01;
+                }
+
                 if ($from || $to) {
                     $value = array('from' => $from, 'to' => $to);
 
@@ -131,6 +135,10 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Decimal extends Mage_Catalog_
                     $from = $request->getParam($this->getRequestVarValue() . '_from', false);
                     $to = $request->getParam($this->getRequestVarValue() . '_to', false);
 
+                    if ($to !== false) {
+                        $to += 0.01;
+                    }
+
                     if ($from || $to) {
                         $value = array('from' => $from, 'to' => $to);
 
@@ -158,6 +166,10 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Decimal extends Mage_Catalog_
                 ) {
                     $from = $request->getParam($this->getRequestVarValue() . '_from', false);
                     $to = $request->getParam($this->getRequestVarValue() . '_to', false);
+
+                    if ($to !== false) {
+                        $to += 0.01;
+                    }
 
                     if ($from || $to) {
                         $value = array('from' => $from, 'to' => $to);
@@ -322,8 +334,8 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Decimal extends Mage_Catalog_
                                 $store = Mage::app()->getStore();
                                 $from = (($index - 1) * $range);
                                 $fromPrice = $store->formatPrice(($index - 1) * $range);
-                                $to = $index * $range;
-                                $toPrice = $store->formatPrice($index * $range);
+                                $to = $index * $range  - 0.01;
+                                $toPrice = $store->formatPrice($to);
                                 $label = Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice);
                                 $priceFrom = Mage::helper('gomage_navigation')->getRequest()
                                     ->getParam($attribute->getAttributeCode() . '_from', false);
@@ -506,5 +518,16 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Decimal extends Mage_Catalog_
         }
         
 		return $this->_selected_options;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _renderItemLabel($range, $value)
+    {
+        $from = Mage::app()->getStore()->formatPrice(($value - 1) * $range, false);
+        $to = Mage::app()->getStore()->formatPrice($value * $range - 0.01, false);
+
+        return Mage::helper('catalog')->__('%s - %s', $from, $to);
     }
 }

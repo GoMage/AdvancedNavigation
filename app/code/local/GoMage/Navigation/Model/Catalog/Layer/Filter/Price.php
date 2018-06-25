@@ -178,8 +178,8 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Price extends Mage_Catalog_Mo
                             $store     = Mage::app()->getStore();
                             $from      = (($index - 1) * $range) + $prevValue;
                             $fromPrice = $store->formatPrice($from);
-                            $to        = $index * $range;
-                            $toPrice   = $store->formatPrice($index * $range);
+                            $to        = $index * $range - 0.01;
+                            $toPrice   = $store->formatPrice($to);
                             $label     = Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice);
                             $prevValue = $range;
 
@@ -254,8 +254,8 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Price extends Mage_Catalog_Mo
                                     $store		= Mage::app()->getStore();
                                     $from		= (($index - 1) * $range);
                                     $fromPrice	= $store->formatPrice(($index - 1) * $range);
-                                    $to			= $index * $range;
-                                    $toPrice	= $store->formatPrice($index * $range);
+                                    $to			= $index * $range - 0.01;
+                                    $toPrice	= $store->formatPrice($to);
                                     $label		= Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice);
                                     $price_from	= Mage::helper('gomage_navigation')->getRequest()->getParam('price_from', false);
                                     
@@ -379,6 +379,10 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Price extends Mage_Catalog_Mo
                 $_from = $request->getParam($this->getRequestVarValue() . '_from', false);
                 $_to   = $request->getParam($this->getRequestVarValue() . '_to', false);
 
+                if ($_to !== false) {
+                    $_to += 0.01;
+                }
+
                 if ($_from || $_to) {
                     $value = array('from' => $_from, 'to' => $_to);
 					
@@ -440,6 +444,10 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Price extends Mage_Catalog_Mo
                     $_from = $request->getParam($this->getRequestVarValue() . '_from', false);
                     $_to   = $request->getParam($this->getRequestVarValue() . '_to', false);
 
+                    if ($_to !== false) {
+                        $_to += 0.01;
+                    }
+
                     if ($_from || $_to) {
                         $value = array('from' => $_from, 'to' => $_to);
 						
@@ -467,6 +475,10 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Price extends Mage_Catalog_Mo
                 ) {
                     $_from = $request->getParam($this->getRequestVarValue() . '_from', false);
                     $_to   = $request->getParam($this->getRequestVarValue() . '_to', false);
+
+                    if ($_to !== false) {
+                        $_to += 0.01;
+                    }
 
                     if ($_from || $_to) {
                         $value = array('from' => $_from, 'to' => $_to);
@@ -679,5 +691,17 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Price extends Mage_Catalog_Mo
         }
 
         return $this->_selected_options;
-    }  
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _renderItemLabel($range, $value)
+    {
+        $store      = Mage::app()->getStore();
+        $fromPrice  = $store->formatPrice(($value - 1) * $range);
+        $toPrice    = $store->formatPrice($value * $range - 0.01);
+
+        return Mage::helper('catalog')->__('%s - %s', $fromPrice, $toPrice);
+    }
 }
