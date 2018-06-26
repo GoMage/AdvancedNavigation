@@ -304,8 +304,8 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Decimal extends Mage_Catalog_
 
                 foreach ($sort as $rangeAuto) {
                     $rangeArray = explode("=", $rangeAuto);
-                    $theRange = (int)trim($rangeArray[1]);
-                    $limitEnd = (int)trim($rangeArray[0]);
+                    $theRange = trim($rangeArray[1]);
+                    $limitEnd = trim($rangeArray[0]);
 
                     $this->setData('price_range', $theRange);
 

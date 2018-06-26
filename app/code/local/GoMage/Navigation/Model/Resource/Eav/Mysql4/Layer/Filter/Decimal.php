@@ -72,10 +72,10 @@ class GoMage_Navigation_Model_Resource_Eav_Mysql4_Layer_Filter_Decimal extends M
                     && $attribute->getFilterType() == GoMage_Navigation_Model_Catalog_Layer::FILTER_TYPE_DEFAULT
                     && (isset($value['from']) || isset($value['to']))
                 ) {
-                    $from = isset($value['from']) ? intval($value['from']) : 0;
-                    $to = isset($value['to']) ? intval($value['to']) : 0;
+                    $from = isset($value['from']) ? $value['from'] : 0;
+                    $to = isset($value['to']) ? $value['to'] : 0;
                     $where[] = $tableAlias . ".value >= " . $from
-                        . ($to > 0 ? ' AND ' . sprintf("{$tableAlias}.value <= %d", $to) : '');
+                        . ($to > 0 ? ' AND ' . sprintf("{$tableAlias}.value <= %s", $to) : '');
                 } else {
                     foreach ((array)$value as $_value) {
                         $where[] = sprintf("{$tableAlias}.value >= %s",
