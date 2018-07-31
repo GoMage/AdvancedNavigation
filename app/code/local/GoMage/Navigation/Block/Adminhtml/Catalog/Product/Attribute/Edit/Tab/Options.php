@@ -8,7 +8,7 @@
  * @author       GoMage
  * @license      https://www.gomage.com/license-agreement/  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 4.9.1
+ * @version      Release: 4.9.2
  * @since        Class available since Release 1.0
  */
 class GoMage_Navigation_Block_Adminhtml_Catalog_Product_Attribute_Edit_Tab_Options extends Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_Options

@@ -7,7 +7,7 @@
  * @author       GoMage
  * @license      https://www.gomage.com/license-agreement/  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 4.9.1
+ * @version      Release: 4.9.2
  * @since        Class available since Release 1.0
  */
 class GoMage_Navigation_Model_Catalog_Layer_Filter_Attribute extends Mage_Catalog_Model_Layer_Filter_Attribute
