@@ -40,13 +40,16 @@ $_swatchOuterHeight	= $_dimHelper->getOuterHeight(Mage_ConfigurableSwatches_Help
         <li<?php if ($_hasImage){ echo ' style="line-height: ' . $_lineHeight . 'px;"'; } ?>>
             <?php if ($_hasItems): ?>
             	<?php
-					$data_param = $_item->getActive() ? $_item->getRemoveUrlParams() : $_item->getUrlParams(false);
-					
-					if($this->ajaxEnabled()){
-						$data_param = $data_param;
-					}
+                $data_param = $_item->getActive() ? $_item->getRemoveUrlParams() : $_item->getUrlParams(false);
+
+                $isSeoBoosterEnabled = Mage::helper('gomage_navigation')->isGoMageSeoBoosterEnabled();
+                if ($isSeoBoosterEnabled) {
+                    $hrefUrl = $_item->getUrl();
+                } else {
+                    $hrefUrl = $_item->getCleanUrl(false) . $data_param;
+                }
 				?>
-                <a data-ajax="<?php echo ($this->ajaxEnabled()) ? 1 : 0 ;?>" data-param="<?php echo $data_param; ?>" data-url="<?php echo $_item->getCleanUrl(false); ?>" title="<?php echo $_item->getLabel() ?>" onclick="GomageNavigation.click(this); return false;" href="<?php echo $_item->getCleanUrl(true) . $data_param; ?>" class="<?php echo $_linkClass ?>">
+                <a data-ajax="<?php echo ($this->ajaxEnabled()) ? 1 : 0 ;?>" data-param="<?php echo $data_param; ?>" data-url="<?php echo $_item->getCleanUrl(false); ?>" title="<?php echo $_item->getLabel() ?>" onclick="GomageNavigation.click(this); return false;" href="<?php echo $hrefUrl; ?>" class="<?php echo $_linkClass ?>">
             <?php else: ?>
                 <span class="<?php echo $_linkClass ?>">
             <?php endif; ?>

@@ -108,6 +108,11 @@ GomageNavigationClass = Class.create({
 
     click: function (element) {
         if ($(element)) {
+            if (this.gomage_seobooster_enabled){
+                setLocation(element.href);
+                return;
+            }
+
             var url_clean = this.decode($(element).readAttribute('data-url'));
             var param = this.decode($(element).readAttribute('data-param'));
             var ajax_clean = $(element).readAttribute('data-ajax');

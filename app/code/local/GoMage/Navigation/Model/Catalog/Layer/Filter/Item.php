@@ -33,6 +33,23 @@ class GoMage_Navigation_Model_Catalog_Layer_Filter_Item extends Mage_Catalog_Mod
         if ($ajax) {
             $query['ajax'] = 1;
         }
+        if (Mage::helper('gomage_navigation')->isGoMageSeoBoosterEnabled()) {
+            $params = array(
+                '_current' => true,
+                '_use_rewrite' => true,
+            );
+
+            if ($separator = Mage::helper('gomage_seobooster/layered')->getSeparator() ||
+                Mage::helper('gomage_seobooster/layered')->canAddRewritePath()
+            ) {
+                $params['_layered_query_params'] = array($this->getFilter()->getRequestVar() => $this->getValue());
+            } else {
+                $query[$this->getFilter()->getRequestVar()] = $this->getValue();
+            }
+            $params['_query'] = $query;
+
+            return Mage::helper('gomage_seobooster/layered')->getUrl('*/*/*', $params);
+        }
 
         return Mage::helper('gomage_navigation')->getFilterUrl(
 			'*/*/*', 
