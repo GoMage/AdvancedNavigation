@@ -62,13 +62,9 @@
     		</div>
     		
     		</div>
-                <?php if ($this->canShowFilterButton()): ?>
-                    <div class="slider-input-action">
-
-                        <button class="button" type="submit"><span><span><?php echo Mage::helper('gomage_navigation')->getFilter();?></span></span></button>
-
-                    </div>
-                <?php endif; ?>
+                <div class="slider-input-action" <?php if (!$this->canShowFilterButton()){ echo 'style="display:none"';} ?>>
+                    <button class="button" type="submit"><span><span><?php echo Mage::helper('gomage_navigation')->getFilter();?></span></span></button>
+                </div>
     		</fieldset>
     	</form>
 	</div>

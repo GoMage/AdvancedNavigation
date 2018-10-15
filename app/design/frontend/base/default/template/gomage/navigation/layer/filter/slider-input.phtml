@@ -105,14 +105,11 @@
     		</div>
     		
     		</div>
-    		
-    		<?php if ($this->canShowFilterButton()): ?>
-        		<div class="slider-input-action">
+        		<div class="slider-input-action" <?php if (!$this->canShowFilterButton()){ echo 'style="display:none"';} ?>>
         		
         		<button class="button" type="submit"><span><span><?php echo Mage::helper('gomage_navigation')->getFilter();?></span></span></button>
         		
         		</div>
-    		<?php endif; ?>
     		</fieldset>
     	</form>
 	</div>
