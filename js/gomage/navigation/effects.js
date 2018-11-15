@@ -6,7 +6,7 @@
  * @author       GoMage
  * @license      https://www.gomage.com/license-agreement/  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 4.9.2
+ * @version      Release: 4.9.3
  * @since        Available since Release 4.0
  */
 

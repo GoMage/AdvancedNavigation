@@ -8,7 +8,7 @@
  * @author       GoMage
  * @license      https://www.gomage.com/license-agreement/  Single domain license
  * @terms of use https://www.gomage.com/terms-of-use
- * @version      Release: 4.9.2
+ * @version      Release: 4.9.3
  * @since        Class available since Release 1.0
  */
 
@@ -86,7 +86,7 @@ class GoMage_Navigation_Helper_Data extends Mage_Core_Helper_Abstract
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, sprintf('https://www.gomage.com/index.php/gomage_downloadable/key/check'));
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'key=' . urlencode($k) . '&sku=advanced-navigation&domains=' . urlencode(implode(',', $this->getAllStoreDomains())) . '&ver=' . urlencode('4.9.2'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'key=' . urlencode($k) . '&sku=advanced-navigation&domains=' . urlencode(implode(',', $this->getAllStoreDomains())) . '&ver=' . urlencode('4.9.3'));
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
